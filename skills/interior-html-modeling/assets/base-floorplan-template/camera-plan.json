@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "8.0",
+  "schema": "interior.camera-plan.v8",
+  "modelBackend": "html-threejs",
+  "modelSchema": "interior.floorplan-structure.v3",
+  "floorplanId": null,
+  "seriesId": null,
+  "purpose": "unbound",
+  "modelPath": "./index.html",
+  "lightingSetups": [],
+  "shots": []
+}

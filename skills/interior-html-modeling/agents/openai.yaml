@@ -1,0 +1,6 @@
+interface:
+  display_name: "室内户型 HTML/Three.js 建模"
+  short_description: "整屋与单空间共用编译器，生成可编辑 HTML 与原生模型清单"
+  default_prompt: "使用 $interior-html-modeling 将已验收 floorplan-handoff.v3 直接编译成 HTML/Three.js 模型。整屋不缩小范围；单空间只提交 model-scope-request.v1，由同一 importer、模板、组件库、碰撞和场景链编译，禁止另写局部 HTML 或手工几何。保持结构和来源 placement 唯一；每个 quantity=1 原子对象只从公共源码目录选择同一 functionalClass 资产，没有同类资产就停止，禁止跨类别、临时重模或方盒 fallback。贴墙、朝向、净距与通道统一交 $interior-circulation-planning 复算。完成浏览器验收、29MB 以内 standalone、绑定 model-scope 的 native-model-manifest.v1 后才进入机位；正式截图只能由 $interior-camera-capture 调度。"
+policy:
+  allow_implicit_invocation: true

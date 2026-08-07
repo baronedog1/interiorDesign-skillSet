@@ -1,0 +1,25 @@
+{
+  "skill": "booklet-production",
+  "version": "3.3.0",
+  "language": "zh-CN",
+  "purpose": "响应方案册、PDF 和图册意图，按规划说明、用户资产和逐空间成果组织客户交付并执行 PDF 质量检查",
+  "file_count": 16,
+  "files": [
+    "ENVIRONMENT_CONTRACT.md",
+    "MANIFEST.json",
+    "SKILL.md",
+    "agents/openai.yaml",
+    "assets/reference-images/avroko-detail-story.jpg",
+    "assets/reference-images/yabu-approach-collage.jpg",
+    "assets/reference-images/yabu-portfolio-grid.jpg",
+    "assets/reference-images/yabu-services-split.jpg",
+    "data_contract.md",
+    "local_runtime.md",
+    "playbook.md",
+    "references/layout-rules.md",
+    "scripts/make_sendable_pdf.py",
+    "scripts/pdf_quality_check.py",
+    "scripts/validate_booklet_plan.py",
+    "scripts_logic.md"
+  ]
+}

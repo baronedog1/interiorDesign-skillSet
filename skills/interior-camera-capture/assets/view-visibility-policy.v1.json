@@ -1,0 +1,33 @@
+{
+  "schema": "interior.view-visibility-policy.v1",
+  "policyVersion": "1.0",
+  "semantics": "Only render-relevant pixels inside the current camera frame may enter the prompt-visible scene. Camera-rear, outside-frustum, fully occluded and unreadable edge-fragment rooms are excluded.",
+  "roomInclusion": {
+    "primaryRoomAlwaysRequiresPixels": true,
+    "visibleFunctionalObjectMakesRoomRelevant": true,
+    "minimumReadableCoverage": 0.03,
+    "minimumReadableWidthRatio": 0.04,
+    "minimumReadableHeightRatio": 0.04,
+    "minimumVisiblePixelCount": 1024
+  },
+  "connectionInclusion": {
+    "allInteriorEndpointRoomsMustBeIncluded": true,
+    "projectedPolygonRequired": true,
+    "adjacencyOnlyIsForbidden": true,
+    "semanticOpeningOcclusionRequired": true,
+    "minimumOpeningSamplePixelCount": 64,
+    "maximumOccludingStructureRatio": 0.15,
+    "occludingStructureCategories": ["wall"]
+  },
+  "promptMask": {
+    "excludedRoomColor": "#000000",
+    "preserveOnlyIncludedRoomSemanticColors": true
+  },
+  "slotOverlay": {
+    "enabled": true,
+    "fillColor": "#22c7b8",
+    "fillOpacity": 0.24,
+    "outlineColor": "#0a776f",
+    "outlineWidthPixelsAtSourceResolution": 2
+  }
+}

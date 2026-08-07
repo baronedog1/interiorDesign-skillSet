@@ -1,0 +1,118 @@
+{
+  "schema": "interior.scene-semantic-frame.v4",
+  "modelBackend": "html-threejs",
+  "sourceModelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "floorplanId": "example-home",
+  "modelRevision": "model-example-revision",
+  "shotId": "living-sofa-frontal",
+  "camera": {
+    "position": [0, 1.25, 1.718519],
+    "target": [0, 1.25, -3],
+    "fov": 43.806,
+    "focalLengthMm": 28
+  },
+  "guidanceImages": {
+    "slotGuided": "01-living-sofa-frontal.slot-guided.png",
+    "furnishedQa": "01-living-sofa-frontal.furnished-qa.png"
+  },
+  "imageSize": [1600, 1000],
+  "semanticRaster": {
+    "size": [800, 500],
+    "normalizedToImageSize": true,
+    "maximumSourcePixelError": 2,
+    "policy": "fixed-800px-maximum-width"
+  },
+  "coordinateSystem": "image-top-left-normalized",
+  "presentation": {
+    "sourceState": "same-model-dual-capture-evidence-on-concrete-shell",
+    "defaultGenerationMode": "slot-guided",
+    "evidenceStates": {
+      "slot-guided": {
+        "componentPresentation": "hidden",
+        "slotFactsRetained": true,
+        "structureAppearance": "concrete-shell",
+        "generationAuthority": true
+      },
+      "furnished-qa": {
+        "componentPresentation": "visible",
+        "structureAppearance": "concrete-shell",
+        "generationAuthority": false
+      }
+    },
+    "styleState": "none",
+    "componentAppearanceAuthority": "json-slots-only-for-generation"
+  },
+  "projectionEvidence": {
+    "method": "same-camera-gpu-entity-id-plus-depth-to-room-polygon",
+    "elapsedMs": 84,
+    "overlapRule": "nearest-depth-wins"
+  },
+  "entitySemanticMask": {
+    "image": "01-living-sofa-frontal.semantic-entity-id.png",
+    "encoding": "rgb8-semantic-id"
+  },
+  "roomSemanticMask": {
+    "image": "01-living-sofa-frontal.semantic-room-id.png",
+    "encoding": "rgb8-room-id"
+  },
+  "rooms": [
+    {
+      "roomId": "living",
+      "displayName": "客厅",
+      "roomType": "living",
+      "screen": {
+        "semanticId": 100,
+        "semanticColor": "#2f80ed",
+        "bbox": [0.02, 0.02, 0.98, 0.98],
+        "visiblePixelCount": 302400,
+        "coverage": 0.756
+      }
+    }
+  ],
+  "connections": [],
+  "entities": [
+    {
+      "entityId": "wall-north",
+      "sourceModelId": "wall-north",
+      "semanticType": "structure",
+      "category": "wall",
+      "roomIds": ["living"],
+      "screen": {
+        "semanticId": 1,
+        "semanticColor": "#ef4444",
+        "bbox": [0.05, 0.08, 0.95, 0.5],
+        "visiblePixelCount": 96000,
+        "coverage": 0.24
+      }
+    },
+    {
+      "entityId": "sofa-01",
+      "sourceModelId": "sofa-01",
+      "sourceObjectCandidateId": "source-object-sofa-01",
+      "assetId": "public-sofa-01",
+      "semanticType": "movable-furniture",
+      "category": "sofa",
+      "functionalClass": "sofa",
+      "quantity": 1,
+      "localAxes": {"front": "+Z", "back": "-Z"},
+      "roomIds": ["living"],
+      "dimensionsMeters": [2.99, 1.505, 0.71],
+      "worldBounds": {"min": [2.705, 0, 2.3475], "max": [5.695, 0.71, 3.8525]},
+      "worldTransform": {
+        "position": [4.2, 0, 3.1],
+        "quaternion": [0, 0, 0, 1],
+        "scale": [1, 1, 1],
+        "yawRadians": 0
+      },
+      "mustPreserve": true,
+      "screen": {
+        "semanticId": 10,
+        "semanticColor": "#9a5fc1",
+        "bbox": [0.12, 0.48, 0.66, 0.92],
+        "visiblePixelCount": 52140,
+        "coverage": 0.13035
+      }
+    }
+  ],
+  "interpretationConstraints": ["do-not-infer-outside-closed-world-required-sets"]
+}

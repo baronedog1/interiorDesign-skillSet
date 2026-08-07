@@ -1,0 +1,4 @@
+interface:
+  display_name: "CAD 中文版"
+  short_description: "用中文生成、检查、可视化并验证参数化 STEP CAD 文件"
+  default_prompt: "使用 $cad-zh 根据我的中文要求创建、检查并验证参数化 CAD 模型。"

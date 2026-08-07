@@ -1,0 +1,33 @@
+{
+  "skill": "interior-floorplan-planning",
+  "version": "6.4.0",
+  "language": "zh-CN",
+  "purpose": "从当前源图建立唯一平面事实，生成 HTML、Blender、CAD 三后端共同消费的 handoff，并统一验收后端结构编辑补丁",
+  "file_count": 24,
+  "files": [
+    "ENVIRONMENT_CONTRACT.md",
+    "MANIFEST.json",
+    "SKILL.md",
+    "agents/openai.yaml",
+    "assets/trace-spec.example.json",
+    "assets/source-evidence.example.json",
+    "assets/semantic-decisions.example.json",
+    "assets/wall-geometry.example.json",
+    "data_contract.md",
+    "local_runtime.md",
+    "playbook.md",
+    "references/modeling-handoff.md",
+    "references/native-layout-method.md",
+    "references/source-model-method.md",
+    "references/quadrant-contract.md",
+    "references/trace-classification.md",
+    "scripts/build_wall_geometry.py",
+    "scripts/finalize_floorplan_handoff.py",
+    "scripts/render_floorplan_quadrants.py",
+    "scripts/topology_compiler.py",
+    "scripts/validate_source_model.py",
+    "scripts/validate_structure_edit_patch.py",
+    "scripts_logic.md",
+    "templates.md"
+  ]
+}

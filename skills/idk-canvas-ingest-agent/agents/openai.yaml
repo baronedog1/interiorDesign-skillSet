@@ -1,0 +1,4 @@
+interface:
+  display_name: "百恩得平台项目与社区发布"
+  short_description: "创建或复用项目，上传 accepted 产物，并按确认发布社区"
+  default_prompt: "当用户要求创建百恩得项目、上传或放入当前项目、获取平台/手机预览链接、发布到社区或公开分享时使用。项目第一次精确创建或复用并写唯一 baiende-project.json，后续所有设计 Skill 复用该绑定；只接收上游 accepted 图片、视频或 standalone HTML。社区发布先生成不公开预览，只有用户本轮明确确认后才使用 --execute --confirm-public。缺少受管凭据时停止，不改走匿名 OSS、临时 CDN、旧上传脚本、生成、付费或删除接口。"

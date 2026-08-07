@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "interior.cad-object-source-inventory.v1",
+  "title": "CAD Object Source Inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "objectId", "projectRoot", "units", "sources", "dimensionFacts", "inputGrade", "strictEligible", "inventoryHash"],
+  "properties": {
+    "schema": {"const": "interior.cad-object-source-inventory.v1"},
+    "objectId": {"type": "string", "minLength": 1},
+    "projectRoot": {"type": "string", "minLength": 1},
+    "units": {"const": "mm"},
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sourceId", "path", "kind", "sha256", "bytes", "imageSize", "role", "view", "calibration"],
+        "properties": {
+          "sourceId": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "kind": {"enum": ["image", "drawing", "cad", "document"]},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "bytes": {"type": "integer", "minimum": 1},
+          "imageSize": {
+            "oneOf": [
+              {"type": "null"},
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["width", "height"],
+                "properties": {
+                  "width": {"type": "integer", "minimum": 1},
+                  "height": {"type": "integer", "minimum": 1}
+                }
+              }
+            ]
+          },
+          "role": {"enum": ["primary", "supporting", "dimension-contract"]},
+          "view": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["viewId", "projection", "normalAxis", "screenRight", "screenUp"],
+            "properties": {
+              "viewId": {"type": "string", "minLength": 1},
+              "projection": {"enum": ["orthographic", "perspective", "unknown", "not-applicable"]},
+              "normalAxis": {"enum": ["x", "y", "z", "unknown", "not-applicable"]},
+              "screenRight": {"type": "string", "minLength": 1},
+              "screenUp": {"type": "string", "minLength": 1}
+            }
+          },
+          "calibration": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["status", "pixelsPerMillimeter", "basis"],
+            "properties": {
+              "status": {"enum": ["calibrated", "uncalibrated", "not-applicable"]},
+              "pixelsPerMillimeter": {"type": ["number", "null"], "exclusiveMinimum": 0},
+              "basis": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "dimensionFacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["dimensionId", "axis", "value", "unit", "sourceId", "confidence", "note"],
+        "properties": {
+          "dimensionId": {"type": "string", "minLength": 1},
+          "axis": {"enum": ["x", "y", "z", "other"]},
+          "value": {"type": "number", "exclusiveMinimum": 0},
+          "unit": {"const": "mm"},
+          "sourceId": {"type": "string", "minLength": 1},
+          "confidence": {"enum": ["explicit", "user-confirmed", "derived", "estimated"]},
+          "note": {"type": "string"}
+        }
+      }
+    },
+    "inputGrade": {"enum": ["A", "B", "C"]},
+    "strictEligible": {"type": "boolean"},
+    "inventoryHash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

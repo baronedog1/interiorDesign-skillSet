@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "interior.cad-object-validation.v1",
+  "title": "CAD Object Validation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "objectId", "sourceInventorySha256", "planSha256", "generatorSha256", "stepSha256", "coordinateReport", "gates", "inspection", "projectionReports", "snapshots", "viewerHandoff", "limitations", "overallStatus"],
+  "properties": {
+    "schema": {"const": "interior.cad-object-validation.v1"},
+    "objectId": {"type": "string", "minLength": 1},
+    "sourceInventorySha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "planSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "generatorSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "stepSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "coordinateReport": {"$ref": "#/$defs/artifact"},
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceInventory", "viewEvidence", "coordinateContract", "stepGenerated", "positiveSolids", "overallDimensions", "componentLabels", "assemblyRelationships", "projection", "visualReview"],
+      "properties": {
+        "sourceInventory": {"type": "boolean"},
+        "viewEvidence": {"type": "boolean"},
+        "coordinateContract": {"type": "boolean"},
+        "stepGenerated": {"type": "boolean"},
+        "positiveSolids": {"type": "boolean"},
+        "overallDimensions": {"type": "boolean"},
+        "componentLabels": {"type": "boolean"},
+        "assemblyRelationships": {"type": "boolean"},
+        "projection": {"type": "boolean"},
+        "visualReview": {"type": "boolean"}
+      }
+    },
+    "inspection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commands", "factsArtifacts", "factsSummary", "solidCount", "validSolidCount", "dimensionChecks", "componentLabelChecks", "relationshipChecks"],
+      "properties": {
+        "commands": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "factsArtifacts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/artifact"}},
+        "factsSummary": {"type": "string", "minLength": 1},
+        "solidCount": {"type": "integer", "minimum": 1},
+        "validSolidCount": {"type": "integer", "minimum": 0},
+        "dimensionChecks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/check"}},
+        "componentLabelChecks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/check"}},
+        "relationshipChecks": {"type": "array", "items": {"$ref": "#/$defs/check"}}
+      }
+    },
+    "projectionReports": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/artifact"}},
+    "snapshots": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "bytes", "reviewed", "reviewNote"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "bytes": {"type": "integer", "minimum": 1},
+          "reviewed": {"const": true},
+          "reviewNote": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "viewerHandoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "url", "reason"],
+      "properties": {
+        "status": {"enum": ["passed", "unavailable"]},
+        "url": {"type": ["string", "null"]},
+        "reason": {"type": "string"}
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "overallStatus": {"enum": ["passed", "failed"]}
+  },
+  "$defs": {
+    "check": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["checkId", "passed"],
+      "properties": {
+        "checkId": {"type": "string", "minLength": 1},
+        "passed": {"type": "boolean"}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "bytes"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "bytes": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

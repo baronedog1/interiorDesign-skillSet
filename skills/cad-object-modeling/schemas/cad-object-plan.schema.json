@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "interior.cad-object-plan.v1",
+  "title": "CAD Object Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "objectId", "units", "sourceInventory", "viewEvidence", "coordinateFrame", "overallDimensions", "parameterFacts", "viewTransforms", "orientationChecks", "components", "relationships", "projectionTargets", "assumptions", "planHash"],
+  "properties": {
+    "schema": {"const": "interior.cad-object-plan.v1"},
+    "objectId": {"type": "string", "minLength": 1},
+    "units": {"const": "mm"},
+    "sourceInventory": {"$ref": "#/$defs/binding"},
+    "viewEvidence": {"type": "array", "items": {"$ref": "#/$defs/binding"}},
+    "coordinateFrame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handedness", "x", "y", "z", "origin"],
+      "properties": {
+        "handedness": {"const": "right"},
+        "x": {"const": "+right"},
+        "y": {"const": "+back"},
+        "z": {"const": "+up"},
+        "origin": {"type": "string", "minLength": 1}
+      }
+    },
+    "overallDimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "z"],
+      "properties": {
+        "x": {"type": "number", "exclusiveMinimum": 0},
+        "y": {"type": "number", "exclusiveMinimum": 0},
+        "z": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "parameterFacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["parameterId", "value", "unit", "provenance", "evidenceIds"],
+        "properties": {
+          "parameterId": {"type": "string", "minLength": 1},
+          "value": {"type": "number"},
+          "unit": {"type": "string", "minLength": 1},
+          "provenance": {"enum": ["source-backed", "user-confirmed", "derived", "unresolved"]},
+          "evidenceIds": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "viewTransforms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["viewId", "sourceSize", "planeAxes", "sourceToPlane", "planeToSource", "controlPoints", "maxSourceRoundTripErrorPx", "maxPlaneErrorMm"],
+        "properties": {
+          "viewId": {"type": "string", "minLength": 1},
+          "sourceSize": {"$ref": "#/$defs/size"},
+          "planeAxes": {
+            "type": "array",
+            "prefixItems": [{"type": "string"}, {"type": "string"}],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "sourceToPlane": {"$ref": "#/$defs/matrix3"},
+          "planeToSource": {"$ref": "#/$defs/matrix3"},
+          "controlPoints": {
+            "type": "array",
+            "minItems": 5,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["source", "plane"],
+              "properties": {
+                "source": {"$ref": "#/$defs/point"},
+                "plane": {"$ref": "#/$defs/point"}
+              }
+            }
+          },
+          "maxSourceRoundTripErrorPx": {"type": "number", "minimum": 0},
+          "maxPlaneErrorMm": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "orientationChecks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["landmarkId", "viewId", "expectedCadSide", "evaluatedCadSide", "evidenceId"],
+        "properties": {
+          "landmarkId": {"type": "string", "minLength": 1},
+          "viewId": {"type": "string", "minLength": 1},
+          "expectedCadSide": {"enum": ["+x", "-x", "+y", "-y", "+z", "-z"]},
+          "evaluatedCadSide": {"enum": ["+x", "-x", "+y", "-y", "+z", "-z"]},
+          "evidenceId": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["componentId", "label", "role", "geometry", "transform", "sourceEvidenceIds"],
+        "properties": {
+          "componentId": {"type": "string", "minLength": 1},
+          "label": {"type": "string", "minLength": 1},
+          "role": {"type": "string", "minLength": 1},
+          "geometry": {
+            "type": "object",
+            "required": ["primitive"],
+            "properties": {"primitive": {"type": "string", "minLength": 1}},
+            "additionalProperties": true
+          },
+          "transform": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["translation", "rotationDegXYZ"],
+            "properties": {
+              "translation": {"$ref": "#/$defs/vector3"},
+              "rotationDegXYZ": {"$ref": "#/$defs/vector3"}
+            }
+          },
+          "sourceEvidenceIds": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["relationshipId", "type", "components"],
+        "properties": {
+          "relationshipId": {"type": "string", "minLength": 1},
+          "type": {"enum": ["contact", "contained-by", "aligned", "coaxial", "joint", "offset"]},
+          "components": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "parameters": {"type": "object"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "projectionTargets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["viewId", "evidenceId", "required", "maxXorPixels", "maxXorRatio", "maxBBoxDeltaPx", "maxCentroidDeltaPx"],
+        "properties": {
+          "viewId": {"type": "string", "minLength": 1},
+          "evidenceId": {"type": "string", "minLength": 1},
+          "required": {"type": "boolean"},
+          "maxXorPixels": {"type": "integer", "minimum": 0},
+          "maxXorRatio": {"type": "number", "minimum": 0, "maximum": 1},
+          "maxBBoxDeltaPx": {"type": "number", "minimum": 0},
+          "maxCentroidDeltaPx": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "value", "status", "reason", "impact", "resolution"],
+        "properties": {
+          "field": {"type": "string", "minLength": 1},
+          "value": {},
+          "status": {"enum": ["source-backed", "user-confirmed", "unresolved", "not-applicable"]},
+          "reason": {"type": "string"},
+          "impact": {"type": "string"},
+          "resolution": {"type": "string"}
+        }
+      }
+    },
+    "planHash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "size": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {"width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1}}
+    },
+    "point": {
+      "type": "array",
+      "prefixItems": [{"type": "number"}, {"type": "number"}],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "vector3": {
+      "type": "array",
+      "prefixItems": [{"type": "number"}, {"type": "number"}, {"type": "number"}],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "matrix3": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 3,
+        "items": {"type": "number"}
+      }
+    }
+  }
+}

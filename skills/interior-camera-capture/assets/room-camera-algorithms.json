@@ -1,0 +1,98 @@
+{
+  "schema": "interior.room-camera-algorithms.v2",
+  "sensor": {
+    "widthMm": 36,
+    "heightMm": 22.5
+  },
+  "formulas": {
+    "frameWidthMeters": "max(anchorWidth/anchorOccupancy, referenceFacadeWidth/referenceOccupancy, contextWidth/contextOccupancy, anchorHeight/verticalOccupancy*36/22.5, referenceFacadeHeight/verticalOccupancy*36/22.5)",
+    "targetPlaneDistanceMeters": "frameWidthMeters * focalLengthMm / sensorWidthMm * distanceSafetyFactor",
+    "cameraToReferenceFaceMeters": "targetPlaneDistanceMeters + referenceFaceOffsetMeters"
+  },
+  "shared": {
+    "frontalOccupancies": [0.8, 0.96],
+    "relationshipOccupancies": [0.6, 0.72],
+    "focalChainMm": [35, 32, 28, 24, 22, 20, 18],
+    "distanceSafetyFactor": 1.05,
+    "depthScaleRatioLimit": 1.18,
+    "verticalOccupancy": 0.72,
+    "distortion": 0,
+    "foregroundWidthLimit": 0.08,
+    "selectedShotsPerRoom": [1, 2],
+    "nativePreviewPolicy": {
+      "selectionMethod": "deterministic-first-fitting-with-one-bounded-fallback",
+      "primaryCount": 1,
+      "maximumFallbackCount": 1,
+      "maximumTotalCount": 2
+    },
+    "frontalAlignment": {
+      "mode": "reference-wall-normal",
+      "referenceSource": "structure-data.walls[id].start/end",
+      "cameraUp": [0, 1, 0],
+      "yawErrorToleranceDeg": 1.0,
+      "pitchAbsToleranceDeg": 0.25,
+      "rollAbsToleranceDeg": 0.1,
+      "alignmentResidualToleranceDeg": 0.25,
+      "minimumFrameMarginRatio": 0.06,
+      "leftRightMarginDifferenceLimit": 0.03,
+      "targetHeightEqualsCameraHeight": true,
+      "rayMustHitReferenceWallSegment": true
+    }
+  },
+  "rooms": {
+    "living": {
+      "cameraHeightMeters": 1.25,
+      "primaryAnchors": ["sofa-group", "tv-console-group"],
+      "requiredCandidates": ["sofa-frontal", "tv-wall-frontal"],
+      "optionalCandidates": ["living-relationship", "balcony-light-relationship"]
+    },
+    "dining": {
+      "cameraHeightMeters": 1.3,
+      "primaryAnchors": ["dining-table-all-chairs", "sideboard-wall"],
+      "requiredCandidates": ["dining-background-wall-frontal"],
+      "optionalCandidates": ["dining-relationship"]
+    },
+    "kitchen": {
+      "cameraHeightMeters": 1.4,
+      "primaryAnchors": ["longest-cabinet-run", "worktop-appliance-sequence"],
+      "requiredCandidates": ["cabinet-run-frontal"],
+      "optionalCandidates": ["corner-or-entry-relationship"]
+    },
+    "bedroom": {
+      "cameraHeightMeters": 1.1,
+      "primaryAnchors": ["bed-group", "headboard-wall"],
+      "requiredCandidates": ["bed-axis-frontal"],
+      "optionalCandidates": ["door-user-view"]
+    },
+    "entry": {
+      "cameraHeightMeters": 1.3,
+      "primaryAnchors": ["circulation-axis", "entry-storage", "terminal-opening"],
+      "requiredCandidates": ["entry-user-view"],
+      "optionalCandidates": ["interior-reverse-view"]
+    },
+    "corridor": {
+      "cameraHeightMeters": 1.3,
+      "primaryAnchors": ["circulation-axis", "terminal-opening"],
+      "requiredCandidates": ["corridor-one-point"],
+      "optionalCandidates": ["reverse-circulation-view"]
+    },
+    "balcony": {
+      "cameraHeightMeters": 1.3,
+      "primaryAnchors": ["balcony-long-axis", "functional-end"],
+      "requiredCandidates": ["balcony-long-axis"],
+      "optionalCandidates": ["indoor-outdoor-relationship"]
+    },
+    "bathroom": {
+      "cameraHeightMeters": 1.25,
+      "primaryAnchors": ["vanity-or-shower-wall", "fixture-cluster"],
+      "requiredCandidates": ["key-fixture-frontal"],
+      "optionalCandidates": ["door-user-view"]
+    },
+    "study": {
+      "cameraHeightMeters": 1.25,
+      "primaryAnchors": ["desk-group", "storage-wall"],
+      "requiredCandidates": ["work-zone-frontal"],
+      "optionalCandidates": ["entry-function-relationship"]
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://interior.local/schemas/product-browser-qa-v1.json",
+  "title": "Single product browser QA v1",
+  "type": "object",
+  "required": ["schema", "stateSha256", "standaloneSha256", "desktop", "mobile", "errors", "pass", "canonicalSha256"],
+  "properties": {
+    "schema": {"const": "interior.product-browser-qa.v1"},
+    "stateSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "standaloneSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "desktop": {"$ref": "#/$defs/viewport"},
+    "mobile": {"$ref": "#/$defs/viewport"},
+    "errors": {"type": "array", "maxItems": 0},
+    "pass": {"const": true},
+    "canonicalSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "viewport": {
+      "type": "object",
+      "required": ["width", "height", "canvasNonBlank", "consoleErrorCount", "webglErrorCount", "overflowPx", "pass"],
+      "properties": {
+        "width": {"type": "integer", "minimum": 240},
+        "height": {"type": "integer", "minimum": 320},
+        "canvasNonBlank": {"const": true},
+        "consoleErrorCount": {"const": 0},
+        "webglErrorCount": {"const": 0},
+        "overflowPx": {"const": 0},
+        "pass": {"const": true}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,26 @@
+{
+  "skill": "interior-circulation-planning",
+  "version": "3.1.0",
+  "language": "zh-CN",
+  "purpose": "对冻结户型结构基线与当前家具柜体布局做拓扑、可达性和净宽差分，只拦截布局新增退化，并向三种原生建模后端生成可复核调整闭环",
+  "file_count": 17,
+  "files": [
+    "ENVIRONMENT_CONTRACT.md",
+    "MANIFEST.json",
+    "SKILL.md",
+    "agents/openai.yaml",
+    "assets/circulation-policy.v2.json",
+    "data_contract.md",
+    "local_runtime.md",
+    "playbook.md",
+    "references/backend-adapters.md",
+    "references/baseline-differential-method.md",
+    "references/topology-and-clearance-method.md",
+    "scripts/audit_circulation.py",
+    "scripts/build_circulation_scene.py",
+    "scripts/common.py",
+    "scripts/finalize_circulation_delivery.py",
+    "scripts/plan_layout_adjustments.py",
+    "scripts_logic.md"
+  ]
+}

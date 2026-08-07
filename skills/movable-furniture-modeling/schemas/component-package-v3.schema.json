@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://interior.local/schemas/custom-component-package-v3.json",
+  "title": "Interior custom component package v3",
+  "type": "object",
+  "required": ["schema", "packageId", "placementClass", "appearance", "bindings", "carvingPlan", "evidence", "visualHullState", "projectionReport", "standalone", "browserQa", "status", "packageSha256"],
+  "properties": {
+    "schema": {"const": "interior.custom-component-package.v3"},
+    "packageId": {"type": "string", "minLength": 1},
+    "placementClass": {"enum": ["movable-green", "fixed-purple"]},
+    "appearance": {
+      "type": "object",
+      "required": ["defaultMode", "supportedModes", "geometryStateSha256", "sourceColorAuthority"],
+      "properties": {
+        "defaultMode": {"const": "white-model"},
+        "supportedModes": {"const": ["white-model", "source-color"]},
+        "geometryStateSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "sourceColorAuthority": {"const": "visualHullState.components[].material"}
+      },
+      "additionalProperties": false
+    },
+    "bindings": {
+      "type": "object",
+      "required": ["planCanonicalSha256", "stateCanonicalSha256", "projectionReportCanonicalSha256", "browserQaCanonicalSha256"],
+      "properties": {
+        "planCanonicalSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "stateCanonicalSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "projectionReportCanonicalSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "browserQaCanonicalSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "carvingPlan": {"$ref": "#/$defs/artifact"},
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["viewId", "regionEvidence", "sourceImage"],
+        "properties": {
+          "viewId": {"type": "string", "minLength": 1},
+          "regionEvidence": {"$ref": "#/$defs/artifact"},
+          "sourceImage": {"$ref": "#/$defs/artifact"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "visualHullState": {"$ref": "#/$defs/artifact"},
+    "projectionReport": {"$ref": "#/$defs/artifact"},
+    "standalone": {"$ref": "#/$defs/artifact"},
+    "browserQa": {"$ref": "#/$defs/artifact"},
+    "status": {"enum": ["provisional", "accepted"]},
+    "packageSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

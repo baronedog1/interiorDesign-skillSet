@@ -1,0 +1,4 @@
+interface:
+  display_name: "室内设计方案册"
+  short_description: "把已验收设计结果做成方案册、PDF、图册或汇报材料"
+  default_prompt: "当用户要求方案册、设计说明书、PDF、设计图册、作品集、汇报材料或社区图文时使用。只读取 confirmed-version 中 QA 通过的干净规划、用户资产、同 shotId 白模机位和效果图；先讲规划与用户资产，再按空间展示效果，每张空间图默认附同机位白模小图，技术描线过程默认不入册。完成 HTML/CSS、全页、字体、图片、移动端 RGB 和 sendable PDF QA；平台项目上传及社区预览/公开一律交给 idk-canvas-ingest-agent。"

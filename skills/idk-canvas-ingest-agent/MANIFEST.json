@@ -1,0 +1,23 @@
+{
+  "skill": "idk-canvas-ingest-agent",
+  "version": "2.0.0",
+  "language": "zh-CN",
+  "purpose": "作为所有设计 Skill 唯一平台边界，创建或复用项目、上传 accepted 产物并在明确确认后发布社区",
+  "file_count": 14,
+  "files": [
+    "ENVIRONMENT_CONTRACT.md",
+    "MANIFEST.json",
+    "SKILL.md",
+    "agents/openai.yaml",
+    "api.md",
+    "data_contract.md",
+    "local_runtime.md",
+    "playbook.md",
+    "scripts/idk-env.mjs",
+    "scripts/list_library_items.mjs",
+    "scripts/publish_community_post.mjs",
+    "scripts/publish_project_artifact.mjs",
+    "scripts/upload_library_item.mjs",
+    "scripts_logic.md"
+  ]
+}

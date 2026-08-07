@@ -1,0 +1,120 @@
+{
+  "schema": "interior.floorplan-trace.v3",
+  "floorplanId": "template-floorplan",
+  "name": "三空间拓扑编译示例",
+  "sourceImage": "inputs/source-floorplan.png",
+  "planBounds": [20, 20, 380, 280],
+  "knownSizeMm": {
+    "width": 8000,
+    "depth": 6000
+  },
+  "spaceSeeds": [
+    {
+      "id": "living",
+      "name": "客厅",
+      "spaceType": "living",
+      "topologyClass": "open-zone",
+      "sourceLabelId": "label-living",
+      "point": [105, 105]
+    },
+    {
+      "id": "bedroom",
+      "name": "卧室",
+      "spaceType": "bedroom",
+      "topologyClass": "enclosed",
+      "sourceLabelId": "label-bedroom",
+      "point": [295, 105]
+    },
+    {
+      "id": "balcony",
+      "name": "阳台",
+      "spaceType": "balcony",
+      "topologyClass": "attached",
+      "sourceLabelId": "label-balcony",
+      "point": [105, 245]
+    }
+  ],
+  "semanticDividers": [
+    {
+      "id": "divider-living-balcony",
+      "kind": "open-zone-boundary",
+      "connectionId": "opening-living-balcony",
+      "sourceDividerId": "candidate-divider-living-balcony",
+      "reason": "源图分别标注客厅和阳台；分界由开放区结构端点确定，双方保持开放通行"
+    }
+  ],
+  "layers": {
+    "movableFurniture": [
+      {
+        "id": "green-living-sofa",
+        "traceId": "green-living-sofa",
+        "sourceObjectCandidateId": "candidate-object-living-sofa",
+      "sourceLabelId": "label-living",
+      "name": "客厅沙发",
+      "functionalClass": "sofa",
+      "quantity": 1,
+      "type": "polygon",
+        "points": [[65, 85], [145, 85], [145, 115], [65, 115]],
+        "details": [[[75, 95], [135, 95]]],
+        "strokeOnly": true,
+        "width": 2
+      }
+    ],
+    "fixedFixtures": [
+      {
+        "id": "purple-bedroom-wardrobe",
+        "traceId": "purple-bedroom-wardrobe",
+        "sourceObjectCandidateId": "candidate-object-bedroom-wardrobe",
+        "sourceLabelId": "label-bedroom",
+        "name": "卧室衣柜",
+        "type": "polygon",
+        "points": [[335, 45], [365, 45], [365, 125], [335, 125]],
+        "details": [[[350, 45], [350, 125]]],
+        "strokeOnly": true,
+        "width": 2
+      }
+    ],
+    "other": []
+  },
+  "cleanStructure": {
+    "windows": [
+      {
+        "id": "window-living",
+        "name": "客厅窗",
+        "sourceOpeningId": "candidate-window-living",
+        "hostWallTraceId": "wall-north",
+        "sill": 0.75,
+        "openingHeight": 1.55,
+        "kind": "standard",
+        "frameDepth": 0.08
+      }
+    ],
+    "connections": [
+      {
+        "id": "entry-living",
+        "fromRoomId": "living",
+        "toRoomId": "exterior",
+        "sourceOpeningId": "candidate-door-entry",
+        "bottom": 0,
+        "height": 2.1
+      },
+      {
+        "id": "door-living-bedroom",
+        "fromRoomId": "living",
+        "toRoomId": "bedroom",
+        "sourceOpeningId": "candidate-door-bedroom",
+        "bottom": 0,
+        "height": 2.1
+      },
+      {
+        "id": "opening-living-balcony",
+        "fromRoomId": "living",
+        "toRoomId": "balcony",
+        "sourceDividerId": "candidate-divider-living-balcony",
+        "bottom": 0,
+        "height": 2.7
+      }
+    ],
+    "removedNoise": []
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "interior.cad-object-stage-timing.v1",
+  "title": "CAD Object Stage Timing",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "taskId", "startedAt", "endedAt", "stages", "totalDurationMs", "wallClockDurationMs", "unaccountedGapMs", "timingHash"],
+  "properties": {
+    "schema": {"const": "interior.cad-object-stage-timing.v1"},
+    "taskId": {"type": "string", "minLength": 1},
+    "startedAt": {"type": "string", "format": "date-time"},
+    "endedAt": {"type": "string", "format": "date-time"},
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stageId", "name", "startedAt", "endedAt", "durationMs", "activities"],
+        "properties": {
+          "stageId": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "startedAt": {"type": "string", "format": "date-time"},
+          "endedAt": {"type": "string", "format": "date-time"},
+          "durationMs": {"type": "integer", "minimum": 0},
+          "activities": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "totalDurationMs": {"type": "integer", "minimum": 0},
+    "wallClockDurationMs": {"type": "integer", "minimum": 0},
+    "unaccountedGapMs": {"type": "integer", "minimum": 0},
+    "timingHash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

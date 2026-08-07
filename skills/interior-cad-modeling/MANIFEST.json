@@ -1,0 +1,33 @@
+{
+  "skill": "interior-cad-modeling",
+  "version": "1.5.0",
+  "language": "zh-CN",
+  "purpose": "把同一平面 handoff 编译为独立 CAD/STEP B-rep 户型、资产、编辑、碰撞、截图和原生模型清单",
+  "file_count": 24,
+  "files": [
+    "ENVIRONMENT_CONTRACT.md",
+    "MANIFEST.json",
+    "SKILL.md",
+    "agents/openai.yaml",
+    "assets/cad-component-library/residential-catalog-v3.json",
+    "assets/interior-cad-template/backend-options.json",
+    "data_contract.md",
+    "local_runtime.md",
+    "playbook.md",
+    "references/cad-architecture.md",
+    "references/licensing-and-editability.md",
+    "scripts/build_cad_floorplan.py",
+    "scripts/apply_circulation_adjustment.py",
+    "scripts/build_functional_class_catalog.py",
+    "scripts/cad_semantic_projection.py",
+    "scripts/capture_cad_views.py",
+    "scripts/common.py",
+    "scripts/export_native_model_manifest.py",
+    "scripts/init_cad_model_project.py",
+    "scripts/resolve_component_motion.py",
+    "scripts/validate_asset_selection.py",
+    "scripts/validate_cad_model.py",
+    "scripts_logic.md",
+    "templates.md"
+  ]
+}

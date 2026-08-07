@@ -1,0 +1,10 @@
+{
+  "schema": "interior.blender-backend-options.v1",
+  "backend": "blender",
+  "ceilings": {"enabled": true, "visibleByDefault": false, "defaultStyle": "flat"},
+  "windows": {"defaultStyle": "frameless-glass", "allowedStyles": ["frameless-glass", "fixed-pane", "casement", "sliding"], "overrides": {}},
+  "balconies": {"defaultEnclosureMode": "source", "allowedModes": ["source", "open-railing", "closed-glazing"], "railingHeightMeters": 1.1},
+  "structureEditing": {"wallEndpoints": true, "constraint": "collinear-extension", "patchSchema": "interior.structure-edit-patch.v1"},
+  "collision": {"mode": "continuous-first-contact-stop", "maxSweepStepMeters": 0.02},
+  "componentAppearance": {"default": "white-model", "alternate": "source-color"}
+}

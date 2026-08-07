@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "8.0",
+  "schema": "interior.camera-plan.v8",
+  "methodVersion": "deterministic-wall-normal-camera-v7",
+  "coordinateSystem": "interior-world-y-up.v1",
+  "modelBackend": "html-threejs",
+  "sourceModelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "modelSchema": "interior.floorplan-structure.v3",
+  "floorplanId": "template-floorplan",
+  "seriesId": "living-native-candidates-v01",
+  "purpose": "render-reference",
+  "captureScope": {
+    "mode": "requested-room-subset",
+    "requestedRoomIds": ["living"],
+    "allowedContextRoomIds": [],
+    "excludedRoomIds": [],
+    "reason": "example requests only the living room"
+  },
+  "planPhase": "final-selection",
+  "nativeModelManifestPath": "native-model-manifest.json",
+  "circulationResult": {
+    "path": "circulation-result.json",
+    "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "resultDigestSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "topologyAuditDigestSha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "layoutRelationshipAuditDigestSha256": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "frontalSeedSet": {
+    "path": "camera-frontal-seeds.example.json",
+    "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+    "seedSetDigestSha256": "4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  "candidateCompilation": {
+    "path": "camera-candidate-batch.example.json",
+    "sha256": "6666666666666666666666666666666666666666666666666666666666666666",
+    "batchDigestSha256": "8888888888888888888888888888888888888888888888888888888888888888"
+  },
+  "roomCoverage": [
+    {
+      "roomId": "living",
+      "major": true,
+      "primarySubject": "完整沙发组、背景墙和连续空间进深",
+      "selectedShotIds": ["living-frontal-80"],
+      "candidateGroupIds": ["living-frontal"],
+      "requiredFrontalPrimary": true,
+      "selectionRationale": "原生候选中正视、边距、近远尺度和遮挡综合得分最高。"
+    }
+  ],
+  "candidateGroups": [
+    {
+      "candidateGroupId": "living-frontal",
+      "roomId": "living",
+      "candidateAudit": {
+        "modelBackend": "html-threejs",
+        "sourceModelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "selectionMethod": "deterministic-first-fitting-with-one-bounded-fallback",
+        "orderedFittingCandidateIds": ["living-o80-f28", "living-o80-f24"],
+        "selectedCandidateId": "living-o80-f28",
+        "nativePreviewEvidence": [
+          {"candidateId": "living-o80-f28", "modelBackend": "html-threejs", "sourceModelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "imagePath": "candidates/living-o80-f28.png", "imageSha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "cameraEvidencePath": "candidates/living-o80-f28.camera-plan-evidence.json", "cameraEvidenceSha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "projectionAccepted": true, "failureCodes": []}
+        ]
+      }
+    }
+  ],
+  "lightingSetups": [
+    {
+      "lightingSetupId": "lighting-living-window-key",
+      "roomId": "living",
+      "name": "客厅窗侧自然主光",
+      "strategy": "window-daylight",
+      "rationale": "使用原生后端的真实窗向和空间灯具。",
+      "lights": []
+    }
+  ],
+  "shots": [
+    {
+      "shotId": "living-frontal-80",
+      "candidateGroupId": "living-frontal",
+      "candidateId": "living-o80-f28",
+      "selectionStatus": "selected",
+      "sequenceOrder": 1,
+      "roomId": "living",
+      "cameraHostRoomId": "living",
+      "role": "primary",
+      "composition": "one-point-frontal",
+      "frontalSeedId": "frontal::living",
+      "modelBackend": "html-threejs",
+      "sourceModelSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "position": [0, 1.25, 1.718519],
+      "target": [0, 1.25, -3],
+      "cameraHeight": 1.25,
+      "focalLengthMm": 28,
+      "fov": 43.806,
+      "lensBand": "standard",
+      "distortion": 0,
+      "levelCamera": true,
+      "frontalAlignment": {
+        "mode": "reference-wall-normal",
+        "referenceWallId": "wall-north",
+        "cameraUp": [0, 1, 0],
+        "wallTangentXZ": [1, 0],
+        "wallNormalXZ": [0, -1],
+        "opticalAxisXYZ": [0, 0, -1],
+        "rayIntersectionXZ": [0, -3],
+        "raySegmentParameter": 0.5,
+        "cameraToWallMeters": 4.718519,
+        "yawErrorDeg": 0,
+        "pitchDeg": 0,
+        "rollDeg": 0,
+        "alignmentResidualDeg": 0,
+        "sensorPlaneParallelToWall": true,
+        "worldVerticalsRemainVertical": true,
+        "targetHeightEqualsCameraHeight": true,
+        "rayHitsReferenceWall": true,
+        "tolerances": {"yawErrorDeg": 1, "pitchAbsDeg": 0.25, "rollAbsDeg": 0.1, "alignmentResidualDeg": 0.25}
+      },
+      "framing": {
+        "sensorWidthMm": 36,
+        "sensorHeightMm": 22.5,
+        "framingBasis": "anchor-reference-context-obb",
+        "targetOccupancy": 0.8,
+        "referenceOccupancyPolicy": 0.8,
+        "contextOccupancyPolicy": 0.94,
+        "verticalOccupancyPolicy": 0.72,
+        "envelopes": {
+          "anchor": {"widthMeters": 2.22, "heightMeters": 1, "depthMeters": 0.9, "elementIds": ["sofa-01"]},
+          "referenceFacade": {"widthMeters": 2.22, "heightMeters": 2.6, "elementIds": ["wall-north"]},
+          "context": {"widthMeters": 3.2, "heightMeters": 2.6, "elementIds": ["living-floor", "wall-east"]}
+        },
+        "envelopeFrameWidthTerms": {"anchorWidth": 2.775, "referenceWidth": 2.775, "contextWidth": 3.404255, "anchorHeight": 2.222222, "referenceHeight": 5.777778},
+        "frameWidthMeters": 5.777778,
+        "frameHeightMeters": 3.611111,
+        "availableDepthMeters": 6,
+        "targetPlaneDistanceMeters": 4.718519,
+        "cameraToReferenceFaceMeters": 4.718519,
+        "distanceSafetyFactor": 1.05,
+        "horizontalOccupancy": 0.384231,
+        "verticalOccupancy": 0.276923,
+        "depthScaleRatioEstimate": 1.12,
+        "depthScaleRatioLimit": 1.18,
+        "fitFormula": "Fw=max(Wa/oa,Wf/of,Wc/oc,Ha/ov*36/22.5,Hf/ov*36/22.5);D=Fw*focal/36*1.05",
+        "fitPass": true,
+        "measurementBasis": "native-model-obb-eight-corners"
+      },
+      "projectionAudit": {
+        "frameMargins": {"left": 0.09, "right": 0.1, "top": 0.08, "bottom": 0.07},
+        "depthScaleRatio": 1.12,
+        "foregroundBlockerShare": 0.08,
+        "mustShowComplete": true,
+        "nativeScreenshotPath": "selected/living-frontal-80.png"
+      },
+      "visibility": {
+        "mode": "all-connected-spaces",
+        "contextPolicy": "preserve-visible-adjacent-spaces",
+        "occlusionPolicy": "ray-blocking-local-elements-only",
+        "hiddenElementIds": ["wall-local-blocker"],
+        "hiddenElementEvidence": [{"elementId": "wall-local-blocker", "decision": "hide-local-ray-blocker", "nativeRaycastConfirmed": true, "blockedAnchorElementIds": ["component-living-sofa"]}],
+        "preserveElementIds": ["sofa-01", "wall-north"],
+        "preservedBackgroundRoomIds": ["living", "dining"]
+      },
+      "mustShowElements": ["sofa-01", "wall-north"],
+      "avoidOcclusionElements": ["sofa-01"],
+      "lightingSetupId": "lighting-living-window-key",
+      "sceneMapPath": "shot-scene-maps/living-frontal-80.json"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "ImageGen 批量编排"
+  short_description: "依赖感知地并发生成图片，并独立落盘、失败隔离和续跑"
+  default_prompt: "当一个任务需要生成多张不同输入的图片时使用。上游先给出 imagegen.batch-plan.v1 和依赖批次；本 Skill 为每张图建立独立状态，按 ready 批次最多五路并发调用 ImageGen，每张返回后立即落盘，只重试失败项，最后输出批次回执。共享空间、槽位或身份参考必须写依赖，不能越批。该五路额度不适用于本机模型截图；截图由 interior-camera-capture 最多两路调度。"

@@ -1,0 +1,62 @@
+{
+  "schema": "interior.scene-rig.v1",
+  "coordinateSystem": "threejs-world-y-up-meters",
+  "gizmosVisible": true,
+  "rendering": {
+    "toneMapping": "ACESFilmic",
+    "exposure": 1,
+    "ambientIntensity": 0.2,
+    "hemisphereIntensity": 0.62,
+    "detailFillIntensity": 0.16
+  },
+  "lights": [
+    {
+      "id": "light-day-key",
+      "name": "日光主灯",
+      "type": "directional",
+      "enabled": true,
+      "position": [-7, 13, 9],
+      "target": [0, 0.8, 0],
+      "intensity": 0.78,
+      "temperatureK": 6500,
+      "distance": 18,
+      "decay": 2,
+      "angle": 45,
+      "penumbra": 0.2,
+      "castShadow": true
+    }
+  ],
+  "cameras": [
+    {
+      "id": "camera-overview",
+      "name": "默认可编辑机位",
+      "enabled": true,
+      "position": [-3.2, 1.25, 1.5],
+      "target": [-1.8, 0.65, -0.9],
+      "focusRoomId": "living",
+      "fov": 46.397,
+      "focalLengthMm": 28,
+      "lensPreset": "wide",
+      "distortion": 0,
+      "near": 0.01,
+      "far": 120,
+      "mount": {
+        "mode": "free",
+        "wallId": null,
+        "offset": null,
+        "height": 1.55,
+        "side": 1,
+        "clearance": 0.12,
+        "snapEnabled": false
+      },
+      "visibility": {
+        "cutawayEnabled": false,
+        "contextPolicy": "preserve-visible-adjacent-spaces",
+        "hiddenElementIds": ["wall-left-west"],
+        "preserveElementIds": ["component-green-living-sofa", "wall-north", "window-living"],
+        "hiddenWallIds": ["wall-left-west"],
+        "hiddenComponentIds": []
+      }
+    }
+  ]
+}

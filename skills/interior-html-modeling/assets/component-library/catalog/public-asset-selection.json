@@ -1,0 +1,2736 @@
+{
+  "schema": "interior.public-component-selection.v2",
+  "generatedAt": "2026-08-02T04:40:00+08:00",
+  "selectionDigestSha256": "f90e5cc590554075d93f274dc06968f68e4016dcb3ffec27429a97c4a1b43455",
+  "sourceCatalogDigestSha256": "5203eb8baf52a9570be39732f4a07588f13737f4c65450823b30e2261d50898a",
+  "policy": {
+    "minimumPerCategory": 20,
+    "preserveValidatedUbuntuAssets": true,
+    "preferCompactCc0Tables": true,
+    "fillDeficitsBySmallestValidatedRuntime": true,
+    "allowProceduralAssets": false,
+    "note": "This exact list is the only component membership fact. Runtime cache state cannot add assets implicitly.",
+    "geometryAuditReplacementSpec": "research/geometry-audit-replacements.json"
+  },
+  "counts": {
+    "total": 337,
+    "byProvider": {
+      "amazon-berkeley-objects": 193,
+      "poly-haven": 129,
+      "sweet-home-3d-blendswap-cc0": 15
+    },
+    "byCategory": {
+      "lighting": 36,
+      "storage": 51,
+      "rug-textile": 20,
+      "mirror": 20,
+      "bed": 21,
+      "sofa": 20,
+      "chair": 20,
+      "decor-art": 28,
+      "plant": 20,
+      "decor-object": 31,
+      "stool": 20,
+      "appliance": 28,
+      "table": 22
+    }
+  },
+  "assets": [
+    {
+      "id": "abo-b0711q7wk7",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0711Q7WK7",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07121rm99",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07121RM99",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b0716wly2y",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0716WLY2Y",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b0719stf79",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0719STF79",
+      "category": "rug-textile",
+      "availability": "downloaded-source",
+      "reason": "smallest validated title/product-type reconciled rug selected to preserve the per-category minimum"
+    },
+    {
+      "id": "abo-b071f73xdb",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B071F73XDB",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b071fjr3sr",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B071FJR3SR",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b071kx42wg",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B071KX42WG",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b071w2sctj",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B071W2SCTJ",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b0725z23g4",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0725Z23G4",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b0728nwfcg",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0728NWFCG",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b072zk8897",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B072ZK8897",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b0735wmnt5",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0735WMNT5",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07374m9zt",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07374M9ZT",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07374p5np",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07374P5NP",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p15s8j",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P15S8J",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p15s9v",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P15S9V",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p17szz",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P17SZZ",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p17t6g",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P17T6G",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p1d981",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P1D981",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p1gb67",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P1GB67",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p1gb8k",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P1GB8K",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p1j8fh",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P1J8FH",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p1j9j2",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P1J9J2",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p1jnl5",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P1JNL5",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p1kfks",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P1KFKS",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p1n3ft",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P1N3FT",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p1n49f",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P1N49F",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p25sxr",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P25SXR",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p6l982",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P6L982",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073p6l986",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073P6L986",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073wgmtb8",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073WGMTB8",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073wgmtcb",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073WGMTCB",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073wgmtcc",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073WGMTCC",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073wgqbpv",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073WGQBPV",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073wgsn2q",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073WGSN2Q",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073wh17gt",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073WH17GT",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073whb435",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073WHB435",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b073whb43v",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B073WHB43V",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075hr7kvr",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HR7KVR",
+      "category": "plant",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b075hr7lff",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HR7LFF",
+      "category": "plant",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b075hwdt2z",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HWDT2Z",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075hwhvn6",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HWHVN6",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075hwr58k",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HWR58K",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075hx5qdl",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HX5QDL",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075hx9t8y",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HX9T8Y",
+      "category": "plant",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b075hxj6q9",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HXJ6Q9",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075hxlwrl",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HXLWRL",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075hxlwrm",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HXLWRM",
+      "category": "plant",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b075hxpg57",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HXPG57",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075hxqjtq",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075HXQJTQ",
+      "category": "plant",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b075qdgzx7",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QDGZX7",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075qdgzx9",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QDGZX9",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075qdmwtp",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QDMWTP",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075qdv39b",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QDV39B",
+      "category": "stool",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b075qdzj4h",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QDZJ4H",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075qfchlb",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QFCHLB",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075qfcjwk",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QFCJWK",
+      "category": "bed",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b075qfcz1z",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QFCZ1Z",
+      "category": "stool",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b075qg3jwl",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QG3JWL",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075qgd5hs",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075QGD5HS",
+      "category": "bed",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b075x2lkmn",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075X2LKMN",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075x4t5l6",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075X4T5L6",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075yz16v7",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075YZ16V7",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075yzpg5y",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075YZPG5Y",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075yzyjqn",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075YZYJQN",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075z8628k",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075Z8628K",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b075zbw1rr",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B075ZBW1RR",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b077x5r9xp",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B077X5R9XP",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b078jg4n1g",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B078JG4N1G",
+      "category": "plant",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b078jghzsz",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B078JGHZSZ",
+      "category": "plant",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b078jghzt3",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B078JGHZT3",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b078jgyjtg",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B078JGYJTG",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4db65t",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4DB65T",
+      "category": "stool",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07b4db8k9",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4DB8K9",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4mf2n5",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4MF2N5",
+      "category": "sofa",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07b4sc2jf",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4SC2JF",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4sc9tn",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4SC9TN",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4vxzzc",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4VXZZC",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4y45gy",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4Y45GY",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4ybvmp",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4YBVMP",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4ynhpf",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4YNHPF",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4yr6kf",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4YR6KF",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4yrz1d",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4YRZ1D",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4yvxc7",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4YVXC7",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b4yxnr3",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B4YXNR3",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b515pzr",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B515PZR",
+      "category": "rug-textile",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07b77vxn8",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B77VXN8",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b78g1bw",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B78G1BW",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b78rct5",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B78RCT5",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b79wskt",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B79WSKT",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b7dkrvm",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B7DKRVM",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b7dmmth",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B7DMMTH",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b8nbqwm",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B8NBQWM",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b8nw6gg",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B8NW6GG",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b8p1jgf",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B8P1JGF",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b8pxmrt",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B8PXMRT",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b8pxmtk",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B8PXMTK",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b8pxsgv",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B8PXSGV",
+      "category": "plant",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07b8w8fdd",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B8W8FDD",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07b92c9wt",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07B92C9WT",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07bzqqp5g",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07BZQQP5G",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07dbb7h9g",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07DBB7H9G",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07dbdt68y",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07DBDT68Y",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07dbdx446",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07DBDX446",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07dbf3s66",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07DBF3S66",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07dbj965s",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07DBJ965S",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07dbjj5q9",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07DBJJ5Q9",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07dtlwj8f",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07DTLWJ8F",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hj66bll",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HJ66BLL",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hk3ptpx",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HK3PTPX",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hk3ylg9",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HK3YLG9",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hk6n3jm",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HK6N3JM",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hk8yfpn",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HK8YFPN",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hk8yj69",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HK8YJ69",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hkfrtvc",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HKFRTVC",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hkfrv7l",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HKFRV7L",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hkfxdch",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HKFXDCH",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hkghtc1",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HKGHTC1",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hkgy6cg",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HKGY6CG",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hpj8s2y",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HPJ8S2Y",
+      "category": "sofa",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07hpkx8sw",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HPKX8SW",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hpmf4px",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HPMF4PX",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "strictly classified public source already exists in the managed store"
+    },
+    {
+      "id": "abo-b07hscjzqm",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSCJZQM",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsf7yhh",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSF7YHH",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsgcngt",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSGCNGT",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsh4zr2",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSH4ZR2",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hshhbr9",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSHHBR9",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hshmq52",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSHMQ52",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hshmvnf",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSHMVNF",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hshrzwt",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSHRZWT",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hshymb2",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSHYMB2",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hshymb8",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSHYMB8",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsjxgdw",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSJXGDW",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsk2h7m",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSK2H7M",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsky884",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSKY884",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsl4ts1",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSL4TS1",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hslg6wr",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSLG6WR",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hslhgbr",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSLHGBR",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hslk3gr",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSLK3GR",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hslqyf1",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSLQYF1",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsm8nkp",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSM8NKP",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsm8nkx",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSM8NKX",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsmynyj",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSMYNYJ",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hsphzxd",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSPHZXD",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hss5rnl",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HSS5RNL",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07hz75qtt",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07HZ75QTT",
+      "category": "sofa",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07j2jgxd7",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07J2JGXD7",
+      "category": "sofa",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07jl5pt64",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JL5PT64",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07jl5q2pm",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JL5Q2PM",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07jl5q3hc",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JL5Q3HC",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07jlgckp6",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JLGCKP6",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07jlsswdn",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JLSSWDN",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "strictly classified public source already exists in the managed store"
+    },
+    {
+      "id": "abo-b07jm1k8vh",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JM1K8VH",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07jnrntyj",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JNRNTYJ",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07jplhflv",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JPLHFLV",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07jqbdlbc",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JQBDLBC",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07jxdpkgc",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07JXDPKGC",
+      "category": "rug-textile",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07k7nxvxr",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07K7NXVXR",
+      "category": "bed",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07n6pkkwj",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07N6PKKWJ",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07n6rt9sm",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07N6RT9SM",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07n6rtlp7",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07N6RTLP7",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07p7nvlv8",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07P7NVLV8",
+      "category": "sofa",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07qhyf1ny",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07QHYF1NY",
+      "category": "sofa",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07tr659g8",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07TR659G8",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b07tthjjkq",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07TTHJJKQ",
+      "category": "stool",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07txpylvy",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07TXPYLVY",
+      "category": "stool",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07tytr8j5",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07TYTR8J5",
+      "category": "stool",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07tzqz1dj",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07TZQZ1DJ",
+      "category": "stool",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b07y2b738l",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B07Y2B738L",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b0825cxg9g",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0825CXG9G",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b0825dbmt7",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0825DBMT7",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b0825dby3c",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0825DBY3C",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b082qdzlrc",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B082QDZLRC",
+      "category": "sofa",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b082xcmrsm",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B082XCMRSM",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b082xcshkb",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B082XCSHKB",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b082xlg9td",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B082XLG9TD",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b082xlmw6g",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B082XLMW6G",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b082xln2zk",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B082XLN2ZK",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b082xmf2rv",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B082XMF2RV",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b082xmrgzg",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B082XMRGZG",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b0831xr16x",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B0831XR16X",
+      "category": "sofa",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b084hty39g",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B084HTY39G",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b084htz2c6",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B084HTZ2C6",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b084hv148l",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B084HV148L",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b084hv6kdl",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B084HV6KDL",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b084hvb133",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B084HVB133",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b08568hg2x",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B08568HG2X",
+      "category": "stool",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b08568x258",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B08568X258",
+      "category": "stool",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b086tfxk75",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B086TFXK75",
+      "category": "bed",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b086tg9q4v",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B086TG9Q4V",
+      "category": "bed",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b086tgjfzk",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B086TGJFZK",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "abo-b086tgwd9n",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B086TGWD9N",
+      "category": "bed",
+      "availability": "downloaded-source",
+      "reason": "smallest validated source selected to reach the per-category minimum"
+    },
+    {
+      "id": "abo-b08ftn8khy",
+      "provider": "amazon-berkeley-objects",
+      "sourceId": "B08FTN8KHY",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-anthurium-botany-01",
+      "provider": "poly-haven",
+      "sourceId": "anthurium_botany_01",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-antique-ceramic-vase-01",
+      "provider": "poly-haven",
+      "sourceId": "antique_ceramic_vase_01",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-bar-chair-round-01",
+      "provider": "poly-haven",
+      "sourceId": "bar_chair_round_01",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-barbershopchair-01",
+      "provider": "poly-haven",
+      "sourceId": "BarberShopChair_01",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-book-encyclopedia-set-01",
+      "provider": "poly-haven",
+      "sourceId": "book_encyclopedia_set_01",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-brass-goblets",
+      "provider": "poly-haven",
+      "sourceId": "brass_goblets",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-brass-vase-01",
+      "provider": "poly-haven",
+      "sourceId": "brass_vase_01",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-brass-vase-02",
+      "provider": "poly-haven",
+      "sourceId": "brass_vase_02",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-brass-vase-03",
+      "provider": "poly-haven",
+      "sourceId": "brass_vase_03",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-bull-head",
+      "provider": "poly-haven",
+      "sourceId": "bull_head",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-caged-hanging-light",
+      "provider": "poly-haven",
+      "sourceId": "caged_hanging_light",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-carved-wooden-elephant",
+      "provider": "poly-haven",
+      "sourceId": "carved_wooden_elephant",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-ceiling-fan",
+      "provider": "poly-haven",
+      "sourceId": "ceiling_fan",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-ceramic-vase-01",
+      "provider": "poly-haven",
+      "sourceId": "ceramic_vase_01",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-ceramic-vase-02",
+      "provider": "poly-haven",
+      "sourceId": "ceramic_vase_02",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-ceramic-vase-04",
+      "provider": "poly-haven",
+      "sourceId": "ceramic_vase_04",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chandelier-01",
+      "provider": "poly-haven",
+      "sourceId": "Chandelier_01",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chandelier-02",
+      "provider": "poly-haven",
+      "sourceId": "Chandelier_02",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chandelier-03",
+      "provider": "poly-haven",
+      "sourceId": "Chandelier_03",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-cheiridopsis-succulent",
+      "provider": "poly-haven",
+      "sourceId": "cheiridopsis_succulent",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chess-set",
+      "provider": "poly-haven",
+      "sourceId": "chess_set",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chinese-armchair",
+      "provider": "poly-haven",
+      "sourceId": "chinese_armchair",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chinese-cabinet",
+      "provider": "poly-haven",
+      "sourceId": "chinese_cabinet",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chinese-chandelier",
+      "provider": "poly-haven",
+      "sourceId": "chinese_chandelier",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chinese-commode",
+      "provider": "poly-haven",
+      "sourceId": "chinese_commode",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chinese-console-table",
+      "provider": "poly-haven",
+      "sourceId": "chinese_console_table",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-chinese-screen-panels",
+      "provider": "poly-haven",
+      "sourceId": "chinese_screen_panels",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chinese-sofa",
+      "provider": "poly-haven",
+      "sourceId": "chinese_sofa",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chinese-stool",
+      "provider": "poly-haven",
+      "sourceId": "chinese_stool",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-chinese-tea-table",
+      "provider": "poly-haven",
+      "sourceId": "chinese_tea_table",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-classicconsole-01",
+      "provider": "poly-haven",
+      "sourceId": "ClassicConsole_01",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-classicnightstand-01",
+      "provider": "poly-haven",
+      "sourceId": "ClassicNightstand_01",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-coffee-table-round-01",
+      "provider": "poly-haven",
+      "sourceId": "coffee_table_round_01",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-coffeetable-01",
+      "provider": "poly-haven",
+      "sourceId": "CoffeeTable_01",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-concrete-cat-statue",
+      "provider": "poly-haven",
+      "sourceId": "concrete_cat_statue",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-dining-chair-02",
+      "provider": "poly-haven",
+      "sourceId": "dining_chair_02",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-drawer-cabinet",
+      "provider": "poly-haven",
+      "sourceId": "drawer_cabinet",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-electric-stove",
+      "provider": "poly-haven",
+      "sourceId": "electric_stove",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-exterior-aircon-unit",
+      "provider": "poly-haven",
+      "sourceId": "exterior_aircon_unit",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-fancy-picture-frame-01",
+      "provider": "poly-haven",
+      "sourceId": "fancy_picture_frame_01",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-fancy-picture-frame-02",
+      "provider": "poly-haven",
+      "sourceId": "fancy_picture_frame_02",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-fern-02",
+      "provider": "poly-haven",
+      "sourceId": "fern_02",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-folding-wooden-stool",
+      "provider": "poly-haven",
+      "sourceId": "folding_wooden_stool",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-gallinera-chair",
+      "provider": "poly-haven",
+      "sourceId": "gallinera_chair",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-gallinera-table",
+      "provider": "poly-haven",
+      "sourceId": "gallinera_table",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-gothic-coffee-table",
+      "provider": "poly-haven",
+      "sourceId": "gothic_coffee_table",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-gothic-statue",
+      "provider": "poly-haven",
+      "sourceId": "gothic_statue",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-gothicbed-01",
+      "provider": "poly-haven",
+      "sourceId": "GothicBed_01",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-gothiccabinet-01",
+      "provider": "poly-haven",
+      "sourceId": "GothicCabinet_01",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-gothiccommode-01",
+      "provider": "poly-haven",
+      "sourceId": "GothicCommode_01",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-greenchair-01",
+      "provider": "poly-haven",
+      "sourceId": "GreenChair_01",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-hanging-industrial-lamp",
+      "provider": "poly-haven",
+      "sourceId": "hanging_industrial_lamp",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-hanging-picture-frame-01",
+      "provider": "poly-haven",
+      "sourceId": "hanging_picture_frame_01",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-hanging-picture-frame-02",
+      "provider": "poly-haven",
+      "sourceId": "hanging_picture_frame_02",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-hanging-picture-frame-03",
+      "provider": "poly-haven",
+      "sourceId": "hanging_picture_frame_03",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-horse-head",
+      "provider": "poly-haven",
+      "sourceId": "horse_head",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-horse-statue-01",
+      "provider": "poly-haven",
+      "sourceId": "horse_statue_01",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-industrial-caged-sconce",
+      "provider": "poly-haven",
+      "sourceId": "industrial_caged_sconce",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-industrial-coffee-table",
+      "provider": "poly-haven",
+      "sourceId": "industrial_coffee_table",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-industrial-wall-lamp",
+      "provider": "poly-haven",
+      "sourceId": "industrial_wall_lamp",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-industrial-wall-sconce",
+      "provider": "poly-haven",
+      "sourceId": "industrial_wall_sconce",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-lambis-shell",
+      "provider": "poly-haven",
+      "sourceId": "lambis_shell",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-lantern-01",
+      "provider": "poly-haven",
+      "sourceId": "Lantern_01",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-lantern-chandelier-01",
+      "provider": "poly-haven",
+      "sourceId": "lantern_chandelier_01",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-lion-head",
+      "provider": "poly-haven",
+      "sourceId": "lion_head",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-marble-bust-01",
+      "provider": "poly-haven",
+      "sourceId": "marble_bust_01",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-metal-office-desk",
+      "provider": "poly-haven",
+      "sourceId": "metal_office_desk",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-metal-stool-01",
+      "provider": "poly-haven",
+      "sourceId": "metal_stool_01",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-metal-stool-02",
+      "provider": "poly-haven",
+      "sourceId": "metal_stool_02",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-metal-stool-03",
+      "provider": "poly-haven",
+      "sourceId": "metal_stool_03",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-modern-arm-chair-01",
+      "provider": "poly-haven",
+      "sourceId": "modern_arm_chair_01",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-modern-ceiling-lamp-01",
+      "provider": "poly-haven",
+      "sourceId": "modern_ceiling_lamp_01",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-modern-coffee-table-02",
+      "provider": "poly-haven",
+      "sourceId": "modern_coffee_table_02",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-modern-wooden-cabinet",
+      "provider": "poly-haven",
+      "sourceId": "modern_wooden_cabinet",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-old-bed-frame",
+      "provider": "poly-haven",
+      "sourceId": "old_bed_frame",
+      "category": "bed",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-ornate-mirror-01",
+      "provider": "poly-haven",
+      "sourceId": "ornate_mirror_01",
+      "category": "mirror",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-ottoman-01",
+      "provider": "poly-haven",
+      "sourceId": "Ottoman_01",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-pachira-aquatica-01",
+      "provider": "poly-haven",
+      "sourceId": "pachira_aquatica_01",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-painted-wooden-bench",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_bench",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-painted-wooden-cabinet",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_cabinet",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-painted-wooden-cabinet-02",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_cabinet_02",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-painted-wooden-chair-01",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_chair_01",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-painted-wooden-chair-02",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_chair_02",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-painted-wooden-nightstand",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_nightstand",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-painted-wooden-shelves",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_shelves",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-painted-wooden-sofa",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_sofa",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-painted-wooden-stool",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_stool",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-painted-wooden-table",
+      "provider": "poly-haven",
+      "sourceId": "painted_wooden_table",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-plastic-monobloc-chair-01",
+      "provider": "poly-haven",
+      "sourceId": "plastic_monobloc_chair_01",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-potted-plant-01",
+      "provider": "poly-haven",
+      "sourceId": "potted_plant_01",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-potted-plant-02",
+      "provider": "poly-haven",
+      "sourceId": "potted_plant_02",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-potted-plant-04",
+      "provider": "poly-haven",
+      "sourceId": "potted_plant_04",
+      "category": "plant",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-rockingchair-01",
+      "provider": "poly-haven",
+      "sourceId": "Rockingchair_01",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-round-wooden-table-01",
+      "provider": "poly-haven",
+      "sourceId": "round_wooden_table_01",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-round-wooden-table-02",
+      "provider": "poly-haven",
+      "sourceId": "round_wooden_table_02",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-schoolchair-01",
+      "provider": "poly-haven",
+      "sourceId": "SchoolChair_01",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-shelf-01",
+      "provider": "poly-haven",
+      "sourceId": "Shelf_01",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-side-table-01",
+      "provider": "poly-haven",
+      "sourceId": "side_table_01",
+      "category": "table",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-side-table-tall-01",
+      "provider": "poly-haven",
+      "sourceId": "side_table_tall_01",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-small-wooden-table-01",
+      "provider": "poly-haven",
+      "sourceId": "small_wooden_table_01",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-sofa-01",
+      "provider": "poly-haven",
+      "sourceId": "Sofa_01",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-sofa-02",
+      "provider": "poly-haven",
+      "sourceId": "sofa_02",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-sofa-03",
+      "provider": "poly-haven",
+      "sourceId": "sofa_03",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-standing-chalkboard-01",
+      "provider": "poly-haven",
+      "sourceId": "standing_chalkboard_01",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-steel-frame-shelves-01",
+      "provider": "poly-haven",
+      "sourceId": "steel_frame_shelves_01",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-steel-frame-shelves-02",
+      "provider": "poly-haven",
+      "sourceId": "steel_frame_shelves_02",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-steel-frame-shelves-03",
+      "provider": "poly-haven",
+      "sourceId": "steel_frame_shelves_03",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-tea-set-01",
+      "provider": "poly-haven",
+      "sourceId": "tea_set_01",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-television-01",
+      "provider": "poly-haven",
+      "sourceId": "Television_01",
+      "category": "appliance",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-treasure-chest",
+      "provider": "poly-haven",
+      "sourceId": "treasure_chest",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-vintage-cabinet-01",
+      "provider": "poly-haven",
+      "sourceId": "vintage_cabinet_01",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-vintage-day-bed",
+      "provider": "poly-haven",
+      "sourceId": "vintage_day_bed",
+      "category": "sofa",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-vintage-oil-lamp",
+      "provider": "poly-haven",
+      "sourceId": "vintage_oil_lamp",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-vintage-suitcase",
+      "provider": "poly-haven",
+      "sourceId": "vintage_suitcase",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-vintage-telephone-wall-clock",
+      "provider": "poly-haven",
+      "sourceId": "vintage_telephone_wall_clock",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-vintage-wooden-drawer-01",
+      "provider": "poly-haven",
+      "sourceId": "vintage_wooden_drawer_01",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-wall-clock",
+      "provider": "poly-haven",
+      "sourceId": "wall_clock",
+      "category": "decor-art",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-wicker-basket-02",
+      "provider": "poly-haven",
+      "sourceId": "wicker_basket_02",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-wooden-bookshelf-worn",
+      "provider": "poly-haven",
+      "sourceId": "wooden_bookshelf_worn",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-wooden-bowl-01",
+      "provider": "poly-haven",
+      "sourceId": "wooden_bowl_01",
+      "category": "decor-object",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-wooden-lantern-01",
+      "provider": "poly-haven",
+      "sourceId": "wooden_lantern_01",
+      "category": "lighting",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-wooden-stool-01",
+      "provider": "poly-haven",
+      "sourceId": "wooden_stool_01",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-wooden-stool-02",
+      "provider": "poly-haven",
+      "sourceId": "wooden_stool_02",
+      "category": "stool",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-wooden-table-02",
+      "provider": "poly-haven",
+      "sourceId": "wooden_table_02",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-woodenchair-01",
+      "provider": "poly-haven",
+      "sourceId": "WoodenChair_01",
+      "category": "chair",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-woodentable-01",
+      "provider": "poly-haven",
+      "sourceId": "WoodenTable_01",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-woodentable-02",
+      "provider": "poly-haven",
+      "sourceId": "WoodenTable_02",
+      "category": "table",
+      "availability": "downloaded-source",
+      "reason": "compact CC0 table source selected for category coverage"
+    },
+    {
+      "id": "ph-woodentable-03",
+      "provider": "poly-haven",
+      "sourceId": "WoodenTable_03",
+      "category": "table",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "ph-worn-metal-rack",
+      "provider": "poly-haven",
+      "sourceId": "worn_metal_rack",
+      "category": "storage",
+      "availability": "already-on-ubuntu",
+      "reason": "valid source and runtime GLB already exist in the managed store"
+    },
+    {
+      "id": "sh3d-cc0-gas-cooktop",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#stove",
+      "category": "appliance",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-generic-closed-cupboard",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#cupboard",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-kitchen-base-cabinet",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#lowerCabinet",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-kitchen-corner-base-cabinet",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#lowerCornerCabinet",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-kitchen-drawer-base",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#drawersCabinet",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-kitchen-glass-wall-cabinet",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#glassDoorCabinet",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-kitchen-hood-wall-cabinet",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#smallUpperCabinet",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-kitchen-sink-base",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#sinkCabinet2",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-kitchen-tall-oven-cabinet",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#highCabinet",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-kitchen-wall-cabinet",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#upperCabinet",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-modern-vanity",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#modernVanity",
+      "category": "appliance",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-neutral-upholstered-bed",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#bedWithTexture",
+      "category": "bed",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-pedestal-washbasin",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#washbasin",
+      "category": "appliance",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-sliding-door-wardrobe",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#wardrobeWithSlidingDoors",
+      "category": "storage",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    },
+    {
+      "id": "sh3d-cc0-toilet-unit",
+      "provider": "sweet-home-3d-blendswap-cc0",
+      "sourceId": "Blend Swap CC-0#toiletsUnit",
+      "category": "appliance",
+      "availability": "compiled-in-managed-store",
+      "reason": "reviewed official CC0 source with editable OBJ tree and validated runtime GLB"
+    }
+  ]
+}

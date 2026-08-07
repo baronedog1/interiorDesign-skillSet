@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "snapshotAt": "2026-08-08T00:30:00+08:00",
+  "source": {
+    "deviceId": "ubuntu-01-codex",
+    "skillRoot": "/home/agentops/.codex/skills",
+    "excluded": [
+      "credentials",
+      "auth",
+      "sessions",
+      "history",
+      "tasks",
+      "logs",
+      "customer-data",
+      "node_modules",
+      "runtime-cache"
+    ]
+  },
+  "skillCount": 16,
+  "fileCount": 692,
+  "skills": [
+    {
+      "id": "booklet-production",
+      "path": "skills/booklet-production",
+      "version": "3.3.0",
+      "fileCount": 16,
+      "bytes": 6412755,
+      "sha256": "df3ea11982f4e5f14f0b200716ba37c99eb44ff359e119e3335ddec1d82db303"
+    },
+    {
+      "id": "cad",
+      "path": "skills/cad",
+      "version": "unversioned",
+      "fileCount": 66,
+      "bytes": 1704566,
+      "sha256": "33d54346fff915a6da1997951e7109b62e88b7457606d93d39ce912e50909c77"
+    },
+    {
+      "id": "cad-object-modeling",
+      "path": "skills/cad-object-modeling",
+      "version": "1.0.0",
+      "fileCount": 32,
+      "bytes": 167995,
+      "sha256": "d501e9416cf5a075984d7777fa1cfee9461acbfc7c2321e5b8e97cb0613551ec"
+    },
+    {
+      "id": "cad-viewer",
+      "path": "skills/cad-viewer",
+      "version": "unversioned",
+      "fileCount": 209,
+      "bytes": 18401739,
+      "sha256": "3c5c7a1f37f5ab6b15e83f192f4fffb7d4885a3af97e4bf0b50b10e5c530ebb8"
+    },
+    {
+      "id": "cad-zh",
+      "path": "skills/cad-zh",
+      "version": "unversioned",
+      "fileCount": 60,
+      "bytes": 1691252,
+      "sha256": "001d4e1629b1528c99bdbf60f6fb36fc53a5bd2a8f28a99c761b8bfcccf46ed5"
+    },
+    {
+      "id": "idk-canvas-ingest-agent",
+      "path": "skills/idk-canvas-ingest-agent",
+      "version": "2.0.0",
+      "fileCount": 14,
+      "bytes": 54519,
+      "sha256": "64413e50231ddf27fbcf8d1f5dc05234dabf560d7114ecc94a4bdd3094356928"
+    },
+    {
+      "id": "imagegen-batch-orchestrator",
+      "path": "skills/imagegen-batch-orchestrator",
+      "version": "1.1.0",
+      "fileCount": 8,
+      "bytes": 32166,
+      "sha256": "78b98db6ae179bf74cbbd0110285d961911dd1403a11f631f33926dd66f17d9e"
+    },
+    {
+      "id": "interior-blender-modeling",
+      "path": "skills/interior-blender-modeling",
+      "version": "1.5.0",
+      "fileCount": 27,
+      "bytes": 146776,
+      "sha256": "690351192ea6f2fac19f733782af526f4e214ae78a3a8c00d840fceb8c62231f"
+    },
+    {
+      "id": "interior-cad-modeling",
+      "path": "skills/interior-cad-modeling",
+      "version": "1.5.0",
+      "fileCount": 24,
+      "bytes": 420506,
+      "sha256": "0c5ed8f52f1fa90cd4c529df68fe77b1407784a8eaafffab857f16128ee85e03"
+    },
+    {
+      "id": "interior-camera-capture",
+      "path": "skills/interior-camera-capture",
+      "version": "20.0.0",
+      "fileCount": 44,
+      "bytes": 322316,
+      "sha256": "d900f391554bbdefddae6833f7e334f73fc7f3345436945f26fb8c35d4f26d9f"
+    },
+    {
+      "id": "interior-circulation-planning",
+      "path": "skills/interior-circulation-planning",
+      "version": "3.1.0",
+      "fileCount": 17,
+      "bytes": 164837,
+      "sha256": "c28039bfeb71a26a4228048f60014fa9bf2dcb502b2fab2f2e4c53ba7507ec5b"
+    },
+    {
+      "id": "interior-design-video-production",
+      "path": "skills/interior-design-video-production",
+      "version": "1.1.0",
+      "fileCount": 22,
+      "bytes": 99949,
+      "sha256": "d14283c5011e8ed48921f8c9cc3d0218aab93e28247bddb9e270e328ed9515e2"
+    },
+    {
+      "id": "interior-floorplan-planning",
+      "path": "skills/interior-floorplan-planning",
+      "version": "6.4.0",
+      "fileCount": 24,
+      "bytes": 276044,
+      "sha256": "ee74a1e755b890bb08d26596f23eb70bfa8dc4b783b1c950625bad17fa59ee6b"
+    },
+    {
+      "id": "interior-html-modeling",
+      "path": "skills/interior-html-modeling",
+      "version": "17.0.0",
+      "fileCount": 68,
+      "bytes": 5644274,
+      "sha256": "db3592bac7534bbf25cfde4f6cf787298678574141b5364eca1bcc9cfab5ca59"
+    },
+    {
+      "id": "interior-space-rendering",
+      "path": "skills/interior-space-rendering",
+      "version": "17.0.0",
+      "fileCount": 36,
+      "bytes": 202553,
+      "sha256": "a26fa0a296b1eb83121add3d2a899edf0bcb19da1b94596261b6e55c12675b74"
+    },
+    {
+      "id": "movable-furniture-modeling",
+      "path": "skills/movable-furniture-modeling",
+      "version": "10.2.0",
+      "fileCount": 25,
+      "bytes": 1416175,
+      "sha256": "dc447e86ee834eb04ce4c928b76bfd3dc25ddfc3a98f092e661dac8bb2b2077f"
+    }
+  ]
+}

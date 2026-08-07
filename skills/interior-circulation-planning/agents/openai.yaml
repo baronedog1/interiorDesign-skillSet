@@ -1,0 +1,4 @@
+interface:
+  display_name: "动线规划"
+  short_description: "确定性审计动线并自动闭环可逆家具柜体修正"
+  default_prompt: "使用 $interior-circulation-planning 对当前原生模型运行结构基线、开口拓扑、最大瓶颈路线和摆放关系算法。原户型限制只提示；家具柜体造成的退化由 adjustment-plan.v2 每轮确定性选择一个同房间可逆变换，并由当前建模后端直接应用后全量复算，不向用户反复确认。只有无安全变换、事实冲突、用户硬性设计意图缺失或不可逆/付费/公开动作才把全部阻塞合并询问一次。accepted result 后才能进入机位。"

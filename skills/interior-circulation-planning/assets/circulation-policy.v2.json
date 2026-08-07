@@ -1,0 +1,95 @@
+{
+  "schema": "interior.circulation-policy.v2",
+  "policyId": "residential-layout-baseline-and-relations-v3",
+  "principle": "cap-layout-target-by-structural-baseline",
+  "gridResolutionMeters": 0.05,
+  "numericToleranceMeters": 0.05,
+  "minimumDetectablePassageMeters": 0.15,
+  "portalApproachDepthMeters": 0.55,
+  "roomInteriorDepthMeters": 0.35,
+  "maxGridCells": 1200000,
+  "routeProfiles": {
+    "primary": {
+      "targetWidthMeters": 0.9,
+      "description": "入户、公共区和房间之间的主要动线"
+    },
+    "secondary": {
+      "targetWidthMeters": 0.6,
+      "description": "卧室、书房、阳台等终端空间内部动线"
+    },
+    "accessible": {
+      "targetWidthMeters": 1.2,
+      "description": "仅在用户或项目明确要求无障碍时启用"
+    }
+  },
+  "roomRouteProfiles": {
+    "living": "primary",
+    "dining": "primary",
+    "kitchen": "primary",
+    "entrance": "primary",
+    "corridor": "primary",
+    "bedroom": "secondary",
+    "bathroom": "secondary",
+    "study": "secondary",
+    "balcony": "secondary",
+    "closet": "secondary",
+    "storage": "secondary",
+    "utility": "secondary",
+    "multipurpose": "secondary",
+    "other": "secondary"
+  },
+  "relationshipRules": {
+    "sofaBackToWall": {
+      "sourceClassPrefixes": ["sofa"],
+      "axisRole": "back",
+      "maximumGapMeters": 0.08
+    },
+    "bedHeadboardToWall": {
+      "sourceFunctionalClasses": ["bed", "single-bed", "double-bed"],
+      "axisRole": "headboard",
+      "maximumGapMeters": 0.05
+    },
+    "sofaFacesTvConsole": {
+      "sourceClassPrefixes": ["sofa"],
+      "targetFunctionalClasses": ["tv-console"],
+      "axisRole": "front",
+      "minimumDot": 0.95,
+      "rayMustIntersectTargetFootprint": true,
+      "maximumRayDistanceMeters": 8.0
+    },
+    "diningChairFacesDiningTable": {
+      "sourceFunctionalClasses": ["dining-chair"],
+      "targetFunctionalClasses": ["dining-table"],
+      "axisRole": "front",
+      "minimumDot": 0.95,
+      "rayMustIntersectTargetFootprint": true,
+      "maximumRayDistanceMeters": 2.0
+    }
+  },
+  "topologyEndpointProbeMeters": [0.08, 0.12, 0.18, 0.25, 0.35],
+  "attribution": {
+    "maxCandidatesPerRoute": 12,
+    "maxCulpritSetSize": 4,
+    "pathCorridorMarginMeters": 0.75
+  },
+  "adjustment": {
+    "translationStepMeters": 0.1,
+    "maxTranslationMeters": 1.5,
+    "maxCandidatesPerComponent": 1200,
+    "allowQuarterTurnOnlyWhenDeclared": true,
+    "candidateOrder": [
+      "route-clearance-translation",
+      "relationship-wall-attachment",
+      "relationship-facing"
+    ],
+    "selection": "lowest-priority-number-then-minimum-movement-then-minimum-rotation-then-stable-id",
+    "applyOneCandidatePerIteration": true,
+    "requireStrictFailureVectorImprovementAfterApply": true,
+    "deterministicReversibleCorrectionRequiresUserConfirmation": false,
+    "repeatConfirmationForbidden": true,
+    "consolidateTrueAmbiguitiesIntoOneQuestion": true
+  },
+  "forbiddenRoomSizeGates": true,
+  "sourceConstraintDisposition": "warn-and-continue",
+  "layoutRegressionDisposition": "adjust-and-reaudit"
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blender 户型建模"
+  short_description: "把验收户型直接编译为原生 Blender 场景"
+  default_prompt: "使用 $interior-blender-modeling 从本轮 accepted floorplan-handoff 直接生成可编辑 .blend；每个原子对象只从 Blender 专属目录选择明确支持同一 functionalClass 且轴已审阅的真实资产，禁止跨类、临时重模或 primitive fallback。输出 native-model-manifest 后交 $interior-circulation-planning；其 adjustment-plan.v2 唯一可逆修正通过摘要绑定 override 自动应用并重建新 .blend，不重复向用户确认。动线 accepted 后才供机位 Skill 原生截图。"
