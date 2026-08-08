@@ -1060,10 +1060,20 @@ class BatchSnapshotRenderer:
                     "Install the CAD skill requirements, then run `python -m playwright install chromium` if needed."
                 ) from exc
             self.playwright = await async_playwright().start()
-            self.browser = await self.playwright.chromium.launch(
-                headless=True,
-                timeout=RENDER_BROWSER_STARTUP_TIMEOUT_MS,
-            )
+            browser_path = os.environ.get("CAD_BROWSER_BIN") or os.environ.get("CHROME_BIN")
+            launch_options: dict[str, object] = {
+                "headless": True,
+                "timeout": RENDER_BROWSER_STARTUP_TIMEOUT_MS,
+                "args": ["--disable-dev-shm-usage"],
+            }
+            if browser_path:
+                resolved_browser = Path(browser_path).expanduser().resolve()
+                if not resolved_browser.is_file() or not os.access(resolved_browser, os.X_OK):
+                    raise SnapshotError(
+                        f"Configured CAD browser is not executable: {resolved_browser}"
+                    )
+                launch_options["executable_path"] = str(resolved_browser)
+            self.browser = await self.playwright.chromium.launch(**launch_options)
             self.context = await self.browser.new_context(
                 viewport={"width": SIMPLE_RENDER_WIDTH, "height": SIMPLE_RENDER_HEIGHT},
                 device_scale_factor=1,
