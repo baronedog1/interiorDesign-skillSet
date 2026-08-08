@@ -1,5 +1,7 @@
 # Local Runtime
 
+Skill 入口以当前 `$CODEX_HOME/skills/idk-canvas-ingest-agent` 为准，真实凭据只从 `IDK_ENV_FILE` 注入；下文 `/home/agentops/...` 只作 Ubuntu 示例。
+
 运行依赖：Node.js 22+，无需 npm 安装。
 
 首次创建项目并上传平面图：

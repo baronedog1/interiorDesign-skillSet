@@ -1,5 +1,11 @@
 # 环境合同
 
+## 多设备运行规则
+
+- 无固定设备路径；Python、批次目录、图片输出目录和当前 Codex 的 `imagegen` 能力以设备 runtime inventory 与当前工作区为准。
+- 本 Skill 不保存图像 API Key，不在任务中安装模型工具。
+- 原生生成器 smoke 可独立登记，但正式 `ready` 还要求 accepted Q1/Q2/Q3 和 scene map；缺上游证据时为条件未满足，不得用旧图替代。
+
 - 共享基线：GCP Manager 登记的 `interior-space-rendering`。
 - Ubuntu 安装目录：`/home/agentops/.codex/skills/interior-space-rendering`，是共享基线的安装镜像，可按治理记录做设备定制。
 - 渲染与复核不需要外部 API 配置或 `.env`。

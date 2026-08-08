@@ -1,5 +1,7 @@
 # 本地运行
 
+正式命令读取 `BLENDER_BIN` 与 `INTERIOR_BLENDER_ASSET_STORE`；下文 `/home/agentops/...` 只作 Ubuntu 示例。找不到已登记 runtime/asset manifest 时停止，不得调用未验系统 Blender。
+
 ```bash
 /home/agentops/agent-runtime/bin/blender --version
 /home/agentops/agent-runtime/bin/blender --background --factory-startup --python-exit-code 1 --python scripts/build_floorplan_scene.py -- --help

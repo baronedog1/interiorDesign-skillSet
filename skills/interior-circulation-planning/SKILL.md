@@ -10,6 +10,12 @@ metadata: {"category":"interior-design","skill_type":"business","source_authorit
 
 版本：`3.1.0`
 
+## 使用前准备
+
+- 本地只需 Python 3.11+ 标准库和 UTF-8 文件系统，无浏览器、网络或 secret 依赖。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，运行 Python 语法检查并确认输出目录可写。
+- 必须已有同一项目、同一 revision 的 accepted handoff、结构、组件和原生布局状态；证据缺失或哈希冲突时在审计前标记 `blocked`，不得自动补墙、补门或修改原生模型。
+
 ## 唯一职责
 
 本 Skill 位于“平面规划 + 一个整屋建模后端”之后、“找机位”之前。它只回答三件事：

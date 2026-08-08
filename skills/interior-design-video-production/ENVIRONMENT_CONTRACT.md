@@ -1,5 +1,11 @@
 # Environment Contract
 
+## 多设备运行规则
+
+- 下文 Ubuntu 路径只作示例；Node/ffmpeg 读取设备 runtime inventory，平台凭据通过设备自己的受管 secret 路径注入。
+- 不配置外部凭据时，本地 storyboard、时间线、合片和 dry-run 可为 `ready`，参考库/Seedance 子路径必须登记 `degraded/unauthorized`。
+- 任务不得安装媒体工具、复制其它设备 secret 或自动发起付费生成；真实生成还需用户本轮明确确认。
+
 ## 权威源与安装
 
 - Ubuntu 权威源和安装：

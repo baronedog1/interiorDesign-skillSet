@@ -8,6 +8,12 @@ metadata:
 
 # 活动家具多视图区域雕刻建模
 
+## 使用前准备
+
+- 管理员预装 Python 3、Pillow、NumPy、OpenCV、jsonschema、Node.js 和非 Snap Chrome/Chromium + WebGL2；Three.js 运行文件随 Skill 提供。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，完成模块导入、多视图 fixture、桌面/手机 browser QA 与非空 canvas preflight。
+- 必须有可冻结的单品视图、组件语义和可写 QA 目录；OpenCV、浏览器或关键视图缺失时在 carving 前标记 `blocked/provisional`，不得任务内安装依赖或用方盒近似绕过零异或投影门禁。
+
 ## 快速导航
 
 - [data_contract.md](data_contract.md)：唯一 evidence、carving plan、state、browser QA 与组件包合同。

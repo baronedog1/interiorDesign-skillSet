@@ -1,5 +1,7 @@
 # Local Runtime
 
+Node、ffmpeg、ffprobe 和 Skill 根目录以设备 runtime inventory / 当前 `$CODEX_HOME` 为准；下文 `/home/agentops/...` 只作 Ubuntu 示例。外部 secret 未授权时只运行 dry-run。
+
 ## 入口
 
 - Node：`/home/agentops/agent-runtime/bin/node`

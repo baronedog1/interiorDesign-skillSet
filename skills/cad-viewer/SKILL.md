@@ -5,6 +5,12 @@ description: Start or reuse CAD Viewer and return review links for explicit CAD,
 
 # CAD Viewer
 
+## 使用前准备
+
+- 管理员预装 Node.js 20+、本 Skill 的锁定 Viewer 依赖和可用的非 Snap Chrome/Chromium；浏览器 profile、cache 与截图目录必须可写。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，确认 `npm --prefix scripts/viewer`、本地端口和浏览器 smoke 通过。
+- 输入必须是明确、可读且位于授权目录的 CAD/GLB/G-code 文件；依赖或文件缺失时先标记 `blocked`，不得联网临时安装或启动对外网开放的 Viewer。
+
 Provenance: maintained in [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad).
 Use the installed local skill files as the runtime source of truth; the
 repository link is only for provenance and release review.

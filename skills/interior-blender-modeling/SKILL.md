@@ -6,6 +6,12 @@ metadata: {"category":"interior-design","skill_type":"business","source_authorit
 
 # Interior Blender Modeling
 
+## 使用前准备
+
+- 管理员预装并固定 Blender 4.5 LTS、可选 Blender MCP runtime 和版本化 Blender 资产仓；通过 `BLENDER_BIN`、`INTERIOR_BLENDER_ASSET_STORE` 指向当前设备路径。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，运行版本、后台 Python、最小 `.blend` 保存和导出 preflight。
+- 必须已有 accepted `floorplan-handoff` 与获准资产清单；运行时、资产仓或 handoff 缺失时建模前标记 `blocked`，不得临时下载 Blender、借用其它设备路径或用未验系统版本冒充固定 runtime。
+
 所有上游文件先按 [data_contract.md](data_contract.md) 的 `semantic-content-first-v1` 发现；推荐目录和文件名只用于排序，不能代替 schema、哈希和模型身份校验。
 
 ## 职责

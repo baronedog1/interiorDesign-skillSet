@@ -1,5 +1,7 @@
 # 本机运行时
 
+解释器优先读取 `CAD_PYTHON_BIN`，浏览器读取 `CAD_BROWSER_BIN`；下文 `/home/agentops/...` 只作 Ubuntu 示例。找不到设备 runtime manifest 时停止，不得猜路径或任务内安装。
+
 ## 解释器与底层 Skill
 
 合同、边界、打包和 Skill 校验脚本使用系统 Python：

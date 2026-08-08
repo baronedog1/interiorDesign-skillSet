@@ -1,5 +1,11 @@
 # Environment Contract
 
+## 多设备运行规则
+
+- 下文 Ubuntu 路径只作示例；其它设备必须通过 `IDK_ENV_FILE` 指向自己的受管凭据文件，并使用本机 `$CODEX_HOME/skills/idk-canvas-ingest-agent`。
+- Node 由管理员预装；任务不得复制其它设备 secret 或在 Skill 目录创建 `.env`。
+- 无获批凭据时状态为 `degraded/dry-run-only`，不能把源码安装或 dry-run 通过登记成真实上传 `ready`。
+
 ## 权威源与安装
 
 - 项目源码：`/home/ecs-user/idk-ai-native-skills/repo/skills/idk-canvas-ingest-agent`

@@ -1,5 +1,7 @@
 # 本地运行
 
+浏览器读取 `CHROME_BIN`，Python/Node 读取设备 runtime inventory；依赖必须由管理员预装，任务不得运行 pip/npm/browser 下载。
+
 要求 Python 3、Pillow、NumPy、OpenCV、jsonschema、Node.js、Google Chrome 和本地 Three.js。
 
 ```bash

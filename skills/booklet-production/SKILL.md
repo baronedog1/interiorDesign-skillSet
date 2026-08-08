@@ -6,6 +6,12 @@ metadata: {"category":"interior-design","skill_type":"business","source_authorit
 
 # 室内设计方案册
 
+## 使用前准备
+
+- 管理员预装 Python 3、可用的非 Snap Chrome/Chromium、Poppler（`pdfinfo`、`pdfimages`、`pdftoppm`）、Ghostscript 和中文字体；需要结构修复或压缩时再启用 qpdf / ImageMagick。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，确认浏览器、字体、PDF 工具和当前任务输出目录均可用。
+- 必须已有同一确认版本的规划图、白模机位、渲染图与来源清单；缺任何必需输入时在排版前标记 `blocked`，不得运行中安装软件或从历史目录猜资料。
+
 ## 唯一职责
 
 - 输入：当前确认版本的规划图、用户资产、正式白模机位、最终渲染、空间说明和来源清单。

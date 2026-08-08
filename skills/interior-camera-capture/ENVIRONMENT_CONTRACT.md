@@ -1,5 +1,11 @@
 # 环境合同
 
+## 多设备运行规则
+
+- 下文 Ubuntu 路径只作示例；各后端分别读取 `CHROME_BIN`、`BLENDER_BIN`、`INTERIOR_CAD_SNAPSHOT_COMMAND` 与设备 runtime inventory。
+- 浏览器、Blender、CAD renderer 由管理员预装；任务不得安装依赖、放宽系统权限或跨设备读取运行时。
+- readiness 按后端分别登记；某一后端通过不能证明另外两个后端可用，只有实际执行账号产生绑定模型/相机哈希的非空图才算该后端 `ready`。
+
 - 正式设备：`ubuntu-01`，运行用户 `agentops`。
 - 正式安装目录：`/home/agentops/.codex/skills/interior-camera-capture`。
 - 本 Skill 不保存建模模板、模型资产、HTML、`.blend`、STEP 或业务 API Key。

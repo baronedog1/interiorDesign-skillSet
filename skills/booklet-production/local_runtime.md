@@ -1,5 +1,7 @@
 # Local Runtime
 
+设备路径以 `CHROME_BIN`、`XDG_RUNTIME_DIR` 和 runtime inventory 为准；任何 `/home/agentops/...` 都只是 Ubuntu 示例。管理员预装依赖，任务只做 preflight。
+
 本 skill 的本地 runtime 包括 PDF 质检和 mobile-safe 转换。
 
 - Python：`scripts/pdf_quality_check.py`、`scripts/make_sendable_pdf.py`。

@@ -1,5 +1,7 @@
 # Local Runtime
 
+各后端只使用设备已登记的 `CHROME_BIN`、`BLENDER_BIN`、`INTERIOR_CAD_SNAPSHOT_COMMAND`；按后端分别 preflight，不以其中一项通过代表全部后端通过。
+
 公共依赖：Python 3.10+。原生截图运行时由模型清单声明：
 
 - HTML：Node.js 20+、Chrome/Chromium、WebGL2。

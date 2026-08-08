@@ -6,6 +6,12 @@ metadata: {"category":"interior-design","skill_type":"business","source_authorit
 
 # Interior CAD Modeling
 
+## 使用前准备
+
+- 管理员预装固定 CAD Python runtime（build123d/OCP/cadpy）、CAD snapshot renderer 和版本化 CAD 资产仓；配置 `INTERIOR_CAD_ASSET_STORE` 与 `INTERIOR_CAD_SNAPSHOT_COMMAND`。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，完成最小 STEP、entity index、资产选择和快照 preflight。
+- 必须已有 accepted `floorplan-handoff`；runtime、资产、快照命令或 handoff 缺失时在构建前标记 `blocked`，禁止任务内安装包或改走 HTML/Blender 伪装 CAD 交付。
+
 所有上游文件先按 [data_contract.md](data_contract.md) 的 `semantic-content-first-v1` 发现；推荐目录和文件名只用于排序，不能代替 schema、哈希和模型身份校验。
 
 ## 职责

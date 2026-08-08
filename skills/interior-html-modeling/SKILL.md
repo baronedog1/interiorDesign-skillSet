@@ -8,6 +8,12 @@ metadata: {"category":"interior-design","skill_type":"business","source_authorit
 
 所有上游文件先按 [data_contract.md](data_contract.md) 的 `semantic-content-first-v1` 发现；推荐目录和文件名只用于排序。阳台围护只能裁切到对应房间 polygon 的真实边界区间，混合墙的客厅区间必须保留原墙体。
 
+## 使用前准备
+
+- 管理员预装 Node.js 20+、Python 3.10+、非 Snap Chrome/Chromium + WebGL2，并提供版本化公共组件资产仓；通过 `CHROME_BIN` 与 `INTERIOR_COMPONENT_ASSET_STORE` 指向设备路径。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，完成资产 manifest、Three.js 加载、桌面/390×844、console、WebGL2 和非空 canvas preflight。
+- 必须已有 accepted `floorplan-handoff`；浏览器、资产仓或 handoff 缺失时在编译前标记 `blocked`，不得任务内下载浏览器、用 CDN 或项目临时方盒替代公共组件事实源。
+
 ## 目标
 
 把 `interior-floorplan-planning` 已确认的户型事实确定性编译为唯一可编辑 HTML。整屋与单空间只有一个编译器；单空间仅用 `interior.model-scope-request.v1` 选择主空间和必要相邻上下文，禁止另写局部 HTML、手工几何或项目专用家具。不要重新识图、修墙、移动来源对象或从历史项目复制 JSON。

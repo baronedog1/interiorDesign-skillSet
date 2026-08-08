@@ -1,5 +1,7 @@
 # 本地执行
 
+使用当前设备的 Python 3.10+ 和任务工作区；无固定设备路径。运行前先确认原生 `imagegen` 可用和 run 目录可写，不在任务中安装依赖。
+
 ```bash
 python3 scripts/manage_imagegen_batch.py init batch-plan.json run
 python3 scripts/manage_imagegen_batch.py ready run

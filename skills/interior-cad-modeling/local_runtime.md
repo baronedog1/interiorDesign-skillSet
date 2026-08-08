@@ -1,5 +1,7 @@
 # 本地运行
 
+正式命令读取 `CAD_PYTHON_BIN`、`INTERIOR_CAD_ASSET_STORE` 与 `INTERIOR_CAD_SNAPSHOT_COMMAND`；下文路径只作示例，任务不得自行安装或替换 runtime。
+
 运行条件：Python 3.11+、build123d 0.11.x、OpenCascade/OCP、CAD snapshot renderer。环境变量：
 
 - `INTERIOR_CAD_ASSET_STORE=/home/agentops/agent-runtime/workspaces/interior-design-2/cad-asset-library`

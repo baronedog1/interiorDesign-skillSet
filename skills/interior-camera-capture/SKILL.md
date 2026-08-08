@@ -10,6 +10,12 @@ metadata:
 
 # Interior Camera Capture
 
+## 使用前准备
+
+- 管理员至少预装一种受支持后端：HTML 需非 Snap Chrome/Chromium + WebGL2，Blender 需固定 `BLENDER_BIN`，CAD 需 `INTERIOR_CAD_SNAPSHOT_COMMAND`；相机槽位和输出目录必须可写。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，以目标服务账号运行对应后端的非空画布/图像 preflight。
+- 必须已有同一哈希链的 accepted 原生模型清单、结构、动线结果和相机输入；任一后端前置缺失时只阻塞该后端，不得任务内安装浏览器、绕过设备压力门或用二维截图冒充原生机位。
+
 所有上游文件先按 [data_contract.md](data_contract.md) 的 `semantic-content-first-v1` 发现；推荐目录和文件名只用于排序，不能代替 schema、哈希和模型身份校验。
 
 ## 唯一职责

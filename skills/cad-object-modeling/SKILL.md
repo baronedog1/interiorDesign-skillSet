@@ -7,6 +7,12 @@ description: 基于产品照片、渲染图、尺寸图以及俯视、正视、�
 
 版本：1.0.0
 
+## 使用前准备
+
+- 管理员预装固定 CAD Python runtime（build123d 0.11.x、OCP、cadpy、Pillow、NumPy、jsonschema）以及可用的 `cad` / `cad-zh` / `cad-viewer`。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，运行解释器导入、STEP 导出和 Viewer 只读 preflight。
+- 必须提供可冻结的产品源图、尺寸或明确允许的推断范围；运行时、Viewer 或输入证据缺失时在建模前标记 `blocked`，禁止任务内 `pip install` 或改用近似 HTML 几何。
+
 ## 目标
 
 把产品资料编译为一条可追溯的 CAD 事实链：冻结输入、逐视图分区、统一坐标、组件化参数计划、build123d/STEP 构建、确定性检查、逐视图投影验收、快照复核和交付打包。STEP/B-Rep 是唯一三维几何事实；GLB、截图和预览只能从同一 STEP 派生。

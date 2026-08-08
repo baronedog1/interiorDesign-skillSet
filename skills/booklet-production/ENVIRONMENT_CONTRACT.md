@@ -1,5 +1,11 @@
 # Environment Contract
 
+## 多设备运行规则
+
+- 下文 Ubuntu 路径只是已验收示例，不是唯一入口。其它设备通过 `CHROME_BIN`、`XDG_RUNTIME_DIR` 和设备 runtime inventory 解析本机浏览器与可写目录。
+- 浏览器、PDF 工具和字体必须由管理员预装；任务只做 preflight，不执行 apt/npm/pip 下载。
+- 只有目标执行账号真实完成 HTML→PDF、逐页栅格与字体/颜色检查后才能登记 `ready`；缺浏览器时为 `blocked`，缺可选压缩工具时为 `degraded`。
+
 ## 运行环境
 
 - 主设备：`ubuntu-01-codex`

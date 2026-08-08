@@ -6,6 +6,12 @@ metadata: {"category":"image-generation","skill_type":"infrastructure","source_a
 
 # ImageGen 批量编排
 
+## 使用前准备
+
+- 本地只需 Python 3.10+ 标准库和支持原子写入/`fcntl.flock` 的可写任务目录；图片生成依赖当前 Codex 会话已提供原生 `imagegen` 能力。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，确认 batch plan、请求文件、输出目录和 receipt 目录可写。
+- 上游必须先给出完整 `imagegen.batch-plan.v1`；缺少调用能力、计划或可写目录时在首次 `init` 前标记 `blocked`，不得把 API Key 写入 Skill 或临时改造并发器。
+
 ## 职责
 
 本 Skill 只执行上游给出的 `imagegen.batch-plan.v1`。上游业务 Skill 决定每张图的输入、依赖和可并行批次；本 Skill 负责独立状态、并发调用、即时保存、失败隔离与续跑。

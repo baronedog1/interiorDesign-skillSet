@@ -8,6 +8,12 @@ metadata: {"category":"interior-design","skill_type":"business","source_authorit
 
 所有上游文件先按 [data_contract.md](data_contract.md) 的 `semantic-content-first-v1` 发现；推荐目录和文件名只用于排序，不能代替 schema、哈希和项目身份校验。
 
+## 使用前准备
+
+- 管理员预装 Python 3.10+、Pillow、NumPy 和 OpenCV；解释器与模块版本必须由设备 runtime inventory 固定，不得由任务临时 `pip install`。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，运行模块导入、脚本 `--help` 和标准 fixture preflight。
+- 必须有本轮源户型图和可写项目目录；源图、OpenCV 或输出门禁缺失时在取证前标记 `blocked`，不得跳过正式验证器或用旧项目 handoff 代替。
+
 ## 职责
 
 本 Skill 只负责把源户型图变成可追溯的平面事实：

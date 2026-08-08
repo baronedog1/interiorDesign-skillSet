@@ -8,6 +8,12 @@ metadata: {"category":"interior-design","skill_type":"business","source_authorit
 
 所有上游文件先按 [data_contract.md](data_contract.md) 的 `semantic-content-first-v1` 发现；推荐目录和文件名只用于排序，不能代替 schema、哈希和模型身份校验。
 
+## 使用前准备
+
+- 本地需要 Python 3.11+、Pillow、可写批次目录，以及当前 Codex 会话可用的原生 `imagegen`；不读取外部图像 API Key。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，确认 ImageGen 执行器、batch receipt 和图片输出路径可用。
+- 必须已有同一模型/相机哈希的 accepted Q1、Q2、Q3、scene map 与用户风格要求；输入或生成能力缺失时在请求构建前标记 `blocked`，不得用未验截图、旧渲染或原生模型图冒充 Q4。
+
 ## 唯一职责
 
 本 Skill 只负责从 accepted 机位事实生成风格效果图，并独占：

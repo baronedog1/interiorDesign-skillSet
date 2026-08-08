@@ -6,6 +6,12 @@ metadata: {"category":"interior-design","skill_type":"business-extension","sourc
 
 # 室内设计视频制作
 
+## 使用前准备
+
+- 管理员预装 Node.js 22、ffmpeg 与 ffprobe；先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，完成 storyboard、时间线和 `--dry-run` preflight。
+- 查询参考库需受管数据库或 SSH 只读入口；真实 Seedance/Ark 生成需设备独立 secret，并在付费前取得用户本轮明确确认。未授权时必须保持 `degraded/dry-run-only`。
+- 必须已有 accepted 静态资产、来源哈希和明确的视频 brief；依赖、授权或输入缺失时在生成前标记 `blocked`，禁止任务内安装工具、复制其它设备凭据或自动付费重试。
+
 ## 唯一职责
 
 把已经验收的室内设计静态资产变成可确认、可生成、可追溯的视频：

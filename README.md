@@ -48,6 +48,8 @@ python3 /path/to/skill-installer/scripts/install-skill-from-github.py \
 
 - 本仓库保存 Skill 本体，不打包设备登录态、客户数据或受管 secret。
 - ImageGen、Seedance、百恩得平台、Blender、CAD Viewer 和部分数据库查询仍需要目标设备具备对应 runtime、网络或获批凭据；缺失时必须明确报错，不得伪造成功。
+- 每个 Skill 的 `SKILL.md` 前部都有统一的 `使用前准备`；完整下载、配置、权限、preflight 和失败语义分别写在该 Skill 的 `ENVIRONMENT_CONTRACT.md` 与 `local_runtime.md`。16 个 Skill 均必须同时具备这两份文件。
+- 设备管理员安装依赖后运行 `node scripts/audit-runtime-prerequisites.mjs --out-dir <audit-dir>`，生成不含 secret 值的 `runtime-inventory.json` 与 `skill-readiness.json`。`installed` 只表示文件存在，只有真实最小任务通过才可把对应能力登记为 `ready`。
 - 设备安装副本必须独立管理 `$CODEX_HOME`、sessions、history、工作区和运行态。
 - GitHub 是版本化分发与备份源，不自动覆盖任何生产设备；升级必须由 GCP Manager 显式同步并验收。
 

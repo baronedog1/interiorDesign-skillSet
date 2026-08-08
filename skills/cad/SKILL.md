@@ -9,6 +9,12 @@ Provenance: maintained in [earthtojake/text-to-cad](https://github.com/earthtoja
 Use the installed local skill files as the runtime source of truth; the
 repository link is only for provenance and release review.
 
+## 使用前准备
+
+- 管理员预装固定 CAD Python runtime（build123d 0.11.x、OCP、cadpy、Pillow）和用于 CAD 快照的非 Snap 浏览器/Playwright 运行时。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，完成解释器导入、最小 STEP、拓扑检查和快照 preflight。
+- 生成任务必须有明确规格或可审计证据，检查任务必须有授权的 STEP/STP 路径；缺依赖或关键尺寸时在执行前标记 `blocked`，禁止任务内安装包或伪造可制造性/认证结论。
+
 ## Purpose
 
 Create or modify parametric CAD models from natural-language requirements, generate validated STEP/STP artifacts, inspect geometry references, and return checked outputs. Treat STEP as the primary CAD artifact. Treat STL, 3MF, and native GLB as secondary export workflows that branch from a STEP-first process. For assemblies, prefer `cadpy.assembly.AssemblyHelper` with source-level build123d joints, named mating datums, and native labels when the parts have functional assembly relationships.

@@ -1,5 +1,7 @@
 # Local Runtime
 
+解释器以设备 runtime inventory 为准；Python、Pillow、NumPy、OpenCV 必须由管理员预装并固定，任务不得临时 `pip install`。
+
 - Python 3.10+
 - Pillow
 - OpenCV (`cv2`)

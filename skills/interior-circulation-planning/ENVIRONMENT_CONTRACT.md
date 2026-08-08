@@ -1,5 +1,11 @@
 # Environment Contract
 
+## 多设备运行规则
+
+- 无固定设备路径或外部 secret；Python 解释器与可写输出目录以设备 runtime inventory 和当前工作区为准。
+- 管理员只需保证 Python 3.11+；任务不得安装包或访问网络。
+- 只有标准 fixture 与当前 handoff 的 hash/schema 检查均通过时为 `ready`；缺输入时是业务 `blocked`，不是运行时故障。
+
 ## Runtime
 
 - Python `>=3.11`

@@ -7,6 +7,12 @@ description: 创建、修改、检查并验证以 STEP 为主的参数化 CAD �
 
 来源：本 Skill 是 [earthtojake/text-to-cad](https://github.com/earthtojake/text-to-cad) 中 `cad` Skill 的中文本地化版本。运行时以已安装的本地文件为准；仓库链接只用于追溯来源和检查更新。
 
+## 使用前准备
+
+- 管理员预装固定 CAD Python runtime（build123d 0.11.x、OCP、cadpy、Pillow）和用于 CAD 快照的非 Snap 浏览器/Playwright 运行时。
+- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，完成导入、最小 STEP、拓扑检查和快照 preflight。
+- 新建模型必须有可执行的需求或证据；检查已有模型必须有明确 STEP/STP 路径。缺运行时、快照器或关键尺寸时在执行前标记 `blocked`，不得任务内安装依赖或伪造工程结论。
+
 ## 目的
 
 根据自然语言要求创建或修改参数化 CAD 模型，生成经过验证的 STEP/STP，并用可复核的拓扑、尺寸、装配坐标和快照证据交付结果。把 STEP 视为主要 CAD 产物；STL、3MF 和原生 GLB 都是从 STEP 主流程分支出来的次级格式。存在功能装配关系时，优先使用 `cadpy.assembly.AssemblyHelper`、build123d 源码级 Joint、具名配合基准和清晰的原生标签。

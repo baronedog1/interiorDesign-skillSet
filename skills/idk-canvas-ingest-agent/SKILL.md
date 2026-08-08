@@ -6,6 +6,12 @@ metadata: {"category":"interior-design","skill_type":"platform","source_authorit
 
 # 百恩得平台项目与社区发布
 
+## 使用前准备
+
+- 管理员预装 Node.js 22+；先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，默认先运行 `--dry-run`。
+- 真实上传前必须由管理员配置 `IDK_ENV_FILE` 指向设备自己的受管凭据文件，并确认 HTTPS endpoint、最小权限和文件权限；Skill、工作区和报告不得保存密钥值。
+- 必须已有 accepted 产物及来源 Skill、run ID、哈希和项目 binding。凭据未获批时保持 `degraded/dry-run-only`；公开发布始终需要用户本轮明确确认。
+
 ## 唯一职责
 
 本 Skill 独占以下能力：
@@ -114,4 +120,3 @@ JSON、Markdown、PDF、组件包、scene map 和 QA 报告不是项目媒体，
 | [scripts_logic.md](scripts_logic.md) | 项目、社区和资产库脚本 |
 | [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) | 受管凭据和安装边界 |
 | [local_runtime.md](local_runtime.md) | dry-run 与真实命令 |
-

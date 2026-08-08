@@ -1,5 +1,7 @@
 # 本地运行
 
+使用当前设备的 Python、原生 `imagegen` 和任务工作区；无固定设备路径，不读取图像 API Key，也不在任务中安装模型工具。
+
 ```bash
 python3 scripts/build_projection_lock.py \
   living-frontal.scene-map.json living-frontal.projection-lock.json

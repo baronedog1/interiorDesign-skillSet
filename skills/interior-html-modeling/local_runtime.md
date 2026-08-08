@@ -1,5 +1,7 @@
 # Local Runtime
 
+正式入口读取 `CHROME_BIN` 与 `INTERIOR_COMPONENT_ASSET_STORE`；下文 Ubuntu 路径只作示例。浏览器和资产仓必须由管理员预装/同步，任务不得下载或从其它设备借用。
+
 - Node.js 20+
 - Python 3.10+
 - Google Chrome/Chromium

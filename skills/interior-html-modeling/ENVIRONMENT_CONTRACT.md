@@ -1,5 +1,11 @@
 # Environment Contract
 
+## 多设备运行规则
+
+- 下文 Ubuntu 路径只作已验收示例；正式入口由 `CHROME_BIN`、`INTERIOR_COMPONENT_ASSET_STORE` 和设备 runtime inventory 决定。
+- 浏览器与版本化组件仓由管理员预装/同步，任务不得下载浏览器、访问 CDN 或从其它设备目录读取资产。
+- 只有实际执行账号通过资产 manifest、桌面/390×844、WebGL2、console、非空 canvas 与模型 hash 验收后才为 `ready`；缺浏览器或资产仓时为 `blocked`。
+
 - 共享权威源：`/home/baronedog111/gcp-manager/skills/interior-html-modeling`。
 - Ubuntu 安装副本：`/home/agentops/.codex/skills/interior-html-modeling`；百亿和百万共用内容，工作区与 Bridge 仍隔离。
 - Ubuntu 公共组件资产仓：`/home/agentops/agent-runtime/shared-assets/interior-component-library-v5`，可用 `INTERIOR_COMPONENT_ASSET_STORE` 显式覆盖。
