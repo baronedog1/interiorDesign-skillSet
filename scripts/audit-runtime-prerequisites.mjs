@@ -18,7 +18,9 @@ function findExecutable(name) {
   if (name.includes('/')) {
     try {
       fs.accessSync(name, fs.constants.X_OK);
-      return fs.realpathSync(name);
+      // Preserve the configured entry path. Resolving a venv's `bin/python`
+      // to the system interpreter disables the venv's site-packages.
+      return path.resolve(name);
     } catch {
       return null;
     }
@@ -28,7 +30,7 @@ function findExecutable(name) {
     const candidate = path.join(directory, name);
     try {
       fs.accessSync(candidate, fs.constants.X_OK);
-      return fs.realpathSync(candidate);
+      return path.resolve(candidate);
     } catch {
       // Continue searching PATH.
     }
@@ -105,7 +107,11 @@ function readiness(localReady, options = {}) {
 }
 
 const python = firstExecutable([process.env.DESIGN_PYTHON_BIN, 'python3']);
-const node = firstExecutable([process.env.DESIGN_NODE_BIN, 'node']);
+const node = firstExecutable([
+  process.env.DESIGN_NODE_BIN,
+  '/home/agentops/agent-runtime/bin/node',
+  'node',
+]);
 const browser = firstExecutable([
   process.env.CHROME_BIN,
   process.env.CAD_BROWSER_BIN,
