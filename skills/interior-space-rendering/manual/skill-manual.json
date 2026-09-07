@@ -1,0 +1,1207 @@
+{
+  "schemaVersion": 4,
+  "displayName": "原生绘图 · 完整场景与空白槽位",
+  "version": "2.1.0",
+  "overview": {
+    "title": "原生绘图：默认完整模型，白模仅明确要求时使用",
+    "nodes": [
+      {
+        "id": "a",
+        "type": "io",
+        "x": 70,
+        "y": 200,
+        "w": 1020,
+        "h": 290,
+        "title": "同版模型图、JSON、机位与指定资产",
+        "lines": [
+          "先看图和用户要求；不把配置当工具可用证明"
+        ],
+        "files": [
+          {
+            "path": "scripts/run.py",
+            "purpose": "ai-request/native-prepare/native-result 入口"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "q",
+        "type": "decision",
+        "x": 1280,
+        "y": 190,
+        "w": 1040,
+        "h": 350,
+        "title": "用户明确要求白模／空白槽位？",
+        "lines": [
+          "默认 furnished；不因效果差自动切模式"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+          }
+        ],
+        "bodySize": 22,
+        "check": true,
+        "detailRef": "modes"
+      },
+      {
+        "id": "full",
+        "type": "process",
+        "x": 70,
+        "y": 810,
+        "w": 1020,
+        "h": 290,
+        "title": "否：完整家具与细节截图",
+        "lines": [
+          "普通简化家具精细化，类别/数量/尺寸范围不变"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "empty",
+        "type": "process",
+        "x": 1280,
+        "y": 810,
+        "w": 1040,
+        "h": 290,
+        "title": "是：建筑截图＋原 JSON 槽位",
+        "lines": [
+          "家具/柜体暂隐；位置、尺寸、朝向仍固定"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "prompt",
+        "type": "process",
+        "x": 70,
+        "y": 1280,
+        "w": 1020,
+        "h": 300,
+        "title": "生成真实提示词与资产约束",
+        "lines": [
+          "锁房型、墙门窗和同机位；指定资产不变形"
+        ],
+        "files": [
+          {
+            "path": "../interior-html-modeling/scripts/engine/python/render.py",
+            "purpose": "两种模式、槽位、产品尺寸进入 prompt"
+          }
+        ],
+        "bodySize": 22,
+        "detailRef": "assets"
+      },
+      {
+        "id": "call",
+        "type": "process",
+        "x": 1280,
+        "y": 1280,
+        "w": 1040,
+        "h": 300,
+        "title": "真实宿主调用 → 看图 → 交付",
+        "lines": [
+          "没有工具或图片就如实报告；不拿截图冒充"
+        ],
+        "files": [
+          {
+            "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+            "purpose": "工具准备、实际调用回执和结果绑定"
+          }
+        ],
+        "bodySize": 22,
+        "detailRef": "native"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "q",
+        "points": [
+          [
+            1090,
+            345
+          ],
+          [
+            1280,
+            365
+          ]
+        ],
+        "label": "模式"
+      },
+      {
+        "from": "q",
+        "to": "empty",
+        "points": [
+          [
+            1800,
+            540
+          ],
+          [
+            1800,
+            810
+          ]
+        ],
+        "label": "是"
+      },
+      {
+        "from": "q",
+        "to": "full",
+        "points": [
+          [
+            1280,
+            365
+          ],
+          [
+            1175,
+            365
+          ],
+          [
+            1175,
+            670
+          ],
+          [
+            580,
+            670
+          ],
+          [
+            580,
+            810
+          ]
+        ],
+        "label": "否：默认"
+      },
+      {
+        "from": "full",
+        "to": "prompt",
+        "points": [
+          [
+            580,
+            1100
+          ],
+          [
+            580,
+            1280
+          ]
+        ],
+        "label": "完整图"
+      },
+      {
+        "from": "empty",
+        "to": "prompt",
+        "points": [
+          [
+            1800,
+            1100
+          ],
+          [
+            1800,
+            1200
+          ],
+          [
+            835,
+            1200
+          ],
+          [
+            835,
+            1280
+          ]
+        ],
+        "label": "空槽图与 JSON"
+      },
+      {
+        "from": "prompt",
+        "to": "call",
+        "points": [
+          [
+            1090,
+            1430
+          ],
+          [
+            1280,
+            1430
+          ]
+        ],
+        "label": "附图调用"
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "workflow",
+      "title": "原生绘图：默认完整模型，白模仅明确要求时使用",
+      "input": "模型图、CMF、产品参考、实际工具",
+      "output": "原生图片、调用回执、逐图问题",
+      "explanation": "本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。",
+      "diagrams": [
+        {
+          "title": "原生绘图：默认完整模型，白模仅明确要求时使用",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 200,
+              "w": 1020,
+              "h": 290,
+              "title": "同版模型图、JSON、机位与指定资产",
+              "lines": [
+                "先看图和用户要求；不把配置当工具可用证明"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "ai-request/native-prepare/native-result 入口"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1280,
+              "y": 190,
+              "w": 1040,
+              "h": 350,
+              "title": "用户明确要求白模／空白槽位？",
+              "lines": [
+                "默认 furnished；不因效果差自动切模式"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                }
+              ],
+              "bodySize": 22,
+              "check": true,
+              "detailRef": "modes"
+            },
+            {
+              "id": "full",
+              "type": "process",
+              "x": 70,
+              "y": 810,
+              "w": 1020,
+              "h": 290,
+              "title": "否：完整家具与细节截图",
+              "lines": [
+                "普通简化家具精细化，类别/数量/尺寸范围不变"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "empty",
+              "type": "process",
+              "x": 1280,
+              "y": 810,
+              "w": 1040,
+              "h": 290,
+              "title": "是：建筑截图＋原 JSON 槽位",
+              "lines": [
+                "家具/柜体暂隐；位置、尺寸、朝向仍固定"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "prompt",
+              "type": "process",
+              "x": 70,
+              "y": 1280,
+              "w": 1020,
+              "h": 300,
+              "title": "生成真实提示词与资产约束",
+              "lines": [
+                "锁房型、墙门窗和同机位；指定资产不变形"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "两种模式、槽位、产品尺寸进入 prompt"
+                }
+              ],
+              "bodySize": 22,
+              "detailRef": "assets"
+            },
+            {
+              "id": "call",
+              "type": "process",
+              "x": 1280,
+              "y": 1280,
+              "w": 1040,
+              "h": 300,
+              "title": "真实宿主调用 → 看图 → 交付",
+              "lines": [
+                "没有工具或图片就如实报告；不拿截图冒充"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "工具准备、实际调用回执和结果绑定"
+                }
+              ],
+              "bodySize": 22,
+              "detailRef": "native"
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "q",
+              "points": [
+                [
+                  1090,
+                  345
+                ],
+                [
+                  1280,
+                  365
+                ]
+              ],
+              "label": "模式"
+            },
+            {
+              "from": "q",
+              "to": "empty",
+              "points": [
+                [
+                  1800,
+                  540
+                ],
+                [
+                  1800,
+                  810
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "full",
+              "points": [
+                [
+                  1280,
+                  365
+                ],
+                [
+                  1175,
+                  365
+                ],
+                [
+                  1175,
+                  670
+                ],
+                [
+                  580,
+                  670
+                ],
+                [
+                  580,
+                  810
+                ]
+              ],
+              "label": "否：默认"
+            },
+            {
+              "from": "full",
+              "to": "prompt",
+              "points": [
+                [
+                  580,
+                  1100
+                ],
+                [
+                  580,
+                  1280
+                ]
+              ],
+              "label": "完整图"
+            },
+            {
+              "from": "empty",
+              "to": "prompt",
+              "points": [
+                [
+                  1800,
+                  1100
+                ],
+                [
+                  1800,
+                  1200
+                ],
+                [
+                  835,
+                  1200
+                ],
+                [
+                  835,
+                  1280
+                ]
+              ],
+              "label": "空槽图与 JSON"
+            },
+            {
+              "from": "prompt",
+              "to": "call",
+              "points": [
+                [
+                  1090,
+                  1430
+                ],
+                [
+                  1280,
+                  1430
+                ]
+              ],
+              "label": "附图调用"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "logicDetails": [
+    {
+      "id": "modes",
+      "code": "MODES",
+      "title": "两种参照模式",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "两模式的源数据：显示可变，布局和机位不变",
+          "nodes": [
+            {
+              "id": "source",
+              "type": "io",
+              "x": 70,
+              "y": 220,
+              "w": 1070,
+              "h": 330,
+              "title": "保存原布局与相机",
+              "lines": [
+                "placements：id/roomId/position/size/rotationY",
+                "size=[宽,高,深]米；不删除 Ubuntu 原数据"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "load_scene、模式和同版校验"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/schemas/layout.schema.json",
+                  "purpose": "原始布局结构"
+                },
+                {
+                  "path": "../interior-html-modeling/data_contract.md",
+                  "purpose": "两模式与槽位数据合同"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "default",
+              "type": "process",
+              "x": 1300,
+              "y": 220,
+              "w": 1020,
+              "h": 330,
+              "title": "已在主图明确选择空槽模式",
+              "lines": [
+                "仅用户明确要求：empty-slots + 请求记录",
+                "固定相机，保存材质和每个实例的可见性"
+              ],
+              "files": [
+                {
+                  "path": "../interior-camera-capture/scripts/run.py",
+                  "purpose": "捕获参数入口"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+                  "purpose": "captureFrame 保存当前状态"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "explicit",
+              "type": "process",
+              "x": 70,
+              "y": 870,
+              "w": 1070,
+              "h": 360,
+              "title": "finally：恢复捕获前场景",
+              "lines": [
+                "成功或异常都恢复材质、可见性和机位",
+                "显示暂变；JSON、家具尺寸和布局不改"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+                  "purpose": "finally 恢复原场景状态"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "empty",
+              "type": "process",
+              "x": 1300,
+              "y": 810,
+              "w": 1020,
+              "h": 470,
+              "title": "空槽帧：仅隐藏家具和柜体实例",
+              "lines": [
+                "冻结机位 → 保存可见性 → 隐藏 placements",
+                "绘制 PNG → 记录全部隐藏ID → finally 恢复",
+                "建筑不删；JSON 槽位列表仍交给生成工具"
+              ],
+              "files": [
+                {
+                  "path": "../interior-camera-capture/scripts/run.py",
+                  "purpose": "--reference-mode/--white-model-requested"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+                  "purpose": "临时隐藏/恢复及返回模式"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "截图摘要、hiddenPlacementIds 和请求槽位"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1390,
+              "w": 2240,
+              "h": 220,
+              "title": "交付给提示词的是明确模式、同版图片和完整槽位",
+              "lines": [
+                "默认不带空槽开关；空槽请求与普通截图不匹配则重拍同版参照"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "文件摘要与原子保存"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cli.py",
+                  "purpose": "请求参数显式选择"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "source",
+              "to": "default",
+              "points": [
+                [
+                  1140,
+                  385
+                ],
+                [
+                  1300,
+                  385
+                ]
+              ],
+              "label": "原数据不变"
+            },
+            {
+              "from": "default",
+              "to": "empty",
+              "points": [
+                [
+                  1810,
+                  550
+                ],
+                [
+                  1810,
+                  810
+                ]
+              ],
+              "label": "临时显示层"
+            },
+            {
+              "from": "empty",
+              "to": "explicit",
+              "points": [
+                [
+                  1300,
+                  1045
+                ],
+                [
+                  1140,
+                  1050
+                ]
+              ],
+              "label": "捕获后或异常"
+            },
+            {
+              "from": "explicit",
+              "to": "out",
+              "points": [
+                [
+                  605,
+                  1230
+                ],
+                [
+                  605,
+                  1390
+                ]
+              ],
+              "label": "恢复后保留真实记录"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "assets",
+      "code": "ASSETS",
+      "title": "结构锁定与资产尺度",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "精细家具与指定资产：细化普通件，锁定指定件",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "process",
+              "x": 70,
+              "y": 200,
+              "w": 2250,
+              "h": 250,
+              "title": "提示词的结构底线始终不变",
+              "lines": [
+                "不改房型、墙门窗、空间尺度；机位位置、朝向、投影、FOV和裁切同图",
+                "普通家具细化细节，不重布局；指定资产身份优先于风格变化"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "实际拼装不可变约束与 slots"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 70,
+              "y": 710,
+              "w": 1060,
+              "h": 370,
+              "title": "用户提供指定产品参考？",
+              "lines": [
+                "产品图与 placementId 一一对应"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "读取 products 文件与绑定校验"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "normal",
+              "type": "process",
+              "x": 70,
+              "y": 1250,
+              "w": 1060,
+              "h": 320,
+              "title": "否：细化现有简化家具",
+              "lines": [
+                "保持类别、数量、位置、朝向、宽高深范围",
+                "提高材质、纹理尺度、接触阴影和细节"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/catalog/styles.json",
+                  "purpose": "当前风格/渲染意图"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "asset",
+              "type": "process",
+              "x": 1300,
+              "y": 660,
+              "w": 1020,
+              "h": 450,
+              "title": "是：读取真实产品尺寸并保留身份",
+              "lines": [
+                "sizeMetres=[宽,高,深]；未知标 null，补查",
+                "不将槽位尺寸当产品实测，不拉伸或压扁",
+                "部件、颜色纹理、形体和比例不被风格改写"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "真实尺寸检查、来源与 prompt"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "参考图 SHA 与 JSON读取"
+                },
+                {
+                  "path": "../idk-canvas-ingest-agent/SKILL.md",
+                  "purpose": "需要平台资产时调用独立平台能力"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "conflict",
+              "type": "process",
+              "x": 1300,
+              "y": 1270,
+              "w": 1020,
+              "h": 300,
+              "title": "尺寸冲突：回布局／选型或请用户确定",
+              "lines": [
+                "不靠扭曲资产塞进槽位；记录未确定尺寸",
+                "结果复核必须看资产身份、比例与尺度"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "q",
+              "points": [
+                [
+                  600,
+                  450
+                ],
+                [
+                  600,
+                  710
+                ]
+              ],
+              "label": "资产条件"
+            },
+            {
+              "from": "q",
+              "to": "normal",
+              "points": [
+                [
+                  600,
+                  1080
+                ],
+                [
+                  600,
+                  1250
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "q",
+              "to": "asset",
+              "points": [
+                [
+                  1130,
+                  895
+                ],
+                [
+                  1300,
+                  885
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "asset",
+              "to": "conflict",
+              "points": [
+                [
+                  1810,
+                  1110
+                ],
+                [
+                  1810,
+                  1270
+                ]
+              ],
+              "label": "比较产品与槽位"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "native",
+      "code": "NATIVE",
+      "title": "真实原生调用与识图",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "真实出图链：准备不是调用，提示词不是保真证明",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "process",
+              "x": 70,
+              "y": 200,
+              "w": 1040,
+              "h": 340,
+              "title": "校对参照和实际工具清单",
+              "lines": [
+                "sceneKey/cameraDigest/图像SHA同版",
+                "产品图摘要和尺寸来源随请求携带"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "ai-request/native-prepare/native-result 入口"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "ai_request 生成完整实际 prompt"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cli.py",
+                  "purpose": "三个命令与参数分派"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1270,
+              "y": 180,
+              "w": 1050,
+              "h": 370,
+              "title": "当前宿主有原生绘图工具？",
+              "lines": [
+                "实际 toolName；无工具不能假写 available"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "prepare 只生成 ready-for-host-call/unavailable"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "原生工具运行与权限边界"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "missing",
+              "type": "process",
+              "x": 70,
+              "y": 820,
+              "w": 1040,
+              "h": 260,
+              "title": "否：报告能力缺失",
+              "lines": [
+                "不能换成 WebGL 或付费 API 冒充"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "call",
+              "type": "process",
+              "x": 1270,
+              "y": 790,
+              "w": 1050,
+              "h": 350,
+              "title": "是：附完整/空槽图及产品图调用",
+              "lines": [
+                "宿主原生工具实际返回后保存图片",
+                "不伪造 providerRequestId 或调用成功"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "实际 invocation 与 jobDigest/outputSHA 关联"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "review",
+              "type": "decision",
+              "x": 70,
+              "y": 1260,
+              "w": 1040,
+              "h": 350,
+              "title": "图像与结构、机位、资产相符？",
+              "lines": [
+                "structure/openings/layout/camera",
+                "furnitureDetail/assetIdentity/assetScale"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 1270,
+              "y": 1290,
+              "w": 1050,
+              "h": 300,
+              "title": "保留真实图片并如实交付",
+              "lines": [
+                "是：记录符合；否：指出位置并修源再生成",
+                "不能以提示词/检测通过保证绝无变形"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "ai_result 校验图片与复核字段"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "摘要与原子保存"
+                },
+                {
+                  "path": "../idk-canvas-ingest-agent/SKILL.md",
+                  "purpose": "需要私有上传时交给平台 Skill"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "q",
+              "points": [
+                [
+                  1110,
+                  370
+                ],
+                [
+                  1270,
+                  365
+                ]
+              ],
+              "label": "工具"
+            },
+            {
+              "from": "q",
+              "to": "missing",
+              "points": [
+                [
+                  1532.9577862125564,
+                  457.6613151415675
+                ],
+                [
+                  1200,
+                  458
+                ],
+                [
+                  1200,
+                  690
+                ],
+                [
+                  590,
+                  690
+                ],
+                [
+                  590,
+                  820
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "q",
+              "to": "call",
+              "points": [
+                [
+                  1795,
+                  550
+                ],
+                [
+                  1795,
+                  790
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "call",
+              "to": "review",
+              "points": [
+                [
+                  1795,
+                  1140
+                ],
+                [
+                  1795,
+                  1200
+                ],
+                [
+                  590,
+                  1200
+                ],
+                [
+                  590,
+                  1260
+                ]
+              ],
+              "label": "自己看输出"
+            },
+            {
+              "from": "review",
+              "to": "out",
+              "points": [
+                [
+                  1110,
+                  1435
+                ],
+                [
+                  1270,
+                  1440
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "review",
+              "to": "out",
+              "points": [
+                [
+                  590,
+                  1610
+                ],
+                [
+                  590,
+                  1640
+                ],
+                [
+                  1795,
+                  1640
+                ],
+                [
+                  1795,
+                  1590
+                ]
+              ],
+              "label": "否：带观察交付"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "dependencyFiles": [
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/render.py",
+      "purpose": "ai_result 校验图片与复核字段"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+      "purpose": "实际 invocation 与 jobDigest/outputSHA 关联"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/schemas/layout.schema.json",
+      "purpose": "原始布局结构"
+    },
+    {
+      "path": "../interior-html-modeling/data_contract.md",
+      "purpose": "两模式与槽位数据合同"
+    },
+    {
+      "path": "../interior-camera-capture/scripts/run.py",
+      "purpose": "--reference-mode/--white-model-requested"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+      "purpose": "临时隐藏/恢复及返回模式"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/common.py",
+      "purpose": "摘要与原子保存"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/cli.py",
+      "purpose": "三个命令与参数分派"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/catalog/styles.json",
+      "purpose": "当前风格/渲染意图"
+    },
+    {
+      "path": "../idk-canvas-ingest-agent/SKILL.md",
+      "purpose": "需要私有上传时交给平台 Skill"
+    }
+  ],
+  "fileDescriptions": {
+    "MANIFEST.json": "发布版本与完整文件清单",
+    "SKILL.md": "调用范围、输入输出与关键规则",
+    "SKILL_MANUAL.pdf": "面向人的算法说明书",
+    "local_runtime.md": "原生工具运行与权限边界",
+    "manual/skill-flowchart.svg": "同源说明书内容与图形",
+    "manual/skill-manual.json": "同源说明书内容与图形",
+    "manual/skill-manual.md": "同源说明书内容与图形",
+    "playbook.md": "两模式、锁结构机位、家具细化与资产不变形",
+    "scripts/run.py": "ai-request/native-prepare/native-result 入口"
+  }
+}

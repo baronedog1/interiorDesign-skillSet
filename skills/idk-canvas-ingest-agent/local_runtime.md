@@ -1,55 +1,11 @@
-# Local Runtime
+# 内部凭据与平台执行
 
-Skill 入口以当前 `$CODEX_HOME/skills/idk-canvas-ingest-agent` 为准，真实凭据只从 `IDK_ENV_FILE` 注入；下文 `/home/agentops/...` 只作 Ubuntu 示例。
+Python 标准库执行 scripts/platform_bridge.py，入口 scripts/run.py；JSON 原子写工具复用 HTML Skill 的 scripts/engine/python/common.py。
 
-运行依赖：Node.js 22+，无需 npm 安装。
+内部安装位置 `.runtime/baiende-platform.env`，只在来酷保留；或显式 IDK_ENV_FILE。实际键名 IDK_API_KEY、IDK_API_BASE_URL、IDK_TOOL_NAME、IDK_REQUEST_TIMEOUT_MS。管理员按用户授权从 Ubuntu 的受管凭据文件安全复制，不能在终端输出内容。Git、PDF、ZIP 分发排除 .runtime；内部部署同步凭据，不表示把密钥嵌入公开包。
 
-首次创建项目并上传平面图：
+生产 HTTPS https://www.baiende.com/api/v1；国内平台走来酷本地网络。外部下载不携平台 Key。连接错误只报告状态/错误类型，不输出请求头、完整异常或带签名链接。
 
-```bash
-node /home/agentops/.codex/skills/idk-canvas-ingest-agent/scripts/publish_project_artifact.mjs \
-  --file <project>/layout-plan.png \
-  --asset-kind layout_plan \
-  --external-tool interior-floorplan-planning \
-  --external-run-id <task-id> \
-  --project-name <project-name> \
-  --binding-file <project>/baiende-project.json \
-  --folder-id plan \
-  --receipt <project>/platform-publications/layout-plan.json
-```
+验收区分 profile、实际库读取、下载、私有上传回读；静态代码及 mock 不算生产联调。只有用户授权上传的文件才 --apply，本轮安装不自动公开社区内容。
 
-复用项目上传 HTML：
-
-```bash
-node /home/agentops/.codex/skills/idk-canvas-ingest-agent/scripts/publish_project_artifact.mjs \
-  --file <project>/model-standalone.html \
-  --asset-kind preview3d_html \
-  --external-tool interior-html-modeling \
-  --external-run-id <task-id> \
-  --binding-file <project>/baiende-project.json \
-  --folder-id 3d \
-  --receipt <project>/platform-publications/model-html.json
-```
-
-所有命令均可先加 `--dry-run`。dry-run 不读取凭据、不写平台、不写绑定。
-
-社区本地合同检查：
-
-```bash
-node /home/agentops/.codex/skills/idk-canvas-ingest-agent/scripts/publish_community_post.mjs \
-  <project>/community-publication-spec.json \
-  --binding-file <project>/baiende-project.json \
-  --out <project>/platform-publications/community-dry-run.json \
-  --dry-run
-```
-
-去掉 `--dry-run` 后生成平台预览，但仍不公开。用户本轮明确确认后才执行：
-
-```bash
-node /home/agentops/.codex/skills/idk-canvas-ingest-agent/scripts/publish_community_post.mjs \
-  <project>/community-publication-spec.json \
-  --binding-file <project>/baiende-project.json \
-  --out <project>/platform-publications/community-publication.json \
-  --execute \
-  --confirm-public
-```
+2026-09-07 生产字段差异：preview3d 使用 name/title/folderId/html/externalTool/externalRunId；不能混入媒体的 assetKind/origin/sourceType，也不能把 operationKey 放入请求体。幂等操作键通过 Idempotency-Key 请求头传递。媒体上传仍使用独立 materials[] 合同，不能把两类 payload 合并。

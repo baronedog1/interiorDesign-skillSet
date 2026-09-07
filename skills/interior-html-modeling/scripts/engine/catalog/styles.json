@@ -1,0 +1,911 @@
+{
+  "schema": "interior.styles/1",
+  "version": "1.2.0",
+  "styles": [
+    {
+      "id": "cream",
+      "name": "奶油自然",
+      "englishName": "Cream Natural",
+      "version": "1.2.0",
+      "theme": {
+        "accent": "#c3a57a",
+        "background": "#171b20",
+        "text": "#eee9df"
+      },
+      "palette": [
+        "#eee9de",
+        "#c6ab84",
+        "#ded0b8",
+        "#909c83"
+      ],
+      "materials": {
+        "plaster": "#eee9de",
+        "cream": "#eee4d3",
+        "porcelain": "#faf7ef",
+        "oak": "#c6ab84",
+        "walnut": "#785239",
+        "travertine": "#ded0b8",
+        "linen": "#e9dfcb",
+        "boucle": "#f0e7d6",
+        "sand": "#c2ad8e",
+        "clay": "#b1826b",
+        "sage": "#909c83",
+        "rug": "#d9ceb8",
+        "bronze": "#a1855d",
+        "black": "#292b2a",
+        "white": "#f2eee6",
+        "sheer": "#faf7ef",
+        "dark": "#37332f",
+        "leaf": "#626f49",
+        "leaf2": "#8c9476"
+      },
+      "materialRecipes": {
+        "plaster": {
+          "color": "#eee9de",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "cream": {
+          "color": "#eee4d3",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "porcelain": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "oak": {
+          "color": "#c6ab84",
+          "roughness": 0.62,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "walnut": {
+          "color": "#785239",
+          "roughness": 0.62,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "travertine": {
+          "color": "#ded0b8",
+          "roughness": 0.66,
+          "metalness": 0,
+          "surface": "stone"
+        },
+        "linen": {
+          "color": "#e9dfcb",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "boucle": {
+          "color": "#f0e7d6",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "sand": {
+          "color": "#c2ad8e",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "clay": {
+          "color": "#b1826b",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "sage": {
+          "color": "#909c83",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "rug": {
+          "color": "#d9ceb8",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "bronze": {
+          "color": "#a1855d",
+          "roughness": 0.3,
+          "metalness": 0.8,
+          "surface": "paint"
+        },
+        "black": {
+          "color": "#292b2a",
+          "roughness": 0.3,
+          "metalness": 0.48,
+          "surface": "paint"
+        },
+        "white": {
+          "color": "#f2eee6",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "sheer": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "dark": {
+          "color": "#37332f",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf": {
+          "color": "#626f49",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf2": {
+          "color": "#8c9476",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        }
+      },
+      "forms": {
+        "sofa": "cloud",
+        "bed": "soft",
+        "chair": "rounded",
+        "tables": "oval",
+        "cabinet": "fluted",
+        "pendant": "dome",
+        "art": "arches"
+      },
+      "lighting": {
+        "temperature": 3000,
+        "exposure": 0.91,
+        "sun": 2.2,
+        "environment": 0.65,
+        "reflection": 0.7,
+        "fixtureIntensity": 5.5,
+        "ambientIntensity": 3.5
+      },
+      "playbook": {
+        "intent": "温润、松弛、圆弧与低对比；不是所有表面统一白色。",
+        "forms": "厚软包模块沙发、弧形床头、圆角餐椅、椭圆石材台面。",
+        "materials": "米白矿物漆、浅橡木、亚麻圈绒、哑光洞石、少量香槟金属。",
+        "details": "柜门细分缝，条纹圆柱支脚，波褶帘和陶器保持克制。",
+        "lighting": "3000K柔和人工光，适中环境亮度；保留地面与天花明暗。",
+        "avoid": "避免全局泛黄、所有材质同样粗糙度、把高光完全打白。"
+      },
+      "renderBrief": "温润、松弛、圆弧与低对比；不是所有表面统一白色。；米白矿物漆、浅橡木、亚麻圈绒、哑光洞石、少量香槟金属。"
+    },
+    {
+      "id": "modern-minimal",
+      "name": "现代极简",
+      "englishName": "Modern Minimal",
+      "version": "1.2.0",
+      "theme": {
+        "accent": "#a6b7c3",
+        "background": "#171b20",
+        "text": "#eee9df"
+      },
+      "palette": [
+        "#e7e9e7",
+        "#b9c0c0",
+        "#53676d",
+        "#232b31"
+      ],
+      "materials": {
+        "plaster": "#e7e9e7",
+        "cream": "#d9dfdd",
+        "porcelain": "#faf7ef",
+        "oak": "#a8a399",
+        "walnut": "#4a4742",
+        "travertine": "#b9c0c0",
+        "linen": "#c9d0ce",
+        "boucle": "#a4b1b5",
+        "sand": "#808e90",
+        "clay": "#53676d",
+        "sage": "#777e74",
+        "rug": "#c0c7c5",
+        "bronze": "#838c8f",
+        "black": "#232b31",
+        "white": "#f2eee6",
+        "sheer": "#faf7ef",
+        "dark": "#37332f",
+        "leaf": "#626f49",
+        "leaf2": "#8c9476"
+      },
+      "materialRecipes": {
+        "plaster": {
+          "color": "#e7e9e7",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "cream": {
+          "color": "#d9dfdd",
+          "roughness": 0.52,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "porcelain": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "oak": {
+          "color": "#a8a399",
+          "roughness": 0.55,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "walnut": {
+          "color": "#4a4742",
+          "roughness": 0.62,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "travertine": {
+          "color": "#b9c0c0",
+          "roughness": 0.38,
+          "metalness": 0,
+          "surface": "stone"
+        },
+        "linen": {
+          "color": "#c9d0ce",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "boucle": {
+          "color": "#a4b1b5",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "sand": {
+          "color": "#808e90",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "clay": {
+          "color": "#53676d",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "sage": {
+          "color": "#777e74",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "rug": {
+          "color": "#c0c7c5",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "bronze": {
+          "color": "#838c8f",
+          "roughness": 0.26,
+          "metalness": 0.8,
+          "surface": "paint"
+        },
+        "black": {
+          "color": "#232b31",
+          "roughness": 0.3,
+          "metalness": 0.48,
+          "surface": "paint"
+        },
+        "white": {
+          "color": "#f2eee6",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "sheer": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "dark": {
+          "color": "#37332f",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf": {
+          "color": "#626f49",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf2": {
+          "color": "#8c9476",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        }
+      },
+      "forms": {
+        "sofa": "linear",
+        "bed": "panel",
+        "chair": "linear",
+        "tables": "rectilinear",
+        "cabinet": "flat",
+        "pendant": "linear",
+        "art": "geometry"
+      },
+      "lighting": {
+        "temperature": 3500,
+        "exposure": 0.87,
+        "sun": 2.2,
+        "environment": 0.65,
+        "reflection": 0.7,
+        "fixtureIntensity": 5.5,
+        "ambientIntensity": 3.5
+      },
+      "playbook": {
+        "intent": "清晰平面、轻薄线条与灰白层次，以少量深色建立秩序。",
+        "forms": "直线模块沙发、薄板床头、矩形石台、细金属桌脚和线性灯。",
+        "materials": "暖灰漆面、烟灰木、灰石、细织物、拉丝银色金属。",
+        "details": "扁平无明拉手门片，浅阴缝，线性吊灯，几何艺术构图。",
+        "lighting": "3500K中性偏暖；保留明暗对比，避免冷蓝大面积染色。",
+        "avoid": "避免复古车木脚、过量圆润泡芙造型、浮夸金属装饰。"
+      },
+      "renderBrief": "清晰平面、轻薄线条与灰白层次，以少量深色建立秩序。；暖灰漆面、烟灰木、灰石、细织物、拉丝银色金属。"
+    },
+    {
+      "id": "mid-century",
+      "name": "中古暖木",
+      "englishName": "Mid-century Warmth",
+      "version": "1.2.0",
+      "theme": {
+        "accent": "#c88d61",
+        "background": "#171b20",
+        "text": "#eee9df"
+      },
+      "palette": [
+        "#e8ddc8",
+        "#ac774e",
+        "#a85c35",
+        "#697655"
+      ],
+      "materials": {
+        "plaster": "#e8ddc8",
+        "cream": "#ddcba7",
+        "porcelain": "#faf7ef",
+        "oak": "#ac774e",
+        "walnut": "#563523",
+        "travertine": "#d4b893",
+        "linen": "#d6bd99",
+        "boucle": "#a85c35",
+        "sand": "#ad854e",
+        "clay": "#9e552e",
+        "sage": "#697655",
+        "rug": "#c4a376",
+        "bronze": "#ac813b",
+        "black": "#3b3024",
+        "white": "#f2eee6",
+        "sheer": "#faf7ef",
+        "dark": "#37332f",
+        "leaf": "#626f49",
+        "leaf2": "#8c9476"
+      },
+      "materialRecipes": {
+        "plaster": {
+          "color": "#e8ddc8",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "cream": {
+          "color": "#ddcba7",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "porcelain": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "oak": {
+          "color": "#ac774e",
+          "roughness": 0.48,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "walnut": {
+          "color": "#563523",
+          "roughness": 0.5,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "travertine": {
+          "color": "#d4b893",
+          "roughness": 0.66,
+          "metalness": 0,
+          "surface": "stone"
+        },
+        "linen": {
+          "color": "#d6bd99",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "boucle": {
+          "color": "#a85c35",
+          "roughness": 0.48,
+          "metalness": 0,
+          "surface": "leather"
+        },
+        "sand": {
+          "color": "#ad854e",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "clay": {
+          "color": "#9e552e",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "sage": {
+          "color": "#697655",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "rug": {
+          "color": "#c4a376",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "bronze": {
+          "color": "#ac813b",
+          "roughness": 0.3,
+          "metalness": 0.8,
+          "surface": "paint"
+        },
+        "black": {
+          "color": "#3b3024",
+          "roughness": 0.3,
+          "metalness": 0.48,
+          "surface": "paint"
+        },
+        "white": {
+          "color": "#f2eee6",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "sheer": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "dark": {
+          "color": "#37332f",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf": {
+          "color": "#626f49",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf2": {
+          "color": "#8c9476",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        }
+      },
+      "forms": {
+        "sofa": "timber",
+        "bed": "timber",
+        "chair": "timber",
+        "tables": "tapered",
+        "cabinet": "timber",
+        "pendant": "sputnik",
+        "art": "geometry"
+      },
+      "lighting": {
+        "temperature": 2850,
+        "exposure": 0.9,
+        "sun": 2.2,
+        "environment": 0.65,
+        "reflection": 0.7,
+        "fixtureIntensity": 5.5,
+        "ambientIntensity": 3.5
+      },
+      "playbook": {
+        "intent": "胡桃木、焦糖软包与有节奏的细支脚，温暖但不做一片棕色。",
+        "forms": "外露木框沙发、木饰面床头、锥脚餐椅、圆角薄台面。",
+        "materials": "胡桃木、焦糖细皮纹、燕麦织物、橄榄绿点缀、复古黄铜。",
+        "details": "斜向细脚、木框扶手、三球枝形灯、低柜与细拉手。",
+        "lighting": "2850K暖光与自然光平衡；皮、木、铜的反射各有区分。",
+        "avoid": "避免把现代方盒只染棕色；避免全部表面高光清漆。"
+      },
+      "renderBrief": "胡桃木、焦糖软包与有节奏的细支脚，温暖但不做一片棕色。；胡桃木、焦糖细皮纹、燕麦织物、橄榄绿点缀、复古黄铜。"
+    },
+    {
+      "id": "wabi-sabi",
+      "name": "侘寂自然",
+      "englishName": "Wabi Sabi",
+      "version": "1.2.0",
+      "theme": {
+        "accent": "#b7a085",
+        "background": "#171b20",
+        "text": "#eee9df"
+      },
+      "palette": [
+        "#d9cdbb",
+        "#a9997e",
+        "#bba98f",
+        "#77624d"
+      ],
+      "materials": {
+        "plaster": "#d9cdbb",
+        "cream": "#d1c2aa",
+        "porcelain": "#faf7ef",
+        "oak": "#a9997e",
+        "walnut": "#77624d",
+        "travertine": "#bba98f",
+        "linen": "#d2c4ab",
+        "boucle": "#d9cab5",
+        "sand": "#b6a386",
+        "clay": "#987b63",
+        "sage": "#929079",
+        "rug": "#c7b697",
+        "bronze": "#7d7161",
+        "black": "#4b443b",
+        "white": "#f2eee6",
+        "sheer": "#faf7ef",
+        "dark": "#37332f",
+        "leaf": "#626f49",
+        "leaf2": "#8c9476"
+      },
+      "materialRecipes": {
+        "plaster": {
+          "color": "#d9cdbb",
+          "roughness": 0.99,
+          "metalness": 0,
+          "surface": "plaster"
+        },
+        "cream": {
+          "color": "#d1c2aa",
+          "roughness": 0.93,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "porcelain": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "oak": {
+          "color": "#a9997e",
+          "roughness": 0.84,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "walnut": {
+          "color": "#77624d",
+          "roughness": 0.86,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "travertine": {
+          "color": "#bba98f",
+          "roughness": 0.91,
+          "metalness": 0,
+          "surface": "stone"
+        },
+        "linen": {
+          "color": "#d2c4ab",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "boucle": {
+          "color": "#d9cab5",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "sand": {
+          "color": "#b6a386",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "clay": {
+          "color": "#987b63",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "sage": {
+          "color": "#929079",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "rug": {
+          "color": "#c7b697",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "bronze": {
+          "color": "#7d7161",
+          "roughness": 0.3,
+          "metalness": 0.8,
+          "surface": "paint"
+        },
+        "black": {
+          "color": "#4b443b",
+          "roughness": 0.3,
+          "metalness": 0.48,
+          "surface": "paint"
+        },
+        "white": {
+          "color": "#f2eee6",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "sheer": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "dark": {
+          "color": "#37332f",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf": {
+          "color": "#626f49",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf2": {
+          "color": "#8c9476",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        }
+      },
+      "forms": {
+        "sofa": "low",
+        "bed": "platform",
+        "chair": "organic",
+        "tables": "organic",
+        "cabinet": "block",
+        "pendant": "paper",
+        "art": "earth"
+      },
+      "lighting": {
+        "temperature": 2700,
+        "exposure": 0.9,
+        "sun": 2.2,
+        "environment": 0.65,
+        "reflection": 0.7,
+        "fixtureIntensity": 5.5,
+        "ambientIntensity": 3.5
+      },
+      "playbook": {
+        "intent": "低重心、矿物肌理与不对称圆润块面；宁静而非破旧。",
+        "forms": "低矮软包座体、厚木平台床、非正圆石几、柔和纸灯笼。",
+        "materials": "石灰肌理、刷纹原木、粗麻、砂色石材；金属只作暗色连接件。",
+        "details": "圆润不规则边、低位收纳、单件素陶、少量艺术纹理。",
+        "lighting": "2700K小范围暖光配柔和日光；避免用低曝光掩盖模型细节。",
+        "avoid": "避免人为破损、夸张污渍、满屋装饰和把所有轮廓都做圆。"
+      },
+      "renderBrief": "低重心、矿物肌理与不对称圆润块面；宁静而非破旧。；石灰肌理、刷纹原木、粗麻、砂色石材；金属只作暗色连接件。"
+    },
+    {
+      "id": "new-chinese",
+      "name": "新中式",
+      "englishName": "Contemporary Chinese",
+      "version": "1.2.0",
+      "theme": {
+        "accent": "#b29a69",
+        "background": "#171b20",
+        "text": "#eee9df"
+      },
+      "palette": [
+        "#eee8dc",
+        "#8b6546",
+        "#423127",
+        "#6f7c71"
+      ],
+      "materials": {
+        "plaster": "#eee8dc",
+        "cream": "#dbd2bc",
+        "porcelain": "#faf7ef",
+        "oak": "#8b6546",
+        "walnut": "#423127",
+        "travertine": "#ddd4c0",
+        "linen": "#e0d4bc",
+        "boucle": "#d8ceb9",
+        "sand": "#bcaa83",
+        "clay": "#8d6e56",
+        "sage": "#6f7c71",
+        "rug": "#cfc5ac",
+        "bronze": "#88734e",
+        "black": "#302c27",
+        "white": "#f2eee6",
+        "sheer": "#faf7ef",
+        "dark": "#37332f",
+        "leaf": "#626f49",
+        "leaf2": "#8c9476"
+      },
+      "materialRecipes": {
+        "plaster": {
+          "color": "#eee8dc",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "cream": {
+          "color": "#dbd2bc",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "porcelain": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "oak": {
+          "color": "#8b6546",
+          "roughness": 0.62,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "walnut": {
+          "color": "#423127",
+          "roughness": 0.62,
+          "metalness": 0,
+          "surface": "wood"
+        },
+        "travertine": {
+          "color": "#ddd4c0",
+          "roughness": 0.66,
+          "metalness": 0,
+          "surface": "stone"
+        },
+        "linen": {
+          "color": "#e0d4bc",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "boucle": {
+          "color": "#d8ceb9",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "sand": {
+          "color": "#bcaa83",
+          "roughness": 0.96,
+          "metalness": 0,
+          "surface": "woven"
+        },
+        "clay": {
+          "color": "#8d6e56",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "sage": {
+          "color": "#6f7c71",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "rug": {
+          "color": "#cfc5ac",
+          "roughness": 0.92,
+          "metalness": 0,
+          "surface": "fabric"
+        },
+        "bronze": {
+          "color": "#88734e",
+          "roughness": 0.3,
+          "metalness": 0.8,
+          "surface": "paint"
+        },
+        "black": {
+          "color": "#302c27",
+          "roughness": 0.3,
+          "metalness": 0.48,
+          "surface": "paint"
+        },
+        "white": {
+          "color": "#f2eee6",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "sheer": {
+          "color": "#faf7ef",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "dark": {
+          "color": "#37332f",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf": {
+          "color": "#626f49",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        },
+        "leaf2": {
+          "color": "#8c9476",
+          "roughness": 0.85,
+          "metalness": 0,
+          "surface": "paint"
+        }
+      },
+      "forms": {
+        "sofa": "lattice",
+        "bed": "lattice",
+        "chair": "lattice",
+        "tables": "trestle",
+        "cabinet": "lattice",
+        "pendant": "lantern",
+        "art": "ink"
+      },
+      "lighting": {
+        "temperature": 3000,
+        "exposure": 0.92,
+        "sun": 2.2,
+        "environment": 0.65,
+        "reflection": 0.7,
+        "fixtureIntensity": 5.5,
+        "ambientIntensity": 3.5
+      },
+      "playbook": {
+        "intent": "东方木构节奏与当代低密度陈设，木色和留白共同构成气质。",
+        "forms": "外露方木框、细格栅靠背、木框床头、横撑餐桌与灯笼灯。",
+        "materials": "深浅木饰面、米白亚麻、纸纤维灯罩、少量竹编和古铜。",
+        "details": "规则窄格栅、围合木扶手、托盘茶器、原创水墨抽象画。",
+        "lighting": "3000K柔暖灯光，木格栅与白墙有清晰明暗；避免高饱和红光。",
+        "avoid": "避免堆砌符号、宫廷雕龙、高饱和红金和全屋厚重雕刻。"
+      },
+      "renderBrief": "东方木构节奏与当代低密度陈设，木色和留白共同构成气质。；深浅木饰面、米白亚麻、纸纤维灯罩、少量竹编和古铜。"
+    }
+  ]
+}

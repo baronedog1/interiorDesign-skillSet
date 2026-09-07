@@ -1,0 +1,2304 @@
+{
+  "schemaVersion": 4,
+  "displayName": "机位截图 · 七类空间与真实成像",
+  "version": "2.1.0",
+  "overview": {
+    "title": "机位：空间语义先行，候选求解后看真实图片",
+    "nodes": [
+      {
+        "id": "a",
+        "type": "io",
+        "x": 70,
+        "y": 210,
+        "w": 890,
+        "h": 270,
+        "title": "当前完整 HTML / scene / 认可机位",
+        "lines": [
+          "不覆盖用户已指定的机位；保持同版文件"
+        ],
+        "files": [
+          {
+            "path": "scripts/run.py",
+            "purpose": "find/apply/capture 入口"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "q",
+        "type": "decision",
+        "x": 1220,
+        "y": 190,
+        "w": 1100,
+        "h": 430,
+        "title": "场景、机位引用同版？",
+        "lines": [
+          "sceneKey/layoutHash/HTML 摘要一致"
+        ],
+        "files": [
+          {
+            "path": "../interior-html-modeling/scripts/engine/python/render.py",
+            "purpose": "load_scene 与真实页面检查"
+          },
+          {
+            "path": "../interior-html-modeling/scripts/engine/schemas/cameras.schema.json",
+            "purpose": "相机数据字段"
+          }
+        ],
+        "bodySize": 22,
+        "check": true
+      },
+      {
+        "id": "fix",
+        "type": "process",
+        "x": 70,
+        "y": 700,
+        "w": 890,
+        "h": 260,
+        "title": "引用错误：更新当前源模型",
+        "lines": [
+          "回本页输入，不拿旧图冒充新结果"
+        ],
+        "files": [
+          {
+            "path": "../interior-html-modeling/scripts/engine/python/common.py",
+            "purpose": "JSON 与文件摘要"
+          },
+          {
+            "path": "../interior-html-modeling/scripts/engine/python/model.py",
+            "purpose": "重新编译当前布局"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "room",
+        "type": "process",
+        "x": 1220,
+        "y": 700,
+        "w": 1100,
+        "h": 260,
+        "title": "明确本房主体和表达关系",
+        "lines": [
+          "卧室/客厅/餐厅/厨房/卫浴/书房/阳台"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "主体、空间差异及识图方法"
+          }
+        ],
+        "bodySize": 22,
+        "detailRef": "rooms"
+      },
+      {
+        "id": "search",
+        "type": "process",
+        "x": 1220,
+        "y": 1220,
+        "w": 1100,
+        "h": 340,
+        "title": "求解候选 → 冻结参数 → 真实截图",
+        "lines": [
+          "候选质量为观察，不用分数拦截整套图",
+          "看图不合格，定位空间语义或机位计算的源头"
+        ],
+        "files": [
+          {
+            "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+            "purpose": "本房主体、候选、投影与评分"
+          },
+          {
+            "path": "scripts/run.py",
+            "purpose": "find/apply/capture 入口"
+          }
+        ],
+        "bodySize": 22,
+        "detailRef": "search"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "q",
+        "points": [
+          [
+            960,
+            345
+          ],
+          [
+            1220,
+            405
+          ]
+        ],
+        "label": "文件"
+      },
+      {
+        "from": "q",
+        "to": "fix",
+        "points": [
+          [
+            1220,
+            405
+          ],
+          [
+            1080,
+            405
+          ],
+          [
+            1080,
+            830
+          ],
+          [
+            960,
+            830
+          ]
+        ],
+        "label": "否"
+      },
+      {
+        "from": "q",
+        "to": "room",
+        "points": [
+          [
+            1770,
+            620
+          ],
+          [
+            1770,
+            700
+          ]
+        ],
+        "label": "是"
+      },
+      {
+        "from": "room",
+        "to": "search",
+        "points": [
+          [
+            1770,
+            960
+          ],
+          [
+            1770,
+            1220
+          ]
+        ],
+        "label": "本房约束"
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "workflow",
+      "title": "机位：空间语义先行，候选求解后看真实图片",
+      "input": "当前完整模型及用户视角意图",
+      "output": "机位 JSON、实际 PNG、观察记录",
+      "explanation": "本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。",
+      "diagrams": [
+        {
+          "title": "机位：空间语义先行，候选求解后看真实图片",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 210,
+              "w": 890,
+              "h": 270,
+              "title": "当前完整 HTML / scene / 认可机位",
+              "lines": [
+                "不覆盖用户已指定的机位；保持同版文件"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1220,
+              "y": 190,
+              "w": 1100,
+              "h": 430,
+              "title": "场景、机位引用同版？",
+              "lines": [
+                "sceneKey/layoutHash/HTML 摘要一致"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "load_scene 与真实页面检查"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/schemas/cameras.schema.json",
+                  "purpose": "相机数据字段"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "fix",
+              "type": "process",
+              "x": 70,
+              "y": 700,
+              "w": 890,
+              "h": 260,
+              "title": "引用错误：更新当前源模型",
+              "lines": [
+                "回本页输入，不拿旧图冒充新结果"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "JSON 与文件摘要"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/model.py",
+                  "purpose": "重新编译当前布局"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "room",
+              "type": "process",
+              "x": 1220,
+              "y": 700,
+              "w": 1100,
+              "h": 260,
+              "title": "明确本房主体和表达关系",
+              "lines": [
+                "卧室/客厅/餐厅/厨房/卫浴/书房/阳台"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22,
+              "detailRef": "rooms"
+            },
+            {
+              "id": "search",
+              "type": "process",
+              "x": 1220,
+              "y": 1220,
+              "w": 1100,
+              "h": 340,
+              "title": "求解候选 → 冻结参数 → 真实截图",
+              "lines": [
+                "候选质量为观察，不用分数拦截整套图",
+                "看图不合格，定位空间语义或机位计算的源头"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                },
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                }
+              ],
+              "bodySize": 22,
+              "detailRef": "search"
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "q",
+              "points": [
+                [
+                  960,
+                  345
+                ],
+                [
+                  1220,
+                  405
+                ]
+              ],
+              "label": "文件"
+            },
+            {
+              "from": "q",
+              "to": "fix",
+              "points": [
+                [
+                  1220,
+                  405
+                ],
+                [
+                  1080,
+                  405
+                ],
+                [
+                  1080,
+                  830
+                ],
+                [
+                  960,
+                  830
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "q",
+              "to": "room",
+              "points": [
+                [
+                  1770,
+                  620
+                ],
+                [
+                  1770,
+                  700
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "room",
+              "to": "search",
+              "points": [
+                [
+                  1770,
+                  960
+                ],
+                [
+                  1770,
+                  1220
+                ]
+              ],
+              "label": "本房约束"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "logicDetails": [
+    {
+      "id": "rooms",
+      "code": "ROOMS",
+      "title": "逐空间关系与机位",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "卧室：从床头墙确定床尾视线",
+          "nodes": [
+            {
+              "id": "bed",
+              "type": "io",
+              "x": 70,
+              "y": 250,
+              "w": 1040,
+              "h": 330,
+              "title": "床与床头柜属于本卧室",
+              "lines": [
+                "床头为 -Z；先确认其宿主墙",
+                "wardrobe、door 是关系对象，不借邻房床"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "axis",
+              "type": "process",
+              "x": 1260,
+              "y": 250,
+              "w": 1060,
+              "h": 330,
+              "title": "以床朝向求正视方向",
+              "lines": [
+                "从床尾朝床头；frontWallId优先",
+                "斜角应同时交代床、衣柜和门"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "candidate",
+              "type": "process",
+              "x": 1260,
+              "y": 860,
+              "w": 1060,
+              "h": 330,
+              "title": "按本房可站区域采样并排序",
+              "lines": [
+                "共用候选算法；不从床头墙外拍",
+                "床侧门板遮挡时改候选，不缩床"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 70,
+              "y": 810,
+              "w": 1040,
+              "h": 420,
+              "title": "图里床头、床侧及门柜关系可读？",
+              "lines": [
+                "检查靠墙、朝向、裁切和门板遮挡"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "yes",
+              "type": "store",
+              "x": 70,
+              "y": 1350,
+              "w": 1040,
+              "h": 220,
+              "title": "是：卧室参考图 + 冻结机位",
+              "lines": [],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "no",
+              "type": "process",
+              "x": 1260,
+              "y": 1340,
+              "w": 1060,
+              "h": 250,
+              "title": "否：区分床锚点错还是镜头错",
+              "lines": [
+                "床位置错回规划；取景错回候选",
+                "交付具体问题图，不改变家具掩盖"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "bed",
+              "to": "axis",
+              "points": [
+                [
+                  1110,
+                  415
+                ],
+                [
+                  1260,
+                  415
+                ]
+              ],
+              "label": "床轴"
+            },
+            {
+              "from": "axis",
+              "to": "candidate",
+              "points": [
+                [
+                  1790,
+                  580
+                ],
+                [
+                  1790,
+                  860
+                ]
+              ],
+              "label": "视线"
+            },
+            {
+              "from": "candidate",
+              "to": "q",
+              "points": [
+                [
+                  1260,
+                  1025
+                ],
+                [
+                  1110,
+                  1020
+                ]
+              ],
+              "label": "实际截图"
+            },
+            {
+              "from": "q",
+              "to": "yes",
+              "points": [
+                [
+                  590,
+                  1230
+                ],
+                [
+                  590,
+                  1350
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "no",
+              "points": [
+                [
+                  920.909090909091,
+                  1096.3636363636363
+                ],
+                [
+                  1180,
+                  1140
+                ],
+                [
+                  1180,
+                  1465
+                ],
+                [
+                  1260,
+                  1465
+                ]
+              ],
+              "label": "否"
+            }
+          ]
+        },
+        {
+          "title": "客厅：会客关系和电视方向必须互补",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 200,
+              "w": 2240,
+              "h": 250,
+              "title": "锁定客厅自己的沙发、茶几、电视和阳台通路",
+              "lines": [
+                "subjectIds 优先；依据原房间功能，餐桌不能代替客厅主体"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "sofa",
+              "type": "process",
+              "x": 70,
+              "y": 660,
+              "w": 1020,
+              "h": 360,
+              "title": "会客机位：朝沙发正面",
+              "lines": [
+                "观察主沙发、单椅、茶几的整体关系",
+                "保留阳台通路，不让茶几占满近景"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "tv",
+              "type": "process",
+              "x": 1290,
+              "y": 660,
+              "w": 1020,
+              "h": 360,
+              "title": "电视机位：从会客侧看电视组",
+              "lines": [
+                "目标包含电视柜和背景，保持真实比例",
+                "电视前景过大时改站位和目标，不缩电视"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 650,
+              "y": 1210,
+              "w": 1080,
+              "h": 370,
+              "title": "两张图共同说明客厅布局？",
+              "lines": [
+                "主体完整、正反方向、阳台与通路可理解"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1280,
+              "w": 440,
+              "h": 300,
+              "title": "是：互补图组",
+              "lines": [],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "fix",
+              "type": "process",
+              "x": 1880,
+              "y": 1280,
+              "w": 440,
+              "h": 300,
+              "title": "否：回主体/站位",
+              "lines": [
+                "保留观察",
+                "不重摆家具"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "sofa",
+              "points": [
+                [
+                  580,
+                  450
+                ],
+                [
+                  580,
+                  660
+                ]
+              ],
+              "label": "会客关系"
+            },
+            {
+              "from": "a",
+              "to": "tv",
+              "points": [
+                [
+                  1800,
+                  450
+                ],
+                [
+                  1800,
+                  660
+                ]
+              ],
+              "label": "电视关系"
+            },
+            {
+              "from": "sofa",
+              "to": "q",
+              "points": [
+                [
+                  580,
+                  1020
+                ],
+                [
+                  580,
+                  1100
+                ],
+                [
+                  950,
+                  1100
+                ],
+                [
+                  1023.8461538461538,
+                  1266.923076923077
+                ]
+              ],
+              "label": "候选A"
+            },
+            {
+              "from": "tv",
+              "to": "q",
+              "points": [
+                [
+                  1800,
+                  1020
+                ],
+                [
+                  1800,
+                  1100
+                ],
+                [
+                  1450,
+                  1100
+                ],
+                [
+                  1365.5,
+                  1270.125
+                ]
+              ],
+              "label": "候选B"
+            },
+            {
+              "from": "q",
+              "to": "out",
+              "points": [
+                [
+                  650,
+                  1395
+                ],
+                [
+                  510,
+                  1430
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "fix",
+              "points": [
+                [
+                  1730,
+                  1395
+                ],
+                [
+                  1880,
+                  1430
+                ]
+              ],
+              "label": "否"
+            }
+          ]
+        },
+        {
+          "title": "餐厅：先包含最外椅背，再决定画幅",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 200,
+              "w": 960,
+              "h": 300,
+              "title": "餐桌＋本组全部椅子",
+              "lines": [
+                "不只取桌面中心；确认属于餐厅"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "process",
+              "x": 1260,
+              "y": 200,
+              "w": 1060,
+              "h": 300,
+              "title": "变换每个组件八角点求联合包络",
+              "lines": [
+                "size/position/rotationY → 世界坐标",
+                "最外椅背决定完整画幅；保留拉椅使用区"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "c",
+              "type": "process",
+              "x": 1260,
+              "y": 770,
+              "w": 1060,
+              "h": 310,
+              "title": "包络投影 → FOV → 候选排序",
+              "lines": [
+                "保持房内站位；吊灯与背景柜作空间关系",
+                "视场不足留风险，不缩小餐桌"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 70,
+              "y": 740,
+              "w": 960,
+              "h": 410,
+              "title": "图片读得清整桌椅与背景？",
+              "lines": [
+                "看椅背裁切、柜体夹窄、拉椅区",
+                "近大远小不能误当实际尺寸"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1320,
+              "w": 2240,
+              "h": 270,
+              "title": "结果与明确归因",
+              "lines": [
+                "是：交付全组图；否：裁切回相机，真实拥挤回布局",
+                "原方案与观察同时保留，不用图像变形掩盖"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  1030,
+                  350
+                ],
+                [
+                  1260,
+                  350
+                ]
+              ],
+              "label": "对象组"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "points": [
+                [
+                  1790,
+                  500
+                ],
+                [
+                  1790,
+                  770
+                ]
+              ],
+              "label": "投影输入"
+            },
+            {
+              "from": "c",
+              "to": "q",
+              "points": [
+                [
+                  1260,
+                  925
+                ],
+                [
+                  1030,
+                  945
+                ]
+              ],
+              "label": "真实图"
+            },
+            {
+              "from": "q",
+              "to": "out",
+              "points": [
+                [
+                  550,
+                  1150
+                ],
+                [
+                  550,
+                  1320
+                ]
+              ],
+              "label": "是：交付"
+            },
+            {
+              "from": "q",
+              "to": "out",
+              "points": [
+                [
+                  70,
+                  945
+                ],
+                [
+                  48,
+                  945
+                ],
+                [
+                  48,
+                  1455
+                ],
+                [
+                  70,
+                  1455
+                ]
+              ],
+              "label": "否：带问题交付"
+            }
+          ]
+        },
+        {
+          "title": "厨房：沿操作面读懂台面、设备和通道",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 240,
+              "w": 720,
+              "h": 290,
+              "title": "本厨房台柜与设备",
+              "lines": [
+                "只取本房 kitchen/cabinet 等实体"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "process",
+              "x": 1040,
+              "y": 240,
+              "w": 1280,
+              "h": 290,
+              "title": "操作面决定观看方向，通道决定站位",
+              "lines": [
+                "保持烟灶/水槽/台面关系；不借隔壁房间站位",
+                "自然站位与柜体前沿分离，柜门开合区纳入观察"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1010,
+              "y": 820,
+              "w": 1310,
+              "h": 390,
+              "title": "房内能容纳完整自然视角？",
+              "lines": [
+                "候选投影、遮挡和使用区一起判断"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "full",
+              "type": "process",
+              "x": 70,
+              "y": 800,
+              "w": 720,
+              "h": 350,
+              "title": "能：操作面全景",
+              "lines": [
+                "镜头留出柜体高度和通路",
+                "保持相机参数截图"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "local",
+              "type": "process",
+              "x": 1210,
+              "y": 1320,
+              "w": 1110,
+              "h": 260,
+              "title": "不能：明确局部／另议剖切",
+              "lines": [
+                "不从墙后拍；当前程序不自动生成剖切",
+                "保留已有图和缺口，回源选择机位"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1320,
+              "w": 920,
+              "h": 260,
+              "title": "看台面、门扇与设备遮挡",
+              "lines": [
+                "位置错回布局；遮挡错回镜头",
+                "不隐掉结构冒充通透"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  790,
+                  385
+                ],
+                [
+                  1040,
+                  385
+                ]
+              ],
+              "label": "功能关系"
+            },
+            {
+              "from": "b",
+              "to": "q",
+              "points": [
+                [
+                  1680,
+                  530
+                ],
+                [
+                  1665,
+                  820
+                ]
+              ],
+              "label": "候选"
+            },
+            {
+              "from": "q",
+              "to": "full",
+              "points": [
+                [
+                  1010,
+                  1015
+                ],
+                [
+                  790,
+                  975
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "local",
+              "points": [
+                [
+                  1665,
+                  1210
+                ],
+                [
+                  1665,
+                  1320
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "full",
+              "to": "out",
+              "points": [
+                [
+                  430,
+                  1150
+                ],
+                [
+                  430,
+                  1320
+                ]
+              ],
+              "label": "实际图"
+            }
+          ]
+        },
+        {
+          "title": "卫浴：先分台盆、马桶、淋浴，再求小空间视角",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "process",
+              "x": 70,
+              "y": 200,
+              "w": 1030,
+              "h": 360,
+              "title": "识别本房功能件及玻璃/门扇",
+              "lines": [
+                "台盆、马桶、淋浴位置不能互换",
+                "只从当前 room 选主体，不借邻房资产"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "process",
+              "x": 1300,
+              "y": 200,
+              "w": 1020,
+              "h": 360,
+              "title": "以可用站位看功能关系",
+              "lines": [
+                "保持真实墙与玻璃，不为完整强行穿墙",
+                "包络抽样只是候选提示，不是透明表面视觉结论"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1300,
+              "y": 890,
+              "w": 1020,
+              "h": 400,
+              "title": "实际图能读清目标功能区？",
+              "lines": [
+                "看台盆/镜面、门扇、玻璃和淋浴遮挡"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "good",
+              "type": "store",
+              "x": 70,
+              "y": 880,
+              "w": 1030,
+              "h": 340,
+              "title": "是：交付功能区图",
+              "lines": [
+                "同房图组共同交代空间；机位摘要保留"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "bad",
+              "type": "process",
+              "x": 1300,
+              "y": 1400,
+              "w": 1020,
+              "h": 200,
+              "title": "否：保留局部并说明缺失视野",
+              "lines": [
+                "回主体或站位；需要剖切时明确约定"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  1100,
+                  380
+                ],
+                [
+                  1300,
+                  380
+                ]
+              ],
+              "label": "功能件"
+            },
+            {
+              "from": "b",
+              "to": "q",
+              "points": [
+                [
+                  1810,
+                  560
+                ],
+                [
+                  1810,
+                  890
+                ]
+              ],
+              "label": "实际截图"
+            },
+            {
+              "from": "q",
+              "to": "good",
+              "points": [
+                [
+                  1300,
+                  1090
+                ],
+                [
+                  1100,
+                  1050
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "bad",
+              "points": [
+                [
+                  1810,
+                  1290
+                ],
+                [
+                  1810,
+                  1400
+                ]
+              ],
+              "label": "否"
+            }
+          ]
+        },
+        {
+          "title": "书房：主体工作面与座椅、收纳共同入镜",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 270,
+              "w": 870,
+              "h": 290,
+              "title": "本房书桌、座椅、收纳",
+              "lines": [
+                "房间类型不明时按原图确认"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "process",
+              "x": 1190,
+              "y": 270,
+              "w": 1120,
+              "h": 290,
+              "title": "取工作面正向与斜向候选",
+              "lines": [
+                "不从桌背板后拍；包含座椅与出入口",
+                "共用采样与投影参数，不另设虚构求解器"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1190,
+              "y": 1030,
+              "w": 1120,
+              "h": 390,
+              "title": "工作面与通行关系可理解？",
+              "lines": [
+                "逐图看桌前/椅后使用空间和门遮挡"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "ok",
+              "type": "store",
+              "x": 70,
+              "y": 1060,
+              "w": 870,
+              "h": 310,
+              "title": "是：工作关系图",
+              "lines": [],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "no",
+              "type": "process",
+              "x": 1190,
+              "y": 1480,
+              "w": 1120,
+              "h": 130,
+              "title": "否：修主体/机位，保留观察后回候选",
+              "lines": [],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  940,
+                  415
+                ],
+                [
+                  1190,
+                  415
+                ]
+              ],
+              "label": "主体"
+            },
+            {
+              "from": "b",
+              "to": "q",
+              "points": [
+                [
+                  1750,
+                  560
+                ],
+                [
+                  1750,
+                  1030
+                ]
+              ],
+              "label": "看真实图"
+            },
+            {
+              "from": "q",
+              "to": "ok",
+              "points": [
+                [
+                  1190,
+                  1225
+                ],
+                [
+                  940,
+                  1215
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "no",
+              "points": [
+                [
+                  1750,
+                  1420
+                ],
+                [
+                  1750,
+                  1480
+                ]
+              ],
+              "label": "否"
+            }
+          ]
+        },
+        {
+          "title": "阳台：休闲主体不能遮掉出入口与栏杆关系",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 230,
+              "w": 1010,
+              "h": 340,
+              "title": "原图用途与本房对象",
+              "lines": [
+                "休闲座椅/绿植或无家具空间",
+                "不把相邻客厅家具当作阳台主体"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1270,
+              "y": 210,
+              "w": 1040,
+              "h": 380,
+              "title": "本房有明确主体？",
+              "lines": [
+                "优先 subjectIds；缺失保持缺失，不造摆件"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "empty",
+              "type": "process",
+              "x": 70,
+              "y": 870,
+              "w": 1010,
+              "h": 300,
+              "title": "无主体：空间预设图",
+              "lines": [
+                "看栏杆、墙、门和出入口；注明无家具主体"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "subject",
+              "type": "process",
+              "x": 1270,
+              "y": 870,
+              "w": 1040,
+              "h": 300,
+              "title": "有主体：沿通路求朝向与站位",
+              "lines": [
+                "保留客厅/阳台连接，不让座椅挡住通行关系",
+                "同一采样与投影算法，真实截图逐图看"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1370,
+              "w": 2240,
+              "h": 220,
+              "title": "明确输出：本阳台图与问题说明",
+              "lines": [
+                "出入口被遮或房间认错时回原图/主体；不是镜像图片修正"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "q",
+              "points": [
+                [
+                  1080,
+                  400
+                ],
+                [
+                  1270,
+                  400
+                ]
+              ],
+              "label": "主体事实"
+            },
+            {
+              "from": "q",
+              "to": "subject",
+              "points": [
+                [
+                  1790,
+                  590
+                ],
+                [
+                  1790,
+                  870
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "empty",
+              "points": [
+                [
+                  1270,
+                  400
+                ],
+                [
+                  1170,
+                  400
+                ],
+                [
+                  1170,
+                  730
+                ],
+                [
+                  575,
+                  730
+                ],
+                [
+                  575,
+                  870
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "empty",
+              "to": "out",
+              "points": [
+                [
+                  575,
+                  1170
+                ],
+                [
+                  575,
+                  1370
+                ]
+              ],
+              "label": "空间图"
+            },
+            {
+              "from": "subject",
+              "to": "out",
+              "points": [
+                [
+                  1790,
+                  1170
+                ],
+                [
+                  1790,
+                  1370
+                ]
+              ],
+              "label": "主体图"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "search",
+      "code": "SEARCH",
+      "title": "候选计算与实际截图",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "候选求解：采样、投影、评分，最后才是截图",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "process",
+              "x": 70,
+              "y": 220,
+              "w": 1030,
+              "h": 360,
+              "title": "构造本房主体与遮挡包络",
+              "lines": [
+                "subjectIds 只取本房；否则按 room.type 推断",
+                "墙段先扣洞口，门扇/窗帘/家具参与近似遮挡"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/schemas/layout.schema.json",
+                  "purpose": "房间、墙门窗、placements 数据"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "process",
+              "x": 1280,
+              "y": 220,
+              "w": 1040,
+              "h": 360,
+              "title": "普通与正视两类站位",
+              "lines": [
+                "普通 7×7×高1.40/1.25/1.55m",
+                "正视沿宿主墙内法向35档、横移0/±.18m"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1250,
+              "y": 800,
+              "w": 1070,
+              "h": 390,
+              "title": "站位在本房且不在实体内？",
+              "lines": [
+                "距主体≥.45m；房间多边形及有向包围盒"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "next",
+              "type": "process",
+              "x": 70,
+              "y": 840,
+              "w": 1030,
+              "h": 240,
+              "title": "舍弃该站位，继续剩余候选",
+              "lines": [
+                "这是生成算法选位，不是事后移动家具"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "score",
+              "type": "process",
+              "x": 70,
+              "y": 1210,
+              "w": 1030,
+              "h": 400,
+              "title": "投影并排序有效候选",
+              "lines": [
+                "score=max(0,FOV需−90)×50+(1−可见比)×160",
+                "+前景比例×140+FOV需+|眼高−1.4|×3",
+                "正视另加 |横移|×5；无主体缺失单独记录"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 1280,
+              "y": 1300,
+              "w": 1040,
+              "h": 280,
+              "title": "冻结 cameras.json；包括 review 候选",
+              "lines": [
+                "可见比<.55、前景>.35 标风险，不冒充像素验收",
+                "没有站位则保留带原因候选，明确不是自然全景"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "本房主体、候选、投影与评分"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "保存机位与摘要"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  1100,
+                  400
+                ],
+                [
+                  1280,
+                  400
+                ]
+              ],
+              "label": "本房事实"
+            },
+            {
+              "from": "b",
+              "to": "q",
+              "points": [
+                [
+                  1800,
+                  580
+                ],
+                [
+                  1785,
+                  800
+                ]
+              ],
+              "label": "候选"
+            },
+            {
+              "from": "q",
+              "to": "next",
+              "points": [
+                [
+                  1250,
+                  995
+                ],
+                [
+                  1100,
+                  960
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "q",
+              "to": "score",
+              "points": [
+                [
+                  1785,
+                  1190
+                ],
+                [
+                  1785,
+                  1230
+                ],
+                [
+                  1180,
+                  1230
+                ],
+                [
+                  1180,
+                  1370
+                ],
+                [
+                  1100,
+                  1370
+                ]
+              ],
+              "label": "是：计算投影"
+            },
+            {
+              "from": "score",
+              "to": "out",
+              "points": [
+                [
+                  1100,
+                  1450
+                ],
+                [
+                  1280,
+                  1440
+                ]
+              ],
+              "label": "参数与风险"
+            }
+          ]
+        },
+        {
+          "title": "真实截图与两种渲染参照：输出后恢复原模型",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "process",
+              "x": 70,
+              "y": 210,
+              "w": 1100,
+              "h": 300,
+              "title": "打开当前完整 HTML",
+              "lines": [
+                "独立 Windows Headless / SwiftShader",
+                "实际页面 ready 或明确错误，不用空白页预检阻断"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "find/apply/capture 入口"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "浏览器打开/截图/回执"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/bootstrap.py",
+                  "purpose": "Windows Python 入口"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "Chrome 与软件 WebGL 配置"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1390,
+              "y": 200,
+              "w": 930,
+              "h": 360,
+              "title": "明确要求空白槽位？",
+              "lines": [
+                "默认 furnished；不是自动切白模"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "主体、空间差异及识图方法"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "full",
+              "type": "process",
+              "x": 70,
+              "y": 840,
+              "w": 1100,
+              "h": 260,
+              "title": "否：带全部家具和细节",
+              "lines": [
+                "clay 仅换灰材质，不等于空房"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+                  "purpose": "captureFrame 默认完整场景"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "empty",
+              "type": "process",
+              "x": 1390,
+              "y": 830,
+              "w": 930,
+              "h": 290,
+              "title": "是：暂隐家具/柜体实例",
+              "lines": [
+                "仅 placements；JSON槽位和建筑不变",
+                "记录 hiddenPlacementIds；截图后恢复"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+                  "purpose": "empty-slots 可见性快照/恢复"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1310,
+              "w": 1100,
+              "h": 290,
+              "title": "PNG + renders.json + 视觉观察",
+              "lines": [
+                "同 sceneKey、cameraDigest；真实模式与摘要",
+                "按本房主体看图，错误回空间或机位源"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "原子保存 PNG 与模式"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "哈希与写文件"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "runtime",
+              "type": "process",
+              "x": 1390,
+              "y": 1270,
+              "w": 930,
+              "h": 340,
+              "title": "页面实际截图调用链",
+              "lines": [
+                "已有完整 HTML 内嵌运行时，不重新编造截图"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/three-r164.js",
+                  "purpose": "WebGL 渲染引擎"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/controls.js",
+                  "purpose": "投影/相机数学"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/scene.js",
+                  "purpose": "当前建筑家具实例"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+                  "purpose": "冻结机位、绘制、还原状态"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "q",
+              "points": [
+                [
+                  1170,
+                  360
+                ],
+                [
+                  1390,
+                  380
+                ]
+              ],
+              "label": "选择"
+            },
+            {
+              "from": "q",
+              "to": "empty",
+              "points": [
+                [
+                  1855,
+                  560
+                ],
+                [
+                  1855,
+                  830
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "full",
+              "points": [
+                [
+                  1390,
+                  380
+                ],
+                [
+                  1250,
+                  380
+                ],
+                [
+                  1250,
+                  700
+                ],
+                [
+                  620,
+                  700
+                ],
+                [
+                  620,
+                  840
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "full",
+              "to": "out",
+              "points": [
+                [
+                  620,
+                  1100
+                ],
+                [
+                  620,
+                  1310
+                ]
+              ],
+              "label": "全场景"
+            },
+            {
+              "from": "empty",
+              "to": "runtime",
+              "points": [
+                [
+                  1855,
+                  1120
+                ],
+                [
+                  1855,
+                  1270
+                ]
+              ],
+              "label": "指定模式"
+            },
+            {
+              "from": "runtime",
+              "to": "out",
+              "points": [
+                [
+                  1390,
+                  1440
+                ],
+                [
+                  1170,
+                  1455
+                ]
+              ],
+              "label": "真实帧"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "dependencyFiles": [
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/render.py",
+      "purpose": "原子保存 PNG 与模式"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/schemas/cameras.schema.json",
+      "purpose": "相机数据字段"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/common.py",
+      "purpose": "哈希与写文件"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/model.py",
+      "purpose": "重新编译当前布局"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+      "purpose": "本房主体、候选、投影与评分"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/schemas/layout.schema.json",
+      "purpose": "房间、墙门窗、placements 数据"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/bootstrap.py",
+      "purpose": "Windows Python 入口"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+      "purpose": "冻结机位、绘制、还原状态"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/runtime/three-r164.js",
+      "purpose": "WebGL 渲染引擎"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/runtime/controls.js",
+      "purpose": "投影/相机数学"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/runtime/scene.js",
+      "purpose": "当前建筑家具实例"
+    }
+  ],
+  "fileDescriptions": {
+    "MANIFEST.json": "发布版本与完整文件清单",
+    "SKILL.md": "调用范围、输入输出与关键规则",
+    "SKILL_MANUAL.pdf": "面向人的算法说明书",
+    "local_runtime.md": "Chrome 与软件 WebGL 配置",
+    "manual/skill-flowchart.svg": "同源说明书内容与图形",
+    "manual/skill-manual.json": "同源说明书内容与图形",
+    "manual/skill-manual.md": "同源说明书内容与图形",
+    "playbook.md": "主体、空间差异及识图方法",
+    "scripts/run.py": "find/apply/capture 入口"
+  }
+}

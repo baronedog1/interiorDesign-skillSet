@@ -1,0 +1,345 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[-a-z0-9]{1,50}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60
+    },
+    "englishName": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "accent": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "background": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "text": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        }
+      },
+      "required": [
+        "accent"
+      ]
+    },
+    "palette": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 12,
+      "items": {
+        "type": "string",
+        "pattern": "^#[0-9a-fA-F]{6}$"
+      }
+    },
+    "materials": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^#[0-9a-fA-F]{6}$"
+      }
+    },
+    "materialRecipes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "roughness": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "metalness": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "surface": {
+            "enum": [
+              "fabric",
+              "woven",
+              "leather",
+              "wood",
+              "stone",
+              "paint",
+              "plaster"
+            ]
+          }
+        },
+        "required": [
+          "color",
+          "roughness",
+          "metalness",
+          "surface"
+        ]
+      }
+    },
+    "forms": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sofa": {
+          "enum": [
+            "cloud",
+            "linear",
+            "timber",
+            "low",
+            "lattice"
+          ]
+        },
+        "bed": {
+          "enum": [
+            "soft",
+            "panel",
+            "timber",
+            "platform",
+            "lattice"
+          ]
+        },
+        "chair": {
+          "enum": [
+            "rounded",
+            "linear",
+            "timber",
+            "organic",
+            "lattice"
+          ]
+        },
+        "tables": {
+          "enum": [
+            "oval",
+            "rectilinear",
+            "tapered",
+            "organic",
+            "trestle"
+          ]
+        },
+        "cabinet": {
+          "enum": [
+            "fluted",
+            "flat",
+            "timber",
+            "block",
+            "lattice"
+          ]
+        },
+        "pendant": {
+          "enum": [
+            "dome",
+            "linear",
+            "sputnik",
+            "paper",
+            "lantern"
+          ]
+        },
+        "art": {
+          "enum": [
+            "arches",
+            "geometry",
+            "earth",
+            "ink"
+          ]
+        }
+      },
+      "required": [
+        "sofa",
+        "bed",
+        "chair",
+        "tables",
+        "cabinet",
+        "pendant",
+        "art"
+      ]
+    },
+    "lighting": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "temperature": {
+          "type": "number",
+          "minimum": 1800,
+          "maximum": 8000
+        },
+        "exposure": {
+          "type": "number",
+          "minimum": 0.4,
+          "maximum": 1.5
+        },
+        "sun": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "environment": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 1.5
+        },
+        "reflection": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1.8
+        },
+        "fixtureIntensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "ambientIntensity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "temperature",
+        "exposure",
+        "sun",
+        "environment",
+        "reflection",
+        "fixtureIntensity",
+        "ambientIntensity"
+      ]
+    },
+    "playbook": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "intent": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "forms": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "materials": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "details": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "lighting": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        },
+        "avoid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1500
+        }
+      },
+      "required": [
+        "intent",
+        "forms",
+        "materials",
+        "details",
+        "lighting",
+        "avoid"
+      ]
+    },
+    "renderBrief": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "query",
+        "retrievedAt",
+        "sources"
+      ],
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "retrievedAt": {
+          "type": "string"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "url",
+              "title",
+              "supports"
+            ],
+            "properties": {
+              "url": {
+                "type": "string",
+                "pattern": "^https://"
+              },
+              "title": {
+                "type": "string"
+              },
+              "supports": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "componentBindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "componentId",
+          "reason"
+        ],
+        "properties": {
+          "componentId": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "shapeChange": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "englishName",
+    "version",
+    "theme",
+    "palette",
+    "materials",
+    "materialRecipes",
+    "forms",
+    "lighting",
+    "playbook",
+    "renderBrief"
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "license": "CC0-1.0 (original procedural texture outputs)",
+  "runtimeAuthority": "../../runtime/materials.js",
+  "usage": "Portable assets preview/export; offline HTML builds textures in memory from same generators. No external asset fetching.",
+  "assets": [
+    {
+      "category": "wood",
+      "channel": "color",
+      "file": "wood-color.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "category": "wood",
+      "channel": "normal",
+      "file": "wood-normal.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "category": "stone",
+      "channel": "color",
+      "file": "stone-color.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "category": "stone",
+      "channel": "normal",
+      "file": "stone-normal.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "category": "fabric",
+      "channel": "color",
+      "file": "fabric-color.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "category": "fabric",
+      "channel": "normal",
+      "file": "fabric-normal.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "category": "woven",
+      "channel": "color",
+      "file": "woven-color.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "category": "woven",
+      "channel": "normal",
+      "file": "woven-normal.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "category": "plaster",
+      "channel": "color",
+      "file": "plaster-color.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "category": "plaster",
+      "channel": "normal",
+      "file": "plaster-normal.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        512,
+        512
+      ]
+    },
+    {
+      "category": "leather",
+      "channel": "color",
+      "file": "leather-color.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "category": "leather",
+      "channel": "normal",
+      "file": "leather-normal.png",
+      "source": "bundled deterministic procedural material generator",
+      "size": [
+        256,
+        256
+      ]
+    }
+  ]
+}

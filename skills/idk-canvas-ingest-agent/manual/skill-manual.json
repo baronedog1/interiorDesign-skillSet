@@ -1,0 +1,1090 @@
+{
+  "schemaVersion": 4,
+  "displayName": "百恩得平台 · 素材流入与私有交付",
+  "version": "3.0.1",
+  "overview": {
+    "title": "平台操作：资产流入与交付流出分别处理",
+    "nodes": [
+      {
+        "id": "a",
+        "type": "io",
+        "x": 70,
+        "y": 220,
+        "w": 960,
+        "h": 300,
+        "title": "其它 Skill 的资产/交付请求",
+        "lines": [
+          "Key 只在本平台 Skill；不放 HTML/PDF"
+        ],
+        "files": [
+          {
+            "path": "scripts/run.py",
+            "purpose": "平台唯一命令入口"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "q",
+        "type": "decision",
+        "x": 1270,
+        "y": 200,
+        "w": 1050,
+        "h": 350,
+        "title": "本机受管身份可访问？",
+        "lines": [
+          "profile 实测；只用真实权限与 HTTPS"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "平台操作授权与步骤"
+          },
+          {
+            "path": "local_runtime.md",
+            "purpose": "本机私有 Key、HTTPS、本地网络和字段合同"
+          }
+        ],
+        "bodySize": 22,
+        "check": true,
+        "detailRef": "identity"
+      },
+      {
+        "id": "no",
+        "type": "process",
+        "x": 70,
+        "y": 820,
+        "w": 960,
+        "h": 260,
+        "title": "否：报告凭据/权限/服务故障",
+        "lines": [
+          "不输出 Key 或完整鉴权异常"
+        ],
+        "files": [
+          {
+            "path": "scripts/platform_bridge.py",
+            "purpose": "实际白名单 API、下载、绑定和回读"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "intent",
+        "type": "decision",
+        "x": 1270,
+        "y": 740,
+        "w": 1050,
+        "h": 410,
+        "title": "读资产还是推送成果？",
+        "lines": [
+          "当前只支持私有项目；不是社区公开发布"
+        ],
+        "files": [
+          {
+            "path": "scripts/platform_bridge.py",
+            "purpose": "实际白名单 API、下载、绑定和回读"
+          }
+        ],
+        "bodySize": 22,
+        "check": true
+      },
+      {
+        "id": "read",
+        "type": "process",
+        "x": 70,
+        "y": 1300,
+        "w": 960,
+        "h": 280,
+        "title": "资产总览 → 条目 → 下载",
+        "lines": [
+          "用户选定素材，真实链接下载本机"
+        ],
+        "files": [
+          {
+            "path": "scripts/platform_bridge.py",
+            "purpose": "实际白名单 API、下载、绑定和回读"
+          }
+        ],
+        "bodySize": 22,
+        "detailRef": "download"
+      },
+      {
+        "id": "write",
+        "type": "process",
+        "x": 1270,
+        "y": 1300,
+        "w": 1050,
+        "h": 280,
+        "title": "唯一项目 → 上传 → 回读",
+        "lines": [
+          "按 HTML/媒体合同；没有授权仅 dry-run"
+        ],
+        "files": [
+          {
+            "path": "scripts/platform_bridge.py",
+            "purpose": "实际白名单 API、下载、绑定和回读"
+          }
+        ],
+        "bodySize": 22,
+        "detailRef": "upload"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "q",
+        "points": [
+          [
+            1030,
+            370
+          ],
+          [
+            1270,
+            375
+          ]
+        ],
+        "label": "访问身份"
+      },
+      {
+        "from": "q",
+        "to": "no",
+        "points": [
+          [
+            1270,
+            375
+          ],
+          [
+            1150,
+            375
+          ],
+          [
+            1150,
+            700
+          ],
+          [
+            550,
+            700
+          ],
+          [
+            550,
+            820
+          ]
+        ],
+        "label": "否"
+      },
+      {
+        "from": "q",
+        "to": "intent",
+        "points": [
+          [
+            1795,
+            550
+          ],
+          [
+            1795,
+            740
+          ]
+        ],
+        "label": "是"
+      },
+      {
+        "from": "intent",
+        "to": "write",
+        "points": [
+          [
+            1795,
+            1150
+          ],
+          [
+            1795,
+            1300
+          ]
+        ],
+        "label": "上传"
+      },
+      {
+        "from": "intent",
+        "to": "read",
+        "points": [
+          [
+            1270,
+            945
+          ],
+          [
+            1150,
+            945
+          ],
+          [
+            1150,
+            1210
+          ],
+          [
+            550,
+            1210
+          ],
+          [
+            550,
+            1300
+          ]
+        ],
+        "label": "查询/下载"
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "workflow",
+      "title": "平台操作：资产流入与交付流出分别处理",
+      "input": "资产检索条件 / 用户授权的交付物",
+      "output": "本地下载、私有项目链接与回执",
+      "explanation": "本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。",
+      "diagrams": [
+        {
+          "title": "平台操作：资产流入与交付流出分别处理",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 220,
+              "w": 960,
+              "h": 300,
+              "title": "其它 Skill 的资产/交付请求",
+              "lines": [
+                "Key 只在本平台 Skill；不放 HTML/PDF"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "平台唯一命令入口"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1270,
+              "y": 200,
+              "w": 1050,
+              "h": 350,
+              "title": "本机受管身份可访问？",
+              "lines": [
+                "profile 实测；只用真实权限与 HTTPS"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "平台操作授权与步骤"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "本机私有 Key、HTTPS、本地网络和字段合同"
+                }
+              ],
+              "bodySize": 22,
+              "check": true,
+              "detailRef": "identity"
+            },
+            {
+              "id": "no",
+              "type": "process",
+              "x": 70,
+              "y": 820,
+              "w": 960,
+              "h": 260,
+              "title": "否：报告凭据/权限/服务故障",
+              "lines": [
+                "不输出 Key 或完整鉴权异常"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "intent",
+              "type": "decision",
+              "x": 1270,
+              "y": 740,
+              "w": 1050,
+              "h": 410,
+              "title": "读资产还是推送成果？",
+              "lines": [
+                "当前只支持私有项目；不是社区公开发布"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "read",
+              "type": "process",
+              "x": 70,
+              "y": 1300,
+              "w": 960,
+              "h": 280,
+              "title": "资产总览 → 条目 → 下载",
+              "lines": [
+                "用户选定素材，真实链接下载本机"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22,
+              "detailRef": "download"
+            },
+            {
+              "id": "write",
+              "type": "process",
+              "x": 1270,
+              "y": 1300,
+              "w": 1050,
+              "h": 280,
+              "title": "唯一项目 → 上传 → 回读",
+              "lines": [
+                "按 HTML/媒体合同；没有授权仅 dry-run"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22,
+              "detailRef": "upload"
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "q",
+              "points": [
+                [
+                  1030,
+                  370
+                ],
+                [
+                  1270,
+                  375
+                ]
+              ],
+              "label": "访问身份"
+            },
+            {
+              "from": "q",
+              "to": "no",
+              "points": [
+                [
+                  1270,
+                  375
+                ],
+                [
+                  1150,
+                  375
+                ],
+                [
+                  1150,
+                  700
+                ],
+                [
+                  550,
+                  700
+                ],
+                [
+                  550,
+                  820
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "q",
+              "to": "intent",
+              "points": [
+                [
+                  1795,
+                  550
+                ],
+                [
+                  1795,
+                  740
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "intent",
+              "to": "write",
+              "points": [
+                [
+                  1795,
+                  1150
+                ],
+                [
+                  1795,
+                  1300
+                ]
+              ],
+              "label": "上传"
+            },
+            {
+              "from": "intent",
+              "to": "read",
+              "points": [
+                [
+                  1270,
+                  945
+                ],
+                [
+                  1150,
+                  945
+                ],
+                [
+                  1150,
+                  1210
+                ],
+                [
+                  550,
+                  1210
+                ],
+                [
+                  550,
+                  1300
+                ]
+              ],
+              "label": "查询/下载"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "logicDetails": [
+    {
+      "id": "identity",
+      "code": "IDENTITY",
+      "title": "身份、网络与授权",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "身份与访问：只读和写操作的边界不同",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "process",
+              "x": 70,
+              "y": 240,
+              "w": 1050,
+              "h": 340,
+              "title": "加载本机平台 env",
+              "lines": [
+                "IDK_API_KEY/IDK_API_BASE_URL/IDK_TOOL_NAME",
+                "只记录位置，秘密内容不进入报告或图"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "平台唯一命令入口"
+                },
+                {
+                  "path": "playbook.md",
+                  "purpose": "平台操作授权与步骤"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "本机私有 Key、HTTPS、本地网络和字段合同"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1280,
+              "y": 210,
+              "w": 1040,
+              "h": 390,
+              "title": "地址与操作在实际允许范围？",
+              "lines": [
+                "HTTPS /api/v1；拒绝鉴权重定向",
+                "只用 profile/projects/library/私有资产路由"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "bad",
+              "type": "process",
+              "x": 1280,
+              "y": 930,
+              "w": 1040,
+              "h": 300,
+              "title": "否：准确报告不支持/权限失败",
+              "lines": [
+                "不发明端点；不静默匿名上传",
+                "不输出完整服务器响应或签名链接"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "ok",
+              "type": "process",
+              "x": 70,
+              "y": 880,
+              "w": 1050,
+              "h": 370,
+              "title": "是：GET 可读；POST 需任务授权",
+              "lines": [
+                "publish 不加 --apply 只 dry-run",
+                "写请求固定幂等键；429/502/503/504 有界重试",
+                "不公开、不付费生成、不删除"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1370,
+              "w": 2250,
+              "h": 230,
+              "title": "后续只在当前账号可见范围内找项目/资产",
+              "lines": [
+                "common 只处理数据保存，绝不承担鉴权"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "JSON 与回执原子写入"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "q",
+              "points": [
+                [
+                  1120,
+                  410
+                ],
+                [
+                  1160,
+                  410
+                ],
+                [
+                  1160,
+                  185
+                ],
+                [
+                  1800,
+                  185
+                ],
+                [
+                  1800,
+                  210
+                ]
+              ],
+              "label": "受管配置"
+            },
+            {
+              "from": "q",
+              "to": "bad",
+              "points": [
+                [
+                  1800,
+                  600
+                ],
+                [
+                  1800,
+                  930
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "q",
+              "to": "ok",
+              "points": [
+                [
+                  1280,
+                  405
+                ],
+                [
+                  1200,
+                  405
+                ],
+                [
+                  1200,
+                  750
+                ],
+                [
+                  595,
+                  750
+                ],
+                [
+                  595,
+                  880
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "ok",
+              "to": "out",
+              "points": [
+                [
+                  595,
+                  1250
+                ],
+                [
+                  595,
+                  1370
+                ]
+              ],
+              "label": "明确权限"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "download",
+      "code": "DOWNLOAD",
+      "title": "真实资产下载",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "素材流入：从可见条目到本机文件",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 230,
+              "w": 1020,
+              "h": 330,
+              "title": "真实 library summary / items",
+              "lines": [
+                "平台资产条目不等于全部都是 3D 模型",
+                "选定 libraryId 与 itemId；不猜 URL"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "process",
+              "x": 1280,
+              "y": 230,
+              "w": 1040,
+              "h": 330,
+              "title": "选中条目实际返回的 source URL",
+              "lines": [
+                "同源才携 Key；外部 HTTPS 不携 Key",
+                "拒绝认证重定向，下载预算 64MiB"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1280,
+              "y": 860,
+              "w": 1040,
+              "h": 400,
+              "title": "文件与可得摘要相符？",
+              "lines": [
+                "有远端 SHA 则核对；无 SHA 只记本地摘要"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "bad",
+              "type": "process",
+              "x": 70,
+              "y": 890,
+              "w": 1020,
+              "h": 300,
+              "title": "否：报告缺失/网络/摘要问题",
+              "lines": [
+                "不称下载成功，不用其它素材偷偷替换"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 1280,
+              "y": 1380,
+              "w": 1040,
+              "h": 210,
+              "title": "是：文件＋下载回执",
+              "lines": [
+                "交回建模/原生绘图 Skill 使用"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "文件原子写入与 SHA"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  1090,
+                  395
+                ],
+                [
+                  1280,
+                  395
+                ]
+              ],
+              "label": "真实条目"
+            },
+            {
+              "from": "b",
+              "to": "q",
+              "points": [
+                [
+                  1800,
+                  560
+                ],
+                [
+                  1800,
+                  860
+                ]
+              ],
+              "label": "字节"
+            },
+            {
+              "from": "q",
+              "to": "bad",
+              "points": [
+                [
+                  1280,
+                  1060
+                ],
+                [
+                  1090,
+                  1040
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "q",
+              "to": "out",
+              "points": [
+                [
+                  1800,
+                  1260
+                ],
+                [
+                  1800,
+                  1380
+                ]
+              ],
+              "label": "是"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "upload",
+      "code": "UPLOAD",
+      "title": "HTML/媒体分流与回读",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "交付流出：HTML 与媒体 payload 不混用",
+          "nodes": [
+            {
+              "id": "bind",
+              "type": "process",
+              "x": 70,
+              "y": 200,
+              "w": 1050,
+              "h": 310,
+              "title": "精确绑定唯一可见项目",
+              "lines": [
+                "GET projects 按 UUID/唯一名称；不猜同名项目",
+                "创建需本次授权；已有绑定不得静默切项目"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1290,
+              "y": 180,
+              "w": 1030,
+              "h": 390,
+              "title": "文件是完整 HTML 还是媒体？",
+              "lines": [
+                "文件非对应格式如实报告；ZIP/PDF不是项目媒体"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "html",
+              "type": "process",
+              "x": 70,
+              "y": 840,
+              "w": 1050,
+              "h": 360,
+              "title": "HTML → preview3d",
+              "lines": [
+                "name/title/folderId/html/externalTool/externalRunId",
+                "完整内嵌依赖，不带 file: 或本机路径",
+                "不混入媒体字段，不传 body.operationKey"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "media",
+              "type": "process",
+              "x": 1290,
+              "y": 840,
+              "w": 1030,
+              "h": 360,
+              "title": "图片/视频 → assets",
+              "lines": [
+                "materials[]: name/mimeType/base64/folderId",
+                "顶层与条目保留来源和 assetKind",
+                "不是平台生成接口"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1330,
+              "w": 2250,
+              "h": 270,
+              "title": "固定幂等键 → 返回资产 ID → GET assets 回读",
+              "lines": [
+                "同名同SHA复用，文件改变需新版本名；有远端摘要才声称内容一致",
+                "回执只含项目/资产身份、本地摘要和状态，不含 Key"
+              ],
+              "files": [
+                {
+                  "path": "scripts/platform_bridge.py",
+                  "purpose": "实际白名单 API、下载、绑定和回读"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "绑定与回执 JSON 保存"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "bind",
+              "to": "q",
+              "points": [
+                [
+                  1120,
+                  355
+                ],
+                [
+                  1290,
+                  375
+                ]
+              ],
+              "label": "项目与文件"
+            },
+            {
+              "from": "q",
+              "to": "media",
+              "points": [
+                [
+                  1805,
+                  570
+                ],
+                [
+                  1805,
+                  840
+                ]
+              ],
+              "label": "媒体"
+            },
+            {
+              "from": "q",
+              "to": "html",
+              "points": [
+                [
+                  1290,
+                  375
+                ],
+                [
+                  1200,
+                  375
+                ],
+                [
+                  1200,
+                  710
+                ],
+                [
+                  595,
+                  710
+                ],
+                [
+                  595,
+                  840
+                ]
+              ],
+              "label": "HTML"
+            },
+            {
+              "from": "html",
+              "to": "out",
+              "points": [
+                [
+                  595,
+                  1200
+                ],
+                [
+                  595,
+                  1330
+                ]
+              ],
+              "label": "POST"
+            },
+            {
+              "from": "media",
+              "to": "out",
+              "points": [
+                [
+                  1805,
+                  1200
+                ],
+                [
+                  1805,
+                  1330
+                ]
+              ],
+              "label": "POST"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "dependencyFiles": [
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/common.py",
+      "purpose": "绑定与回执 JSON 保存"
+    }
+  ],
+  "fileDescriptions": {
+    ".gitignore": "配方、资源与实现说明：.gitignore",
+    "MANIFEST.json": "发布版本与完整文件清单",
+    "SKILL.md": "调用范围、输入输出与关键规则",
+    "SKILL_MANUAL.pdf": "面向人的算法说明书",
+    "local_runtime.md": "本机私有 Key、HTTPS、本地网络和字段合同",
+    "manual/skill-flowchart.svg": "同源说明书内容与图形",
+    "manual/skill-manual.json": "同源说明书内容与图形",
+    "manual/skill-manual.md": "同源说明书内容与图形",
+    "playbook.md": "平台操作授权与步骤",
+    "scripts/platform_bridge.py": "实际白名单 API、下载、绑定和回读",
+    "scripts/run.py": "平台唯一命令入口"
+  }
+}

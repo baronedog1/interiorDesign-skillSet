@@ -1,0 +1,622 @@
+{
+  "schema": "interior.components/1",
+  "version": "1.2.0",
+  "units": "m",
+  "frontAxis": "+Z",
+  "origin": "footprint-centre-at-floor",
+  "source": {
+    "kind": "parametric",
+    "description": "从用户已认可的 STABLE 3.0 组件提炼，并补齐可复用厨房/卫浴模块；不是品牌产品复刻。"
+  },
+  "components": [
+    {
+      "id": "sofa.cloud",
+      "category": "sofa",
+      "name": "组合沙发（风格变体）",
+      "builder": "sofa",
+      "defaultSize": [
+        3.4,
+        1.0,
+        1.7
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "chair.dining",
+      "category": "chair",
+      "name": "餐椅（风格变体）",
+      "builder": "chair",
+      "defaultSize": [
+        0.48,
+        0.9,
+        0.51
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "chair.lounge",
+      "category": "armchair",
+      "name": "休闲椅（风格变体）",
+      "builder": "armchair",
+      "defaultSize": [
+        0.84,
+        1.0,
+        0.82
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "bed.upholstered",
+      "category": "bed",
+      "name": "床与分层床品（风格变体）",
+      "builder": "bed",
+      "defaultSize": [
+        1.95,
+        1.24,
+        2.28
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "table.coffee",
+      "category": "coffee-table",
+      "name": "组合茶几（风格变体）",
+      "builder": "coffee",
+      "defaultSize": [
+        1.65,
+        0.51,
+        0.99
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "table.dining",
+      "category": "dining-table",
+      "name": "六人餐桌（风格变体）",
+      "builder": "dining",
+      "defaultSize": [
+        1.02,
+        0.83,
+        1.96
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "table.side",
+      "category": "side-table",
+      "name": "木纹边几",
+      "builder": "sideTable",
+      "defaultSize": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "cabinet.wardrobe",
+      "category": "wardrobe",
+      "name": "通顶衣柜",
+      "builder": "wardrobe",
+      "defaultSize": [
+        1.8,
+        2.55,
+        0.65
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "desk.work",
+      "category": "desk",
+      "name": "工作台",
+      "builder": "desk",
+      "defaultSize": [
+        1.5,
+        1.1,
+        0.65
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "shelf.open",
+      "category": "shelf",
+      "name": "开放书架",
+      "builder": "shelf",
+      "defaultSize": [
+        1.5,
+        2.3,
+        0.32
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "cabinet.sideboard",
+      "category": "sideboard",
+      "name": "餐边柜",
+      "builder": "sideboard",
+      "defaultSize": [
+        1.96,
+        0.94,
+        0.48
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "tv.console",
+      "category": "tv-console",
+      "name": "电视与悬浮柜",
+      "builder": "tv",
+      "defaultSize": [
+        3.15,
+        2.65,
+        0.53
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "kitchen.base",
+      "category": "base-cabinet",
+      "name": "带台面地柜",
+      "builder": "counter",
+      "defaultSize": [
+        0.7,
+        0.91,
+        0.65
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "kitchen.sink",
+      "category": "sink",
+      "name": "水槽地柜",
+      "builder": "sink",
+      "defaultSize": [
+        1.0,
+        1.25,
+        0.65
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "kitchen.hob",
+      "category": "hob",
+      "name": "灶具与烤箱地柜",
+      "builder": "hob",
+      "defaultSize": [
+        0.8,
+        0.96,
+        0.65
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "kitchen.fridge",
+      "category": "fridge",
+      "name": "双区冰箱",
+      "builder": "fridge",
+      "defaultSize": [
+        0.8,
+        2.3,
+        0.75
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "bath.vanity",
+      "category": "vanity",
+      "name": "镜柜与真实盆腔",
+      "builder": "vanity",
+      "defaultSize": [
+        0.85,
+        2.15,
+        0.6
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "bath.toilet",
+      "category": "toilet",
+      "name": "坐便器",
+      "builder": "toilet",
+      "defaultSize": [
+        0.42,
+        0.62,
+        0.76
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "bath.shower",
+      "category": "shower",
+      "name": "淋浴玻璃与花洒",
+      "builder": "shower",
+      "defaultSize": [
+        1.1,
+        2.25,
+        0.9
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "rug.wool",
+      "category": "rug",
+      "name": "包边羊毛地毯",
+      "builder": "rug",
+      "defaultSize": [
+        3.5,
+        0.04,
+        2.8
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "plant.olive",
+      "category": "plant",
+      "name": "陶盆橄榄树",
+      "builder": "plant",
+      "defaultSize": [
+        0.75,
+        1.9,
+        0.75
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "lamp.floor",
+      "category": "floor-lamp",
+      "name": "落地灯（风格变体）",
+      "builder": "floorLamp",
+      "defaultSize": [
+        1.0,
+        1.95,
+        0.5
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "lamp.table",
+      "category": "table-lamp",
+      "name": "台灯（风格变体）",
+      "builder": "tableLamp",
+      "defaultSize": [
+        0.44,
+        0.37,
+        0.44
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "curtain.linen",
+      "category": "curtain",
+      "name": "双层波褶窗帘",
+      "builder": "curtain",
+      "defaultSize": [
+        2.9,
+        2.65,
+        0.3
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "wall",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "art.frame",
+      "category": "art",
+      "name": "原创装框艺术画",
+      "builder": "art",
+      "defaultSize": [
+        0.8,
+        1.0,
+        0.07
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "wall",
+      "styleMode": "form-and-material"
+    },
+    {
+      "id": "appliance.washer",
+      "category": "washing-machine",
+      "name": "滚筒洗衣机",
+      "builder": "washer",
+      "defaultSize": [
+        0.6,
+        0.86,
+        0.65
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "bench.window",
+      "category": "bench",
+      "name": "飘窗软包坐台",
+      "builder": "windowBench",
+      "defaultSize": [
+        1.8,
+        0.5,
+        0.65
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "kitchen.upper",
+      "category": "wall-cabinet",
+      "name": "吊柜 / 下照灯",
+      "builder": "upperCabinet",
+      "defaultSize": [
+        1.2,
+        0.76,
+        0.36
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "wall",
+      "styleMode": "material-and-detail"
+    },
+    {
+      "id": "lamp.pendant",
+      "category": "pendant",
+      "name": "餐厅吊灯",
+      "builder": "pendant",
+      "defaultSize": [
+        1.05,
+        0.58,
+        0.4
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "ceiling",
+      "styleMode": "form-and-material"
+    }
+  ]
+}

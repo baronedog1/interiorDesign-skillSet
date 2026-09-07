@@ -1,0 +1,26 @@
+{
+  "schema": "interior.booklet/3",
+  "projectId": "replace-with-current-project",
+  "version": "v1",
+  "title": "客户空间提案",
+  "edition": "INTERIOR / 设计方案",
+  "status": "阶段方案",
+  "pages": [
+    {
+      "kind": "cover",
+      "title": "客户空间提案",
+      "kicker": "空间设计 / 当前版本",
+      "layoutReason": "以当前模型对应的主空间图片作为阅读入口。",
+      "images": [{"path": "renders/living-final.jpg", "role": "render", "shotId": "living-final", "caption": "客厅最终机位", "source": "当前项目真实生成回执", "crop": false}],
+      "body": ["替换为当前客户的设计目标。不要照抄示例面积、风格或项目事实。"]
+    },
+    {
+      "kind": "plan",
+      "title": "空间与动线",
+      "kicker": "PLAN / 布局说明",
+      "layoutReason": "平面图完整呈现，说明文字放在下方，不裁切尺寸。",
+      "images": [{"path": "shots/plan.png", "role": "planning", "caption": "当前同版模型平面图", "source": "当前项目"}],
+      "body": ["替换为真实房间关系、动线与面积说明。"]
+    }
+  ]
+}

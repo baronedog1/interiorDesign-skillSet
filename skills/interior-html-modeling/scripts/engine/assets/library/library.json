@@ -1,0 +1,78 @@
+{
+  "schema": "interior.asset-library/1",
+  "name": "离线原生加载示例库",
+  "items": [
+    {
+      "id": "lounge-chair",
+      "name": "休闲椅 · 原生网格样件",
+      "componentId": "chair.lounge",
+      "category": "休闲椅",
+      "styles": [
+        "cream",
+        "modern-minimal",
+        "mid-century",
+        "wabi-sabi",
+        "new-chinese"
+      ],
+      "size": [
+        0.84,
+        1,
+        0.82
+      ],
+      "forward": "+Z",
+      "deform": "uniform",
+      "modelPath": "lounge-chair.glb",
+      "thumbnail": "lounge-chair.png",
+      "sha256": "8d6e1cf716034c209082412f4b530964e750c3576b8a9e34553a83750ce7cc64",
+      "origin": "本包参数化构件烘焙为静态 GLB 的加载/替换样件，不是外购品牌家具"
+    },
+    {
+      "id": "dining-chair",
+      "name": "餐椅 · 原生网格样件",
+      "componentId": "chair.dining",
+      "category": "餐椅",
+      "styles": [
+        "cream",
+        "modern-minimal",
+        "mid-century",
+        "wabi-sabi",
+        "new-chinese"
+      ],
+      "size": [
+        0.48,
+        0.9,
+        0.51
+      ],
+      "forward": "+Z",
+      "deform": "uniform",
+      "modelPath": "dining-chair.glb",
+      "thumbnail": "dining-chair.png",
+      "sha256": "f7a381d5cfe2ed60590f49d6582ede7b2fce53738c9fbcc03af60fc616d1452d",
+      "origin": "本包参数化构件烘焙为静态 GLB 的加载/替换样件，不是外购品牌家具"
+    },
+    {
+      "id": "sideboard",
+      "name": "餐边柜 · 原生网格样件",
+      "componentId": "cabinet.sideboard",
+      "category": "餐边柜",
+      "styles": [
+        "cream",
+        "modern-minimal",
+        "mid-century",
+        "wabi-sabi",
+        "new-chinese"
+      ],
+      "size": [
+        1.96,
+        0.94,
+        0.48
+      ],
+      "forward": "+Z",
+      "deform": "uniform",
+      "modelPath": "sideboard.glb",
+      "thumbnail": "sideboard.png",
+      "sha256": "b66014e0686761a269e90e0fb71f739f886d7aa5d027c222fed8448a98f51084",
+      "origin": "本包参数化构件烘焙为静态 GLB 的加载/替换样件，不是外购品牌家具"
+    }
+  ]
+}

@@ -44,6 +44,9 @@ function skillVersion(text) {
     }
   }
   const yamlVersion = text.match(/^\s{2}version:\s*["'`]?([^\n"'`]+)["'`]?\s*$/m);
+  const flowMetadata = text.match(/^metadata:\s*\{([^\n]+)\}\s*$/m);
+  const flowVersion = flowMetadata?.[1].match(/(?:^|[,\s])version:\s*["']?([^,"'\s}]+)/);
+  if (flowVersion) return flowVersion[1];
   if (yamlVersion) return yamlVersion[1].trim();
   const bodyVersion = text.match(/^版本[：:]\s*[`"]?([^\n`"]+)/m);
   return bodyVersion ? bodyVersion[1].trim() : 'unversioned';
@@ -55,6 +58,7 @@ const skillDirs = fs.readdirSync(skillsRoot, { withFileTypes: true })
   .sort();
 const fileRows = [];
 const skills = [];
+const lecooSkills = new Set(['interior-floorplan-planning', 'interior-html-modeling', 'interior-camera-capture', 'interior-space-rendering', 'idk-canvas-ingest-agent', 'booklet-production']);
 
 for (const skillId of skillDirs) {
   const skillRoot = path.join(skillsRoot, skillId);
@@ -80,6 +84,7 @@ for (const skillId of skillDirs) {
     id: skillId,
     path: `skills/${skillId}`,
     version: skillVersion(skillText),
+    sourceDevice: lecooSkills.has(skillId) ? 'lecoo-windows-codex' : 'ubuntu-01-codex (retained legacy snapshot)',
     fileCount: files.length,
     bytes: totalBytes,
     sha256: digest.digest('hex'),
@@ -90,8 +95,9 @@ const manifest = {
   schemaVersion: 1,
   snapshotAt,
   source: {
-    deviceId: 'ubuntu-01-codex',
-    skillRoot: '/home/agentops/.codex/skills',
+    type: 'mixed-device-snapshot',
+    currentDesignRelease: { deviceId: 'lecoo-windows-codex', skillRoot: 'C:\\Users\\agentops\\.codex\\skills', skillIds: [...lecooSkills] },
+    retainedLegacySnapshot: { deviceId: 'ubuntu-01-codex', commit: '66f4815edb16db5b19e88aa262283e8075633490' },
     excluded: ['credentials', 'auth', 'sessions', 'history', 'tasks', 'logs', 'customer-data', 'node_modules', 'runtime-cache'],
   },
   skillCount: skills.length,

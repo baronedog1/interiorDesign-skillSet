@@ -1,62 +1,9 @@
-# Local Runtime
+# 截图环境
 
-各后端只使用设备已登记的 `CHROME_BIN`、`BLENDER_BIN`、`INTERIOR_CAD_SNAPSHOT_COMMAND`；按后端分别 preflight，不以其中一项通过代表全部后端通过。
+依赖同安装根 HTML Skill 的 scripts/engine，具体 Python、Playwright 和 Chrome 路径见 [运行说明](../interior-html-modeling/local_runtime.md)。本 Skill 的 capture 是正式模型截图入口；渲染 Skill 不重复提供截图入口。
 
-公共依赖：Python 3.10+。原生截图运行时由模型清单声明：
+截图前确认当前 HTML 同版、Windows 原生浏览器可初始化 WebGL2；Linux 开发回归不能充当 Windows 验收。render_shots 只关闭本次创建的 browser，不重启桌面、Bridge 或其他会话。
 
-- HTML：Node.js 20+、Chrome/Chromium、WebGL2。
-- Blender：清单登记的 Blender LTS 与 `BLENDER_BIN`。
-- CAD：清单登记的 STEP/CAD snapshot renderer 与 `INTERIOR_CAD_SNAPSHOT_COMMAND`。
+Windows SSH/服务会话的桌面 D3D 上下文存在间歇性初始化失败。自动截图的独立离线 Chrome 默认使用 SwiftShader 软件 WebGL；不是 AI 图片、不是硬件 GPU 验收，也不改变用户桌面 Chrome 设置。明确验证后可设置 INTERIOR_HEADLESS_RENDERER=hardware。仅加载本任务生成的离线模型，不用此自动化实例浏览外站。是否可用以实际文件页面 ready/加载错误为准，不在 about:blank 先做阻断检查。
 
-语法检查：
-
-```bash
-python3 -m py_compile scripts/*.py
-```
-
-正视主种子求解：
-
-```bash
-python3 scripts/solve_frontal_camera_seeds.py \
-  --structure structure-data.json \
-  --scene circulation-scene.json \
-  --circulation-result circulation-result.json \
-  --native-manifest native-model-manifest.json \
-  --out camera-frontal-seeds.json
-```
-
-同一输入重复运行必须得到相同 `seedSetDigestSha256`。该步骤是代码算法，不等待用户选角度。
-
-原生适配器一次写出所有 seed 的 OBB 八角点包围范围与可退距后，批量编译候选：
-
-```bash
-python3 scripts/compile_camera_candidates.py \
-  --seeds camera-frontal-seeds.json \
-  --measurements native-camera-envelope-measurements.json \
-  --out camera-candidate-batch.json
-```
-
-同一 seed set 与 measurement digest 必须产生同一 `batchDigestSha256`；camera plan 只能复制并绑定该 batch 的候选，不能逐空间手工重算。
-
-绑定正视种子后的计划验收：
-
-```bash
-python3 scripts/validate_camera_manifest.py \
-  camera-plan.json native-model-manifest.json structure-data.json
-```
-
-统一截图：
-
-```bash
-python3 scripts/capture_model_views.py \
-  --model-manifest native-model-manifest.json \
-  --camera-plan camera-plan.json \
-  --structure structure-data.json \
-  --out captures
-```
-
-`--prepare-only` 只检查调度并生成作业，不构成 accepted 截图。正式交付必须让原生适配器真实运行并返回 `accepted=true`。真实适配器不得直接执行：正式入口会先运行 camera validator 和设备压力门，并通过 `/tmp/interior-capture-slots-v1` 保证整机最多 `2` 个截图作业；每个 HTML 作业只启动一个 Chrome 并顺序拍摄其 shots。
-
-语义栅格最大宽度固定为 800px。设备压力不合格时停止并保存证据；不能绕过正式入口、提高截图并发、改用二维包围盒、凸包或图片识别作为正式证据。截图上限 `2` 与 `imagegen-batch-orchestrator` 的远端生成上限 `5` 相互独立。
-
-平台入库不属于本 Skill；accepted 文件交给 `idk-canvas-ingest-agent`。
+输出文件在来酷项目目录；renders.json 保留 sourceType=webgl，与原生生成严格区分。几何候选状态不阻止实际截图；真实浏览器失败单独报告，不捏造 PNG。

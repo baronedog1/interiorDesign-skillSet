@@ -1,25 +1,23 @@
 {
-  "skill": "booklet-production",
-  "version": "3.3.0",
-  "language": "zh-CN",
-  "purpose": "响应方案册、PDF 和图册意图，按规划说明、用户资产和逐空间成果组织客户交付并执行 PDF 质量检查",
-  "file_count": 16,
-  "files": [
-    "ENVIRONMENT_CONTRACT.md",
-    "MANIFEST.json",
-    "SKILL.md",
-    "agents/openai.yaml",
-    "assets/reference-images/avroko-detail-story.jpg",
-    "assets/reference-images/yabu-approach-collage.jpg",
-    "assets/reference-images/yabu-portfolio-grid.jpg",
-    "assets/reference-images/yabu-services-split.jpg",
-    "data_contract.md",
-    "local_runtime.md",
-    "playbook.md",
-    "references/layout-rules.md",
-    "scripts/make_sendable_pdf.py",
-    "scripts/pdf_quality_check.py",
-    "scripts/validate_booklet_plan.py",
-    "scripts_logic.md"
-  ]
+  "name": "booklet-production",
+  "version": "4.0.0",
+  "platform": "windows",
+  "upstream": "Ubuntu booklet-production 3.3.0 (read-only reference)",
+  "privateCredentialsIncluded": false,
+  "sha256": {
+    "SKILL.md": "a2c2827b98b06e6f868634e148ec2c2120713a1a83e6741f9677689717476f0d",
+    "SKILL_MANUAL.pdf": "98529459bcb3b410618440a2e50dd5e941dc3db9aaaa4e54d9d32c7dc32337d8",
+    "assets/magazine.css": "a9f13736b9b2f69ee85c1bac6d8b439bd801ffdd316b1ac35046a5cead04d6bc",
+    "data_contract.md": "bc3d2dd77be307029b7cf92130a553cd495922e069c03b32a7920f0f47f0ef5a",
+    "expected_outcome/demo.pdf": "aac4601bd96a916f79a783cd461acab730c9e4c044ad7296984d6c5866e6b031",
+    "expected_outcome/expected_outcome.md": "2d7c1861bc28a32897bee8d3601a28426274448e6ebb18d7317481ead5f75f1e",
+    "local_runtime.md": "649a6236ef23d82bd42de1515606b4e229932488657083478d30d4d9ead730cf",
+    "manual/skill-flowchart.svg": "57a5c6f7a01fbf39d5ae9830464fb042c06b1be3a23ef363c7297a6e3f308f77",
+    "manual/skill-manual.json": "f7761126ffa0541b0734038edbafe3dd5024100862246ad699ce295fdcf9208f",
+    "manual/skill-manual.md": "dd3fbfd6ad462ea9f8f6973bd4da955d9b39499387ff9b2b0ff7c971aa962cba",
+    "playbook.md": "de4e801000c293c6f3ba96a41f2c1ff1d370d67ad26523e6d3b6a6a128715929",
+    "playbook/example-brief.json": "752ee3e0c0e365302bbe0c9656fe538872efbe1778faedc3d877623b7d3c9bf8",
+    "scripts/run.py": "4906adfc80ec2bd4f2da24a670b0a6bb9754e1726b2df924353b04a81bc1171f",
+    "scripts/scripts.md": "ac9e75328c388071636ce88d1b4eb3188a1d02deed82ccfabee271a560d1c031"
+  }
 }

@@ -1,4 +1,0 @@
-interface:
-  display_name: "基于模型图渲染"
-  short_description: "按封闭世界 scene map 确定性编译唯一槽位引导效果图"
-  default_prompt: "当用户要求把 HTML、Blender 或 CAD 户型出效果图、保持空间不变出图或生成标准四象限时使用。没有 accepted 机位先调用 interior-camera-capture。默认槽位引导只提交 Q1 纯水泥空结构图和 shot-scene-map.v9/context JSON；Q2 家具图与 masks 仅供 QA。生成前逐字段验证 Q1、Q3 camera JSON 和正式 camera-plan.v8 的 position/target/fov/focalLengthMm 相同；每空间主图必须保持墙法向 one-point-frontal，效果图阶段禁止另选角度。JSON 锁定可见空间、对象类别、数量、位置、占地、朝向和关系，未登记空间或对象禁止出现。共享空间或槽位的后续镜头依赖 accepted 主图；完全不相交的 ImageGen job 最多五路真并发并独立落盘。最后按同 shot 生成 Q1/Q2/Q3/Q4 并运行完整验收。"

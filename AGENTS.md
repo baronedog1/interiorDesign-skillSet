@@ -9,9 +9,9 @@
 - 不得提交 `.env`、Codex auth、API key、Cookie、SSH key、会话、history、任务、日志、客户附件、客户作品或设备运行数据。
 - 不得提交 `node_modules`、Python cache、测试缓存或临时渲染产物。
 - 保留第三方 Skill 自带的 LICENSE、来源和署名；不得用仓库级说明覆盖原许可证。
-- Skill 内容变更必须遵循其 `SKILL.md` 和 GCP Manager 的 Skill 治理规范；安装副本不得反向覆盖权威源。
+- Skill 内容变更必须遵循其 `SKILL.md` 和 GCP Manager 的 Skill 治理规范。当前六项 Windows 设计 Skill 的权威源为来酷设备安装目录，按用户授权向 main 发布去敏快照；其它旧 Skill 保留原快照，不自动同步到设备。
 - 新增、删除或修改 Skill 后，运行 `node scripts/build-manifest.mjs --snapshot <ISO-8601>`，再执行 frontmatter、secret、符号链接和脚本语法检查。
-- 每个 Skill 的 `SKILL.md` 前部必须有 `## 使用前准备`，并同时提供 `ENVIRONMENT_CONTRACT.md` 与 `local_runtime.md`；设备依赖只由管理员预装，业务任务不得临时下载。安装后运行 `scripts/audit-runtime-prerequisites.mjs`，把 `installed` 与 `ready/degraded/blocked/conditional` 分开登记。
+- 依赖按每项 Skill 当前 `SKILL.md` 与 `local_runtime.md` 说明，不为已精简的 Windows 版本补回旧 `ENVIRONMENT_CONTRACT.md` 或强制章节。设备依赖由管理员预装，业务任务不临时安装。旧 `scripts/audit-runtime-prerequisites.mjs` 面向历史 Ubuntu 目录合同，不作为新版六项的就绪验收；新版按实际目标设备运行结果登记，不能以文件存在冒充能力可用。
 - 向设备安装必须显式指定目标 `$CODEX_HOME/skills`，不得碰触其它 Agent、OpenSlaw Agent Space 或设备级登录态。
 
 ## 验收

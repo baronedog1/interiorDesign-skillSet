@@ -1,0 +1,183 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "interior.cameras/1"
+    },
+    "sceneKey": {
+      "type": "string",
+      "minLength": 1
+    },
+    "layoutHash": {
+      "type": "string",
+      "minLength": 1
+    },
+    "shots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "roomId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kind": {
+            "enum": [
+              "preset",
+              "front",
+              "detail",
+              "overview"
+            ]
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "target": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "up": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "fov": {
+            "type": "number",
+            "minimum": 20,
+            "maximum": 100
+          },
+          "projection": {
+            "enum": [
+              "perspective",
+              "orthographic"
+            ]
+          },
+          "orthographicSpan": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "frame": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "width": {
+                "type": "integer",
+                "minimum": 128,
+                "maximum": 4096
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 128,
+                "maximum": 4096
+              }
+            },
+            "required": [
+              "width",
+              "height"
+            ]
+          },
+          "subjectIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$"
+            }
+          },
+          "status": {
+            "enum": [
+              "ready",
+              "review",
+              "blocked"
+            ]
+          },
+          "reviewNotes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metrics": {
+            "type": "object"
+          },
+          "visibility": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "walls": {
+                "const": true
+              },
+              "ceiling": {
+                "type": "boolean"
+              },
+              "doorsOpen": {
+                "type": "boolean"
+              },
+              "cutaway": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "walls",
+              "ceiling",
+              "doorsOpen",
+              "cutaway"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "roomId",
+          "kind",
+          "position",
+          "target",
+          "up",
+          "fov",
+          "projection",
+          "frame",
+          "subjectIds",
+          "status",
+          "reviewNotes",
+          "metrics",
+          "visibility"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "sceneKey",
+    "layoutHash",
+    "shots"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

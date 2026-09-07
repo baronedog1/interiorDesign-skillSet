@@ -1,0 +1,1151 @@
+{
+  "schemaVersion": 4,
+  "displayName": "平面规划 · 尺度、拓扑与锚点",
+  "version": "2.1.0",
+  "overview": {
+    "title": "从客户原图生成可追溯的布局 JSON",
+    "nodes": [
+      {
+        "id": "input",
+        "type": "io",
+        "x": 70,
+        "y": 190,
+        "w": 660,
+        "h": 230,
+        "title": "P1 原图、尺寸、需求",
+        "lines": [
+          "先读墙门窗、阳台与房间用途"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "读图、尺度、空间功能和动线方法"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "scale",
+        "type": "decision",
+        "x": 70,
+        "y": 510,
+        "w": 880,
+        "h": 340,
+        "title": "尺度和方向可信？",
+        "lines": [
+          "像素只用于读图；以标注距离定标"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "读图、尺度、空间功能和动线方法"
+          }
+        ],
+        "bodySize": 22,
+        "check": true,
+        "detailRef": "facts"
+      },
+      {
+        "id": "uncertain",
+        "type": "process",
+        "x": 1340,
+        "y": 560,
+        "w": 940,
+        "h": 230,
+        "title": "估算与疑问随稿保留",
+        "lines": [
+          "标注估算来源；不能称精准施工数据"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "读图、尺度、空间功能和动线方法"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "topology",
+        "type": "process",
+        "x": 70,
+        "y": 950,
+        "w": 880,
+        "h": 250,
+        "title": "P2 建立全屋唯一拓扑",
+        "lines": [
+          "共享墙一次；门窗绑定宿主；客餐厅按原图区分"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "读图、尺度、空间功能和动线方法"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "anchor",
+        "type": "process",
+        "x": 1340,
+        "y": 950,
+        "w": 940,
+        "h": 250,
+        "title": "P3 先算家具锚点与使用区",
+        "lines": [
+          "床头/沙发背靠指定墙；保留开门、柜门、拉椅及通路"
+        ],
+        "files": [
+          {
+            "path": "scripts/run.py",
+            "purpose": "handoff/observe/anchor 三条实际命令"
+          }
+        ],
+        "bodySize": 22,
+        "detailRef": "anchors"
+      },
+      {
+        "id": "out",
+        "type": "store",
+        "x": 1340,
+        "y": 1330,
+        "w": 940,
+        "h": 260,
+        "title": "layout.json 交给 HTML 建模",
+        "lines": [
+          "只生成 JSON；疑问与观察同交付"
+        ],
+        "files": [
+          {
+            "path": "scripts/run.py",
+            "purpose": "handoff/observe/anchor 三条实际命令"
+          }
+        ],
+        "bodySize": 22
+      },
+      {
+        "id": "native",
+        "type": "process",
+        "x": 1340,
+        "y": 190,
+        "w": 940,
+        "h": 230,
+        "title": "用户要多方案：原生平面绘图",
+        "lines": [
+          "附原图探索方案 → 识图选定 → 回 P2 整理事实",
+          "图片不是测量值；不生成平面 HTML"
+        ],
+        "files": [
+          {
+            "path": "playbook.md",
+            "purpose": "读图、尺度、空间功能和动线方法"
+          }
+        ],
+        "bodySize": 22
+      }
+    ],
+    "edges": [
+      {
+        "from": "input",
+        "to": "scale",
+        "points": [
+          [
+            400,
+            420
+          ],
+          [
+            422,
+            544
+          ]
+        ],
+        "label": "读尺度"
+      },
+      {
+        "from": "input",
+        "to": "native",
+        "points": [
+          [
+            730,
+            305
+          ],
+          [
+            1340,
+            305
+          ]
+        ],
+        "label": "明确要多方案"
+      },
+      {
+        "from": "scale",
+        "to": "uncertain",
+        "points": [
+          [
+            950,
+            680
+          ],
+          [
+            1340,
+            675
+          ]
+        ],
+        "label": "否"
+      },
+      {
+        "from": "scale",
+        "to": "topology",
+        "points": [
+          [
+            510,
+            850
+          ],
+          [
+            510,
+            950
+          ]
+        ],
+        "label": "是"
+      },
+      {
+        "from": "uncertain",
+        "to": "topology",
+        "points": [
+          [
+            1810,
+            790
+          ],
+          [
+            1810,
+            890
+          ],
+          [
+            1050,
+            890
+          ],
+          [
+            1050,
+            1075
+          ],
+          [
+            950,
+            1075
+          ]
+        ],
+        "label": "保留估算后"
+      },
+      {
+        "from": "topology",
+        "to": "anchor",
+        "points": [
+          [
+            950,
+            1130
+          ],
+          [
+            1340,
+            1130
+          ]
+        ],
+        "label": "本房与宿主"
+      },
+      {
+        "from": "anchor",
+        "to": "out",
+        "points": [
+          [
+            1810,
+            1200
+          ],
+          [
+            1810,
+            1330
+          ]
+        ],
+        "label": "生成，不补丁摆放"
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "workflow",
+      "title": "从客户原图生成可追溯的布局 JSON",
+      "input": "原图、尺寸、客户需求",
+      "output": "布局 JSON；可选原生平面图",
+      "explanation": "本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。",
+      "diagrams": [
+        {
+          "title": "从客户原图生成可追溯的布局 JSON",
+          "nodes": [
+            {
+              "id": "input",
+              "type": "io",
+              "x": 70,
+              "y": 190,
+              "w": 660,
+              "h": 230,
+              "title": "P1 原图、尺寸、需求",
+              "lines": [
+                "先读墙门窗、阳台与房间用途"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "scale",
+              "type": "decision",
+              "x": 70,
+              "y": 510,
+              "w": 880,
+              "h": 340,
+              "title": "尺度和方向可信？",
+              "lines": [
+                "像素只用于读图；以标注距离定标"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22,
+              "check": true,
+              "detailRef": "facts"
+            },
+            {
+              "id": "uncertain",
+              "type": "process",
+              "x": 1340,
+              "y": 560,
+              "w": 940,
+              "h": 230,
+              "title": "估算与疑问随稿保留",
+              "lines": [
+                "标注估算来源；不能称精准施工数据"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "topology",
+              "type": "process",
+              "x": 70,
+              "y": 950,
+              "w": 880,
+              "h": 250,
+              "title": "P2 建立全屋唯一拓扑",
+              "lines": [
+                "共享墙一次；门窗绑定宿主；客餐厅按原图区分"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "anchor",
+              "type": "process",
+              "x": 1340,
+              "y": 950,
+              "w": 940,
+              "h": 250,
+              "title": "P3 先算家具锚点与使用区",
+              "lines": [
+                "床头/沙发背靠指定墙；保留开门、柜门、拉椅及通路"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22,
+              "detailRef": "anchors"
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 1340,
+              "y": 1330,
+              "w": 940,
+              "h": 260,
+              "title": "layout.json 交给 HTML 建模",
+              "lines": [
+                "只生成 JSON；疑问与观察同交付"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "native",
+              "type": "process",
+              "x": 1340,
+              "y": 190,
+              "w": 940,
+              "h": 230,
+              "title": "用户要多方案：原生平面绘图",
+              "lines": [
+                "附原图探索方案 → 识图选定 → 回 P2 整理事实",
+                "图片不是测量值；不生成平面 HTML"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "input",
+              "to": "scale",
+              "points": [
+                [
+                  400,
+                  420
+                ],
+                [
+                  422,
+                  544
+                ]
+              ],
+              "label": "读尺度"
+            },
+            {
+              "from": "input",
+              "to": "native",
+              "points": [
+                [
+                  730,
+                  305
+                ],
+                [
+                  1340,
+                  305
+                ]
+              ],
+              "label": "明确要多方案"
+            },
+            {
+              "from": "scale",
+              "to": "uncertain",
+              "points": [
+                [
+                  950,
+                  680
+                ],
+                [
+                  1340,
+                  675
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "scale",
+              "to": "topology",
+              "points": [
+                [
+                  510,
+                  850
+                ],
+                [
+                  510,
+                  950
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "uncertain",
+              "to": "topology",
+              "points": [
+                [
+                  1810,
+                  790
+                ],
+                [
+                  1810,
+                  890
+                ],
+                [
+                  1050,
+                  890
+                ],
+                [
+                  1050,
+                  1075
+                ],
+                [
+                  950,
+                  1075
+                ]
+              ],
+              "label": "保留估算后"
+            },
+            {
+              "from": "topology",
+              "to": "anchor",
+              "points": [
+                [
+                  950,
+                  1130
+                ],
+                [
+                  1340,
+                  1130
+                ]
+              ],
+              "label": "本房与宿主"
+            },
+            {
+              "from": "anchor",
+              "to": "out",
+              "points": [
+                [
+                  1810,
+                  1200
+                ],
+                [
+                  1810,
+                  1330
+                ]
+              ],
+              "label": "生成，不补丁摆放"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "logicDetails": [
+    {
+      "id": "facts",
+      "code": "FACTS",
+      "title": "尺度与拓扑算法",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "尺度与拓扑：从原图信息到统一坐标",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 240,
+              "w": 620,
+              "h": 300,
+              "title": "选取可对应的标注墙段",
+              "lines": [
+                "记录真实长度 L、像素距离 d、方向和原点"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "process",
+              "x": 890,
+              "y": 240,
+              "w": 690,
+              "h": 300,
+              "title": "计算比例与唯一坐标变换",
+              "lines": [
+                "米/像素 = L/d；图像 Y 向下只在入口翻转",
+                "所有墙、洞口、房间、家具共用同一变换"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "c",
+              "type": "decision",
+              "x": 1720,
+              "y": 200,
+              "w": 610,
+              "h": 390,
+              "title": "其它尺寸相符？",
+              "lines": [
+                "交叉核对可见标注；不可从截图编尺寸"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "d",
+              "type": "process",
+              "x": 1710,
+              "y": 760,
+              "w": 620,
+              "h": 300,
+              "title": "有矛盾：记录原图事实冲突",
+              "lines": [
+                "定位标注/识图错误 → 回比例输入",
+                "保留估算稿，不镜像输出掩盖错误"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "e",
+              "type": "process",
+              "x": 70,
+              "y": 780,
+              "w": 870,
+              "h": 380,
+              "title": "形成房间、墙和开口连接",
+              "lines": [
+                "共享墙去重；门窗引用真实 wallId",
+                "房间多边形与开放连接保持原图"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/schemas/layout.schema.json",
+                  "purpose": "布局字段、单位和引用结构"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "JSON 读取与规范摘要"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "f",
+              "type": "decision",
+              "x": 1080,
+              "y": 1220,
+              "w": 870,
+              "h": 370,
+              "title": "JSON 可计算？",
+              "lines": [
+                "ID/宿主存在；有限数值；有效房间多边形"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/validate.py",
+                  "purpose": "区分 technicalErrors 与设计观察"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "g",
+              "type": "store",
+              "x": 70,
+              "y": 1260,
+              "w": 740,
+              "h": 300,
+              "title": "技术成立：输出布局及观察",
+              "lines": [
+                "handoff 不生成 HTML；留原图来源和假设"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "h",
+              "type": "process",
+              "x": 2050,
+              "y": 1250,
+              "w": 280,
+              "h": 290,
+              "title": "字段错误",
+              "lines": [
+                "明确字段",
+                "回本页输入"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  690,
+                  390
+                ],
+                [
+                  890,
+                  390
+                ]
+              ],
+              "label": "定标事实"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "points": [
+                [
+                  1580,
+                  390
+                ],
+                [
+                  1720,
+                  395
+                ]
+              ],
+              "label": "交叉比对"
+            },
+            {
+              "from": "c",
+              "to": "d",
+              "points": [
+                [
+                  2025,
+                  590
+                ],
+                [
+                  2025,
+                  760
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "c",
+              "to": "e",
+              "points": [
+                [
+                  1871.8583810164928,
+                  492.08978458431505
+                ],
+                [
+                  1640,
+                  492
+                ],
+                [
+                  1640,
+                  690
+                ],
+                [
+                  505,
+                  690
+                ],
+                [
+                  505,
+                  780
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "e",
+              "to": "f",
+              "points": [
+                [
+                  940,
+                  970
+                ],
+                [
+                  1515,
+                  970
+                ],
+                [
+                  1515,
+                  1220
+                ]
+              ],
+              "label": "结构数据"
+            },
+            {
+              "from": "f",
+              "to": "g",
+              "points": [
+                [
+                  1080,
+                  1405
+                ],
+                [
+                  810,
+                  1410
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "f",
+              "to": "h",
+              "points": [
+                [
+                  1950,
+                  1405
+                ],
+                [
+                  2050,
+                  1395
+                ]
+              ],
+              "label": "否"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "anchors",
+      "code": "ANCHORS",
+      "title": "家具锚点计算",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "diagrams": [
+        {
+          "title": "家具靠墙：墙基向量、尺寸与房间约束",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "io",
+              "x": 70,
+              "y": 200,
+              "w": 900,
+              "h": 260,
+              "title": "输入指定墙、房间及家具",
+              "lines": [
+                "墙 a/b、厚度；家具宽/高/深；offset 与 gap"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "decision",
+              "x": 1190,
+              "y": 180,
+              "w": 1110,
+              "h": 320,
+              "title": "选定墙段容纳组件？",
+              "lines": [
+                "长度>0；offset/gap有限且≥0；offset+宽≤墙长"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "c",
+              "type": "process",
+              "x": 1210,
+              "y": 650,
+              "w": 1090,
+              "h": 320,
+              "title": "计算切向 t 与朝房间的法向 n",
+              "lines": [
+                "t=(b−a)/|b−a|；n=(-tz,tx)",
+                "房间内部点决定 n 的正负"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "d",
+              "type": "process",
+              "x": 70,
+              "y": 650,
+              "w": 900,
+              "h": 340,
+              "title": "一次求中心与正面",
+              "lines": [
+                "中心=a+t×(offset+宽/2)+n×(墙厚/2+深/2+gap)",
+                "朝向=atan2(nx,nz)；正面 +Z；背/床头 -Z"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "e",
+              "type": "decision",
+              "x": 70,
+              "y": 1130,
+              "w": 900,
+              "h": 340,
+              "title": "中心在指定房间内？",
+              "lines": [
+                "按真实多边形；不借邻房空间"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "f",
+              "type": "store",
+              "x": 1190,
+              "y": 1150,
+              "w": 1110,
+              "h": 340,
+              "title": "写新布局与观察报告",
+              "lines": [
+                "房间/门扇/拉椅净空继续按规划方法看",
+                "该锚点计算不是全屋无碰撞证明"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/validate.py",
+                  "purpose": "保留真实几何观察"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "原子写布局和 observations"
+                },
+                {
+                  "path": "playbook.md",
+                  "purpose": "读图、尺度、空间功能和动线方法"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "bad",
+              "type": "process",
+              "x": 70,
+              "y": 485,
+              "w": 900,
+              "h": 120,
+              "title": "无解：改源墙段/组件，回输入",
+              "lines": [],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff/observe/anchor 三条实际命令"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  970,
+                  330
+                ],
+                [
+                  1190,
+                  340
+                ]
+              ],
+              "label": "尺寸"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "points": [
+                [
+                  1745,
+                  500
+                ],
+                [
+                  1745,
+                  650
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "b",
+              "to": "bad",
+              "points": [
+                [
+                  1190,
+                  340
+                ],
+                [
+                  1070,
+                  340
+                ],
+                [
+                  1070,
+                  545
+                ],
+                [
+                  970,
+                  545
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "c",
+              "to": "d",
+              "points": [
+                [
+                  1210,
+                  810
+                ],
+                [
+                  970,
+                  820
+                ]
+              ],
+              "label": "内法向"
+            },
+            {
+              "from": "d",
+              "to": "e",
+              "points": [
+                [
+                  520,
+                  990
+                ],
+                [
+                  520,
+                  1130
+                ]
+              ],
+              "label": "锚点"
+            },
+            {
+              "from": "e",
+              "to": "f",
+              "points": [
+                [
+                  970,
+                  1300
+                ],
+                [
+                  1190,
+                  1320
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "e",
+              "to": "bad",
+              "points": [
+                [
+                  70,
+                  1300
+                ],
+                [
+                  48,
+                  1300
+                ],
+                [
+                  48,
+                  545
+                ],
+                [
+                  70,
+                  545
+                ]
+              ],
+              "label": "否：回源"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "dependencyFiles": [
+    {
+      "path": "../interior-html-modeling/scripts/engine/schemas/layout.schema.json",
+      "purpose": "布局字段、单位和引用结构"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/common.py",
+      "purpose": "原子写布局和 observations"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/validate.py",
+      "purpose": "保留真实几何观察"
+    }
+  ],
+  "fileDescriptions": {
+    "MANIFEST.json": "发布版本与完整文件清单",
+    "SKILL.md": "调用范围、输入输出与关键规则",
+    "SKILL_MANUAL.pdf": "面向人的算法说明书",
+    "local_runtime.md": "运行工具、路径与凭据边界",
+    "manual/skill-flowchart.svg": "同源说明书内容与图形",
+    "manual/skill-manual.json": "同源说明书内容与图形",
+    "manual/skill-manual.md": "同源说明书内容与图形",
+    "playbook.md": "读图、尺度、空间功能和动线方法",
+    "scripts/run.py": "handoff/observe/anchor 三条实际命令"
+  }
+}

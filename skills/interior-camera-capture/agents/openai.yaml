@@ -1,4 +1,0 @@
-interface:
-  display_name: "跨后端室内机位与四象限"
-  short_description: "三后端共用的原生机位、可见事实和封闭世界证据"
-  default_prompt: "当用户要求找机位、模型截图、拍白模、取景或做机位四象限时使用 $interior-camera-capture。先验证 accepted circulation-result.v2、model-scope 与当前 HTML、Blender 或 CAD 原生模型哈希一致。用代码为每个主空间确定性生成唯一真实背景墙法向的 one-point-frontal 主种子；原生适配器一次量取 OBB 和可退距，批量编译候选。每空间只渲染首个可拟合候选，机器失败时最多一次有原因回退。所有真实截图必须走 capture_model_views.py，截图前检查设备压力，整机最多两个截图作业且单作业复用一个原生进程。用同一模型和相机生成水泥 Q1、家具 QA Q2、平面相机 Q3；编译 camera-plan.v8 与 shot-scene-map.v9。ImageGen 的最高五路远端并发属于后续渲染编排，不能用于本机截图。"
