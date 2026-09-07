@@ -31,10 +31,10 @@ from common import (
 )
 
 
-STRUCTURE_SCHEMA = "interior.floorplan-structure.v3"
-SCENE_SCHEMA = "interior.circulation-scene.v2"
+STRUCTURE_SCHEMAS = {"interior.floorplan-structure.v3", "interior.floorplan-structure.v4"}
+SCENE_SCHEMA = "interior.circulation-scene.v3"
 POLICY_SCHEMA = "interior.circulation-policy.v2"
-AUDIT_SCHEMA = "interior.circulation-audit.v2"
+AUDIT_SCHEMA = "interior.circulation-audit.v3"
 
 LOCAL_AXES = {
     "+X": (1.0, 0.0),
@@ -206,15 +206,24 @@ def independently_audit_connection_endpoints(
             and isinstance(row.get("passed"), bool)
         )
 
-    compiled_audit, discovery = discover_semantic_list(
-        structure,
-        "connectionEndpointAudit",
-        item_validator=valid_compiled_row,
-        preferred_paths=(
-            "topology.connectionEndpointAudit",
-            "compiledTopology.connectionEndpointAudit",
-        ),
-    )
+    try:
+        compiled_audit, discovery = discover_semantic_list(
+            structure,
+            "connectionEndpointAudit",
+            item_validator=valid_compiled_row,
+            preferred_paths=(
+                "topology.connectionEndpointAudit",
+                "compiledTopology.connectionEndpointAudit",
+            ),
+        )
+    except ArtifactDiscoveryError:
+        compiled_audit = []
+        discovery = {
+            "role": "connectionEndpointAudit",
+            "status": "not-provided",
+            "required": False,
+            "reason": "independent meter-space endpoint derivation is authoritative",
+        }
     compiled_rows = {row.get("connectionId"): row for row in compiled_audit}
     for connection in structure.get("connections", []):
         start = tuple(map(float, connection.get("start", [])))
@@ -267,13 +276,14 @@ def independently_audit_connection_endpoints(
             side_probe_audits = []
         declared = sorted({connection.get("fromRoomId"), connection.get("toRoomId")})
         compiled = compiled_rows.get(connection.get("id"))
-        passed = (
-            len(derived) == 2
-            and derived == declared
-            and isinstance(compiled, dict)
-            and compiled.get("passed") is True
-            and compiled.get("derivedEndpointIds") == declared
+        compiled_agrees = (
+            not isinstance(compiled, dict)
+            or (
+                compiled.get("passed") is True
+                and compiled.get("derivedEndpointIds") == declared
+            )
         )
+        passed = len(derived) == 2 and derived == declared and compiled_agrees
         row = {
             "connectionId": connection.get("id"),
             "derivedSideA": side_labels[0],
@@ -284,7 +294,7 @@ def independently_audit_connection_endpoints(
             "compiledPixelAuditPassed": compiled.get("passed") if isinstance(compiled, dict) else False,
             "sideProbeAudit": side_probe_audits,
             "passed": passed,
-            "method": "meter-space-normal-probes-ignore-wall-band-cross-checked-with-semantically-discovered-pixel-audit",
+            "method": "meter-space-normal-probes-ignore-wall-band-with-optional-pixel-audit-cross-check",
         }
         audits.append(row)
         if not passed:
@@ -358,7 +368,7 @@ def audit_layout_relationships(
         findings.append({
             "code": code,
             "responsibility": responsibility,
-            "severity": "error",
+            "severity": "error" if responsibility == "input-integrity" else "warning",
             "componentId": component_id,
             "message": message,
         })
@@ -945,13 +955,37 @@ def main() -> int:
     structure = read_json(structure_path)
     scene = read_json(scene_path)
     policy = read_json(policy_path)
-    require_schema(structure, STRUCTURE_SCHEMA, "structure data")
+    if structure.get("schema") not in STRUCTURE_SCHEMAS:
+        raise ValueError(f"structure data schema must be one of {sorted(STRUCTURE_SCHEMAS)}")
     require_schema(scene, SCENE_SCHEMA, "circulation scene")
     require_schema(policy, POLICY_SCHEMA, "circulation policy")
     if structure.get("floorplanId") != scene.get("floorplanId"):
         raise ValueError("structure and circulation scene floorplanId differ")
     if scene.get("bindings", {}).get("structureDataSha256") != sha256_file(structure_path):
         raise ValueError("circulation scene is not bound to the supplied structure data")
+    bindings = scene.get("bindings", {})
+    required_bindings = [
+        ("sourceImagePath", "sourceImageSha256", "source image"),
+        ("floorplanHandoffPath", "floorplanHandoffSha256", "floorplan handoff"),
+        ("traceComponentsPath", "traceComponentsSha256", "trace components"),
+    ]
+    if scene.get("checkpoint") == "post-model":
+        required_bindings.extend([
+            ("nativeModelManifestPath", "nativeModelManifestSha256", "native model manifest"),
+            ("layoutStatePath", "layoutStateSha256", "layout state"),
+        ])
+    elif scene.get("checkpoint") != "post-floorplan":
+        raise ValueError("circulation scene checkpoint must be post-floorplan or post-model")
+    for path_key, hash_key, label in required_bindings:
+        path_value = bindings.get(path_key)
+        expected_hash = bindings.get(hash_key)
+        if not path_value or not expected_hash:
+            raise ValueError(f"circulation scene is missing its {label} binding")
+        bound_path = Path(path_value).expanduser().resolve()
+        if bound_path.is_file() and sha256_file(bound_path) != expected_hash:
+            raise ValueError(
+                f"circulation scene {label} binding is stale; rebuild the scene from the current model instead of reusing an old audit"
+            )
     if policy.get("principle") != "cap-layout-target-by-structural-baseline" or policy.get("forbiddenRoomSizeGates") is not True:
         raise ValueError("policy must use baseline-capped targets and forbid room-size gates")
 
@@ -1030,7 +1064,7 @@ def main() -> int:
                 {
                     "code": "layout-caused-circulation-regression",
                     "responsibility": "current-layout",
-                    "severity": "error",
+                    "severity": "warning",
                     "routeId": route["id"],
                     "message": "Furniture or cabinetry reduced circulation below what the structural shell can support.",
                 }
@@ -1039,6 +1073,7 @@ def main() -> int:
     attribution_policy = policy.get("attribution", {})
     failing_rows = [row for row in route_rows if row["disposition"] == "layout-regression"]
     route_by_id = {route["id"]: route for route in route_definitions}
+    candidate_state_cache: dict[str, tuple[list[bool], list[float]]] = {}
     for row in failing_rows:
         shell_path = [tuple(point) for point in row["shellPath"]]
         candidates = component_candidates_for_path(
@@ -1047,14 +1082,28 @@ def main() -> int:
             float(attribution_policy.get("pathCorridorMarginMeters", 0.75)),
             int(attribution_policy.get("maxCandidatesPerRoute", 12)),
         )
+        if row["kind"] != "portal-crossing":
+            row["attribution"] = {
+                "candidateComponentIds": candidates,
+                "singleRemovalRecovery": [],
+                "provenSingleCulpritIds": [],
+                "contributorIds": candidates,
+                "method": "shared-portal-bottleneck-candidates-no-duplicate-grid-rebuild",
+            }
+            continue
         recoveries = []
         for component_id in candidates:
-            candidate_free = apply_layout_obstacles(
-                grid,
-                shell_free,
-                component_polygons(scene, {component_id}),
-            )
-            candidate_clearance = clearance_field(grid, candidate_free)
+            if component_id not in candidate_state_cache:
+                candidate_free = apply_layout_obstacles(
+                    grid,
+                    shell_free,
+                    component_polygons(scene, {component_id}),
+                )
+                candidate_state_cache[component_id] = (
+                    candidate_free,
+                    clearance_field(grid, candidate_free),
+                )
+            candidate_free, candidate_clearance = candidate_state_cache[component_id]
             width, _ = evaluate_route(
                 route_by_id[row["id"]], grid, candidate_free, candidate_clearance, rooms, policy
             )
@@ -1072,6 +1121,7 @@ def main() -> int:
             "singleRemovalRecovery": recoveries,
             "provenSingleCulpritIds": [item["componentId"] for item in recoveries if item["restoresRequirement"]],
             "contributorIds": [item["componentId"] for item in recoveries],
+            "method": "single-removal-state-cached-per-component",
         }
 
     source_reachable = graph_reachable(connections)
@@ -1095,10 +1145,10 @@ def main() -> int:
             findings.append(
                 {
                     "code": "room-not-connected-in-source-topology",
-                    "responsibility": "source-structure",
-                    "severity": "warning",
+                    "responsibility": "input-integrity",
+                    "severity": "error",
                     "roomId": room_id,
-                    "message": "The accepted source topology has no route from an exterior entry; disclose it and continue.",
+                    "message": "This room has no traversable route to an exterior entry. Return to floorplan planning and correct the door, sliding-door or open-passage facts.",
                 }
             )
         elif not layout_accessible:
@@ -1106,7 +1156,7 @@ def main() -> int:
                 {
                     "code": "room-disconnected-by-layout",
                     "responsibility": "current-layout",
-                    "severity": "error",
+                    "severity": "warning",
                     "roomId": room_id,
                     "message": "The source topology reaches this room, but current furniture/cabinet placement closes every operational route.",
                 }
@@ -1124,22 +1174,130 @@ def main() -> int:
             }
         )
 
-    layout_errors = [finding for finding in findings if finding["responsibility"] == "current-layout" and finding["severity"] == "error"]
+    layout_risks = [finding for finding in findings if finding["responsibility"] == "current-layout"]
     integrity_errors = [finding for finding in findings if finding["responsibility"] == "input-integrity" and finding["severity"] == "error"]
-    source_warnings = [finding for finding in findings if finding["responsibility"] == "source-structure"]
+    source_warnings = [
+        finding
+        for finding in findings
+        if finding["responsibility"] == "source-structure" and finding["severity"] == "warning"
+    ]
     if integrity_errors:
         status = "blocked-input-integrity"
-    elif layout_errors:
-        status = "needs-layout-adjustment"
+    elif layout_risks:
+        status = "accepted-with-layout-risks"
     elif source_warnings:
         status = "accepted-with-source-constraints"
     else:
         status = "accepted"
 
+    component_labels = {
+        component["id"]: component.get("name") or component.get("functionalClass") or component["id"]
+        for component in scene.get("components", [])
+    }
+    room_labels = {
+        room_id: room.get("name") or room.get("label") or room_id
+        for room_id, room in rooms.items()
+    }
+    risk_notices = []
+    source_constraint_notices_by_key: dict[tuple[str, ...], dict[str, Any]] = {}
+    for row in route_rows:
+        if row.get("disposition") not in {"source-only-limitation", "accepted-with-source-constraint"}:
+            continue
+        room_ids = sorted(set(row.get("roomIds", [])))
+        rooms_text = "与".join(room_labels.get(room_id, room_id) for room_id in room_ids)
+        bottleneck_key = tuple(room_ids)
+        notice = source_constraint_notices_by_key.get(bottleneck_key)
+        if notice is None:
+            notice = {
+                "riskId": f"source-clearance::{row['id']}",
+                "category": "inherited-structural-clearance",
+                "severity": "warning",
+                "title": f"{rooms_text or '原户型'}存在固有通行限制",
+                "message": (
+                    f"该路线的结构基线净宽约{row['structuralBaselineWidthMeters']:.2f}米，"
+                    "属于原户型事实；继续设计并在交付说明中提示，不移动家具、不阻断机位与渲染。"
+                ),
+                "structuralBaselineWidthMeters": float(row["structuralBaselineWidthMeters"]),
+                "roomIds": room_ids,
+                "connectionIds": row.get("connectionIds", []),
+                "sourceRouteIds": [row["id"]],
+            }
+            source_constraint_notices_by_key[bottleneck_key] = notice
+        else:
+            existing_width = float(notice["structuralBaselineWidthMeters"])
+            current_width = float(row["structuralBaselineWidthMeters"])
+            if current_width < existing_width:
+                notice["structuralBaselineWidthMeters"] = current_width
+                notice["message"] = (
+                    f"该路线的结构基线净宽约{current_width:.2f}米，"
+                    "属于原户型事实；继续设计并在交付说明中提示，不移动家具、不阻断机位与渲染。"
+                )
+            notice["connectionIds"] = sorted(
+                set(notice["connectionIds"]) | set(row.get("connectionIds", []))
+            )
+            notice["sourceRouteIds"].append(row["id"])
+    source_constraint_notices = list(source_constraint_notices_by_key.values())
+    for row in route_rows:
+        if row.get("kind") != "portal-crossing" or row.get("disposition") != "layout-regression":
+            continue
+        component_ids = (
+            row.get("attribution", {}).get("provenSingleCulpritIds")
+            or row.get("attribution", {}).get("contributorIds")
+            or row.get("attribution", {}).get("candidateComponentIds")
+            or []
+        )
+        rooms_text = "与".join(room_labels.get(room_id, room_id) for room_id in row.get("roomIds", []))
+        components_text = "、".join(component_labels.get(component_id, component_id) for component_id in component_ids[:4])
+        message = (
+            f"{rooms_text}之间当前可用净宽约{row['currentLayoutWidthMeters']:.2f}米，"
+            f"低于该户型结构可提供的{row['effectiveRequiredWidthMeters']:.2f}米。"
+        )
+        if components_text:
+            message += f"主要可能受{components_text}影响，建议调整位置、朝向或组合方式。"
+        risk_notices.append(
+            {
+                "riskId": f"portal-clearance::{row.get('connectionId')}",
+                "category": "circulation-clearance",
+                "severity": "warning",
+                "title": f"{rooms_text}通行受家具影响",
+                "message": message,
+                "roomIds": row.get("roomIds", []),
+                "connectionIds": [row.get("connectionId")],
+                "componentIds": component_ids,
+                "sourceRouteIds": [row["id"]],
+            }
+        )
+    for relation in relationship_audit:
+        if relation.get("passed") is True:
+            continue
+        source_id = relation.get("sourceId")
+        rule_id = relation.get("ruleId")
+        title_by_rule = {
+            "bedHeadboardToWall": "床头未贴近目标墙",
+            "sofaBackToWall": "沙发未贴近目标墙",
+            "sofaFacesTvConsole": "沙发朝向与电视柜关系不佳",
+            "diningChairFacesTable": "餐椅未朝向餐桌",
+            "diningChairFacesDiningTable": "餐椅未朝向餐桌",
+        }
+        risk_notices.append(
+            {
+                "riskId": f"relationship::{rule_id}::{source_id}",
+                "category": "furniture-relationship",
+                "severity": "warning",
+                "title": title_by_rule.get(rule_id, "家具摆放关系需要注意"),
+                "message": f"{component_labels.get(source_id, source_id)}的摆放关系未达到建议值；不改变户型，可在后续方案中调整位置或朝向。",
+                "roomIds": [scene_component.get("roomId") for scene_component in scene.get("components", []) if scene_component.get("id") == source_id],
+                "connectionIds": [],
+                "componentIds": [source_id] if source_id else [],
+                "sourceRouteIds": [],
+            }
+        )
+
     audit = {
         "schema": AUDIT_SCHEMA,
-        "producer": {"skill": "interior-circulation-planning", "version": "3.1.0"},
+        "producer": {"skill": "interior-circulation-planning", "version": "5.2.0"},
         "floorplanId": structure["floorplanId"],
+        "checkpoint": scene["checkpoint"],
         "modelBackend": scene["modelBackend"],
         "bindings": {
             **scene["bindings"],
@@ -1149,7 +1307,7 @@ def main() -> int:
             "policySha256": sha256_file(policy_path),
         },
         "method": {
-            "id": "structure-topology-layout-relations-and-maximin-v3",
+            "id": "two-checkpoint-structure-topology-layout-relations-and-maximin-v4",
             "principle": "effectiveRequiredWidth=min(configuredTargetWidth,structuralBaselineWidth)",
             "gridResolutionMeters": resolution,
             "numericToleranceMeters": tolerance,
@@ -1179,6 +1337,24 @@ def main() -> int:
         },
         "routes": route_rows,
         "findings": findings,
+        "riskSummary": {
+            "status": "risks-found" if risk_notices else "no-layout-risk",
+            "blocking": False,
+            "issueCount": len(risk_notices),
+            "notices": risk_notices,
+            "userMessage": "当前布局存在可继续交付的动线或家具关系风险，已在风险清单中说明；这些风险不会改变户型，也不会阻断机位和渲染。" if risk_notices else "未发现由当前家具布局新增的动线风险。",
+        },
+        "sourceConstraintSummary": {
+            "status": "constraints-found" if source_constraint_notices else "no-source-constraint",
+            "blocking": False,
+            "issueCount": len(source_constraint_notices),
+            "notices": source_constraint_notices,
+            "userMessage": (
+                "原户型存在固有狭窄或净空限制，已记录为提示；不会修改家具，也不会阻断后续流程。"
+                if source_constraint_notices
+                else "未发现需要提示的原户型固有通行限制。"
+            ),
+        },
         "counts": {
             "routes": len(route_rows),
             "acceptedRoutes": sum(row["disposition"] == "accepted" for row in route_rows),
@@ -1188,7 +1364,8 @@ def main() -> int:
             ),
             "layoutRegressionRoutes": sum(row["disposition"] == "layout-regression" for row in route_rows),
             "sourceWarnings": len(source_warnings),
-            "layoutErrors": len(layout_errors),
+            "layoutErrors": 0,
+            "layoutRisks": len(layout_risks),
             "integrityErrors": len(integrity_errors),
             "relationshipChecks": len(relationship_audit),
             "layoutRelationshipFailures": sum(row.get("passed") is not True for row in relationship_audit),
@@ -1196,9 +1373,10 @@ def main() -> int:
         },
         "verdict": {
             "status": status,
-            "cameraWorkflowAllowed": status in {"accepted", "accepted-with-source-constraints"},
-            "sourceConstraintsAreBlocking": False,
-            "layoutRegressionsRequireAdjustment": True,
+            "cameraWorkflowAllowed": status != "blocked-input-integrity",
+        "sourceConstraintsAreBlocking": bool(integrity_errors),
+            "layoutRegressionsRequireAdjustment": False,
+            "layoutRisksAreAdvisory": True,
         },
     }
     audit["auditDigestSha256"] = canonical_sha256(audit)
@@ -1211,8 +1389,6 @@ def main() -> int:
     )
     if status == "blocked-input-integrity":
         return 2
-    if status == "needs-layout-adjustment":
-        return 3
     return 0
 
 

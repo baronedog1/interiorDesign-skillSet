@@ -13,6 +13,6 @@
 | 方案册/PDF | `booklet-production` | 可进入平台 |
 | 创建项目、上传、社区发布 | `idk-canvas-ingest-agent` | 平台回读验收 |
 
-三种完整户型后端平级，直接消费同一 accepted handoff。明确要求多个版本时冻结同一 handoff 并分别编译；任何一个后端的模型、回执、组件库或截图都不成为另一个后端的输入。
+三种完整户型后端平级，直接消费同一当前 handoff。明确要求多个版本时冻结同一 handoff 并分别编译；任何一个后端的模型、回执、组件库或截图都不成为另一个后端的输入。
 
-机位和渲染分别只有一个正式 Skill。它们通过 `native-model-manifest.v1`、`camera-plan.v8` 和 `shot-scene-map.v9` 兼容三个后端，不复制三套算法。
+机位和渲染分别只有一个正式 Skill。机位以 `interior.algorithmic-camera-plan.v3` 统一三个后端；渲染只读每个后端同名 `interior.camera-image-facts.v3 + PNG`，不再维护 scene-map 或旧 camera-plan 中转接口。

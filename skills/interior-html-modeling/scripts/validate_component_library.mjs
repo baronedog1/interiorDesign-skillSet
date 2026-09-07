@@ -9,6 +9,9 @@ import {
 import {
   MOVABLE_GREEN_COMPONENTS,
 } from "../assets/component-library/movable-green/catalog.js";
+import {
+  RUNTIME_GEOMETRY_ADMISSION,
+} from "../assets/component-library/catalog/runtime-geometry-admission.v1.js";
 
 const COMPONENT_CATALOG = [...MOVABLE_GREEN_COMPONENTS, ...FIXED_PURPLE_COMPONENTS];
 
@@ -16,6 +19,16 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const canonicalPath = path.join(root, "assets/component-library/catalog/public-assets.json");
 const canonical = JSON.parse(fs.readFileSync(canonicalPath, "utf8"));
 const issues = [];
+if (RUNTIME_GEOMETRY_ADMISSION.schema !== "interior.component-runtime-geometry-admission.v1") {
+  issues.push("unsupported runtime geometry admission schema");
+}
+const admissionDigest = crypto.createHash("sha256").update(JSON.stringify({
+  ...RUNTIME_GEOMETRY_ADMISSION,
+  admissionDigestSha256: null,
+})).digest("hex");
+if (admissionDigest !== RUNTIME_GEOMETRY_ADMISSION.admissionDigestSha256) {
+  issues.push("runtime geometry admission digest mismatch");
+}
 if (canonical.schema !== "interior.public-component-catalog.v5") issues.push("unsupported canonical catalog schema");
 const digestPayload = JSON.stringify({ ...canonical, catalogDigestSha256: null });
 const digest = crypto.createHash("sha256").update(digestPayload).digest("hex");
@@ -57,6 +70,27 @@ if (!canonical.sourceAssetExclusions || !fs.existsSync(exclusionsPath)) {
 }
 
 const canonicalIds = canonical.assets.map((asset) => asset.id).sort();
+const runtimeRejectedIds = RUNTIME_GEOMETRY_ADMISSION.rejectedAssets.map((row) => row.assetId);
+const nonDefaultFrameIds = RUNTIME_GEOMETRY_ADMISSION.nonDefaultFrames.map((row) => row.assetId);
+if (new Set(runtimeRejectedIds).size !== runtimeRejectedIds.length
+    || new Set(nonDefaultFrameIds).size !== nonDefaultFrameIds.length) {
+  issues.push("runtime geometry admission contains duplicate asset IDs");
+}
+for (const assetId of [...runtimeRejectedIds, ...nonDefaultFrameIds]) {
+  if (!canonicalIds.includes(assetId)) {
+    issues.push(`runtime geometry admission references unknown asset ${assetId}`);
+  }
+}
+if (runtimeRejectedIds.some((assetId) => nonDefaultFrameIds.includes(assetId))) {
+  issues.push("runtime geometry admission cannot both reject and normalize one asset");
+}
+if (RUNTIME_GEOMETRY_ADMISSION.catalogDigestSha256 !== canonical.catalogDigestSha256
+    || RUNTIME_GEOMETRY_ADMISSION.assetCount !== canonicalIds.length
+    || RUNTIME_GEOMETRY_ADMISSION.acceptedCount + RUNTIME_GEOMETRY_ADMISSION.rejectedCount
+      !== canonicalIds.length
+    || RUNTIME_GEOMETRY_ADMISSION.rejectedCount !== runtimeRejectedIds.length) {
+  issues.push("runtime geometry admission is stale for the canonical catalog");
+}
 const runtimeIds = COMPONENT_CATALOG.map((asset) => asset.id).sort();
 if (JSON.stringify(canonicalIds) !== JSON.stringify(runtimeIds)) {
   issues.push("runtime catalogs do not exactly match canonical public-assets.json");
@@ -158,7 +192,7 @@ for (const asset of COMPONENT_CATALOG) {
     issues.push(`${asset.id}: non-interior asset entered the catalog`);
   }
   if (asset.researchOnly) issues.push(`${asset.id}: selected public assets must allow the requested research use`);
-  if (!["CC0-1.0", "CC-BY-4.0"].includes(asset.sourceLicense)) {
+  if (!["CC0-1.0", "CC-BY-4.0", "CC-BY-3.0", "Free-Art-1.3"].includes(asset.sourceLicense)) {
     issues.push(`${asset.id}: unsupported source license ${asset.sourceLicense}`);
   }
   if (asset.sourceProvenance === "amazon-berkeley-objects" && asset.sourceLicense !== "CC-BY-4.0") {
@@ -188,6 +222,17 @@ for (const asset of COMPONENT_CATALOG) {
         || asset.commercialReviewRequired !== false
         || asset.categoryEvidence !== "reviewed-official-library-record")) {
     issues.push(`${asset.id}: Sweet Home 3D CC0 source or policy is inconsistent`);
+  }
+  if (["sweet-home-3d-contributions", "sweet-home-3d-scopia", "sweet-home-3d-kator-legaz"].includes(asset.sourceProvenance)) {
+    const expectedLicense = asset.sourceProvenance === "sweet-home-3d-contributions" ? "Free-Art-1.3" : "CC-BY-3.0";
+    if (asset.sourceLicense !== expectedLicense
+        || asset.commercialUseAllowed !== true
+        || asset.commercialReviewRequired !== false
+        || asset.licenseEvidence?.status !== "official-library-license-confirmed"
+        || asset.licenseEvidence?.attributionRequired !== true
+        || asset.categoryEvidence !== "reviewed-official-library-record") {
+      issues.push(`${asset.id}: Sweet Home 3D attributed source or policy is inconsistent`);
+    }
   }
   if (asset.styleNeutral && asset.styleCompatibility?.length) {
     issues.push(`${asset.id}: style-neutral component cannot also claim a style`);

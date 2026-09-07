@@ -1,4 +1,4 @@
-// Generated from catalog/public-assets.json (53c23758524ae207905064069c8c0d17d36ec9e67e410b583e6debaffe161eff). Do not edit by hand.
+// Generated from catalog/public-assets.json (7c460b5d5b0ca2500dc3c06d6fb0cefd5b96e633f997a7ebfe149c426677a3ac). Do not edit by hand.
 import { definePartitionCatalog } from "../shared/library-contract.js";
 
 const entries = [
@@ -26805,8 +26805,2965 @@ const entries = [
     }
   },
   {
+    "id": "sh3d-blendswap-cc-0-001-armchair",
+    "name": "Armchair (BlendSwap-CC-0 1)",
+    "shortName": "accent-chair · Armchair",
+    "sourceName": "Armchair",
+    "category": "chair",
+    "categoryName": "accent-chair",
+    "functionalClass": "accent-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-1",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.594,
+      "depth": 0.627,
+      "height": 1.05
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-001-armchair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#1",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Absfrm",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "c13ed2d7d45506285e1e36cd99006f66d3d5b8a183fa2a562643ed9b4afac86e",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "accent-chair",
+      "Armchair",
+      "Office",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Office",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "accent-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 594,
+          "depth": 627,
+          "height": 1050,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Office",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/armchair/armchair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-002-bed",
+    "name": "Bed (BlendSwap-CC-0 2)",
+    "shortName": "double-bed · Bed",
+    "sourceName": "Bed",
+    "category": "bed",
+    "categoryName": "double-bed",
+    "functionalClass": "double-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-2",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.4069999999999998,
+      "depth": 2.08,
+      "height": 0.955
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-002-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#2",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Blend Swap",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "71b77b57d73763daff879e23771dd882cef5398aab3906ff6ecff3129f4b105a",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "double-bed",
+      "Bed",
+      "Bedroom",
+      "Blend Swap"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "double-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1407,
+          "depth": 2080,
+          "height": 955,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/bed1/bed1.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-003-bed",
+    "name": "Bed (BlendSwap-CC-0 3)",
+    "shortName": "double-bed · Bed",
+    "sourceName": "Bed",
+    "category": "bed",
+    "categoryName": "double-bed",
+    "functionalClass": "double-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-3",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.4469999999999998,
+      "depth": 2.137,
+      "height": 1.077
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-003-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#3",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Blend Swap",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "038b08cc55d3e775fc8cc72cb824fde83af99e5a1db16294b605768210bf0255",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "double-bed",
+      "Bed",
+      "Bedroom",
+      "Blend Swap"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "double-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1447,
+          "depth": 2137,
+          "height": 1077,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/bed2/bed2.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-004-bedside-table",
+    "name": "Bedside table (BlendSwap-CC-0 4)",
+    "shortName": "side-table · Bedside table",
+    "sourceName": "Bedside table",
+    "category": "table",
+    "categoryName": "side-table",
+    "functionalClass": "side-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-4",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.4855,
+      "depth": 0.48100000000000004,
+      "height": 0.45399999999999996
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-004-bedside-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#4",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Nhumrod",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "aa7f4eb5fd6ec41597645108b5677eade4f2adb334ea781504677dbfdaa34cf6",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "side-table",
+      "Bedside table",
+      "Bedroom",
+      "Blend Swap",
+      "Nightstand"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "side-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 486,
+          "depth": 481,
+          "height": 454,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/bedsideTable2/bedsideTable2.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-005-bed",
+    "name": "Bed (BlendSwap-CC-0 5)",
+    "shortName": "double-bed · Bed",
+    "sourceName": "Bed",
+    "category": "bed",
+    "categoryName": "double-bed",
+    "functionalClass": "double-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-5",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.98,
+      "depth": 2.2636000000000003,
+      "height": 0.765
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-005-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#5",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Nhumrod",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "67848cd102a2e083c7221dea51ccae0036321055b25e992f816b38fdc4266aca",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "double-bed",
+      "Bed",
+      "Bedroom",
+      "Blend Swap"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "double-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1980,
+          "depth": 2264,
+          "height": 765,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/bedWithTexture/bedWithTexture.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-021-corner-sofa",
+    "name": "Corner sofa (BlendSwap-CC-0 21)",
+    "shortName": "sectional-sofa · Corner sofa",
+    "sourceName": "Corner sofa",
+    "category": "sofa",
+    "categoryName": "sectional-sofa",
+    "functionalClass": "sectional-sofa",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-21",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.3369999999999997,
+      "depth": 1.436,
+      "height": 0.8
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-021-corner-sofa.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#21",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Nhumrod",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "9556f7cddc46de9f3283f4cb8992a79eb5c95bcf9e5c048619151eea9a81ef57",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sectional-sofa",
+      "Corner sofa",
+      "Living room",
+      "Blend Swap",
+      "Couch",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sectional-sofa",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2337,
+          "depth": 1436,
+          "height": 800,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/L_shaped_sofa/L_shaped_sofa.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-026-oak-chair",
+    "name": "Oak chair (BlendSwap-CC-0 26)",
+    "shortName": "dining-chair · Oak chair",
+    "sourceName": "Oak chair",
+    "category": "chair",
+    "categoryName": "dining-chair",
+    "functionalClass": "dining-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-26",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.491,
+      "depth": 0.612,
+      "height": 1.178
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-026-oak-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#26",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Doug C",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "1789220af44e4ff6001463898094516f20006ffd125d547f84cee53604344c18",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-chair",
+      "Oak chair",
+      "Living room",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "dining-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 491,
+          "depth": 612,
+          "height": 1178,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/oakChair/oakChair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-027-oak-table",
+    "name": "Oak table (BlendSwap-CC-0 27)",
+    "shortName": "dining-table · Oak table",
+    "sourceName": "Oak table",
+    "category": "table",
+    "categoryName": "dining-table",
+    "functionalClass": "dining-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-27",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.24,
+      "depth": 1.24,
+      "height": 0.741
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-027-oak-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#27",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Doug C",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "be71daffba6944fa779212ce584bdb486eff331fc270dfd4de7e66bbafd99ff1",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-table",
+      "Oak table",
+      "Living room",
+      "Blend Swap",
+      "Dining",
+      "Dinner"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "dining-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1240,
+          "depth": 1240,
+          "height": 741,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/oakTable/oakTable.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-031-chair",
+    "name": "Chair (BlendSwap-CC-0 31)",
+    "shortName": "dining-chair · Chair",
+    "sourceName": "Chair",
+    "category": "chair",
+    "categoryName": "dining-chair",
+    "functionalClass": "dining-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-31",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.444,
+      "depth": 0.584,
+      "height": 0.82
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-031-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#31",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "exL",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "9e70cfda717641f1a4222d72247903ae8e7dd42063126eca0313149ae5cfd56c",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-chair",
+      "Chair",
+      "Living room",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "dining-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 444,
+          "depth": 584,
+          "height": 820,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/plasticChair/plasticChair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-037-relax-chair",
+    "name": "Relax chair (BlendSwap-CC-0 37)",
+    "shortName": "accent-chair · Relax chair",
+    "sourceName": "Relax chair",
+    "category": "chair",
+    "categoryName": "accent-chair",
+    "functionalClass": "accent-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-37",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.66,
+      "depth": 1.9,
+      "height": 0.847
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-037-relax-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#37",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Semhustej",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "7ba191512ab86df0a4999861ecbf064aa575eba99b3be2d10e7d64910a9c4b82",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "accent-chair",
+      "Relax chair",
+      "Exterior",
+      "Blend Swap",
+      "Outdoor",
+      "Deck",
+      "Garden",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Exterior",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "accent-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 660,
+          "depth": 1900,
+          "height": 847,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/relaxChair/relaxChair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-065-deck-chair",
+    "name": "Deck chair (BlendSwap-CC-0 65)",
+    "shortName": "outdoor-chair · Deck chair",
+    "sourceName": "Deck chair",
+    "category": "chair",
+    "categoryName": "outdoor-chair",
+    "functionalClass": "outdoor-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-65",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.7140000000000001,
+      "depth": 1.255,
+      "height": 0.8220000000000001
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-065-deck-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#65",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "BigMouse",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "1ccc88a727d3d30084826f0d70d6d66d383a6919712980eb1e46ff682200bbd9",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "outdoor-chair",
+      "Deck chair",
+      "Exterior",
+      "Blend Swap",
+      "Seat",
+      "Outdoor",
+      "Garden",
+      "Swimming",
+      "Pool"
+    ],
+    "useCaseTags": [
+      "Exterior",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "outdoor-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 714,
+          "depth": 1255,
+          "height": 822,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/deckChair/deckChair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-067-corner-sofa",
+    "name": "Corner sofa (BlendSwap-CC-0 67)",
+    "shortName": "sectional-sofa · Corner sofa",
+    "sourceName": "Corner sofa",
+    "category": "sofa",
+    "categoryName": "sectional-sofa",
+    "functionalClass": "sectional-sofa",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-67",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.488,
+      "depth": 1.896,
+      "height": 0.78
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-067-corner-sofa.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#67",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Mitch37",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "982a50b2135dacc773fd700deb7d34f1872d7e24c5fefa37d9f3ab871b90465d",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sectional-sofa",
+      "Corner sofa",
+      "Living room",
+      "Blend Swap",
+      "Couch",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sectional-sofa",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2488,
+          "depth": 1896,
+          "height": 780,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/sofa/sofa.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-075-desk",
+    "name": "Desk (BlendSwap-CC-0 75)",
+    "shortName": "desk · Desk",
+    "sourceName": "Desk",
+    "category": "table",
+    "categoryName": "desk",
+    "functionalClass": "desk",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-75",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.393,
+      "depth": 0.5429999999999999,
+      "height": 1.054
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-075-desk.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#75",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Razi",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "ae95aac828b2acf4a4d470f5bede211bf0dbc3d11e6887eafb0ea467856b35fa",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "desk",
+      "Desk",
+      "Office",
+      "Blend Swap",
+      "Table"
+    ],
+    "useCaseTags": [
+      "Office"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "desk",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1393,
+          "depth": 543,
+          "height": 1054,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Office"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/desk/desk.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-079-chair",
+    "name": "Chair (BlendSwap-CC-0 79)",
+    "shortName": "dining-chair · Chair",
+    "sourceName": "Chair",
+    "category": "chair",
+    "categoryName": "dining-chair",
+    "functionalClass": "dining-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-79",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.505,
+      "depth": 0.584,
+      "height": 0.85
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-079-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#79",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Jviersalas",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "09ff037801735899c9ba5cbc4f06699d448fa2b3e5f9f9c56b413db04a789ccb",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-chair",
+      "Chair",
+      "Living room",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "dining-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 505,
+          "depth": 584,
+          "height": 850,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/sillaBlanca/sillaBlanca.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-086-armchair",
+    "name": "Armchair (BlendSwap-CC-0 86)",
+    "shortName": "accent-chair · Armchair",
+    "sourceName": "Armchair",
+    "category": "chair",
+    "categoryName": "accent-chair",
+    "functionalClass": "accent-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-86",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.953,
+      "depth": 0.833,
+      "height": 0.7829999999999999
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-086-armchair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#86",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Cris1983",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "eaae2f138a6fed3d2ba8e049de42c2b5ab25da89368b31a64af1b524173e1a92",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "accent-chair",
+      "Armchair",
+      "Living room",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "accent-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 953,
+          "depth": 833,
+          "height": 783,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/armchair2/armchair2.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-087-baby-bed",
+    "name": "Baby bed (BlendSwap-CC-0 87)",
+    "shortName": "crib · Baby bed",
+    "sourceName": "Baby bed",
+    "category": "bed",
+    "categoryName": "crib",
+    "functionalClass": "crib",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-87",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.597,
+      "depth": 0.825,
+      "height": 0.762
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-087-baby-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#87",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "SVAFnemesis",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "d25845e845b880ea943f4bc3c550220eb3a2836c28531ae7c5163db330c19172",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "crib",
+      "Baby bed",
+      "Bedroom",
+      "Blend Swap",
+      "Crib"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "crib",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 597,
+          "depth": 825,
+          "height": 762,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/babyRockingBed/babyRockingBed.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-088-bed",
+    "name": "Bed (BlendSwap-CC-0 88)",
+    "shortName": "double-bed · Bed",
+    "sourceName": "Bed",
+    "category": "bed",
+    "categoryName": "double-bed",
+    "functionalClass": "double-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-88",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.022,
+      "depth": 2.282,
+      "height": 1.1420000000000001
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-088-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#88",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "SVAFnemesis",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "d0f44f6a1b436fce75a46d22a9608938d9bcd66cb0e063cb5420d7d3c91a85ac",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "double-bed",
+      "Bed",
+      "Bedroom",
+      "Blend Swap"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "double-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2022,
+          "depth": 2282,
+          "height": 1142,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/bed3/bed3.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-093-chair",
+    "name": "Chair (BlendSwap-CC-0 93)",
+    "shortName": "dining-chair · Chair",
+    "sourceName": "Chair",
+    "category": "chair",
+    "categoryName": "dining-chair",
+    "functionalClass": "dining-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-93",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.513,
+      "depth": 0.531,
+      "height": 0.8
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-093-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#93",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "JeffJeffer",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "d76eb406fbf3177b4eeb27e1e204b7d96a05fc232bf6b28b7016e7884b361be7",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-chair",
+      "Chair",
+      "Living room",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "dining-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 513,
+          "depth": 531,
+          "height": 800,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/chair/chair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-099-armchair",
+    "name": "Armchair (BlendSwap-CC-0 99)",
+    "shortName": "accent-chair · Armchair",
+    "sourceName": "Armchair",
+    "category": "chair",
+    "categoryName": "accent-chair",
+    "functionalClass": "accent-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-99",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.773,
+      "depth": 0.8490000000000001,
+      "height": 0.865
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-099-armchair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#99",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Dreadbwai",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "5104a5f7a698e2e8c92556146e34ab1ba33cb04460594e8de2946d6b163d18dc",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "accent-chair",
+      "Armchair",
+      "Living room",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "accent-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 773,
+          "depth": 849,
+          "height": 865,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/modernArmchair/modernArmchair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-101-chair",
+    "name": "Chair (BlendSwap-CC-0 101)",
+    "shortName": "dining-chair · Chair",
+    "sourceName": "Chair",
+    "category": "chair",
+    "categoryName": "dining-chair",
+    "functionalClass": "dining-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-101",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.498,
+      "depth": 0.632,
+      "height": 0.982
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-101-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#101",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Niuskir",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "27619c78cf29f07bb0dd6744919ca607369839610437a9d976fcf7f87c5c723b",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-chair",
+      "Chair",
+      "Living room",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "dining-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 498,
+          "depth": 632,
+          "height": 982,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/antiqueChair/antiqueChair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-108-chair-with-cushion",
+    "name": "Chair with cushion (BlendSwap-CC-0 108)",
+    "shortName": "dining-chair · Chair with cushion",
+    "sourceName": "Chair with cushion",
+    "category": "chair",
+    "categoryName": "dining-chair",
+    "functionalClass": "dining-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-108",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.441,
+      "depth": 0.441,
+      "height": 0.948
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-108-chair-with-cushion.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#108",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "MZiemys",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "2986eb1ae44a76b1fdbc608f8125fd76a8fe7cc31510a93ed584ccaa960190a8",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-chair",
+      "Chair with cushion",
+      "Living room",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "dining-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 441,
+          "depth": 441,
+          "height": 948,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/chairWithCushion/chairWithCushion.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-118-folding-chair",
+    "name": "Folding chair (BlendSwap-CC-0 118)",
+    "shortName": "folding-chair · Folding chair",
+    "sourceName": "Folding chair",
+    "category": "chair",
+    "categoryName": "folding-chair",
+    "functionalClass": "folding-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-118",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.37200000000000005,
+      "depth": 0.392,
+      "height": 0.47100000000000003
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-118-folding-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#118",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Cocoblendy",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "0776a27ff49972e750988a891a8c676870ba40a4a46861d5d55bcf2fd2611f80",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "folding-chair",
+      "Folding chair",
+      "Exterior",
+      "Blend Swap",
+      "Outdoor",
+      "Garden",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Exterior",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "folding-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 372,
+          "depth": 392,
+          "height": 471,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/foldingChair/foldingChair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-132-sofa",
+    "name": "Sofa (BlendSwap-CC-0 132)",
+    "shortName": "sofa · Sofa",
+    "sourceName": "Sofa",
+    "category": "sofa",
+    "categoryName": "sofa",
+    "functionalClass": "sofa",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-132",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.669,
+      "depth": 0.747,
+      "height": 0.848
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-132-sofa.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#132",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Blend Swap",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "2e6c1988270c2e1d8e0b4ed05f7f76efc6046f29db2c6307136bdc2138022682",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa",
+      "Sofa",
+      "Living room",
+      "Blend Swap",
+      "Couch"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1669,
+          "depth": 747,
+          "height": 848,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/sofa2/sofa2.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-134-table",
+    "name": "Table (BlendSwap-CC-0 134)",
+    "shortName": "dining-table · Table",
+    "sourceName": "Table",
+    "category": "table",
+    "categoryName": "dining-table",
+    "functionalClass": "dining-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-134",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.35,
+      "depth": 1,
+      "height": 0.7390000000000001
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-134-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#134",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "MZiemys",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "b7fed31c0ede0c743d42371150bd1a4035facd271edf805269ebd4f5b06806e5",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-table",
+      "Table",
+      "Living room",
+      "Blend Swap"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "dining-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2350,
+          "depth": 1000,
+          "height": 739,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/table/table.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-139-winchester-armchair",
+    "name": "Winchester armchair (BlendSwap-CC-0 139)",
+    "shortName": "accent-chair · Winchester armchair",
+    "sourceName": "Winchester armchair",
+    "category": "chair",
+    "categoryName": "accent-chair",
+    "functionalClass": "accent-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-139",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.12,
+      "depth": 0.934,
+      "height": 0.804
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-139-winchester-armchair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#139",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Gnanasaireddy",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "b7112000067765f031ce589db9f3bcc20a70dd00914dc83673e20627789c854f",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "accent-chair",
+      "Winchester armchair",
+      "Living room",
+      "Blend Swap",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "accent-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1120,
+          "depth": 934,
+          "height": 804,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/winchesterArmchair/winchesterArmchair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-140-winchester-sofa",
+    "name": "Winchester sofa (BlendSwap-CC-0 140)",
+    "shortName": "sofa · Winchester sofa",
+    "sourceName": "Winchester sofa",
+    "category": "sofa",
+    "categoryName": "sofa",
+    "functionalClass": "sofa",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-140",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.319,
+      "depth": 0.938,
+      "height": 0.804
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-140-winchester-sofa.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#140",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Gnanasaireddy",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "ddc49579f9a11b4c5145890ea6f0970392017a5b3ba86df67403e08be036a5ca",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa",
+      "Winchester sofa",
+      "Living room",
+      "Blend Swap",
+      "Couch"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2319,
+          "depth": 938,
+          "height": 804,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/winchesterSofa/winchesterSofa.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-blendswap-cc-0-152-desk",
+    "name": "Desk (BlendSwap-CC-0 152)",
+    "shortName": "desk · Desk",
+    "sourceName": "Desk",
+    "category": "table",
+    "categoryName": "desk",
+    "functionalClass": "desk",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-blendswap-cc0-152",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.6,
+      "depth": 0.8,
+      "height": 0.723
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-blendswap-cc0/sh3d-blendswap-cc-0-152-desk.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-blendswap-cc0",
+    "sourceId": "BlendSwap-CC-0#152",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC0-1.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": false
+    },
+    "sourceAuthors": {
+      "creator": "Wiresoulstudio",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "8e97403e937b2cf5e0e21485e25e55e72b823670c2b0355a73ee76f24290fcfc",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "desk",
+      "Desk",
+      "Office",
+      "Blend Swap",
+      "Table"
+    ],
+    "useCaseTags": [
+      "Office"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "desk",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1600,
+          "depth": 800,
+          "height": 723,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Office"
+      ]
+    },
+    "sourceModel": {
+      "path": "blendswap-cc-0/lbDesk/lbDesk.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
     "id": "sh3d-cc0-neutral-upholstered-bed",
-    "name": "通用软包双人床",
+    "name": "Bed (Blend Swap CC-0 bedWithTexture)",
     "shortName": "通用软包双人床",
     "sourceName": "Bed",
     "category": "bed",
@@ -26955,6 +29912,5646 @@ const entries = [
         "双人床",
         "通用软包"
       ]
+    }
+  },
+  {
+    "id": "sh3d-contributions-014-crib",
+    "name": "Crib (Contributions 14)",
+    "shortName": "crib · Crib",
+    "sourceName": "Crib",
+    "category": "bed",
+    "categoryName": "crib",
+    "functionalClass": "crib",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-14",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.66,
+      "depth": 1.24,
+      "height": 0.8
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-014-crib.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#14",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Sheep",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "e622c4c5cb1e7c18a44d241a58d940c48cb811f4017c0be4fb8b007220fbf1cc",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "crib",
+      "Crib",
+      "Bedroom",
+      "Baby",
+      "Bed"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "crib",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 660,
+          "depth": 1240,
+          "height": 800,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/litBebe.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-015-loft-bed",
+    "name": "Loft bed (Contributions 15)",
+    "shortName": "bunk-bed · Loft bed",
+    "sourceName": "Loft bed",
+    "category": "bed",
+    "categoryName": "bunk-bed",
+    "functionalClass": "bunk-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-15",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.005,
+      "depth": 2.168,
+      "height": 2.004
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-015-loft-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#15",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Infernal-quack",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "e3825a6f1e55ad4ff709d6dd31368f66704758137de9969b8a90212478d2136b",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "bunk-bed",
+      "Loft bed",
+      "Bedroom",
+      "Double"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "bunk-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2005,
+          "depth": 2168,
+          "height": 2004,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/litMezzanine.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-029-deck-chair",
+    "name": "Deck chair (Contributions 29)",
+    "shortName": "outdoor-chair · Deck chair",
+    "sourceName": "Deck chair",
+    "category": "chair",
+    "categoryName": "outdoor-chair",
+    "functionalClass": "outdoor-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-29",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.6,
+      "depth": 1.046,
+      "height": 0.977
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-029-deck-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#29",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "GdB",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "753176d82f9a509b109c1b80301367975bdde4de4dd3715880b8b0fee3e1f7cc",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "outdoor-chair",
+      "Deck chair",
+      "Exterior",
+      "Outdoor",
+      "Garden",
+      "Swimming",
+      "Pool",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Exterior",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "outdoor-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 600,
+          "depth": 1046,
+          "height": 977,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/transat.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-039-table",
+    "name": "Table (Contributions 39)",
+    "shortName": "dining-table · Table",
+    "sourceName": "Table",
+    "category": "table",
+    "categoryName": "dining-table",
+    "functionalClass": "dining-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-39",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.2,
+      "depth": 0.4,
+      "height": 0.88
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-039-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#39",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Infernal-quack",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "e57921f54aa0a9f46daed5bbbb4fd173e0d7b033c665ed5b883738549754ac84",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-table",
+      "Table",
+      "Kitchen"
+    ],
+    "useCaseTags": [
+      "Kitchen"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "dining-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1200,
+          "depth": 400,
+          "height": 880,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Kitchen"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/tableCuisine.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-049-armchair",
+    "name": "Armchair (Contributions 49)",
+    "shortName": "accent-chair · Armchair",
+    "sourceName": "Armchair",
+    "category": "chair",
+    "categoryName": "accent-chair",
+    "functionalClass": "accent-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-49",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.68,
+      "depth": 0.83,
+      "height": 1
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-049-armchair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#49",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "GdB",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "b1d5522a611f52228892db4031407af1decc41f737286b611fc0d17b9f3abff2",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "accent-chair",
+      "Armchair",
+      "Living room",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "accent-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 680,
+          "depth": 830,
+          "height": 1000,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/fauteuil.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-053-computer-desk",
+    "name": "Computer desk (Contributions 53)",
+    "shortName": "desk · Computer desk",
+    "sourceName": "Computer desk",
+    "category": "table",
+    "categoryName": "desk",
+    "functionalClass": "desk",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-53",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.24,
+      "depth": 1.385,
+      "height": 1.82
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-053-computer-desk.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#53",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "GdB",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "72297633e032b0221bc99d731161e9640e7cebb52d50e4d9e76005adeadf7140",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "desk",
+      "Computer desk",
+      "Living room",
+      "Table"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "desk",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1240,
+          "depth": 1385,
+          "height": 1820,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/bureau2.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-054-computer-desk",
+    "name": "Computer desk (Contributions 54)",
+    "shortName": "desk · Computer desk",
+    "sourceName": "Computer desk",
+    "category": "table",
+    "categoryName": "desk",
+    "functionalClass": "desk",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-54",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.09,
+      "depth": 1.08,
+      "height": 1.71
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-054-computer-desk.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#54",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Geantick",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "bcf25e079c1e0ee15e27e0b807a6d4cdb4875d2754779c8da5b7e94818f11c84",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "desk",
+      "Computer desk",
+      "Living room",
+      "Table"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "desk",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1090,
+          "depth": 1080,
+          "height": 1710,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/meublePC.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-055-desk",
+    "name": "Desk (Contributions 55)",
+    "shortName": "desk · Desk",
+    "sourceName": "Desk",
+    "category": "table",
+    "categoryName": "desk",
+    "functionalClass": "desk",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-55",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.41,
+      "depth": 0.705,
+      "height": 0.74
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-055-desk.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#55",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Sheep",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "6082d8a244c897a03ef91fb431bd79c5b3405929e7d1baadd94b854b1cd7bc05",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "desk",
+      "Desk",
+      "Living room",
+      "Table"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "desk",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1410,
+          "depth": 705,
+          "height": 740,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/bureau.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-062-rectangular-table",
+    "name": "Rectangular table (Contributions 62)",
+    "shortName": "dining-table · Rectangular table",
+    "sourceName": "Rectangular table",
+    "category": "table",
+    "categoryName": "dining-table",
+    "functionalClass": "dining-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-62",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.75,
+      "depth": 1.005,
+      "height": 0.74
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-062-rectangular-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#62",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Sleipnir1",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "f92a14539f017cd4b46a58bc4642550e9c5878df8bb859a8faf2036bb934e1ea",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-table",
+      "Rectangular table",
+      "Living room",
+      "Dining",
+      "Dinner"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "dining-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1750,
+          "depth": 1005,
+          "height": 740,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/table2.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-063-round-table",
+    "name": "Round table (Contributions 63)",
+    "shortName": "dining-table · Round table",
+    "sourceName": "Round table",
+    "category": "table",
+    "categoryName": "dining-table",
+    "functionalClass": "dining-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-63",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.945,
+      "depth": 0.945,
+      "height": 0.74
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-063-round-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#63",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Pencilart",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "366416580ee3072e0a196c0fb8f552e24f649b5491fde64f1c4d47abea3b5181",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-table",
+      "Round table",
+      "Living room"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "dining-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 945,
+          "depth": 945,
+          "height": 740,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/roundTable.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-065-square-coffee-table",
+    "name": "Square coffee table (Contributions 65)",
+    "shortName": "coffee-table · Square coffee table",
+    "sourceName": "Square coffee table",
+    "category": "table",
+    "categoryName": "coffee-table",
+    "functionalClass": "coffee-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-65",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.6709999999999999,
+      "depth": 0.6709999999999999,
+      "height": 0.44
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-065-square-coffee-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#65",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "GdB",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "7acd1c3ec19423101cb48f5e599607bbab05e0f19230eaf4333256d5c78b6ec8",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "coffee-table",
+      "Square coffee table",
+      "Living room"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "coffee-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 671,
+          "depth": 671,
+          "height": 440,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/tableBasseVerre.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-066-table",
+    "name": "Table (Contributions 66)",
+    "shortName": "dining-table · Table",
+    "sourceName": "Table",
+    "category": "table",
+    "categoryName": "dining-table",
+    "functionalClass": "dining-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-66",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.71,
+      "depth": 0.705,
+      "height": 0.74
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-066-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#66",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Geantick",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "de10ede4b3db61bbacc0ff652488fdf0360b9e4a9c175817b6c9f4022b820b01",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "dining-table",
+      "Table",
+      "Living room"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "dining-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1710,
+          "depth": 705,
+          "height": 740,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/table.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-067-coffee-table",
+    "name": "Coffee table (Contributions 67)",
+    "shortName": "coffee-table · Coffee table",
+    "sourceName": "Coffee table",
+    "category": "table",
+    "categoryName": "coffee-table",
+    "functionalClass": "coffee-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-67",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.17,
+      "depth": 0.49,
+      "height": 0.44
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-067-coffee-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#67",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Sheep",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "ee41815e80e20ca7b0e63c25aa0f8e01c65c5fe0a093e04598e3aee09a8bd9fb",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "coffee-table",
+      "Coffee table",
+      "Living room"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "coffee-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1170,
+          "depth": 490,
+          "height": 440,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/tableBasse.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-161-small-table",
+    "name": "Small table (Contributions 161)",
+    "shortName": "side-table · Small table",
+    "sourceName": "Small table",
+    "category": "table",
+    "categoryName": "side-table",
+    "functionalClass": "side-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-161",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.32,
+      "depth": 0.32,
+      "height": 0.57
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-161-small-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#161",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Snduc",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "6761921b0f235e8fceeb6b69d0e61302cc231db4cf33ecdbae45840ff0e50c4a",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "side-table",
+      "Small table",
+      "Living room"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "side-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 320,
+          "depth": 320,
+          "height": 570,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/petiteTableSalon.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-183-captain-s-bed",
+    "name": "Captain's bed (Contributions 183)",
+    "shortName": "double-bed · Captain's bed",
+    "sourceName": "Captain's bed",
+    "category": "bed",
+    "categoryName": "double-bed",
+    "functionalClass": "double-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-183",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.318,
+      "depth": 2.08,
+      "height": 1.193
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-183-captain-s-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#183",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Pencilart",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "222277d2c12b8433dd79716d3f51fca9a81e5982c3f91bd5bbd81c27c2ebf5e4",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "double-bed",
+      "Captain's bed",
+      "Bedroom"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "double-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1318,
+          "depth": 2080,
+          "height": 1193,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/captainsBed/captainsBed.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-189-coffee-table",
+    "name": "Coffee table (Contributions 189)",
+    "shortName": "coffee-table · Coffee table",
+    "sourceName": "Coffee table",
+    "category": "table",
+    "categoryName": "coffee-table",
+    "functionalClass": "coffee-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-189",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1,
+      "depth": 1,
+      "height": 0.3
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-189-coffee-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#189",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Theo Blonk",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "e2c10cb075395d0dde367663c2c3ac83a2b6b496a8966989e78a9d76f55a0d94",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "coffee-table",
+      "Coffee table",
+      "Living room"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "coffee-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1000,
+          "depth": 1000,
+          "height": 300,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/salontafel/salontafel.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-201-daybed",
+    "name": "Daybed (Contributions 201)",
+    "shortName": "double-bed · Daybed",
+    "sourceName": "Daybed",
+    "category": "bed",
+    "categoryName": "double-bed",
+    "functionalClass": "double-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-201",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.157,
+      "depth": 0.95,
+      "height": 1.171
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-201-daybed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#201",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Pencilart",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "37b85d9641347bcbcd6727b9906b8e5a5532beecda754c2e76962ef005012a27",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "double-bed",
+      "Daybed",
+      "Bedroom",
+      "Bed"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "double-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2157,
+          "depth": 950,
+          "height": 1171,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/trundleBed/trundleBed.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-209-black-deck-table",
+    "name": "Black deck table (Contributions 209)",
+    "shortName": "outdoor-table · Black deck table",
+    "sourceName": "Black deck table",
+    "category": "table",
+    "categoryName": "outdoor-table",
+    "functionalClass": "outdoor-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-209",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.55,
+      "depth": 1.5659999999999998,
+      "height": 0.72
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-209-black-deck-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#209",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Pencilart",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "c42a7c0f9e074134f2efa4db7ddea142ea61f4d09aa5dcf8da140fa56c6a0821",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "outdoor-table",
+      "Black deck table",
+      "Exterior",
+      "Outdoor",
+      "Deck",
+      "Garden"
+    ],
+    "useCaseTags": [
+      "Exterior"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "outdoor-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1550,
+          "depth": 1566,
+          "height": 720,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/blackDeckTable/blackDeckTable.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-211-black-deck-chair",
+    "name": "Black deck chair (Contributions 211)",
+    "shortName": "outdoor-chair · Black deck chair",
+    "sourceName": "Black deck chair",
+    "category": "chair",
+    "categoryName": "outdoor-chair",
+    "functionalClass": "outdoor-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-211",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.515,
+      "depth": 0.66,
+      "height": 1.1
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-211-black-deck-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#211",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Pencilart",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "840dc31df4ab0c0fd040488d38d96c2bdcbf7eaeb8df43e33035a7a8c8e363d2",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "outdoor-chair",
+      "Black deck chair",
+      "Exterior",
+      "Outdoor",
+      "Deck",
+      "Seat",
+      "Garden"
+    ],
+    "useCaseTags": [
+      "Exterior",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "outdoor-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 515,
+          "depth": 660,
+          "height": 1100,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/blackDeckChair/blackDeckChair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-247-office-chair",
+    "name": "Office chair (Contributions 247)",
+    "shortName": "office-chair · Office chair",
+    "sourceName": "Office chair",
+    "category": "chair",
+    "categoryName": "office-chair",
+    "functionalClass": "office-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-247",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.6262,
+      "depth": 0.5967,
+      "height": 0.8734000000000001
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-247-office-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#247",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Peter Smolik",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "f12c20cb8f5d1e8ce4b9ee2fb2dfc620803f46219563fb217cadeee025b3308f",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "office-chair",
+      "Office chair",
+      "Office",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Office",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "office-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 626,
+          "depth": 597,
+          "height": 873,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Office",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/officeChair/officeChair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-248-office-chair",
+    "name": "Office chair (Contributions 248)",
+    "shortName": "office-chair · Office chair",
+    "sourceName": "Office chair",
+    "category": "chair",
+    "categoryName": "office-chair",
+    "functionalClass": "office-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-248",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.6288,
+      "depth": 0.688,
+      "height": 1.015
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-248-office-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#248",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Peter Smolik",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "a654e28199601643d88e26a80454f06464dbefcbedec03992b0631607e3301c9",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "office-chair",
+      "Office chair",
+      "Office",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Office",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "office-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 629,
+          "depth": 688,
+          "height": 1015,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Office",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/officeChair2/officeChair2.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-249-office-chair",
+    "name": "Office chair (Contributions 249)",
+    "shortName": "office-chair · Office chair",
+    "sourceName": "Office chair",
+    "category": "chair",
+    "categoryName": "office-chair",
+    "functionalClass": "office-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-249",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.5588000000000001,
+      "depth": 0.5635,
+      "height": 1.07
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-249-office-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#249",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Peter Smolik",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "8f26ee03b2d4c4836d53f89a418bec0681cc9765fe844df385ef29baf1f2b983",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "office-chair",
+      "Office chair",
+      "Office",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Office",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "office-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 559,
+          "depth": 564,
+          "height": 1070,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Office",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/officeChair3/officeChair3.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-254-sofa",
+    "name": "Sofa (Contributions 254)",
+    "shortName": "sofa · Sofa",
+    "sourceName": "Sofa",
+    "category": "sofa",
+    "categoryName": "sofa",
+    "functionalClass": "sofa",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-254",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.34,
+      "depth": 0.7937000000000001,
+      "height": 0.7923
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-254-sofa.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#254",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Peter Smolik",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "b42f4d554cc3c28469c8c9e9b8deb9a6a5f5e8bb37fd76cc1a8dd0beb9d690f2",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa",
+      "Sofa",
+      "Living room",
+      "Couch",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2340,
+          "depth": 794,
+          "height": 792,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/sofa1/sofa1.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-255-sofa",
+    "name": "Sofa (Contributions 255)",
+    "shortName": "sofa · Sofa",
+    "sourceName": "Sofa",
+    "category": "sofa",
+    "categoryName": "sofa",
+    "functionalClass": "sofa",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-255",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.8592,
+      "depth": 1.001,
+      "height": 0.8919
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-255-sofa.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#255",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Peter Smolik",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "0f5e97ed575698346007cb817166c0331a7494fdb2d1778f4ef583f8c99a507d",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa",
+      "Sofa",
+      "Living room",
+      "Couch",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2859,
+          "depth": 1001,
+          "height": 892,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/sofa3/sofa3.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-257-sofa",
+    "name": "Sofa (Contributions 257)",
+    "shortName": "sofa · Sofa",
+    "sourceName": "Sofa",
+    "category": "sofa",
+    "categoryName": "sofa",
+    "functionalClass": "sofa",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-257",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.85,
+      "depth": 0.74,
+      "height": 0.8354
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-257-sofa.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#257",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Peter Smolik",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "1422801d201762a0dd65f7a023cc05a68e5011441a82bc6bfc6524621f41b812",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa",
+      "Sofa",
+      "Living room",
+      "Couch",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1850,
+          "depth": 740,
+          "height": 835,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/sofa4/sofa4.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-329-garden-sofa",
+    "name": "Garden sofa (Contributions 329)",
+    "shortName": "sofa · Garden sofa",
+    "sourceName": "Garden sofa",
+    "category": "sofa",
+    "categoryName": "sofa",
+    "functionalClass": "sofa",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-329",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.21,
+      "depth": 0.75,
+      "height": 1.8
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-329-garden-sofa.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#329",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Ga�l Bettinelli",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "4a1650ff47aa45e2e7db594414f87a2211fb6c8890379fa911f52babdf22f622",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa",
+      "Garden sofa",
+      "Exterior",
+      "Couch",
+      "Seat",
+      "Outdoor",
+      "Deck",
+      "Garden"
+    ],
+    "useCaseTags": [
+      "Exterior",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2210,
+          "depth": 750,
+          "height": 1800,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/canapeJardin/canapeJardin.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-330-sofa-bed",
+    "name": "Sofa bed (Contributions 330)",
+    "shortName": "sofa-bed · Sofa bed",
+    "sourceName": "Sofa bed",
+    "category": "sofa",
+    "categoryName": "sofa-bed",
+    "functionalClass": "sofa-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-330",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.82,
+      "depth": 0.9329999999999999,
+      "height": 0.9309999999999999
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-330-sofa-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#330",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Ga�l Bettinelli",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "d6597afb4bf1c8649d85d5ca7fc1c587f793646accc51bf60c4d82d5e4dcb67e",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa-bed",
+      "Sofa bed",
+      "Bedroom",
+      "Couch",
+      "Convertible",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Bedroom",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1820,
+          "depth": 933,
+          "height": 931,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/clicClac/clicClac.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-331-opened-sofa-bed",
+    "name": "Opened sofa bed (Contributions 331)",
+    "shortName": "sofa-bed · Opened sofa bed",
+    "sourceName": "Opened sofa bed",
+    "category": "sofa",
+    "categoryName": "sofa-bed",
+    "functionalClass": "sofa-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-331",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.82,
+      "depth": 1.32,
+      "height": 0.39899999999999997
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-331-opened-sofa-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#331",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Ga�l Bettinelli",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "f51c88b82f99e08ff477cf483165719b46f3753fd55c77d3c39b7e22d36fb197",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa-bed",
+      "Opened sofa bed",
+      "Bedroom",
+      "Couch",
+      "Convertible"
+    ],
+    "useCaseTags": [
+      "Bedroom",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1820,
+          "depth": 1320,
+          "height": 399,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/clicClacOuvert/clicClacOuvert.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-337-bedside-table",
+    "name": "Bedside table (Contributions 337)",
+    "shortName": "side-table · Bedside table",
+    "sourceName": "Bedside table",
+    "category": "table",
+    "categoryName": "side-table",
+    "functionalClass": "side-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-337",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.3986778,
+      "depth": 0.29,
+      "height": 0.54
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-337-bedside-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#337",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Ga�l Bettinelli",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "22c657f363f0ad9e067f0ee544f60feb9eb231f1d66084d1d5003c64da8eacf7",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "side-table",
+      "Bedside table",
+      "Bedroom",
+      "Nightstand"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "side-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 399,
+          "depth": 290,
+          "height": 540,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/meubleChevet/meubleChevet.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-341-coffee-table",
+    "name": "Coffee table (Contributions 341)",
+    "shortName": "coffee-table · Coffee table",
+    "sourceName": "Coffee table",
+    "category": "table",
+    "categoryName": "coffee-table",
+    "functionalClass": "coffee-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-341",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.125,
+      "depth": 0.598,
+      "height": 0.391
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-341-coffee-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#341",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Ga�l Bettinelli",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "cbbd78e3196c2adbf46b321d596ef0448d89d548b0adabd1738d6a92d63edad2",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "coffee-table",
+      "Coffee table",
+      "Living room"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "coffee-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1125,
+          "depth": 598,
+          "height": 391,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/tableBasse2/tableBasse2.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-355-swinging-chair",
+    "name": "Swinging chair (Contributions 355)",
+    "shortName": "rocking-chair · Swinging chair",
+    "sourceName": "Swinging chair",
+    "category": "chair",
+    "categoryName": "rocking-chair",
+    "functionalClass": "rocking-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-355",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.5,
+      "depth": 1.4709999999999999,
+      "height": 1.824
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-355-swinging-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#355",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Roger Lonqueux",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "c782dfcdb34a5ea1ac6bf76193087fba5e0a374348873b5ca4745cd03c5f8513",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "rocking-chair",
+      "Swinging chair",
+      "Exterior",
+      "Seat",
+      "Outdoor",
+      "Deck",
+      "Garden"
+    ],
+    "useCaseTags": [
+      "Exterior",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "rocking-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1500,
+          "depth": 1471,
+          "height": 1824,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/balancelle.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-397-picnic-table",
+    "name": "Picnic table (Contributions 397)",
+    "shortName": "outdoor-table · Picnic table",
+    "sourceName": "Picnic table",
+    "category": "table",
+    "categoryName": "outdoor-table",
+    "functionalClass": "outdoor-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-397",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.8019999999999998,
+      "depth": 1.453,
+      "height": 0.75
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-397-picnic-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#397",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Hawkdawg",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "d13636c9fcb8ad4bab029017faf72716b3129632534d3e2ff98954110f6e6027",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "outdoor-table",
+      "Picnic table",
+      "Exterior",
+      "Outdoor",
+      "Deck",
+      "Garden"
+    ],
+    "useCaseTags": [
+      "Exterior"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "outdoor-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1802,
+          "depth": 1453,
+          "height": 750,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/picnic_table/picnic_table.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-404-rocking-chair",
+    "name": "Rocking chair (Contributions 404)",
+    "shortName": "rocking-chair · Rocking chair",
+    "sourceName": "Rocking chair",
+    "category": "chair",
+    "categoryName": "rocking-chair",
+    "functionalClass": "rocking-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-404",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.65,
+      "depth": 0.8,
+      "height": 1.09
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-404-rocking-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#404",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Ola-Kristian Hoff",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "356dcc6a15a5c221530386638f44d0bda67c544cc3c768d492d87f401c56f74a",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "rocking-chair",
+      "Rocking chair",
+      "Living room",
+      "OKH",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "rocking-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 650,
+          "depth": 800,
+          "height": 1090,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/rocking_chair/rocking_chair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-461-child-bed",
+    "name": "Child bed (Contributions 461)",
+    "shortName": "child-bed · Child bed",
+    "sourceName": "Child bed",
+    "category": "bed",
+    "categoryName": "child-bed",
+    "functionalClass": "child-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-461",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.05,
+      "depth": 2.1,
+      "height": 1.1
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-461-child-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#461",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Jabberwalky",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "1d127003bb4403ab2b07709def14e14afb0109e47fd044ec0079f27cfd832828",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "child-bed",
+      "Child bed",
+      "Bedroom"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "child-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1050,
+          "depth": 2100,
+          "height": 1100,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/childBed/childBed.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-465-couch-table",
+    "name": "Couch table (Contributions 465)",
+    "shortName": "coffee-table · Couch table",
+    "sourceName": "Couch table",
+    "category": "table",
+    "categoryName": "coffee-table",
+    "functionalClass": "coffee-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-465",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.001,
+      "depth": 0.701,
+      "height": 0.44
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-465-couch-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#465",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Jabberwalky",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "3aae53ece5f96cdecadefb63429c1411c8b4834e5c20e52d33c5180045850a5d",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "coffee-table",
+      "Couch table",
+      "Living room",
+      "Coffee"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "coffee-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1001,
+          "depth": 701,
+          "height": 440,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/couchTable/couchTable.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-472-folding-chair",
+    "name": "Folding chair (Contributions 472)",
+    "shortName": "folding-chair · Folding chair",
+    "sourceName": "Folding chair",
+    "category": "chair",
+    "categoryName": "folding-chair",
+    "functionalClass": "folding-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-472",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.49,
+      "depth": 0.509,
+      "height": 0.765
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-472-folding-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#472",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "alaX",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "6e65fa65197481f14785804c7c3e609c14284a24f5b59c985ba3736a1c3e37b9",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "folding-chair",
+      "Folding chair",
+      "Living room",
+      "Adjustable",
+      "Outdoor",
+      "Deck",
+      "Patio"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "folding-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 490,
+          "depth": 509,
+          "height": 765,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/folding_chair/folding_chair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-480-mezzanine-bed",
+    "name": "Mezzanine bed (Contributions 480)",
+    "shortName": "bunk-bed · Mezzanine bed",
+    "sourceName": "Mezzanine bed",
+    "category": "bed",
+    "categoryName": "bunk-bed",
+    "functionalClass": "bunk-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-480",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 2.964,
+      "depth": 1.849,
+      "height": 2.1
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-480-mezzanine-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#480",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Clyriss",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "88cfcff293c514d3d611fd0c78b199f23a171d71f618fb631163724c46b60db3",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "bunk-bed",
+      "Mezzanine bed",
+      "Bedroom"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "bunk-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 2964,
+          "depth": 1849,
+          "height": 2100,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/litMezzanine2/litMezzanine2.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-contributions-492-half-round-table",
+    "name": "Half round table (Contributions 492)",
+    "shortName": "side-table · Half round table",
+    "sourceName": "Half round table",
+    "category": "table",
+    "categoryName": "side-table",
+    "functionalClass": "side-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-contributions-492",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.02,
+      "depth": 0.586,
+      "height": 0.78
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-contributions/sh3d-contributions-492-half-round-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-contributions",
+    "sourceId": "Contributions#492",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "Free-Art-1.3",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Ola-Kristian Hoff",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "602b8b8143b0214d76eb98a483550e45ca16f88edae62038fb495da7d47189ab",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "side-table",
+      "Half round table",
+      "Living room",
+      "OKH"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "side-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1020,
+          "depth": 586,
+          "height": 780,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "contributions/table_half_round/table_half_round.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-katorlegaz-077-bathmat",
+    "name": "Bathmat (KatorLegaz 77)",
+    "shortName": "bathmat · Bathmat",
+    "sourceName": "Bathmat",
+    "category": "rug-textile",
+    "categoryName": "bathmat",
+    "functionalClass": "bathmat",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-kator-legaz-77",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.733,
+      "depth": 0.47,
+      "height": 0.013999999999999999
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-kator-legaz/sh3d-katorlegaz-077-bathmat.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-kator-legaz",
+    "sourceId": "KatorLegaz#77",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Kator Legaz",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "2b9591645d8199558aadf83a7b74a43b82dfbfe88c43529e98cdf22436f0b7d8",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "bathmat",
+      "Bathmat",
+      "Bathroom",
+      "Rug",
+      "Carpet"
+    ],
+    "useCaseTags": [
+      "Bathroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "rug-textile",
+      "softSubcategory": "bathmat",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 733,
+          "depth": 470,
+          "height": 14,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bathroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "katorlegaz/bathmat/bathmat.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-071-bar-chair",
+    "name": "Bar chair (Scopia 71)",
+    "shortName": "bar-stool · Bar chair",
+    "sourceName": "Bar chair",
+    "category": "stool",
+    "categoryName": "bar-stool",
+    "functionalClass": "bar-stool",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-71",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.447,
+      "depth": 0.486,
+      "height": 1.078
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-071-bar-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#71",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "935fadfffc0cfed47868cc99dc4dd3ad8c728748bfdfd3d308c54bcc299570dd",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "bar-stool",
+      "Bar chair",
+      "Kitchen",
+      "Seat",
+      "Outdoor",
+      "Deck",
+      "Patio"
+    ],
+    "useCaseTags": [
+      "Kitchen",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "stool",
+      "softSubcategory": "bar-stool",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 447,
+          "depth": 486,
+          "height": 1078,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Kitchen",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/bar_chair/bar_chair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-077-child-bed",
+    "name": "Child bed (Scopia 77)",
+    "shortName": "child-bed · Child bed",
+    "sourceName": "Child bed",
+    "category": "bed",
+    "categoryName": "child-bed",
+    "functionalClass": "child-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-77",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.9179999999999999,
+      "depth": 2.053,
+      "height": 0.8740000000000001
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-077-child-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#77",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "1175f91873dace5b662d75a78c0ece2e18ed4cfd60ded88e37d08134ad0b418b",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "child-bed",
+      "Child bed",
+      "Bedroom",
+      "Kid",
+      "Children"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "child-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 918,
+          "depth": 2053,
+          "height": 874,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/children_bed/children_bed.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-079-crib",
+    "name": "Crib (Scopia 79)",
+    "shortName": "crib · Crib",
+    "sourceName": "Crib",
+    "category": "bed",
+    "categoryName": "crib",
+    "functionalClass": "crib",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-79",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.728,
+      "depth": 1.2429999999999999,
+      "height": 1.109
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-079-crib.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#79",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "f8cfbe7cba990b5321004c60ac1cd3f625bccf8bfbfcea3f49bffc0a66576ccf",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "crib",
+      "Crib",
+      "Bedroom",
+      "Baby",
+      "Bed"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "crib",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 728,
+          "depth": 1243,
+          "height": 1109,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/crib/crib.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-099-beach-chair",
+    "name": "Beach chair (Scopia 99)",
+    "shortName": "outdoor-chair · Beach chair",
+    "sourceName": "Beach chair",
+    "category": "chair",
+    "categoryName": "outdoor-chair",
+    "functionalClass": "outdoor-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-99",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.696,
+      "depth": 1.935,
+      "height": 1.081
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-099-beach-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#99",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "ebdf182a7c5a08d58e489731e4f11327b4f7f5311608f9fdc0fb129c408f7bfa",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "outdoor-chair",
+      "Beach chair",
+      "Exterior",
+      "Seat",
+      "Outdoor",
+      "Deck",
+      "Garden",
+      "Swimming",
+      "Pool"
+    ],
+    "useCaseTags": [
+      "Exterior",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "outdoor-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 696,
+          "depth": 1935,
+          "height": 1081,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/beach_chair/beach_chair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-126-baby-high-chair",
+    "name": "Baby high chair (Scopia 126)",
+    "shortName": "high-chair · Baby high chair",
+    "sourceName": "Baby high chair",
+    "category": "chair",
+    "categoryName": "high-chair",
+    "functionalClass": "high-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-126",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.6,
+      "depth": 0.644,
+      "height": 1.04
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-126-baby-high-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#126",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "f9a57dbfcb016d39576181545e8f0e52fdb1ba5185f5b1f322200e9218ac02cb",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "high-chair",
+      "Baby high chair",
+      "Kitchen",
+      "Seat",
+      "Kid",
+      "Children"
+    ],
+    "useCaseTags": [
+      "Kitchen",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "high-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 600,
+          "depth": 644,
+          "height": 1040,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Kitchen",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/baby_high_chair/baby_high_chair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-288-convertible-sofa-bz",
+    "name": "Convertible sofa BZ (Scopia 288)",
+    "shortName": "sofa-bed · Convertible sofa BZ",
+    "sourceName": "Convertible sofa BZ",
+    "category": "sofa",
+    "categoryName": "sofa-bed",
+    "functionalClass": "sofa-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-288",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.432,
+      "depth": 1.023,
+      "height": 0.873
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-288-convertible-sofa-bz.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#288",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "6f3ba1e440395b5c16d6a5c7387947db606be2394a0e96f3eea0ea725c18c1b3",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa-bed",
+      "Convertible sofa BZ",
+      "Bedroom",
+      "Bed"
+    ],
+    "useCaseTags": [
+      "Bedroom",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1432,
+          "depth": 1023,
+          "height": 873,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/convertible-sofa-BZ-closed/convertible-sofa-BZ-closed.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-289-opened-convertible-sofa-bz",
+    "name": "Opened convertible sofa BZ (Scopia 289)",
+    "shortName": "sofa-bed · Opened convertible sofa BZ",
+    "sourceName": "Opened convertible sofa BZ",
+    "category": "sofa",
+    "categoryName": "sofa-bed",
+    "functionalClass": "sofa-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-289",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.5830000000000002,
+      "depth": 1.901,
+      "height": 0.478
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-289-opened-convertible-sofa-bz.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#289",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "b7f4c0e3eb1f87d666e0f0b740f39ab54cf1750681aaba1fa7c80aa24c755512",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 2,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "sofa-bed",
+      "Opened convertible sofa BZ",
+      "Bedroom",
+      "Bed"
+    ],
+    "useCaseTags": [
+      "Bedroom",
+      "2人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "sofa",
+      "softSubcategory": "sofa-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1583,
+          "depth": 1901,
+          "height": 478,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 2,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom",
+        "2人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/convertible-sofa-BZ-opened/convertible-sofa-BZ-opened.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-300-table-on-trestles",
+    "name": "Table on trestles (Scopia 300)",
+    "shortName": "outdoor-table · Table on trestles",
+    "sourceName": "Table on trestles",
+    "category": "table",
+    "categoryName": "outdoor-table",
+    "functionalClass": "outdoor-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-300",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.6,
+      "depth": 0.664,
+      "height": 0.7609999999999999
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-300-table-on-trestles.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#300",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "9c64e53a528d7ac7a10fa8729c23363e3c82b2c5af29872d452c827421ff28c9",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "outdoor-table",
+      "Table on trestles",
+      "Living room",
+      "Outdoor",
+      "Deck",
+      "Patio"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "outdoor-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1600,
+          "depth": 664,
+          "height": 761,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/table-on-trestles/table-on-trestles.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-343-doormat",
+    "name": "Doormat (Scopia 343)",
+    "shortName": "doormat · Doormat",
+    "sourceName": "Doormat",
+    "category": "rug-textile",
+    "categoryName": "doormat",
+    "functionalClass": "doormat",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-343",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.6,
+      "depth": 0.3,
+      "height": 0.011000000000000001
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-343-doormat.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#343",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "7fdb1f541a3fa723b4b406e72c4b6ca089dd58b20909592a8fc0b63836ebcd86",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "doormat",
+      "Doormat",
+      "Miscellaneous"
+    ],
+    "useCaseTags": [
+      "Miscellaneous"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "rug-textile",
+      "softSubcategory": "doormat",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 600,
+          "depth": 300,
+          "height": 11,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Miscellaneous"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/doormat/doormat.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-345-mezzanine-bed",
+    "name": "Mezzanine bed (Scopia 345)",
+    "shortName": "bunk-bed · Mezzanine bed",
+    "sourceName": "Mezzanine bed",
+    "category": "bed",
+    "categoryName": "bunk-bed",
+    "functionalClass": "bunk-bed",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-345",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.218,
+      "depth": 2.59,
+      "height": 1.926
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-345-mezzanine-bed.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#345",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "d99f077ba0689a361d2309df91b71a9406f739dc05925e1dbe5ba3cca4d22112",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "bunk-bed",
+      "Mezzanine bed",
+      "Bedroom"
+    ],
+    "useCaseTags": [
+      "Bedroom"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "bed",
+      "softSubcategory": "bunk-bed",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1218,
+          "depth": 2590,
+          "height": 1926,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Bedroom"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/mezzanine-bed/mezzanine-bed.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-359-children-chair",
+    "name": "Children chair (Scopia 359)",
+    "shortName": "child-chair · Children chair",
+    "sourceName": "Children chair",
+    "category": "chair",
+    "categoryName": "child-chair",
+    "functionalClass": "child-chair",
+    "placementClass": "movable-green",
+    "shapeClass": "organic",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-359",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.28,
+      "depth": 0.28,
+      "height": 0.51
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-359-children-chair.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#359",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "42501b6aacccf73f0441fdffcd29e0b414c8f4e0feed14da1309d290ff86c7d2",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": 1,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "child-chair",
+      "Children chair",
+      "Living room",
+      "Seat"
+    ],
+    "useCaseTags": [
+      "Living room",
+      "1人位"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "chair",
+      "softSubcategory": "child-chair",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 280,
+          "depth": 280,
+          "height": 510,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": 1,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room",
+        "1人位"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/children_chair/children_chair.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-360-children-table",
+    "name": "Children table (Scopia 360)",
+    "shortName": "child-table · Children table",
+    "sourceName": "Children table",
+    "category": "table",
+    "categoryName": "child-table",
+    "functionalClass": "child-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-360",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 0.63,
+      "depth": 0.48,
+      "height": 0.45
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-360-children-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#360",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "5d9d8cb55ca96afa3b661bfc92c8e9ee42f26a2667c5445b9a6b74d751cd4a23",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "child-table",
+      "Children table",
+      "Living room"
+    ],
+    "useCaseTags": [
+      "Living room"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "child-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 630,
+          "depth": 480,
+          "height": 450,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Living room"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/children_table/children_table.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
+    }
+  },
+  {
+    "id": "sh3d-scopia-386-rattan-table",
+    "name": "Rattan table (Scopia 386)",
+    "shortName": "outdoor-table · Rattan table",
+    "sourceName": "Rattan table",
+    "category": "table",
+    "categoryName": "outdoor-table",
+    "functionalClass": "outdoor-table",
+    "placementClass": "movable-green",
+    "shapeClass": "rectilinear",
+    "builder": "external-gltf",
+    "variant": "sweet-home-3d-scopia-386",
+    "units": "m",
+    "defaultDimensions": {
+      "width": 1.2,
+      "depth": 0.6,
+      "height": 0.4
+    },
+    "uniformScaleRange": {
+      "min": 0.45,
+      "max": 2.2
+    },
+    "lockAspectRatio": true,
+    "appearance": "dual-white-source-color",
+    "appearanceVariants": [
+      "white-model",
+      "source-color"
+    ],
+    "assetPath": "./models/sweet-home-3d-scopia/sh3d-scopia-386-rattan-table.glb",
+    "qualityTier": "production-authored-external",
+    "geometryProfile": "authored-gltf-pbr-v2",
+    "sourceProvenance": "sweet-home-3d-scopia",
+    "sourceId": "Scopia#386",
+    "sourceUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceApiUrl": "https://www.sweethome3d.com/import-models/",
+    "sourceThumbnailUrl": null,
+    "categoryEvidence": "reviewed-official-library-record",
+    "sourceLicense": "CC-BY-3.0",
+    "licenseEvidence": {
+      "providerPage": "https://www.sweethome3d.com/import-models/",
+      "providerLicenseUrl": "https://www.sweethome3d.com/license/",
+      "status": "official-library-license-confirmed",
+      "attributionRequired": true
+    },
+    "sourceAuthors": {
+      "creator": "Scopia",
+      "conversion": "Sweet Home 3D contributors"
+    },
+    "sourcePolycount": null,
+    "sourceFilesHash": "3fa3b540bd5a1892e4f285c8ed07d74c9ba36985781ce6af1039b46a2f880584",
+    "researchOnly": false,
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "commercialReviewRequired": false,
+    "editableFormat": "OBJ/MTL/textures",
+    "sourceFormat": "Wavefront OBJ",
+    "axisConvention": "Y-up",
+    "primitiveBoxOnly": false,
+    "designFeatures": [
+      "authored-mesh",
+      "source-materials",
+      "source-dimensional-bounds",
+      "no-procedural-placeholder"
+    ],
+    "mountType": "floor",
+    "seatingCapacity": null,
+    "styleCompatibility": [],
+    "styleNeutral": true,
+    "tags": [
+      "outdoor-table",
+      "Rattan table",
+      "Exterior",
+      "Outdoor",
+      "Deck",
+      "Patio",
+      "Garden"
+    ],
+    "useCaseTags": [
+      "Exterior"
+    ],
+    "platform": {
+      "libraryId": "material_soft",
+      "hardType": null,
+      "hardSubcategory": null,
+      "softCategory": "table",
+      "softSubcategory": "outdoor-table",
+      "otherSubcategory": null,
+      "compatibility": [],
+      "dimensions": [
+        {
+          "width": 1200,
+          "depth": 600,
+          "height": 400,
+          "unit": "mm"
+        }
+      ],
+      "colorPalette": [],
+      "seatingCapacity": null,
+      "mountType": "floor",
+      "useCaseTags": [
+        "Exterior"
+      ]
+    },
+    "sourceModel": {
+      "path": "scopia/rattanTable/rattanTable.obj",
+      "meshes": null,
+      "materials": null,
+      "textures": null
     }
   }
 ];

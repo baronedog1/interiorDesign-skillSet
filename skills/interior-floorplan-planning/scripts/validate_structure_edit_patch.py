@@ -34,8 +34,11 @@ def main() -> int:
     args = parser.parse_args()
     structure = read(Path(args.structure).resolve())
     patch_set = read(Path(args.patch_set).resolve())
-    if structure.get("schema") != "interior.floorplan-structure.v3":
-        raise ValueError("structure must be interior.floorplan-structure.v3")
+    if structure.get("schema") not in {
+        "interior.floorplan-structure.v3",
+        "interior.floorplan-structure.v4",
+    }:
+        raise ValueError("structure must be interior.floorplan-structure.v3 or v4")
     if patch_set.get("schema") != "interior.structure-edit-patch-set.v1":
         raise ValueError("patch set schema mismatch")
     if patch_set.get("floorplanId") != structure.get("floorplanId"):

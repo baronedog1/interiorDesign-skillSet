@@ -10,10 +10,14 @@ import {
   MOVABLE_GREEN_COMPONENTS,
 } from "../assets/component-library/movable-green/catalog.js";
 import {
+  RUNTIME_GEOMETRY_ADMISSION,
+  RUNTIME_GEOMETRY_REJECTED_ASSET_IDS,
+} from "../assets/component-library/catalog/runtime-geometry-admission.v1.js";
+import {
   componentCollisionPairs,
   componentFootprint,
   connectionOpeningPolygon,
-  placementMatchesSourceTransform,
+  polygonContainedByBoundary,
   polygonsOverlap,
   rotatedRectangle,
 } from "../assets/component-library/shared/placement-geometry.js";
@@ -21,8 +25,10 @@ import {
   inspectTraceShape,
   sameShapeAdjustments,
 } from "./trace_shape_contract.mjs";
+import { auditPlacementHeight } from "./placement_height_guard.mjs";
 
-const COMPONENT_LIBRARY_VERSION = "5.0.0";
+const COMPONENT_LIBRARY_VERSION = "6.1.1";
+const MAX_PROJECT_RUNTIME_ASSET_BYTES = 14 * 1024 * 1024;
 const COMPONENT_LIBRARY_BY_SEMANTIC = {
   "movable-green": MOVABLE_GREEN_COMPONENTS,
   "fixed-purple": FIXED_PURPLE_COMPONENTS,
@@ -43,18 +49,33 @@ const FUNCTIONAL_CLASSES_BY_ASSET = new Map(tagDocument.assets.map((row) => [
   row.assetId,
   new Set(row.supportedFunctionalClasses),
 ]));
+const FUNCTIONAL_CLASS_CANONICAL = new Map([
+  ["area-rug", "rug"], ["floor-rug", "rug"], ["carpet", "rug"],
+]);
+const canonicalFunctionalClass = (value) => {
+  const normalized = String(value || "").trim().toLowerCase();
+  return FUNCTIONAL_CLASS_CANONICAL.get(normalized) || normalized;
+};
+if (RUNTIME_GEOMETRY_ADMISSION.schema !== "interior.component-runtime-geometry-admission.v1") {
+  throw new Error("runtime geometry admission is missing or invalid");
+}
 
 function exactFunctionalClassEvidence(row, definition) {
   return /^[a-z0-9][a-z0-9-]*$/.test(row?.functionalClass || "")
     && row?.atomicObject === true
     && row?.quantity === 1
-    && definition
-    && FUNCTIONAL_CLASSES_BY_ASSET.get(definition.id)?.has(row.functionalClass) === true;
+    && Boolean(definition)
+    && canonicalFunctionalClass(row.assetFunctionalClass) === canonicalFunctionalClass(row.functionalClass)
+    && [...(FUNCTIONAL_CLASSES_BY_ASSET.get(definition.id) || [])]
+      .some((value) => canonicalFunctionalClass(value) === canonicalFunctionalClass(row.functionalClass));
 }
 
 function getComponentDefinition(componentId, semantic) {
   return (COMPONENT_LIBRARY_BY_SEMANTIC[semantic] || [])
-    .find((item) => item.id === componentId) || null;
+    .find((item) => item.id === componentId)
+    || Object.values(COMPONENT_LIBRARY_BY_SEMANTIC).flat()
+      .find((item) => item.id === componentId)
+    || null;
 }
 
 const file = process.argv[2];
@@ -67,19 +88,21 @@ if (!file) {
 const data = JSON.parse(fs.readFileSync(file, "utf8"));
 const structure = structureFile ? JSON.parse(fs.readFileSync(structureFile, "utf8")) : null;
 const issues = [];
-const hasReviewedAuthoredFootprintMismatch = (match) => (
-  match?.matchMethod === "explicit-proportional-source-route"
-  && match?.evidence?.sourceFootprintAuthority === "source-trace-collision"
-  && match?.evidence?.visualFootprintAuthority === "authored-model-preserved"
-  && match?.evidence?.visualFitReview?.status === "accepted"
-  && typeof match?.evidence?.visualFitReview?.reason === "string"
-  && match.evidence.visualFitReview.reason.trim().length >= 12
-  && typeof match?.evidence?.visualFitReview?.userInstructionRef === "string"
-  && match.evidence.visualFitReview.userInstructionRef.trim().length >= 8
-);
-if (data.schema !== "interior.component-layout.v4") issues.push("invalid component layout schema");
+const advisories = [];
+const scaleAdvisories = [];
+if (data.schema !== "interior.component-layout.v5") issues.push("invalid component layout schema");
 if (data.libraryVersion !== COMPONENT_LIBRARY_VERSION) issues.push("invalid component library version");
 const projectRoot = path.dirname(path.resolve(file));
+const tracePath = path.resolve(projectRoot, data.source?.traceSpec || "trace-components.json");
+const traceFile = fs.statSync(tracePath, { throwIfNoEntry: false })?.isFile()
+  ? fs.readFileSync(tracePath)
+  : null;
+const trace = traceFile ? JSON.parse(traceFile) : null;
+if (!traceFile || trace?.schema !== "interior.trace-components.v2") {
+  issues.push("component layout source trace-components is missing or invalid");
+} else if (crypto.createHash("sha256").update(traceFile).digest("hex") !== data.source?.traceComponentsSha256) {
+  issues.push("component layout source trace-components digest differs from the current artifact");
+}
 const materialization = data.source?.assetMaterialization;
 const lockPath = path.join(projectRoot, materialization?.lockFile || "");
 let assetLock = null;
@@ -122,6 +145,9 @@ const traceIds = new Set();
 const sourceObjectCandidateIds = new Set();
 (data.matches || []).forEach((match) => {
   if (!match.sourceTraceId) issues.push("match missing sourceTraceId");
+  if (RUNTIME_GEOMETRY_REJECTED_ASSET_IDS.has(match.componentId)) {
+    issues.push(`${match.sourceTraceId}: component is excluded by runtime geometry audit`);
+  }
   if (!match.sourceObjectCandidateId) {
     issues.push(`match missing sourceObjectCandidateId: ${match.sourceTraceId}`);
   }
@@ -131,29 +157,41 @@ const sourceObjectCandidateIds = new Set();
   sourceObjectCandidateIds.add(match.sourceObjectCandidateId);
   if (traceIds.has(match.sourceTraceId)) issues.push(`duplicate sourceTraceId: ${match.sourceTraceId}`);
   traceIds.add(match.sourceTraceId);
-  const definition = getComponentDefinition(match.componentId, match.semantic);
-  if (!definition) issues.push(`component is not in ${match.semantic}: ${match.componentId}`);
+  const definition = getComponentDefinition(match.componentId, match.libraryPartition || match.semantic);
+  if (!definition) issues.push(`component is not in ${match.libraryPartition || match.semantic}: ${match.componentId}`);
   if (!exactFunctionalClassEvidence(match, definition)) {
     issues.push(`match lacks exact atomic functional-class evidence: ${match.sourceTraceId}`);
   }
   if (match.evidence?.functionalClassExact !== true
-      || match.evidence?.assetFunctionalClassTagDigestSha256 !== tagDocument.tagsDigestSha256) {
+      || match.evidence?.assetFunctionalClassTagDigestSha256 !== tagDocument.tagsDigestSha256
+      || match.evidence?.runtimeGeometryAdmissionDigestSha256
+        !== RUNTIME_GEOMETRY_ADMISSION.admissionDigestSha256) {
     issues.push(`match functional-class tag evidence is stale: ${match.sourceTraceId}`);
   }
-  if (definition && definition.shapeClass !== match.sourceShapeClass) issues.push(`shape mismatch: ${match.sourceTraceId}`);
+  if (definition && match.assetShapeClass !== definition.shapeClass) {
+    issues.push(`asset shape evidence differs from catalog: ${match.sourceTraceId}`);
+  }
   if (definition && match.libraryPartition !== definition.libraryPartition) issues.push(`libraryPartition mismatch: ${match.sourceTraceId}`);
   if (definition && match.libraryDirectory !== definition.libraryDirectory) issues.push(`libraryDirectory mismatch: ${match.sourceTraceId}`);
   if (Object.prototype.hasOwnProperty.call(match, "fallback")) issues.push(`fallback is prohibited: ${match.sourceTraceId}`);
-  if (!["explicit-proportional-source-route", "semantic-shape-proportional-source-score"].includes(match.matchMethod)) {
+  if (![
+    "explicit-proportional-source-route",
+    "same-functional-class-nearest-fit",
+  ].includes(match.matchMethod)) {
     issues.push(`invalid match method: ${match.sourceTraceId}`);
   }
   if (
     match.evidence?.outlineBoundToCollisionFootprint !== true
-    || !["uniform-only", "axis-limited"].includes(match.evidence?.authoredGeometryScalePolicy)
+    || !["uniform-only", "axis-limited", "planar-free"].includes(match.evidence?.authoredGeometryScalePolicy)
     || !/^[a-f0-9]{64}$/.test(match.evidence?.sourceOutlineHash || "")
     || !(Number(match.evidence?.sourceOutlinePointCount) >= 4)
   ) {
     issues.push(`match lacks outline evidence: ${match.sourceTraceId}`);
+  }
+  if (match.evidence?.webEmbeddable !== true
+      || !(Number(match.evidence?.runtimeBytes) > 0)
+      || Number(match.evidence.runtimeBytes) > Number(match.evidence?.maxStandaloneAssetBytes)) {
+    issues.push(`match lacks a delivery-sized reviewed runtime asset: ${match.sourceTraceId}`);
   }
   if (
     ![
@@ -169,12 +207,86 @@ const sourceObjectCandidateIds = new Set();
   ) {
     issues.push(`match lacks proportional source-model evidence: ${match.sourceTraceId}`);
   }
-  if (match.evidence?.authoredGeometryScalePolicy === "uniform-only"
-      && Number(match.evidence?.proportionalScaleSpread) > 0.25
-      && !hasReviewedAuthoredFootprintMismatch(match)) {
-    issues.push(`match would distort authored source geometry: ${match.sourceTraceId}`);
-  }
 });
+
+const assetBudget = data.source?.assetBudget;
+const runtimeBytesByAsset = new Map();
+for (const match of data.matches || []) {
+  const runtimeBytes = Number(match.evidence?.runtimeBytes || 0);
+  const previous = runtimeBytesByAsset.get(match.componentId);
+  if (previous !== undefined && previous !== runtimeBytes) {
+    issues.push(`inconsistent runtime bytes for shared asset: ${match.componentId}`);
+  }
+  runtimeBytesByAsset.set(match.componentId, runtimeBytes);
+}
+const computedProjectRuntimeBytes = [...runtimeBytesByAsset.values()]
+  .reduce((total, bytes) => total + bytes, 0);
+if (data.source?.matchPolicy !== "canonical-functional-class-project-budget-v3") {
+  issues.push("component layout does not use the project-budget matching policy");
+}
+if (assetBudget?.schema !== "interior.project-runtime-asset-budget.v1"
+    || assetBudget.accepted !== true
+    || !Number.isInteger(Number(assetBudget.maxProjectRuntimeBytes))
+    || Number(assetBudget.maxProjectRuntimeBytes) <= 0
+    || Number(assetBudget.maxProjectRuntimeBytes) > MAX_PROJECT_RUNTIME_ASSET_BYTES
+    || Number(assetBudget.maxSingleAssetRuntimeBytes) !== 8 * 1024 * 1024
+    || Number(assetBudget.finalProjectRuntimeBytes) !== computedProjectRuntimeBytes
+    || Number(assetBudget.finalDistinctAssetCount) !== runtimeBytesByAsset.size
+    || computedProjectRuntimeBytes > Number(assetBudget.maxProjectRuntimeBytes)
+    || !Array.isArray(assetBudget.optimizationSteps)) {
+  issues.push("project runtime asset budget evidence is missing, stale, or above the delivery-safe limit");
+}
+if (assetLock?.assets) {
+  const lockedRuntimeBytes = new Map(assetLock.assets.map((asset) => [
+    asset.id,
+    Number(asset.runtimeBytes || asset.bytes || 0),
+  ]));
+  if (lockedRuntimeBytes.size !== runtimeBytesByAsset.size
+      || [...runtimeBytesByAsset].some(([assetId, bytes]) => lockedRuntimeBytes.get(assetId) !== bytes)) {
+    issues.push("project asset lock runtime bytes differ from budget evidence");
+  }
+}
+
+const assemblyIds = new Set();
+const assemblyMemberTraceIds = new Set();
+for (const assembly of data.assemblies || []) {
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(assembly.id || "") || assemblyIds.has(assembly.id)) {
+    issues.push("assembly IDs must be unique kebab-case values");
+    continue;
+  }
+  assemblyIds.add(assembly.id);
+  if (assembly.compositionPolicy !== "source-evidenced-atomic-members") {
+    issues.push(`${assembly.id}: invalid assembly compositionPolicy`);
+  }
+  if (!Array.isArray(assembly.childTraceIds) || assembly.childTraceIds.length < 2
+      || new Set(assembly.childTraceIds).size !== assembly.childTraceIds.length) {
+    issues.push(`${assembly.id}: invalid childTraceIds`);
+    continue;
+  }
+  const expectedPlacementIds = assembly.childTraceIds.map((traceId) => `component-${traceId}`);
+  if (JSON.stringify(assembly.childPlacementIds) !== JSON.stringify(expectedPlacementIds)) {
+    issues.push(`${assembly.id}: childPlacementIds differ from childTraceIds`);
+  }
+  for (const traceId of assembly.childTraceIds) {
+    if (assemblyMemberTraceIds.has(traceId)) issues.push(`${traceId}: belongs to multiple assemblies`);
+    assemblyMemberTraceIds.add(traceId);
+    const match = (data.matches || []).find((row) => row.sourceTraceId === traceId);
+    const placement = (data.placements || []).find((row) => row.sourceTraceId === traceId);
+    if (!match || !placement) issues.push(`${assembly.id}: missing member ${traceId}`);
+    if (match?.assemblyId !== assembly.id || placement?.assemblyId !== assembly.id) {
+      issues.push(`${traceId}: assembly membership differs from ${assembly.id}`);
+    }
+    if (!match?.assemblyRole || match.assemblyRole !== placement?.assemblyRole) {
+      issues.push(`${traceId}: assemblyRole is missing or inconsistent`);
+    }
+    if (placement?.roomId !== assembly.roomId) issues.push(`${traceId}: assembly roomId mismatch`);
+  }
+}
+for (const placement of data.placements || []) {
+  if (placement.assemblyId && !assemblyMemberTraceIds.has(placement.sourceTraceId)) {
+    issues.push(`${placement.sourceTraceId}: undeclared assembly membership`);
+  }
+}
 
 const placementIds = new Set();
 const designAdditionIds = new Set();
@@ -203,15 +315,8 @@ function inspectReviewedAdjustment(placement) {
     && adjustment.userInstructionRef.trim().length >= 8
     && typeof adjustment.reviewedAt === "string"
     && adjustment.reviewedAt.includes("T");
-  const digestPattern = /^[a-f0-9]{64}$/;
-  const validCirculationAuthority = adjustment.authority === "circulation-deterministic-correction"
-    && digestPattern.test(adjustment.sourceAuditDigestSha256 || "")
-    && digestPattern.test(adjustment.adjustmentPlanDigestSha256 || "")
-    && digestPattern.test(adjustment.operationDigestSha256 || "")
-    && typeof adjustment.candidateId === "string"
-    && adjustment.candidateId.length >= 8;
   const valid = adjustment.schema === "interior.reviewed-layout-adjustment.v1"
-    && (validUserAuthority || validCirculationAuthority)
+    && validUserAuthority
     && typeof adjustment.reasonCode === "string"
     && adjustment.reasonCode.trim().length >= 8
     && typeof adjustment.reason === "string"
@@ -222,7 +327,7 @@ function inspectReviewedAdjustment(placement) {
     && samePosition(adjustment.previous?.position, placement.sourcePosition)
     && nearlyEqual(adjustment.previous?.rotationY, placement.sourceRotationY || 0)
     && samePosition(adjustment.active?.position, placement.position)
-    && nearlyEqual(adjustment.active?.rotationY, placement.rotationY || 0)
+    && nearlyEqual(adjustment.active?.rotationY, placement.planFootprintRotationY)
     && (fields.has("position") ? placement.traceLock?.position === false : placement.traceLock?.position === true)
     && (fields.has("rotationY") ? placement.traceLock?.rotation === false : placement.traceLock?.rotation === true);
   return { valid, fields, absent: false };
@@ -230,10 +335,7 @@ function inspectReviewedAdjustment(placement) {
 (data.placements || []).forEach((placement) => {
   if (placementIds.has(placement.id)) issues.push(`duplicate placement id: ${placement.id}`);
   placementIds.add(placement.id);
-  const definition = getComponentDefinition(placement.componentId, placement.semantic);
-  if (!exactFunctionalClassEvidence(placement, definition)) {
-    issues.push(`placement lacks exact atomic functional-class evidence: ${placement.id}`);
-  }
+  const definition = getComponentDefinition(placement.componentId, placement.libraryPartition || placement.semantic);
   if (placement.finishPreset !== undefined
       && !["source-authored", "modern-light-wood"].includes(placement.finishPreset)) {
     issues.push(`unsupported finishPreset: ${placement.id}`);
@@ -255,13 +357,13 @@ function inspectReviewedAdjustment(placement) {
     if (placement.sourceTraceId || placement.sourceObjectCandidateId) {
       issues.push(`user-added component may not impersonate source trace evidence: ${placement.id}`);
     }
-    if (!definition || definition.placementClass !== placement.semantic) {
-      issues.push(`user-added component is not in ${placement.semantic}: ${placement.id}`);
+    if (!definition || definition.placementClass !== (placement.libraryPartition || placement.semantic)) {
+      issues.push(`user-added component is not in ${placement.libraryPartition || placement.semantic}: ${placement.id}`);
       return;
     }
     const scale = Number(placement.uniformScale ?? 1);
     if (!(scale >= definition.uniformScaleRange.min && scale <= definition.uniformScaleRange.max)) {
-      issues.push(`scale outside range: ${placement.id}`);
+      scaleAdvisories.push(`scale outside catalog recommendation: ${placement.id}`);
     }
     if (!(Array.isArray(placement.position)
       && placement.position.length === 2
@@ -284,15 +386,25 @@ function inspectReviewedAdjustment(placement) {
         const ratio = value / base[axis];
         if (!Array.isArray(range) || !Number.isFinite(value) || value <= 0
             || ratio < range[0] - 1e-6 || ratio > range[1] + 1e-6) {
-          issues.push(`axis-limited ${axis} outside reviewed range: ${placement.id}`);
+          if (!Number.isFinite(value) || value <= 0 || !Array.isArray(range)) {
+            issues.push(`invalid axis-limited ${axis}: ${placement.id}`);
+          } else {
+            scaleAdvisories.push(`axis-limited ${axis} outside catalog recommendation: ${placement.id}`);
+          }
         }
       }
-    } else if (placement.visualDimensions) {
-      issues.push(`visualDimensions are forbidden for uniform-only component: ${placement.id}`);
+    } else if (placement.visualDimensions && !["width", "depth", "height"].every(
+      (axis) => Number(placement.visualDimensions?.[axis]) > 0
+    )) {
+      issues.push(`visualDimensions must be positive: ${placement.id}`);
     }
     return;
   }
   const match = (data.matches || []).find((item) => item.sourceTraceId === placement.sourceTraceId);
+  if (!exactFunctionalClassEvidence(placement, definition)
+      && !exactFunctionalClassEvidence(match, definition)) {
+    issues.push(`placement lacks exact atomic functional-class evidence: ${placement.id}`);
+  }
   if (!match || match.componentId !== placement.componentId) issues.push(`placement has no exact match: ${placement.id}`);
   if (
     !placement.sourceObjectCandidateId
@@ -300,16 +412,18 @@ function inspectReviewedAdjustment(placement) {
   ) {
     issues.push(`placement source object evidence differs from match: ${placement.id}`);
   }
-  if (!definition) issues.push(`placement component is not in ${placement.semantic}: ${placement.id}`);
+  if (!definition) issues.push(`placement component is not in ${placement.libraryPartition || placement.semantic}: ${placement.id}`);
   if (definition && placement.libraryPartition !== definition.libraryPartition) issues.push(`placement libraryPartition mismatch: ${placement.id}`);
   if (definition && placement.libraryDirectory !== definition.libraryDirectory) issues.push(`placement libraryDirectory mismatch: ${placement.id}`);
   if (definition) {
     const scale = Number(placement.uniformScale);
-    if (!(scale >= definition.uniformScaleRange.min && scale <= definition.uniformScaleRange.max)) issues.push(`scale outside range: ${placement.id}`);
+    if (!(scale >= definition.uniformScaleRange.min && scale <= definition.uniformScaleRange.max)) {
+      scaleAdvisories.push(`scale outside catalog recommendation: ${placement.id}`);
+    }
     const scaleMode = definition.editorCapabilities?.scaleMode || "uniform-only";
     const visual = placement.visualDimensions;
-    if (visual && scaleMode !== "axis-limited") {
-      issues.push(`visualDimensions are forbidden for uniform-only component: ${placement.id}`);
+    if (visual && !["width", "depth", "height"].every((axis) => Number(visual?.[axis]) > 0)) {
+      issues.push(`visualDimensions must be positive: ${placement.id}`);
     }
     if (scaleMode === "axis-limited") {
       const base = {
@@ -323,7 +437,11 @@ function inspectReviewedAdjustment(placement) {
         const ratio = value / base[axis];
         if (!Number.isFinite(value) || value <= 0 || !Array.isArray(range)
             || ratio < range[0] - 1e-6 || ratio > range[1] + 1e-6) {
-          issues.push(`axis-limited ${axis} outside reviewed range: ${placement.id}`);
+          if (!Number.isFinite(value) || value <= 0 || !Array.isArray(range)) {
+            issues.push(`invalid axis-limited ${axis}: ${placement.id}`);
+          } else {
+            scaleAdvisories.push(`axis-limited ${axis} outside catalog recommendation: ${placement.id}`);
+          }
         }
       }
     }
@@ -378,13 +496,13 @@ function inspectReviewedAdjustment(placement) {
     && sourceDimensions
     && nearlyEqual(targetDimensions.width, sourceDimensions.width)
     && nearlyEqual(targetDimensions.depth, sourceDimensions.depth);
-  const exactRotation = nearlyEqual(sourceRotationY, placement.rotationY || 0);
+  const exactRotation = nearlyEqual(sourceRotationY, placement.planFootprintRotationY);
   if (!exactPosition && !(adjustmentAudit.valid && adjustmentAudit.fields.has("position"))) {
     issues.push(`placement shifted away from source trace without review: ${placement.id}`);
   }
   if (!exactDimensions) issues.push(`placement dimensions differ from source trace: ${placement.id}`);
   if (!exactRotation && !(adjustmentAudit.valid && adjustmentAudit.fields.has("rotationY"))) {
-    issues.push(`placement rotation differs from source trace without review: ${placement.id}`);
+    issues.push(`placement plan footprint rotation differs from source trace without review: ${placement.id}`);
   }
   if (exactPosition && exactDimensions && exactRotation) traceExactPlacementCount += 1;
   try {
@@ -409,15 +527,17 @@ function inspectReviewedAdjustment(placement) {
   }
   if (match?.evidence) {
     if (!match.evidence.targetFootprintExact) issues.push(`match lacks exact source-footprint evidence: ${placement.id}`);
-    if (!["uniform-only", "axis-limited"].includes(match.evidence.authoredGeometryScalePolicy)) {
+    if (!["uniform-only", "axis-limited", "planar-free"].includes(match.evidence.authoredGeometryScalePolicy)) {
       issues.push(`match lacks authored-geometry scale policy: ${placement.id}`);
     }
     if (!nearlyEqual(match.evidence.targetWidth, sourceDimensions?.width)
       || !nearlyEqual(match.evidence.targetDepth, sourceDimensions?.depth)) {
       issues.push(`match target dimensions differ from source trace: ${placement.id}`);
     }
-    const expectedWidthScale = Number(sourceDimensions?.width) / Number(definition?.defaultDimensions?.width);
-    const expectedDepthScale = Number(sourceDimensions?.depth) / Number(definition?.defaultDimensions?.depth);
+    const prototypeWidth = Number(match.evidence?.traceReshape?.prototypeWidth);
+    const prototypeDepth = Number(match.evidence?.traceReshape?.prototypeDepth);
+    const expectedWidthScale = Number(sourceDimensions?.width) / prototypeWidth;
+    const expectedDepthScale = Number(sourceDimensions?.depth) / prototypeDepth;
     const expectedSpread = Math.abs(expectedWidthScale - expectedDepthScale)
       / Math.max(expectedWidthScale, expectedDepthScale);
     if (
@@ -434,11 +554,6 @@ function inspectReviewedAdjustment(placement) {
     if (!nearlyEqual(match.evidence?.proportionalScaleSpread, expectedSpread)) {
       issues.push(`proportional scale spread differs from source and authored model: ${placement.id}`);
     }
-    if (expectedSpread > 0.25
-        && match.evidence?.authoredGeometryScalePolicy === "uniform-only"
-        && !hasReviewedAuthoredFootprintMismatch(match)) {
-      issues.push(`large source/authored footprint mismatch lacks review evidence: ${placement.id}`);
-    }
   }
 });
 const declaredObjectIds = data.source?.sourceObjectCandidateIds || [];
@@ -448,6 +563,23 @@ if (
   || declaredObjectIds.some((candidateId) => !sourceObjectCandidateIds.has(candidateId))
 ) {
   issues.push("source object candidate registry differs from matches");
+}
+if (trace) {
+  const canonicalTraceRows = (trace.objects || []).map((row) => ({
+    traceId: row.traceId,
+    sourceObjectCandidateId: row.sourceObjectCandidateId,
+    semantic: row.semantic,
+    functionalClass: row.functionalClass,
+  })).sort((left, right) => left.traceId.localeCompare(right.traceId));
+  const canonicalMatchRows = (data.matches || []).map((row) => ({
+    traceId: row.sourceTraceId,
+    sourceObjectCandidateId: row.sourceObjectCandidateId,
+    semantic: row.semantic,
+    functionalClass: row.functionalClass,
+  })).sort((left, right) => left.traceId.localeCompare(right.traceId));
+  if (JSON.stringify(canonicalTraceRows) !== JSON.stringify(canonicalMatchRows)) {
+    issues.push("component matches do not exactly represent the current trace-components artifact");
+  }
 }
 removedTraceIds.forEach((traceId) => {
   if (!(data.matches || []).some((match) => match.sourceTraceId === traceId)) {
@@ -505,32 +637,8 @@ const collisionPairs = rawCollisionPairs.filter(
   (collision) => !allowedContactKeys.has(pairKey(collision.firstId, collision.secondId)),
 );
 collisionPairs.forEach((collision) => {
-  issues.push(`component collision: ${collision.firstId} <-> ${collision.secondId}`);
+  advisories.push(`source-layout contact risk: ${collision.firstId} <-> ${collision.secondId}`);
 });
-
-function pointOnSegment(point, a, b, tolerance = 0.0001) {
-  const cross = (point[1] - a[1]) * (b[0] - a[0]) - (point[0] - a[0]) * (b[1] - a[1]);
-  if (Math.abs(cross) > tolerance) return false;
-  const dot = (point[0] - a[0]) * (b[0] - a[0]) + (point[1] - a[1]) * (b[1] - a[1]);
-  if (dot < -tolerance) return false;
-  const squared = (b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2;
-  return dot <= squared + tolerance;
-}
-
-function pointInPolygon(point, polygon) {
-  for (let index = 0; index < polygon.length; index += 1) {
-    if (pointOnSegment(point, polygon[index], polygon[(index + 1) % polygon.length])) return true;
-  }
-  let inside = false;
-  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-    const [xi, zi] = polygon[i];
-    const [xj, zj] = polygon[j];
-    const intersects = ((zi > point[1]) !== (zj > point[1]))
-      && point[0] < (xj - xi) * (point[1] - zi) / (zj - zi || 0.000001) + xi;
-    if (intersects) inside = !inside;
-  }
-  return inside;
-}
 
 function wallFootprint(wall) {
   const dx = wall.end[0] - wall.start[0];
@@ -545,11 +653,11 @@ function wallFootprint(wall) {
 
 const relationHintIssues = [];
 const relationHints = data.relationHints;
-if (relationHints?.schema !== "interior.layout-relation-hints.v2") {
+if (relationHints?.schema !== "interior.layout-relation-hints.v3") {
   relationHintIssues.push("missing or invalid relation hint contract");
 }
 const allowedHintKeys = new Set([
-  "schema", "directionalAxes", "facing", "wallAttachment", "allowedContacts", "spaceDividerMarkers",
+  "schema", "directionalAxes", "worldOrientations", "facing", "wallAttachment", "allowedContacts", "spaceDividerMarkers",
 ]);
 if (relationHints && Object.keys(relationHints).some((key) => !allowedHintKeys.has(key))) {
   relationHintIssues.push("relation hints contain legacy or calculated fields");
@@ -562,11 +670,37 @@ for (const axis of relationHints?.directionalAxes || []) {
       || !assetIds.has(axis.assetId)
       || !["front", "back", "headboard"].includes(axis.role)
       || !["+X", "-X", "+Z", "-Z"].includes(axis.localAxis)
-      || axis.evidence !== "browser-reviewed-authored-model") {
+      || axis.evidence !== "historical-browser-reviewed-consensus") {
     relationHintIssues.push(`invalid directional axis: ${key}`);
     continue;
   }
   axisRecords.set(key, axis.localAxis);
+}
+
+const orientationIds = new Set();
+for (const orientation of relationHints?.worldOrientations || []) {
+  const placement = placementById.get(orientation.sourceId);
+  const vectors = orientation.vectors || {};
+  const vectorsValid = Object.values(vectors).every((vector) => (
+    Array.isArray(vector)
+    && vector.length === 2
+    && vector.every(Number.isFinite)
+    && Math.abs(Math.hypot(...vector) - 1) <= 0.00001
+  ));
+  if (!placement
+      || orientationIds.has(orientation.sourceId)
+      || !Number.isFinite(Number(orientation.yawRadians))
+      || !["historical-browser-reviewed-consensus", "source-plan-yaw-only"].includes(orientation.evidence)
+      || !vectorsValid
+      || !nearlyEqual(orientation.yawRadians, placement.rotationY || 0)
+      || JSON.stringify(vectors) !== JSON.stringify(placement.worldOrientation?.vectors || {})) {
+    relationHintIssues.push(`invalid world orientation: ${orientation.sourceId}`);
+    continue;
+  }
+  orientationIds.add(orientation.sourceId);
+}
+if (orientationIds.size !== placementById.size) {
+  relationHintIssues.push("world orientations must cover every placement exactly once");
 }
 const dividerIds = new Set((structure?.semanticDividers || []).map((divider) => divider.id));
 const dividerMarkerIds = new Set();
@@ -612,41 +746,35 @@ issues.push(...relationHintIssues);
 
 const structurePlacementIssues = [];
 const heightGuardIssues = [];
+const heightGuardAudit = [];
 if (structure) {
-  const wallHeight = Math.min(...(structure.walls || [])
-    .filter((wall) => wall.enabled !== false && Number(wall.height) > 0)
-    .map((wall) => Number(wall.height)));
   (data.placements || []).forEach((placement) => {
     const definition = getComponentDefinition(placement.componentId, placement.semantic);
-    const uniformScale = Number(placement.uniformScale ?? 1);
-    const visualHeight = Number(
-      placement.visualDimensions?.height
-      ?? definition?.defaultDimensions?.height * uniformScale,
-    );
-    const elevation = Number(placement.elevation ?? definition?.defaultElevation ?? 0);
-    if (["floor", "wall", "countertop"].includes(definition?.mountType)
-        && Number.isFinite(wallHeight)
-        && (!Number.isFinite(visualHeight) || !Number.isFinite(elevation)
-          || visualHeight + elevation > wallHeight - 0.05 + 1e-6)) {
+    const heightAudit = auditPlacementHeight(structure, placement, definition);
+    if (heightAudit) heightGuardAudit.push(heightAudit);
+    if (heightAudit && !heightAudit.ok) {
       heightGuardIssues.push(
-        `${placement.id}: top ${(visualHeight + elevation).toFixed(3)}m exceeds ${(wallHeight - 0.05).toFixed(3)}m guard`,
+        `${placement.id}: top ${heightAudit.top.toFixed(3)}m exceeds ${heightAudit.limit.toFixed(3)}m guard (${heightAudit.source})`,
       );
     }
+    const elevation = Number(placement.elevation ?? definition?.defaultElevation ?? 0);
     if (definition?.mountType === "wall" && !(elevation > 0)) {
       heightGuardIssues.push(`${placement.id}: wall cabinet requires positive elevation`);
     }
     const footprint = componentFootprint(placement, definition);
     if (!footprint.length) return;
-    if (placementMatchesSourceTransform(placement)) return;
     const hostWallIds = new Set(placement.hostWallIds || []);
     const hostWalls = (structure.walls || []).filter(
       (wall) => wall.enabled !== false && hostWallIds.has(wall.id),
     );
     const attachedToHost = placement.attachmentMode === "flush-to-host-wall"
       && hostWalls.some((wall) => polygonsOverlap(footprint, wallFootprint(wall)));
-    const centerInside = pointInPolygon(placement.position, structure.floorBoundary || []);
-    if (!centerInside && !attachedToHost) {
-      structurePlacementIssues.push(`${placement.id}: outside floor boundary`);
+    const footprintInside = polygonContainedByBoundary(
+      footprint,
+      structure.floorBoundary || [],
+    );
+    if (!footprintInside) {
+      structurePlacementIssues.push(`${placement.id}: footprint leaves floor boundary`);
       return;
     }
     if (placement.attachmentMode === "flush-to-host-wall" && !attachedToHost) {
@@ -670,8 +798,15 @@ if (structure) {
     }
   });
 }
-issues.push(...structurePlacementIssues);
 issues.push(...heightGuardIssues);
+advisories.push(...scaleAdvisories);
+const outsideFloorFootprintIssues = structurePlacementIssues.filter(
+  (item) => item.includes("footprint leaves floor boundary"),
+);
+issues.push(...outsideFloorFootprintIssues);
+advisories.push(...structurePlacementIssues
+  .filter((item) => !outsideFloorFootprintIssues.includes(item))
+  .map((item) => `source-layout structure risk: ${item}`));
 
 const result = {
   ok: issues.length === 0,
@@ -689,11 +824,19 @@ const result = {
   rawCollisionPairs,
   allowedContacts,
   collisionPairs,
+  scaleAdvisories,
   relationHintIssues,
   relationHintSchema: relationHints?.schema || null,
   spaceDividerMarkerCount: dividerMarkerIds.size,
   structurePlacementIssues,
+  outsideFloorFootprintIssues,
   heightGuardIssues,
+  heightGuardAudit,
+  projectRuntimeAssetBytes: computedProjectRuntimeBytes,
+  projectRuntimeAssetBudgetBytes: Number(assetBudget?.maxProjectRuntimeBytes || 0),
+  projectDistinctAssetCount: runtimeBytesByAsset.size,
+  projectBudgetOptimizationSteps: assetBudget?.optimizationSteps?.length || 0,
+  advisories,
   structureChecked: Boolean(structure),
   fallbackCount: (data.matches || []).filter((match) => Object.prototype.hasOwnProperty.call(match, "fallback")).length,
   issues,

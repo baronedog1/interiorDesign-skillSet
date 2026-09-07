@@ -45,7 +45,7 @@ function pointOnSegment(point, first, second, tolerance = 0.000001) {
   return dot <= squaredLength + tolerance;
 }
 
-function pointInPolygon(point, polygon, includeBoundary = false) {
+export function pointInPolygon(point, polygon, includeBoundary = false) {
   for (let index = 0; index < polygon.length; index += 1) {
     if (pointOnSegment(point, polygon[index], polygon[(index + 1) % polygon.length])) {
       return includeBoundary;
@@ -61,6 +61,45 @@ function pointInPolygon(point, polygon, includeBoundary = false) {
     if (intersects) inside = !inside;
   }
   return inside;
+}
+
+export function polygonContainedByBoundary(
+  polygon,
+  boundary,
+  { edgeSampleMeters = 0.02, boundaryToleranceMeters = 0.012 } = {},
+) {
+  if (!Array.isArray(polygon) || polygon.length < 3
+      || !Array.isArray(boundary) || boundary.length < 3) return false;
+  const inside = (point) => {
+    if (pointInPolygon(point, boundary, true)) return true;
+    return boundary.some((start, index) => {
+      const end = boundary[(index + 1) % boundary.length];
+      const dx = end[0] - start[0];
+      const dz = end[1] - start[1];
+      const lengthSquared = dx * dx + dz * dz;
+      if (lengthSquared <= Number.EPSILON) return false;
+      const parameter = Math.max(0, Math.min(1,
+        ((point[0] - start[0]) * dx + (point[1] - start[1]) * dz) / lengthSquared));
+      const nearest = [start[0] + dx * parameter, start[1] + dz * parameter];
+      return Math.hypot(point[0] - nearest[0], point[1] - nearest[1])
+        <= boundaryToleranceMeters;
+    });
+  };
+  for (let index = 0; index < polygon.length; index += 1) {
+    const start = polygon[index];
+    const end = polygon[(index + 1) % polygon.length];
+    const steps = Math.max(1, Math.ceil(
+      Math.hypot(end[0] - start[0], end[1] - start[1]) / edgeSampleMeters,
+    ));
+    for (let step = 0; step <= steps; step += 1) {
+      const ratio = step / steps;
+      if (!inside([
+        start[0] + (end[0] - start[0]) * ratio,
+        start[1] + (end[1] - start[1]) * ratio,
+      ])) return false;
+    }
+  }
+  return true;
 }
 
 function orientation(first, second, third, tolerance) {
@@ -168,7 +207,9 @@ export function transformedTraceOutline(placement) {
     || ![width, depth, ...center].every(Number.isFinite)) {
     return [];
   }
-  const rotation = Number(placement.rotationY || 0);
+  // Asset calibration may rotate the visual model. Plan checks stay bound to
+  // the reviewed source footprint and its independent plan rotation.
+  const rotation = Number(placement.planFootprintRotationY ?? placement.rotationY ?? 0);
   const cos = Math.cos(rotation);
   const sin = Math.sin(rotation);
   return outline.map(([normalizedX, normalizedZ]) => {
@@ -182,9 +223,10 @@ export function transformedTraceOutline(placement) {
 }
 
 export function componentFootprint(placement, definition) {
-  if (!placement || !definition) return [];
+  if (!placement) return [];
   const traceOutline = transformedTraceOutline(placement);
   if (traceOutline.length) return traceOutline;
+  if (!definition) return [];
   const scale = Number(placement.uniformScale ?? 1);
   const dimensions = definition.defaultDimensions;
   if (!dimensions || !Number.isFinite(scale) || scale <= 0) return [];
@@ -195,7 +237,7 @@ export function componentFootprint(placement, definition) {
     placement.position,
     width,
     depth,
-    Number(placement.rotationY || 0),
+    Number(placement.planFootprintRotationY ?? placement.rotationY ?? 0),
   );
 }
 

@@ -1,0 +1,17 @@
+{
+  "schema": "interior.camera-backend-template.v1",
+  "backend": "html-threejs",
+  "planPolicy": "solve-once-from-current-html",
+  "scene": {
+    "mode": "generate",
+    "runtime": "python",
+    "script": "scripts/generate_vtk_camera_scene.py",
+    "arguments": ["--html", "{html}", "--structure", "{structure}", "--out-dir", "{sceneDir}", "--node-bin", "{nodeBin}", "--chrome-bin", "{chromeBin}"]
+  },
+  "capture": {
+    "runtime": "node",
+    "script": "scripts/capture_frozen_html_plan.mjs",
+    "arguments": ["--html", "{html}", "--plan", "{plan}", "--out-dir", "{outDir}", "--viewport", "{viewport}"]
+  },
+  "requiredInputs": ["html", "structure"]
+}

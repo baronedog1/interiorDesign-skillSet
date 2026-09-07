@@ -1,0 +1,16 @@
+{
+  "schema": "interior.camera-backend-template.v1",
+  "backend": "cad-step",
+  "planPolicy": "consume-frozen-v3",
+  "planAdapter": {
+    "runtime": "python",
+    "script": "scripts/export_backend_camera_plan.py",
+    "arguments": ["--plan", "{plan}", "--model-manifest", "{modelManifest}", "--schema", "v8", "--output", "{adaptedPlan}"]
+  },
+  "capture": {
+    "runtime": "python",
+    "script": "{cadSkill}/scripts/capture_cad_views.py",
+    "arguments": ["--manifest", "{modelManifest}", "--camera-plan", "{adaptedPlan}", "--out", "{outDir}"]
+  },
+  "requiredInputs": ["nativeModel", "modelManifest", "cameraPlan", "structure"]
+}

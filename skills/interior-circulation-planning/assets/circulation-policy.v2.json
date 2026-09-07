@@ -72,24 +72,7 @@
     "maxCulpritSetSize": 4,
     "pathCorridorMarginMeters": 0.75
   },
-  "adjustment": {
-    "translationStepMeters": 0.1,
-    "maxTranslationMeters": 1.5,
-    "maxCandidatesPerComponent": 1200,
-    "allowQuarterTurnOnlyWhenDeclared": true,
-    "candidateOrder": [
-      "route-clearance-translation",
-      "relationship-wall-attachment",
-      "relationship-facing"
-    ],
-    "selection": "lowest-priority-number-then-minimum-movement-then-minimum-rotation-then-stable-id",
-    "applyOneCandidatePerIteration": true,
-    "requireStrictFailureVectorImprovementAfterApply": true,
-    "deterministicReversibleCorrectionRequiresUserConfirmation": false,
-    "repeatConfirmationForbidden": true,
-    "consolidateTrueAmbiguitiesIntoOneQuestion": true
-  },
   "forbiddenRoomSizeGates": true,
   "sourceConstraintDisposition": "warn-and-continue",
-  "layoutRegressionDisposition": "adjust-and-reaudit"
+  "layoutRegressionDisposition": "advisory-and-continue"
 }

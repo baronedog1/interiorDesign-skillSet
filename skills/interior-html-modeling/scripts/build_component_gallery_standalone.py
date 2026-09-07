@@ -67,6 +67,13 @@ movable_catalog = catalog_module("movable-green", movable_assets, "MOVABLE_GREEN
 fixed_catalog = catalog_module("fixed-purple", fixed_assets, "FIXED_PURPLE_COMPONENTS")
 catalog = (library / "index.js").read_text(encoding="utf-8")
 runtime = (library / "component-library.js").read_text(encoding="utf-8")
+runtime_geometry_admission = (
+    library / "catalog/runtime-geometry-admission.v1.js"
+).read_text(encoding="utf-8")
+runtime = runtime.replace(
+    '"./catalog/runtime-geometry-admission.v1.js"',
+    '"@interior/runtime-geometry-admission"',
+)
 three = (root / "vendor/three.module.js").read_text(encoding="utf-8")
 controls = (root / "vendor/controls/OrbitControls.js").read_text(encoding="utf-8")
 gltf_loader = (root / "vendor/loaders/GLTFLoader.js").read_text(encoding="utf-8").replace(
@@ -82,6 +89,7 @@ imports = json.dumps({"imports": {
     "@interior/movable-green-catalog": "data:text/javascript;charset=utf-8," + quote(movable_catalog, safe=""),
     "@interior/fixed-purple-catalog": "data:text/javascript;charset=utf-8," + quote(fixed_catalog, safe=""),
     "@interior/component-catalog": "data:text/javascript;charset=utf-8," + quote(catalog, safe=""),
+    "@interior/runtime-geometry-admission": "data:text/javascript;charset=utf-8," + quote(runtime_geometry_admission, safe=""),
     "@interior/component-library": "data:text/javascript;charset=utf-8," + quote(runtime, safe=""),
 }}, separators=(",", ":"))
 html = html.replace('<link rel="stylesheet" href="./styles.css">', f"<style>{css}</style>")

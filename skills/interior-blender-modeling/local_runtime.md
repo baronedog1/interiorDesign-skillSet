@@ -1,13 +1,17 @@
-# 本地运行
+# Ubuntu 本地运行
 
-正式命令读取 `BLENDER_BIN` 与 `INTERIOR_BLENDER_ASSET_STORE`；下文 `/home/agentops/...` 只作 Ubuntu 示例。找不到已登记 runtime/asset manifest 时停止，不得调用未验系统 Blender。
+所有 Blender 调用必须经过 `/home/agentops/agent-runtime/bin/blender` 渲染盒入口。
 
 ```bash
-/home/agentops/agent-runtime/bin/blender --version
-/home/agentops/agent-runtime/bin/blender --background --factory-startup --python-exit-code 1 --python scripts/build_floorplan_scene.py -- --help
-/home/agentops/agent-runtime/bin/blender-mcp-server-0.1.3/bin/python scripts/test_mcp_connection.py --help
-python3 scripts/apply_circulation_adjustment.py --plan circulation-adjustment-plan.json --existing native-layout-overrides.json --out native-layout-overrides.next.json
+python3 scripts/acquire_blenderkit_assets.py --request assets/blender-component-library/precision-asset-acquisition.v1.json --out-root /home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2 --manifest assets/blender-component-library/acquisition-manifest.v1.json --client-bin <reviewed-blenderkit-client>
+
+python3 scripts/acquire_polyhaven_materials.py --request assets/blender-material-library/material-acquisition.v1.json --out-root /home/agentops/agent-runtime/shared-assets/blender-interior-research/materials-v1 --manifest assets/blender-material-library/acquisition-manifest.v1.json
+
+python3 scripts/init_blender_model_project.py --model current-model.json --structure structure-data.json --blender-catalog assets/blender-component-library/catalog.json --material-catalog assets/blender-material-library/catalog.json --style-preset assets/blender-style-presets/warm-modern-neutral.json --template-options assets/blender-template/backend-options.json --out project
+
+/home/agentops/agent-runtime/bin/blender --background --factory-startup --python-exit-code 1 --python scripts/build_floorplan_scene.py -- --model current-model.json --structure structure-data.json --blender-catalog assets/blender-component-library/catalog.json --material-catalog assets/blender-material-library/catalog.json --style-preset assets/blender-style-presets/warm-modern-neutral.json --backend-options assets/blender-template/backend-options.json --out-blend model/current.blend --out-glb model/current.glb --out-report reports/build-report.json
+
+python3 scripts/capture_blender_batch.py --blend model/current.blend --camera-plan camera-plan.json --adapter scripts/capture_blender_views.py --out-dir camera --viewport 960x600
 ```
 
-正式构建使用 Blender 后台 Python；有 override 时向 `build_floorplan_scene.py` 传
-`--layout-overrides native-layout-overrides.json`。MCP 只做连接、reopen、场景检查和有界编辑。
+资产获取只允许显式审过的免费 ID，受限资产立即停止，不复制登录态。设备盒默认 `MemoryHigh=6G/MemoryMax=7500M/MemorySwapMax=1G`。禁止为完成截图提高限额；批处理通过“单图进程＋目标房间剪枝”释放内存并保留 Eevee 材质渲染。

@@ -1,10 +1,12 @@
 {
-  "schema": "interior.blender-backend-options.v1",
+  "schema": "interior.blender-backend-options.v5",
   "backend": "blender",
   "ceilings": {"enabled": true, "visibleByDefault": false, "defaultStyle": "flat"},
   "windows": {"defaultStyle": "frameless-glass", "allowedStyles": ["frameless-glass", "fixed-pane", "casement", "sliding"], "overrides": {}},
   "balconies": {"defaultEnclosureMode": "source", "allowedModes": ["source", "open-railing", "closed-glazing"], "railingHeightMeters": 1.1},
-  "structureEditing": {"wallEndpoints": true, "constraint": "collinear-extension", "patchSchema": "interior.structure-edit-patch.v1"},
+  "sourceModel": {"mode": "html-facts-only", "structureAuthority": "current-model.json", "furnitureTransformAuthority": "current-model.json", "assetAuthority": "assets/blender-component-library/catalog.json", "materialAuthority":"assets/blender-material-library/catalog.json"},
+  "structureEditing": {"wallEndpoints": true, "constraint": "current-html-revision-only"},
   "collision": {"mode": "continuous-first-contact-stop", "maxSweepStepMeters": 0.02},
-  "componentAppearance": {"default": "white-model", "alternate": "source-color"}
+  "componentAppearance": {"default": "source-color", "alternate": "white-model", "geometry": "blender-native-exact-asset", "scalePolicy": "exact-dimensions"},
+  "nativePreview": {"engine": "BLENDER_EEVEE_NEXT", "viewport": "960x600", "samples": 16, "execution": "isolated-pruned-scene-per-shot", "foreignFurniturePolicy": "remove-before-render"}
 }

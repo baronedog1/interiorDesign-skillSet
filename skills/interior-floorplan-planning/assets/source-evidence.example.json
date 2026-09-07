@@ -1,5 +1,5 @@
 {
-  "schema": "interior.floorplan-source-evidence.v4",
+  "schema": "interior.floorplan-source-evidence.v5",
   "sourceSha256": "<source image sha256>",
   "sourceNormalization": {
     "method": "grayscale-local-contrast-union-v1",
@@ -50,6 +50,7 @@
     {"id": "candidate-door-bedroom", "segment": [[200, 140], [200, 190]], "discovery": "deterministic-source-pixel-trace", "symbolEvidence": {"signature": "single-leaf-swing", "primitiveTypes": ["wall-gap", "swing-arc"]}},
     {"id": "candidate-window-living", "segment": [[65, 25], [145, 25]], "discovery": "deterministic-source-pixel-trace", "symbolEvidence": {"signature": "window-frame", "primitiveTypes": ["host-wall", "parallel-frame-lines"], "panelMaterial": "glass"}}
   ],
+  "boundaryCandidates": [],
   "spaceLabelCandidates": [
     {"id": "label-living", "text": "客厅", "point": [105, 105], "discovery": "source-plan-text-position-agent-confirmed"},
     {"id": "label-bedroom", "text": "卧室", "point": [295, 105], "discovery": "source-plan-text-position-agent-confirmed"},

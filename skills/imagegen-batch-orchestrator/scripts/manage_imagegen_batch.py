@@ -213,6 +213,7 @@ def cmd_init(args: argparse.Namespace) -> dict[str, Any]:
                 "jobId": row["jobId"],
                 "batchIndex": batch_index[row["jobId"]],
                 "status": "queued",
+                "queuedAt": created,
                 "attempts": 0,
                 "maxAttempts": row["maxAttempts"],
                 "dependencies": row["dependencies"],
@@ -242,32 +243,27 @@ def cmd_ready(args: argparse.Namespace) -> dict[str, Any]:
         states = job_states(run_dir, plan)
         running = sum(state["status"] == "running" for state in states.values())
         available = max(0, plan["maxConcurrency"] - running)
-        ready_rows: list[dict[str, Any]] = []
-        selected_batch = None
-        for index, batch in enumerate(plan["batches"]):
-            candidates = []
-            for job_id in batch["jobIds"]:
-                state = states[job_id]
-                can_retry = state["status"] == "failed" and state["retryable"] and state["attempts"] < state["maxAttempts"]
-                if state["status"] != "queued" and not can_retry:
-                    continue
-                if not state.get("requestPath") or not state.get("requestSha256"):
-                    continue
-                if all(states[dependency]["status"] == "succeeded" for dependency in state["dependencies"]):
-                    candidates.append(state)
-            if candidates:
-                selected_batch = index
-                ready_rows = candidates[:available]
-                break
-            unresolved = [states[job_id] for job_id in batch["jobIds"] if states[job_id]["status"] != "succeeded"]
-            if unresolved:
-                break
+        candidates = []
+        for state in states.values():
+            can_retry = (
+                state["status"] == "failed"
+                and state["retryable"]
+                and state["attempts"] < state["maxAttempts"]
+            )
+            if state["status"] != "queued" and not can_retry:
+                continue
+            if not state.get("requestPath") or not state.get("requestSha256"):
+                continue
+            if all(states[dependency]["status"] == "succeeded" for dependency in state["dependencies"]):
+                candidates.append(state)
+        candidates.sort(key=lambda state: (state["batchIndex"], state["jobId"]))
+        ready_rows = candidates[:available]
         return {
             "schema": "imagegen.ready-jobs.v1",
             "runDir": str(run_dir),
             "maxConcurrency": plan["maxConcurrency"],
             "running": running,
-            "batchIndex": selected_batch,
+            "batchIndexes": sorted({state["batchIndex"] for state in ready_rows}),
             "jobs": [{
                 "jobId": state["jobId"],
                 "requestPath": state["requestPath"],
@@ -343,8 +339,23 @@ def cmd_succeed(args: argparse.Namespace) -> dict[str, Any]:
             if state.get("output", {}).get("sha256") == digest_file(source):
                 return state
             raise ValueError(f"{args.job_id}: succeeded output cannot be replaced")
-        if state["status"] != "running":
-            raise ValueError(f"{args.job_id}: job is not running")
+        late_result = bool(args.late_result)
+        if late_result:
+            if (
+                state["status"] != "failed"
+                or not state.get("retryable")
+                or state.get("output") is not None
+                or not args.invocation_id
+            ):
+                raise ValueError(
+                    f"{args.job_id}: late result requires a retryable failed job, "
+                    "no accepted output and an invocation ID"
+                )
+            completion_time = state["finishedAt"]
+        else:
+            if state["status"] != "running":
+                raise ValueError(f"{args.job_id}: job is not running")
+            completion_time = now()
         target = (run_dir / "outputs" / state["outputFile"]).resolve()
         outputs_root = (run_dir / "outputs").resolve()
         if outputs_root not in target.parents:
@@ -355,7 +366,7 @@ def cmd_succeed(args: argparse.Namespace) -> dict[str, Any]:
         os.replace(temp, target)
         state.update({
             "status": "succeeded",
-            "finishedAt": now(),
+            "finishedAt": completion_time,
             "lastError": None,
             "retryable": False,
             "invocationId": args.invocation_id,
@@ -363,7 +374,12 @@ def cmd_succeed(args: argparse.Namespace) -> dict[str, Any]:
             "output": {"path": str(target), "sha256": digest_file(target), "bytes": target.stat().st_size},
         })
         atomic_json(job_path(run_dir, args.job_id), state)
-        event(run_dir, "job-succeeded", args.job_id, outputSha256=state["output"]["sha256"])
+        event(
+            run_dir,
+            "job-late-result-adopted" if late_result else "job-succeeded",
+            args.job_id,
+            outputSha256=state["output"]["sha256"],
+        )
         return state
 
 
@@ -452,6 +468,10 @@ def cmd_finalize(args: argparse.Namespace) -> dict[str, Any]:
             for right in intervals[index + 1:]:
                 if max(left[0], right[0]) < min(left[1], right[1]):
                     parallel_pairs.append([left[2], right[2]])
+        earliest_start = min(row[0] for row in intervals)
+        latest_finish = max(row[1] for row in intervals)
+        wall_clock_seconds = (latest_finish - earliest_start).total_seconds()
+        serial_seconds = sum((row[1] - row[0]).total_seconds() for row in intervals)
         receipt = {
             "schema": RECEIPT_SCHEMA,
             "planId": plan["planId"],
@@ -461,6 +481,11 @@ def cmd_finalize(args: argparse.Namespace) -> dict[str, Any]:
             "maxConcurrency": plan["maxConcurrency"],
             "parallelExecutionObserved": bool(parallel_pairs),
             "overlappingJobPairs": parallel_pairs,
+            "timing": {
+                "wallClockSeconds": round(wall_clock_seconds, 3),
+                "serialGenerationSeconds": round(serial_seconds, 3),
+                "observedSpeedup": round(serial_seconds / wall_clock_seconds, 3) if wall_clock_seconds else 1.0,
+            },
             "jobs": [{
                 "jobId": job_id,
                 "batchIndex": state["batchIndex"],
@@ -471,6 +496,8 @@ def cmd_finalize(args: argparse.Namespace) -> dict[str, Any]:
                 "providerRequestId": state.get("providerRequestId"),
                 "startedAt": state["startedAt"],
                 "finishedAt": state["finishedAt"],
+                "queueSeconds": round((parse_time(state["startedAt"]) - parse_time(state["queuedAt"])).total_seconds(), 3),
+                "generationSeconds": round((parse_time(state["finishedAt"]) - parse_time(state["startedAt"])).total_seconds(), 3),
                 "output": state["output"],
             } for job_id, state in sorted(states.items())],
         }
@@ -501,6 +528,14 @@ def parser() -> argparse.ArgumentParser:
     succeed.add_argument("image")
     succeed.add_argument("--invocation-id")
     succeed.add_argument("--provider-request-id")
+    succeed.add_argument(
+        "--late-result",
+        action="store_true",
+        help=(
+            "accept an already returned image from the same failed attempt without "
+            "starting or charging a replacement attempt"
+        ),
+    )
     fail = commands.add_parser("fail")
     fail.add_argument("run_dir")
     fail.add_argument("job_id")

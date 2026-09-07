@@ -34,7 +34,16 @@ OPENING_CLASSIFICATIONS = ALL_CONNECTION_KINDS | {"not-opening", "unresolved"}
 DIVIDER_TRAVERSAL_TYPES = {"open-passage", "boundary-only"}
 CONTOUR_APPROXIMATION_EPSILON_PX = 1.0
 MAX_SHARED_BOUNDARY_SNAP_PX = CONTOUR_APPROXIMATION_EPSILON_PX * 2
-SOURCE_EVIDENCE_SCHEMA = "interior.floorplan-source-evidence.v4"
+SOURCE_EVIDENCE_SCHEMAS = {
+    "interior.floorplan-source-evidence.v4",
+    "interior.floorplan-source-evidence.v5",
+}
+BOUNDARY_FEATURE_KINDS = {
+    "railing",
+    "parapet",
+    "open-edge",
+    "full-height-glazing",
+}
 
 
 def point_segment_distance(
@@ -143,7 +152,7 @@ def bind_source_openings(
     semantic_decisions: dict,
 ) -> dict:
     """Materialize physical openings and non-physical space dividers."""
-    if source_evidence.get("schema") != SOURCE_EVIDENCE_SCHEMA:
+    if source_evidence.get("schema") not in SOURCE_EVIDENCE_SCHEMAS:
         raise ValueError("invalid source evidence schema")
     if semantic_decisions.get("schema") != "interior.floorplan-semantic-decisions.v1":
         raise ValueError("invalid semantic decisions schema")
@@ -201,10 +210,47 @@ def bind_source_openings(
     wall_candidates = source_evidence.get("wallCandidates", [])
     wall_candidate_by_id = {item.get("id"): item for item in wall_candidates}
     known_wall_candidate_ids = set(wall_candidate_by_id)
+    boundary_candidates = source_evidence.get("boundaryCandidates", [])
+    boundary_candidate_by_id = {
+        item.get("id"): item for item in boundary_candidates
+    }
+    boundary_decisions = semantic_decisions.get("boundaries", [])
+    boundary_decision_by_id = {
+        item.get("candidateId"): item for item in boundary_decisions
+    }
+    if (
+        len(boundary_candidate_by_id) != len(boundary_candidates)
+        or None in boundary_candidate_by_id
+        or len(boundary_decision_by_id) != len(boundary_decisions)
+        or None in boundary_decision_by_id
+        or set(boundary_candidate_by_id) != set(boundary_decision_by_id)
+    ):
+        raise ValueError(
+            "every non-wall boundary candidate needs exactly one semantic decision"
+        )
+    for candidate_id, candidate in boundary_candidate_by_id.items():
+        decision = boundary_decision_by_id[candidate_id]
+        classification = decision.get("classification")
+        if classification not in BOUNDARY_FEATURE_KINDS | {
+            "not-boundary",
+            "unresolved",
+        }:
+            raise ValueError(f"{candidate_id}: unsupported boundary classification")
+        if classification == "unresolved":
+            raise ValueError(f"{candidate_id}: unresolved boundary classification")
+        if not valid_segment(candidate.get("segment")):
+            raise ValueError(f"{candidate_id}: boundary candidate needs one segment")
+        source_label_id = decision.get("sourceLabelId")
+        if classification in BOUNDARY_FEATURE_KINDS and source_label_id not in known_label_ids:
+            raise ValueError(
+                f"{candidate_id}: accepted boundary needs one known sourceLabelId"
+            )
+
     all_evidence_ids = [
         *(item.get("id") for item in source_evidence.get("wallCandidates", [])),
         *candidate_by_id,
         *divider_candidate_by_id,
+        *boundary_candidate_by_id,
         *known_label_ids,
     ]
     if (
@@ -357,6 +403,7 @@ def bind_source_openings(
             )
         bound = deepcopy(binding)
         bound["type"] = "line"
+        bound["existence"] = "present"
         bound["points"] = deepcopy(candidate["segment"])
         bound["width"] = 5
         bound["sourceTraceIds"] = [source_id]
@@ -398,8 +445,34 @@ def bind_source_openings(
             f"divider candidate; missing={missing}, extra={extra}"
         )
 
+    bound_boundary_features = []
+    for candidate_id, candidate in boundary_candidate_by_id.items():
+        decision = boundary_decision_by_id[candidate_id]
+        classification = decision.get("classification")
+        if classification not in BOUNDARY_FEATURE_KINDS:
+            continue
+        room_id = room_by_seed_label.get(decision.get("sourceLabelId"))
+        if room_id is None:
+            raise ValueError(
+                f"{candidate_id}: boundary source label is not bound to a space seed"
+            )
+        bound_boundary_features.append({
+            "id": candidate_id,
+            "kind": classification,
+            "roomId": room_id,
+            "segment": deepcopy(candidate["segment"]),
+            "height": float(decision.get(
+                "height",
+                1.1 if classification in {"railing", "parapet"} else 3.0,
+            )),
+            "bottom": float(decision.get("bottom", 0.0)),
+            "sourceTraceIds": [candidate_id],
+            "reason": decision.get("reason"),
+        })
+
     clean["connections"] = bound_connections
     clean["windows"] = bound_windows
+    clean["boundaryFeatures"] = bound_boundary_features
     connection_by_id = {
         connection.get("id"): connection for connection in bound_connections
     }
@@ -492,6 +565,16 @@ def bind_source_openings(
             "width": 5,
         }
         for window in bound_windows
+    ]
+    layers["boundaryFeatures"] = [
+        {
+            "id": feature["id"],
+            "type": "line",
+            "kind": feature["kind"],
+            "points": deepcopy(feature["segment"]),
+            "width": 4,
+        }
+        for feature in bound_boundary_features
     ]
     return compiled
 
@@ -866,6 +949,9 @@ def compile_space_topology(
         )
     walls = trace_spec.get("cleanStructure", {}).get("walls", [])
     connections = trace_spec.get("cleanStructure", {}).get("connections", [])
+    boundary_features = trace_spec.get("cleanStructure", {}).get(
+        "boundaryFeatures", []
+    )
     semantic_dividers = trace_spec.get("semanticDividers", [])
     seeds = trace_spec.get("spaceSeeds", [])
     seed_ids = [seed.get("id") for seed in seeds if isinstance(seed, dict)]
@@ -922,6 +1008,15 @@ def compile_space_topology(
         physical_closure_metrics[connection_id] = closure_metrics
 
     floor_barrier = wall_mask.copy()
+    for feature in boundary_features:
+        if feature.get("kind") not in BOUNDARY_FEATURE_KINDS:
+            errors.append(f"{feature.get('id')}: unsupported boundary feature kind")
+            continue
+        segment = feature.get("segment")
+        if not valid_segment(segment):
+            errors.append(f"{feature.get('id')}: boundary feature needs one segment")
+            continue
+        draw_segment(floor_barrier, segment, width=3)
     for connection in connections:
         if (
             connection.get("kind") in TRAVERSABLE_CONNECTION_KINDS
@@ -936,6 +1031,9 @@ def compile_space_topology(
         errors.append("walls and evidenced exterior openings do not enclose a usable interior")
 
     room_barrier = wall_mask.copy()
+    for feature in boundary_features:
+        if valid_segment(feature.get("segment")):
+            draw_segment(room_barrier, feature["segment"], width=3)
     for connection in connections:
         closure = physical_closures.get(str(connection.get("id")))
         if closure is not None:
@@ -1266,6 +1364,7 @@ def compile_space_topology(
             divider.get("traversal") == "boundary-only"
             for divider in semantic_dividers
         ),
+        "boundaryFeatureCount": len(boundary_features),
         "mergedSeedGroups": merged_seed_groups,
         "unassignedRegionCount": len(unassigned_components),
         "orphanWallIds": orphan_wall_ids,

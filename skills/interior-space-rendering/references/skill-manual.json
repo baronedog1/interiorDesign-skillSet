@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 4,
+  "skillId": "interior-space-rendering",
+  "displayName": "基于当前模型图直接生成效果图",
+  "version": "25.0.0",
+  "purpose": "直接消费 Camera v3 同名 PNG 与代码事实，编译一次正式 ImageGen 请求；质量评估只提示并始终交付已生成图片。",
+  "overview": {
+    "subtitle": "Camera facts + PNG → 一次请求 → 图片与非阻断提示；不再经过 scene-map、Q1/Q2/Q3 或 accepted 门禁。",
+    "nodes": [
+      {
+        "id": "overview-input",
+        "scenarioId": "render-current-camera-image",
+        "type": "io",
+        "x": 60,
+        "y": 330,
+        "w": 520,
+        "h": 430,
+        "title": "读取当前 Camera 图与事实",
+        "lines": ["同名 PNG + camera-image-facts.v3", "可选产品或风格参考"],
+        "responsibility": "渲染 Agent 只读取当前 Camera 已交付的同名图片与代码事实，确认技术身份，不用质量分拒绝输入。",
+        "files": [
+          {"path": "SKILL.md", "purpose": "定义直接交接、非阻断质量策略和四类真实停止条件。"},
+          {"path": "data_contract.md", "purpose": "定义 Camera facts、请求、计划与交付回执。"},
+          {"path": "references/design-intent-routing.md", "purpose": "判断是结构修改还是保持布局的风格渲染。"}
+        ]
+      },
+      {
+        "id": "overview-compile",
+        "type": "process",
+        "x": 810,
+        "y": 280,
+        "w": 650,
+        "h": 520,
+        "title": "直接编译一次正式请求",
+        "lines": ["对象事实由 JSON 生成", "质量提示不阻断"],
+        "responsibility": "唯一编译器从 Camera facts 生成 plan、context、request 和可选 batch plan，不创建第二份场景事实。",
+        "files": [
+          {"path": "scripts/compile_render_request.py", "purpose": "唯一请求编译器。"},
+          {"path": "scripts_logic.md", "purpose": "登记两个脚本及技术停止条件。"},
+          {"path": "local_runtime.md", "purpose": "给出 Ubuntu 确定性命令。"},
+          {"path": "ENVIRONMENT_CONTRACT.md", "purpose": "说明运行依赖、安装副本和无密钥边界。"},
+          {"path": "references/architectural-styling-playbook.md", "purpose": "指导墙、地、顶和固定产品的外观精细化。"},
+          {"path": "references/cabinet-and-decor-playbook.md", "purpose": "指导柜体和非结构装饰。"},
+          {"path": "references/ceiling-and-lighting-playbook.md", "purpose": "指导天花与灯光。"},
+          {"path": "references/window-door-balcony-playbook.md", "purpose": "指导门窗和阳台边界。"},
+          {"path": "references/style-guides/modern-minimal.md", "purpose": "这个文件用来说明现代简约风格的材质、色彩和装饰表达。"},
+          {"path": "references/style-guides/mid-century.md", "purpose": "这个文件用来说明中古风格的家具、材质和色彩表达。"},
+          {"path": "references/style-guides/maillard.md", "purpose": "这个文件用来说明美拉德风格的材质、色彩和灯光表达。"}
+        ]
+      },
+      {
+        "id": "overview-deliver",
+        "type": "store",
+        "x": 1740,
+        "y": 320,
+        "w": 570,
+        "h": 450,
+        "title": "生成并交付图片",
+        "lines": ["每个 shot/style 一次正式生成", "图片存在即交付，问题写提示"],
+        "responsibility": "ImageGen 返回图片后，渲染 Agent 绑定摘要并交付；视觉问题进入 advisory，不形成 accepted/rejected 终态。",
+        "files": [
+          {"path": "scripts/finalize_render_delivery.py", "purpose": "绑定实际图片并写非阻断交付回执。"},
+          {"path": "playbook.md", "purpose": "说明生成、失败处理和交付方式。"},
+          {"path": "agents/openai.yaml", "purpose": "提供默认调用提示。"},
+          {"path": "references/skill-manual.json", "purpose": "说明书唯一结构化事实源。"},
+          {"path": "references/skill-manual.md", "purpose": "派生的 AI 完整说明。"},
+          {"path": "references/skill-flowchart.svg", "purpose": "派生的矢量流程图。"},
+          {"path": "SKILL_MANUAL.pdf", "purpose": "派生的人类 A3 说明书。"},
+          {"path": "MANIFEST.json", "purpose": "登记唯一活动文件和版本。"}
+        ]
+      }
+    ],
+    "edges": [
+      {"from": "overview-input", "to": "overview-compile", "points": [[580, 545], [810, 545]], "label": "当前图片事实"},
+      {"from": "overview-compile", "to": "overview-deliver", "points": [[1460, 545], [1740, 545]], "label": "一次正式请求"}
+    ]
+  },
+  "concepts": [],
+  "scenarios": [
+    {
+      "id": "render-current-camera-image",
+      "yamlPhrase": "Camera 已生成同名 PNG 与 interior.camera-image-facts.v3，需要保持当前户型、机位和家具布局生成写实效果图",
+      "title": "从当前模型机位图直接生成并交付写实效果图",
+      "explanation": "用户已经有当前模型的正式机位截图，希望把它变成某种室内风格的写实效果图时调用。",
+      "inputKey": "camera-v3-image-and-facts",
+      "narrative": "用户需要的不是再跑一轮场景验收，而是把当前模型图快速变成可看的效果图。系统直接读取 Camera 同名 PNG 与 camera-image-facts.v3：PNG 锁定当前相机、墙门窗、家具排列和画面范围，JSON 锁定对象身份、类别、数量、世界位置、尺寸与朝向。编译器一次生成正式 ImageGen 请求，工具返回图片就立即交付。构图、材质、灯光、轻微软装或局部外观不理想时，用自然语言提示用户并进入公共算法改进清单，不能把当前图片扣住，也不能自动重复生成。只有输入文件损坏、身份冲突、工具没有图片或缺少高风险授权时才停止。",
+      "input": "同名 camera-image-facts.v3 与 PNG、风格、可选参考图",
+      "output": "render-plan.v13、context v9、request v5、正式图片和 render-delivery.v1",
+      "diagrams": [
+        {
+          "title": "当前 Camera 图直接进入一次生成与非阻断交付",
+          "nodes": [
+            {"id": "s-input", "type": "io", "x": 50, "y": 250, "w": 430, "h": 330, "title": "读取同名图与事实", "lines": ["核对文件、摘要和项目身份", "不评价画面质量"], "responsibility": "渲染 Agent 只确认当前事实能否被读取，不用质量分决定是否继续。", "files": [{"path": "SKILL.md", "purpose": "这个文件用来规定当前输入、质量策略和真实技术停止边界。"}, {"path": "data_contract.md", "purpose": "这个文件用来规定输入字段、摘要绑定和全部输出对象。"}]},
+            {"id": "s-compile", "type": "process", "x": 680, "y": 220, "w": 500, "h": 390, "title": "编译 plan/context/request", "lines": ["精确对象清单由代码生成", "advisories 随请求保留"], "responsibility": "唯一脚本从真实 Camera facts 生成请求，不手写对象和机位。", "files": [{"path": "scripts/compile_render_request.py", "purpose": "这个文件用来生成计划、上下文、正式请求和可选批处理计划。"}, {"path": "scripts_logic.md", "purpose": "这个文件用来登记两个正式脚本的职责、输入、输出和停止条件。"}, {"path": "local_runtime.md", "purpose": "这个文件用来说明 Ubuntu 上的确定性执行命令。"}]},
+            {"id": "s-imagegen", "type": "process", "x": 1390, "y": 220, "w": 430, "h": 390, "title": "调用一次 ImageGen", "lines": ["每个 shot/style 一次", "无质量自动重试"], "responsibility": "运行环境提交当前模型图、JSON 编译 prompt 和可选参考图；工具失败才是技术失败。", "files": [{"path": "playbook.md", "purpose": "这个文件用来说明一次生成、技术失败处理和非阻断交付。"}, {"path": "ENVIRONMENT_CONTRACT.md", "purpose": "这个文件用来说明 ImageGen、Python、设备与本地脚本之间的边界。"}]},
+            {"id": "s-deliver", "type": "store", "x": 2030, "y": 250, "w": 400, "h": 330, "title": "绑定并交付", "lines": ["图片 + 回执 + 质量提示"], "responsibility": "只要图片可读就写 delivered；审美问题不改变交付状态。", "files": [{"path": "scripts/finalize_render_delivery.py", "purpose": "这个文件用来绑定实际输出摘要并记录非阻断质量提示。"}, {"path": "agents/openai.yaml", "purpose": "这个文件用来向 Codex 提供默认调用表达。"}, {"path": "MANIFEST.json", "purpose": "这个文件用来登记当前版本和全部活动文件。"}]}
+          ],
+          "edges": [
+            {"from": "s-input", "to": "s-compile", "points": [[480, 415], [680, 415]], "label": "可读事实"},
+            {"from": "s-compile", "to": "s-imagegen", "points": [[1180, 415], [1390, 415]], "label": "一次请求"},
+            {"from": "s-imagegen", "to": "s-deliver", "points": [[1820, 415], [2030, 415]], "label": "实际图片"}
+          ],
+          "annotations": [
+            {"x": 180, "y": 790, "w": 2100, "h": 240, "title": "质量为什么不再成为门禁", "wrap": 138, "paragraphs": ["客户生产任务的目标是及时拿到结果并参与人机共创。构图、材质、灯光、软装和局部对象外观都可能继续改进，但这些判断不能证明文件损坏，也不能代替用户判断，所以全部写成提示并照常交付。", "真正需要停止的是无法继续执行的技术事实：输入不可读或摘要损坏、项目身份冲突、ImageGen 没有返回图片，以及付费、发布、删除、生产覆盖或批量外发尚未授权。这里没有兼容旧 schema 或历史图片的降级路线。"]}
+          ]
+        }
+      ]
+    }
+  ],
+  "logicDetails": [],
+  "fileDescriptions": {
+    "ENVIRONMENT_CONTRACT.md": "说明共享源、Ubuntu 安装、Python 和 ImageGen 边界。",
+    "MANIFEST.json": "登记版本和全部活动文件。",
+    "SKILL.md": "定义直接 Camera v3 交接、非阻断质量策略和停止条件。",
+    "SKILL_MANUAL.pdf": "人类 A3 说明书。",
+    "agents/openai.yaml": "提供默认调用提示。",
+    "data_contract.md": "定义输入、plan、context、request 和 delivery。",
+    "local_runtime.md": "给出本地确定性命令。",
+    "playbook.md": "说明读取、生成、失败处理和交付。",
+    "references/architectural-styling-playbook.md": "指导结构表面与固定产品的风格化。",
+    "references/cabinet-and-decor-playbook.md": "指导柜体和非结构装饰。",
+    "references/ceiling-and-lighting-playbook.md": "指导天花和灯光。",
+    "references/design-intent-routing.md": "区分结构修改与保持布局渲染。",
+    "references/style-guides/maillard.md": "美拉德风格参考。",
+    "references/style-guides/mid-century.md": "中古风格参考。",
+    "references/style-guides/modern-minimal.md": "现代简约风格参考。",
+    "references/window-door-balcony-playbook.md": "指导门窗和阳台边界。",
+    "references/skill-flowchart.svg": "派生的矢量流程图。",
+    "references/skill-manual.json": "说明书唯一结构化事实源。",
+    "references/skill-manual.md": "派生的 AI 完整说明。",
+    "scripts/compile_render_request.py": "直接编译渲染计划、上下文、请求和批计划。",
+    "scripts/finalize_render_delivery.py": "绑定实际图片并写非阻断交付回执。",
+    "scripts_logic.md": "登记正式脚本职责。"
+  }
+}

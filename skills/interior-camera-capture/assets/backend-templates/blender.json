@@ -1,0 +1,12 @@
+{
+  "schema": "interior.camera-backend-template.v1",
+  "backend": "blender",
+  "planPolicy": "consume-frozen-v3",
+  "capture": {
+    "runtime": "blender",
+    "timeoutPolicy": "managed-render-box-no-wall-time-limit",
+    "script": "{blenderSkill}/scripts/capture_blender_views.py",
+    "arguments": ["{nativeModel}", "--background", "--python-exit-code", "1", "--python", "{script}", "--", "--camera-plan", "{plan}", "--out-dir", "{outDir}", "--viewport", "{viewport}"]
+  },
+  "requiredInputs": ["nativeModel", "cameraPlan", "structure"]
+}

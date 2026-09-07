@@ -27,7 +27,7 @@ window.__INTERIOR_MODEL_EDITOR__.captureCameraPlanEvidenceDataUrl(shotId)
 
 返回同一画布 PNG 与 `interior.camera-plan-evidence.v2`。JSON 包含 native model hash、`modelBackend=html-threejs`、position、target、fov、focalLengthMm、平面方向、水平视锥和显示策略；不得由下游脚本重新推算或绘制。
 
-正式批量截图必须由 `interior-camera-capture/scripts/capture_model_views.py` 完成结构、机位、模型范围和设备压力验证，并在取得全设备截图槽位后调用 `capture_html_views.mjs`。适配器在页面任何业务脚本执行前注入并冻结外部 accepted `camera-plan.v8`。页面内嵌计划只服务 standalone 交互预览；其赋值会被正式截图运行时丢弃。每帧必须验证 `runtimeCameraPlanSource=external-formal-camera-plan-v8`，并由截图器直接把 `modelBackend`、`sourceModelSha256`、坐标系、`visibility` 和 `mustShowElements` 写进第三象限 JSON。运行时来源缺失、模型哈希不一致或页面仍采用内嵌历史机位时立即失败，不允许项目目录直接启动 Chrome，也不允许维护升级证据的临时脚本。
+正式批量截图必须由 `interior-camera-capture/scripts/capture_model_views.py` 完成结构、机位、模型范围和设备压力验证，并在取得全设备截图槽位后调用 `capture_html_views.mjs`。适配器在页面任何业务脚本执行前注入并冻结外部 accepted `camera-plan.v9`。页面内嵌计划只服务 standalone 交互预览；其赋值会被正式截图运行时丢弃。每帧必须验证 `runtimeCameraPlanSource=external-formal-camera-plan-v9`，并由截图器直接把 `modelBackend`、`sourceModelSha256`、坐标系、`visibility` 和 `mustShowElements` 写进第三象限 JSON。运行时来源缺失、模型哈希不一致或页面仍采用内嵌历史机位时立即失败，不允许项目目录直接启动 Chrome，也不允许维护升级证据的临时脚本。
 
 ## 局部遮挡唯一规则
 
@@ -42,7 +42,7 @@ window.__INTERIOR_MODEL_EDITOR__.captureCameraPlanEvidenceDataUrl(shotId)
 }
 ```
 
-HTML 只执行 `hiddenElementIds`，并先排除 `preserveElementIds`。它可以公开相机射线候选供 Agent 审阅，但不能自动扩大隐藏清单。不存在 `focus-room`、`isolateOtherSpaces`、`hideFocusOccluders` 或“失败后多隐藏一些”的兼容逻辑。关闭、切换机位或截图结束后完整恢复 `visible` 状态，任何对象都不被删除。
+HTML 只执行 `hiddenElementIds`，并先排除 `preserveElementIds`。墙、窗框和组件都由这一个列表确定性派生运行时显隐；窗框不能被忽略，也不能另建第二份业务隐藏清单。它可以公开相机射线候选供 Agent 审阅，但不能自动扩大隐藏清单。不存在 `focus-room`、`isolateOtherSpaces`、`hideFocusOccluders` 或“失败后多隐藏一些”的兼容逻辑。关闭、切换机位或截图结束后完整恢复 `visible` 状态，任何对象都不被删除。
 
 ## 两种同机位证据状态
 

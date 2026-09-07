@@ -6,7 +6,7 @@
 
 ## HTML / Three.js
 
-读取 `interior.component-layout.v4`。源图对象由冻结 `bbox-normalized` 轮廓、当前尺寸、平面中心和 `rotationY` 计算；正式轮廓以组件中心为原点且坐标范围为 `-0.5…0.5`。设计新增对象必须给绝对 `planFootprint`。
+读取 `interior.component-layout.v5`。源图对象由冻结 `bbox-normalized` 轮廓、当前尺寸、平面中心和 `rotationY` 计算；正式轮廓以组件中心为原点且坐标范围为 `-0.5…0.5`。方向读取 `layout-relation-hints.v3` 与 placement 的 `worldOrientation`。设计新增对象必须给绝对 `planFootprint`。
 
 ## Blender
 

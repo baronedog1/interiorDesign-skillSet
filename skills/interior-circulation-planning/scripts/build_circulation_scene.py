@@ -21,10 +21,10 @@ from common import (
 
 
 HANDOFF_SCHEMA = "interior.floorplan-handoff.v3"
-STRUCTURE_SCHEMA = "interior.floorplan-structure.v3"
+STRUCTURE_SCHEMAS = {"interior.floorplan-structure.v3", "interior.floorplan-structure.v4"}
 TRACE_SCHEMA = "interior.trace-components.v2"
 MANIFEST_SCHEMA = "interior.native-model-manifest.v1"
-SCENE_SCHEMA = "interior.circulation-scene.v2"
+SCENE_SCHEMA = "interior.circulation-scene.v3"
 
 
 NON_BLOCKING_TERMS = {
@@ -122,9 +122,12 @@ def text_blob(value: dict[str, Any]) -> str:
 
 def relation_hint_facts(layout: dict[str, Any]) -> tuple[dict[str, dict[str, str]], dict[str, Any]]:
     relations = layout.get("relationHints")
-    if not isinstance(relations, dict) or relations.get("schema") != "interior.layout-relation-hints.v2":
-        raise ValueError("layout state requires interior.layout-relation-hints.v2 orientation evidence")
-    allowed_keys = {"schema", "directionalAxes", "facing", "wallAttachment", "allowedContacts", "spaceDividerMarkers"}
+    if not isinstance(relations, dict) or relations.get("schema") != "interior.layout-relation-hints.v3":
+        raise ValueError("layout state requires interior.layout-relation-hints.v3 orientation evidence")
+    allowed_keys = {
+        "schema", "directionalAxes", "worldOrientations", "facing", "wallAttachment",
+        "allowedContacts", "spaceDividerMarkers",
+    }
     unexpected = sorted(set(relations) - allowed_keys)
     if unexpected:
         raise ValueError(f"relation hints contain legacy or calculated fields: {unexpected}")
@@ -133,6 +136,7 @@ def relation_hint_facts(layout: dict[str, Any]) -> tuple[dict[str, dict[str, str
         "browser-reviewed-authored-model",
         "blender-native-preview-reviewed-authored-model",
         "cad-native-preview-reviewed-authored-model",
+        "historical-browser-reviewed-consensus",
     }
     for row in relations.get("directionalAxes", []):
         component_id = row.get("assetId")
@@ -200,6 +204,64 @@ def relation_hint_facts(layout: dict[str, Any]) -> tuple[dict[str, dict[str, str
         ],
     }
     return axes, hints
+
+
+def floorplan_components(traces: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str], dict[str, Any]]:
+    """Compile the accepted plan objects without introducing model-side facts."""
+    components: list[dict[str, Any]] = []
+    for trace in traces.get("objects", []):
+        center = as_point(trace.get("center", []), f"{trace.get('traceId')} center")
+        rotation = float(trace.get("rotationY"))
+        footprint = trace_footprint(trace, center, rotation)
+        orientation = trace.get("orientation") or {}
+        local_axes = orientation.get("localAxes") or trace.get("localAxes") or {}
+        if not isinstance(local_axes, dict):
+            raise ValueError(f"{trace.get('traceId')} orientation.localAxes must be an object")
+        component = {
+            "id": trace.get("traceId"),
+            "sourceObjectCandidateId": trace.get("sourceObjectCandidateId"),
+            "designAdditionId": None,
+            "sourceTraceId": trace.get("traceId"),
+            "roomId": trace.get("roomId"),
+            "semantic": trace.get("semantic"),
+            "assetId": None,
+            "category": trace.get("category") or trace.get("functionalClass"),
+            "functionalClass": trace.get("functionalClass"),
+            "quantity": trace.get("quantity"),
+            "localAxes": local_axes,
+            "origin": "accepted-floorplan-layout",
+            "blockingClass": blocking_class(trace),
+            "footprint": [[round(point[0], 6), round(point[1], 6)] for point in footprint],
+            "activeTransform": {"position": list(center), "rotationRadians": rotation},
+            "sourceTransform": {"position": list(center), "rotationRadians": rotation},
+            "reviewedAdjustment": None,
+        }
+        if (
+            not component["id"]
+            or not component["sourceObjectCandidateId"]
+            or not component["roomId"]
+            or not component["functionalClass"]
+            or component["quantity"] != 1
+        ):
+            raise ValueError(
+                "floorplan objects require traceId, sourceObjectCandidateId, roomId, "
+                "functionalClass and quantity=1"
+            )
+        components.append(component)
+    relations = traces.get("relationHints") or {
+        "schema": "interior.layout-relation-hints.v3",
+        "directionalAxes": [],
+        "worldOrientations": [],
+        "facing": [],
+        "wallAttachment": [],
+        "allowedContacts": [],
+        "spaceDividerMarkers": [],
+    }
+    relation_container = {"relationHints": relations}
+    axes_by_asset, relation_hints = relation_hint_facts(relation_container)
+    if axes_by_asset:
+        raise ValueError("floorplan checkpoint must place directional axes on trace objects, not asset IDs")
+    return components, [], relation_hints
 
 
 def validate_relation_hint_references(
@@ -280,7 +342,7 @@ def trace_footprint(
 
 
 def html_components(layout: dict[str, Any], traces: dict[str, dict[str, Any]]) -> tuple[list[dict[str, Any]], list[str], dict[str, Any]]:
-    require_schema(layout, "interior.component-layout.v4", "HTML component layout")
+    require_schema(layout, "interior.component-layout.v5", "HTML component layout")
     axes_by_asset, relation_hints = relation_hint_facts(layout)
     components: list[dict[str, Any]] = []
     seen_sources: set[str] = set()
@@ -290,7 +352,7 @@ def html_components(layout: dict[str, Any], traces: dict[str, dict[str, Any]]) -
         if bool(source_id) == bool(design_id):
             raise ValueError("each HTML placement requires exactly one sourceObjectCandidateId or designAdditionId")
         center = as_point(placement.get("position", []), "HTML placement position")
-        rotation = float(placement.get("rotationY", 0))
+        rotation = float(placement.get("planFootprintRotationY", placement.get("sourceRotationY")))
         if source_id:
             if source_id in seen_sources or source_id not in traces:
                 raise ValueError(f"HTML placement source binding is missing or duplicated: {source_id}")
@@ -331,6 +393,7 @@ def html_components(layout: dict[str, Any], traces: dict[str, dict[str, Any]]) -
             "functionalClass": placement.get("functionalClass"),
             "quantity": placement.get("quantity"),
             "localAxes": axes_by_asset.get(placement.get("componentId"), {}),
+            "worldOrientation": placement.get("worldOrientation"),
             "origin": origin,
             "blockingClass": blocking_class(placement),
             "footprint": [[round(point[0], 6), round(point[1], 6)] for point in footprint],
@@ -466,29 +529,47 @@ def main() -> int:
     parser.add_argument("--handoff", required=True)
     parser.add_argument("--structure", required=True)
     parser.add_argument("--traces", required=True)
-    parser.add_argument("--manifest", required=True)
-    parser.add_argument("--layout-state", required=True)
+    parser.add_argument("--checkpoint", choices=("post-floorplan", "post-model"), required=True)
+    parser.add_argument("--manifest")
+    parser.add_argument("--layout-state")
     parser.add_argument("--source-image", required=True)
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
 
-    paths = {name: Path(getattr(args, name.replace("-", "_"))).expanduser().resolve() for name in [
-        "handoff", "structure", "traces", "manifest", "layout_state", "source_image", "out"
-    ]}
+    if args.checkpoint == "post-model" and (not args.manifest or not args.layout_state):
+        parser.error("post-model requires --manifest and --layout-state")
+    paths = {
+        name: Path(value).expanduser().resolve()
+        for name, value in {
+            "handoff": args.handoff,
+            "structure": args.structure,
+            "traces": args.traces,
+            "manifest": args.manifest,
+            "layout_state": args.layout_state,
+            "source_image": args.source_image,
+            "out": args.out,
+        }.items()
+        if value
+    }
     handoff = read_json(paths["handoff"])
     structure = read_json(paths["structure"])
     traces = read_json(paths["traces"])
-    manifest = read_json(paths["manifest"])
-    layout = read_json(paths["layout_state"])
+    manifest = read_json(paths["manifest"]) if "manifest" in paths else None
+    layout = read_json(paths["layout_state"]) if "layout_state" in paths else None
     require_schema(handoff, HANDOFF_SCHEMA, "floorplan handoff")
-    require_schema(structure, STRUCTURE_SCHEMA, "structure data")
+    if structure.get("schema") not in STRUCTURE_SCHEMAS:
+        raise ValueError(f"structure data schema must be one of {sorted(STRUCTURE_SCHEMAS)}")
     require_schema(traces, TRACE_SCHEMA, "trace components")
-    require_schema(manifest, MANIFEST_SCHEMA, "native model manifest")
+    if manifest is not None:
+        require_schema(manifest, MANIFEST_SCHEMA, "native model manifest")
 
     floorplan_id = handoff.get("floorplanId")
-    if not floorplan_id or {structure.get("floorplanId"), traces.get("floorplanId"), manifest.get("floorplanId")} != {floorplan_id}:
-        raise ValueError("floorplanId differs across handoff, structure, traces, and native model")
-    if manifest.get("handoffDigestSha256") != handoff.get("handoffDigestSha256"):
+    bound_ids = {structure.get("floorplanId"), traces.get("floorplanId")}
+    if manifest is not None:
+        bound_ids.add(manifest.get("floorplanId"))
+    if not floorplan_id or bound_ids != {floorplan_id}:
+        raise ValueError("floorplanId differs across the supplied checkpoint artifacts")
+    if manifest is not None and manifest.get("handoffDigestSha256") != handoff.get("handoffDigestSha256"):
         raise ValueError("native model is not derived from this floorplan handoff")
     if handoff.get("validation", {}).get("sourceModel") is not True or handoff.get("validation", {}).get("agentVisualReview") is not True:
         raise ValueError("floorplan handoff has not passed source and Agent visual validation")
@@ -499,20 +580,27 @@ def main() -> int:
     source_descriptor = artifact_descriptor(handoff, "sourceImage", "floorplanSource", "sourceFloorplan")
     if source_descriptor is not None and source_descriptor.get("sha256") != source_sha:
         raise ValueError("source image SHA-256 differs from the handoff")
-    verify_manifest_source(manifest, structure_sha, traces_sha)
-    model_sha = native_model_sha(manifest)
-    backend = manifest.get("modelBackend")
     traces_by_source = trace_index(traces)
-    if backend == "html-threejs":
+    model_sha = None
+    if args.checkpoint == "post-floorplan":
+        backend = "floorplan-layout"
+        components, removed, relation_hints = floorplan_components(traces)
+        adapter = "floorplan-trace-components-v2"
+    else:
+        assert manifest is not None and layout is not None
+        verify_manifest_source(manifest, structure_sha, traces_sha)
+        model_sha = native_model_sha(manifest)
+        backend = manifest.get("modelBackend")
+    if args.checkpoint == "post-model" and backend == "html-threejs":
         components, removed, relation_hints = html_components(layout, traces_by_source)
-        adapter = "html-component-layout-v4"
-    elif backend == "blender":
+        adapter = "html-component-layout-v5"
+    elif args.checkpoint == "post-model" and backend == "blender":
         components, removed, relation_hints = entity_components(layout, traces_by_source, structure, "blender")
         adapter = "blender-entity-index-v2-to-plan"
-    elif backend == "cad-step":
+    elif args.checkpoint == "post-model" and backend == "cad-step":
         components, removed, relation_hints = entity_components(layout, traces_by_source, structure, "cad")
         adapter = "cad-entity-index-v1-to-plan"
-    else:
+    elif args.checkpoint == "post-model":
         raise ValueError(f"unsupported modelBackend: {backend}")
 
     validate_relation_hint_references(components, structure, relation_hints)
@@ -520,6 +608,7 @@ def main() -> int:
     scene = {
         "schema": SCENE_SCHEMA,
         "floorplanId": floorplan_id,
+        "checkpoint": args.checkpoint,
         "modelBackend": backend,
         "authority": "current-native-model-layout-state",
         "bindings": {
@@ -532,11 +621,13 @@ def main() -> int:
             "structureDataSha256": structure_sha,
             "traceComponentsPath": str(paths["traces"]),
             "traceComponentsSha256": traces_sha,
-            "nativeModelManifestPath": str(paths["manifest"]),
-            "nativeModelManifestSha256": sha256_file(paths["manifest"]),
-            "nativeModelSha256": model_sha,
-            "layoutStatePath": str(paths["layout_state"]),
-            "layoutStateSha256": sha256_file(paths["layout_state"]),
+            **({
+                "nativeModelManifestPath": str(paths["manifest"]),
+                "nativeModelManifestSha256": sha256_file(paths["manifest"]),
+                "nativeModelSha256": model_sha,
+                "layoutStatePath": str(paths["layout_state"]),
+                "layoutStateSha256": sha256_file(paths["layout_state"]),
+            } if args.checkpoint == "post-model" else {}),
         },
         "backendAdapter": adapter,
         "components": components,

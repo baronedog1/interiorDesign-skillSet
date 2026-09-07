@@ -1,0 +1,859 @@
+{
+  "schemaVersion": 4,
+  "skillId": "interior-html-modeling",
+  "displayName": "室内户型人机共创 HTML 建模",
+  "version": "34.0.0",
+  "purpose": "把已编译户型一次生成只有真实受管家具资产的可编辑 Three.js 整屋 HTML，并允许用户直接调整结构、门窗、家具、灯光和相机。",
+  "overview": {
+    "subtitle": "唯一流程：当前户型事实 → 精确资产匹配 → 当前项目模型 → 可编辑单文件 HTML → 用户回传覆盖当前版。",
+    "nodes": [
+      {
+        "id": "overview-in",
+        "scenarioId": "build-editable-html",
+        "type": "io",
+        "x": 80,
+        "y": 560,
+        "w": 450,
+        "h": 250,
+        "title": "输入当前户型编译结果",
+        "lines": [
+          "墙门窗、空间、家具描线和项目身份"
+        ],
+        "responsibility": "建模 Agent 读取同一户型版本的结构和家具对象，不从旧 HTML 或示例模型猜数据。",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "purpose": "规定 HTML 建模的触发条件与唯一产品边界。"
+          }
+        ]
+      },
+      {
+        "id": "overview-build",
+        "type": "process",
+        "x": 830,
+        "y": 500,
+        "w": 760,
+        "h": 370,
+        "title": "匹配真实资产并编译当前项目模型",
+        "lines": [
+          "每件家具都有真实 GLB",
+          "色块、轮廓体和示例模型不能进入正式项目"
+        ],
+        "responsibility": "唯一匹配器规范功能类别、物化真实资产并编译当前项目自己的模型。",
+        "files": [
+          {
+            "path": "scripts/match_trace_components.mjs",
+            "purpose": "为每个描线对象选择同功能真实资产，这个文件在当前步骤提供正式依据。"
+          },
+          {
+            "path": "scripts/compile_coauthoring_model.mjs",
+            "purpose": "把当前结构和资产合成唯一编辑器模型，这个文件在当前步骤提供正式依据。"
+          }
+        ]
+      },
+      {
+        "id": "overview-out",
+        "type": "store",
+        "x": 1880,
+        "y": 540,
+        "w": 450,
+        "h": 290,
+        "title": "交付可编辑整屋 HTML",
+        "lines": [
+          "用户可改墙、门窗和精细家具",
+          "保存后把新 HTML 发回模型"
+        ],
+        "responsibility": "建模 Agent 交付自包含 HTML，并在用户回传后原子覆盖项目唯一当前版。",
+        "files": [
+          {
+            "path": "data_contract.md",
+            "purpose": "规定当前 HTML、模型和回传覆盖关系，这个文件在当前步骤提供正式依据。"
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "overview-in",
+        "to": "overview-build",
+        "points": [
+          [
+            530,
+            685
+          ],
+          [
+            830,
+            685
+          ]
+        ],
+        "label": "当前户型事实"
+      },
+      {
+        "from": "overview-build",
+        "to": "overview-out",
+        "points": [
+          [
+            1590,
+            685
+          ],
+          [
+            1880,
+            685
+          ]
+        ],
+        "label": "真实资产模型"
+      }
+    ]
+  },
+  "concepts": [],
+  "fileDescriptions": {
+    "SKILL.md": "定义触发条件、唯一 HTML 产品、精确资产和交付边界。",
+    "SKILL_MANUAL.pdf": "给普通人阅读的 A3 图文说明书。",
+    "ENVIRONMENT_CONTRACT.md": "说明共享源、Ubuntu 运行副本、资产仓和浏览器环境。",
+    "MANIFEST.json": "登记版本、正式文件和摘要。",
+    "agents/openai.yaml": "提供 Codex 默认调用提示。",
+    "data_contract.md": "规定户型、组件布局、当前 HTML 和回传覆盖对象。",
+    "local_runtime.md": "列出 Ubuntu 唯一正式命令。",
+    "playbook.md": "说明从户型导入到用户回传的连续工作方法。",
+    "scripts_logic.md": "登记所有确定性脚本的职责。",
+    "templates.md": "索引唯一模板和组件库。",
+    "references/skill-manual.json": "作为说明书唯一结构化事实源。",
+    "references/skill-manual.md": "给 AI 阅读的同源说明书。",
+    "references/skill-flowchart.svg": "提供同源流程总览图。",
+    "references/annotation-and-measurement-method.md": "解释标注与测量显示方法。",
+    "references/backend-architectural-options.md": "说明 HTML 与其它建模后端的职责边界。",
+    "references/furniture-component-system.md": "规定公共精细家具来源、网格和尺寸能力。",
+    "references/furniture-placement-method.md": "规定家具方向、位置和碰撞关系。",
+    "references/scene-light-camera-method.md": "说明编辑器灯光、相机与正式机位桥。",
+    "references/sidebar-function-contract.md": "规定结构、组件和场景侧栏交互。",
+    "references/structure-and-window-method.md": "规定墙、门窗和二维三维编辑行为。",
+    "references/trace-to-component-matching.md": "解释描线对象怎样匹配真实资产。",
+    "references/white-model-contrast-system.md": "说明白模与源色外观切换。",
+    "scripts/audit_component_runtime_geometry.mjs": "审计全部公共 GLB 的真实运行几何。",
+    "scripts/build_component_gallery_standalone.py": "生成组件库浏览展厅。",
+    "scripts/build_functional_class_tags.mjs": "生成资产功能类别标签。",
+    "scripts/build_standalone_html.py": "内联当前模型和实际使用资产，生成单文件 HTML。",
+    "scripts/capture_html_views.mjs": "按外部冻结计划截取 HTML 原生视图。",
+    "scripts/collect_modeling_stage_timing.py": "汇总 HTML 建模各阶段用时。",
+    "scripts/compile_coauthoring_model.mjs": "编译当前项目唯一 Three.js 模型。",
+    "scripts/export_native_model_manifest.mjs": "登记当前原生模型和适配器摘要。",
+    "scripts/import_custom_component_package.mjs": "导入通过准入的定制组件包。",
+    "scripts/import_floorplan_handoff.mjs": "导入户型并清除模板示例模型。",
+    "scripts/import_returned_html.py": "接收用户修改后的 HTML 并原子覆盖当前版。",
+    "scripts/init_html_model_project.mjs": "创建只使用唯一模板的新项目。",
+    "scripts/match_trace_components.mjs": "规范类别、选择真实 GLB、校准尺寸方向并物化资产。",
+    "scripts/materialize_component_assets.mjs": "只复制当前项目实际使用的资产。",
+    "scripts/measure_html_camera_envelopes.mjs": "向机位 Skill 暴露当前模型包络。",
+    "scripts/model_scope_contract.mjs": "编译整屋或明确局部建模范围。",
+    "scripts/node_component_loader.mjs": "让 Node 校验器读取组件库模块。",
+    "scripts/placement_height_guard.mjs": "限制柜体和固定构件垂直位置。",
+    "scripts/trace_shape_contract.mjs": "规范来源家具轮廓与碰撞脚印。",
+    "scripts/validate_coauthoring_collisions.mjs": "在真实浏览器回归碰撞与直接编辑。",
+    "scripts/validate_component_geometry.mjs": "验证全部 placement 都有真实网格和来源脚印。",
+    "scripts/validate_component_layout.mjs": "验证匹配、尺寸、方向、预算和关系。",
+    "scripts/validate_component_library.mjs": "验证公共组件目录与几何合同。",
+    "scripts/validate_public_asset_store.mjs": "验证 Ubuntu 资产仓文件与摘要。",
+    "scripts/validate_scene_rig.mjs": "验证灯光和场景相机数据。",
+    "scripts/validate_structure_data.py": "在发版回归中验证户型结构。",
+    "scripts/validate_template_ownership.py": "确认只有一个活动 HTML 模板。",
+    "assets/component-library/catalog/directional-axis-tags.v1.json": "登记有方向资产的局部轴。",
+    "assets/component-library/catalog/functional-class-tags.v1.json": "登记每件资产支持的功能类别。",
+    "assets/component-library/catalog/platform-taxonomy.json": "保存组件平台分类枚举。",
+    "assets/component-library/catalog/public-asset-selection.json": "保存公共资产精确成员清单。",
+    "assets/component-library/catalog/public-assets.json": "作为公共资产目录唯一事实源。",
+    "assets/component-library/catalog/runtime-geometry-admission.v1.js": "登记已准入和排除的运行几何。",
+    "assets/component-library/catalog/source-asset-exclusions.json": "保存明确排除的来源资产。",
+    "assets/component-library/component-library.js": "加载真实 GLB、调整尺寸并切换外观。",
+    "assets/component-library/fixed-purple/catalog.js": "提供固定和安装类资产目录。",
+    "assets/component-library/fixtures/match-fixture.json": "提供匹配算法的离线测试样本。",
+    "assets/component-library/gallery/explorer.js": "实现组件展厅浏览交互。",
+    "assets/component-library/gallery/index.html": "提供组件展厅页面。",
+    "assets/component-library/gallery/styles.css": "提供组件展厅样式。",
+    "assets/component-library/index.js": "汇总公共组件目录出口。",
+    "assets/component-library/movable-green/catalog.js": "提供活动家具资产目录。",
+    "assets/component-library/shared/library-contract.js": "声明组件库共同字段合同。",
+    "assets/component-library/shared/placement-geometry.js": "提供家具放置和碰撞几何函数。",
+    "assets/interior-coauthoring-template/coauthoring-model.js": "提供唯一模板直接打开时的无色块示例模型。",
+    "assets/interior-coauthoring-template/coauthoring-model.json": "保存同一示例模型的结构化数据。",
+    "assets/interior-coauthoring-template/index.html": "实现唯一室内户型人机共创编辑器。",
+    "assets/interior-coauthoring-template/vendor/exporters/GLTFExporter.global.js": "提供离线 GLTF 场景导出。",
+    "assets/interior-coauthoring-template/vendor/loaders/GLTFLoader.js": "提供离线 GLB 加载。",
+    "assets/interior-coauthoring-template/vendor/three.module.js": "提供离线 Three.js 运行库。",
+    "assets/interior-coauthoring-template/vendor/utils/BufferGeometryUtils.js": "提供离线几何合并工具。"
+  },
+  "scenarios": [
+    {
+      "id": "build-editable-html",
+      "yamlPhrase": "把已编译户型快速生成可编辑 HTML/Three.js 整屋模型，或在 AI 初稿上直接调整墙、门窗、精细家具、摄像机与灯光",
+      "title": "把已编译户型生成只有真实资产的可编辑整屋 HTML",
+      "explanation": "用户已经有户型编译结果，希望快速得到可编辑整屋模型，或者继续在现有 HTML 中修改结构、家具和场景时调用。",
+      "inputKey": "compiled-floorplan-or-returned-current-html",
+      "narrative": "当用户提供已经编译好的户型结构，或者把自己修改后的当前 HTML 发回来时，就进入这一条流程。系统先确认项目身份和当前版本，再删除模板自带的示例模型，避免把其它户型家具混进来。每件家具都按规范化后的同功能类别从受管库选择真实 GLB，绿色或紫色只表示编辑方式，不再阻止同功能资产匹配。地毯、台灯、书桌等必须显示真实网格并可调整尺寸和方向；找不到资产时先补入正式资产再继续，绝不交付色块。模型编译后生成一个自包含 HTML，用户可直接修改墙门窗和家具，保存后把新 HTML 发回，系统原子覆盖项目唯一当前版。",
+      "input": "同一户型版本的 floorplan-handoff.v3，或由唯一模板保存并回传的当前 HTML",
+      "output": "真实资产 component-layout、当前 coauthoring model、自包含可编辑 HTML、原生模型清单和回传接收回执",
+      "diagrams": [
+        {
+          "title": "从户型事实到可编辑整屋 HTML 的唯一流程",
+          "subtitle": "示例模型、色块和第二套模板都不能进入当前项目。",
+          "nodes": [
+            {
+              "id": "input",
+              "type": "io",
+              "x": 40,
+              "y": 170,
+              "w": 300,
+              "h": 360,
+              "title": "读取当前户型或回传 HTML",
+              "lines": [
+                "核对项目身份、版本和当前事实"
+              ],
+              "responsibility": "建模 Agent 只读取当前户型交接或用户回传 HTML，不使用旧版本与示例数据。",
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "规定触发、边界和唯一产品，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "playbook.md",
+                  "purpose": "说明连续生产与回传流程，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "data_contract.md",
+                  "purpose": "规定输入身份和当前版覆盖，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "ENVIRONMENT_CONTRACT.md",
+                  "purpose": "说明共享源、Ubuntu 和资产仓，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/import_returned_html.py",
+                  "purpose": "接收用户回传并覆盖当前版，这个文件在当前步骤提供正式依据。"
+                }
+              ]
+            },
+            {
+              "id": "import",
+              "type": "process",
+              "x": 390,
+              "y": 150,
+              "w": 360,
+              "h": 400,
+              "title": "导入户型并清除示例模型",
+              "lines": [
+                "复制唯一模板",
+                "建立当前结构、范围和场景"
+              ],
+              "responsibility": "导入器创建当前项目并立即删除模板示例模型，保证后续编译只属于这套户型。",
+              "files": [
+                {
+                  "path": "scripts/import_floorplan_handoff.mjs",
+                  "purpose": "导入当前户型并删除示例模型，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/init_html_model_project.mjs",
+                  "purpose": "创建只用唯一模板的项目，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/model_scope_contract.mjs",
+                  "purpose": "编译整屋或用户明确的局部范围，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/validate_structure_data.py",
+                  "purpose": "发版时复核户型结构，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/validate_scene_rig.mjs",
+                  "purpose": "复核场景灯光与相机数据，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/backend-architectural-options.md",
+                  "purpose": "说明 HTML 后端职责，这个文件在当前步骤提供正式依据。"
+                }
+              ]
+            },
+            {
+              "id": "match",
+              "type": "process",
+              "x": 800,
+              "y": 110,
+              "w": 430,
+              "h": 480,
+              "title": "为每个对象匹配真实受管资产",
+              "lines": [
+                "规范同义功能类别",
+                "全受管库同类选择",
+                "尺寸、方向和资产物化"
+              ],
+              "responsibility": "唯一匹配器让每个对象落到真实 GLB，绿色紫色只保留编辑语义。",
+              "detailRef": "exact-asset-matching",
+              "files": [
+                {
+                  "path": "scripts/match_trace_components.mjs",
+                  "purpose": "唯一决定对象对应哪件真实资产，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/materialize_component_assets.mjs",
+                  "purpose": "只复制项目实际使用的 GLB，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/trace_shape_contract.mjs",
+                  "purpose": "规范来源轮廓和碰撞脚印，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/placement_height_guard.mjs",
+                  "purpose": "约束柜体与固定构件高度，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/trace-to-component-matching.md",
+                  "purpose": "解释功能类别匹配方法，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/furniture-component-system.md",
+                  "purpose": "规定真实网格、许可和尺寸能力，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/furniture-placement-method.md",
+                  "purpose": "规定位置、方向与碰撞，这个文件在当前步骤提供正式依据。"
+                }
+              ]
+            },
+            {
+              "id": "assets-ok",
+              "type": "decision",
+              "x": 1290,
+              "y": 100,
+              "w": 390,
+              "h": 500,
+              "title": "全部对象都有真实资产吗？",
+              "lines": [
+                "matched 数等于家具总数",
+                "真实网格加载失败为零"
+              ],
+              "responsibility": "发版回归检查每个 placement 都有 componentId、真实 GLB、正确尺寸方向和资产锁。",
+              "files": [
+                {
+                  "path": "scripts/validate_component_layout.mjs",
+                  "purpose": "复核匹配、尺寸、方向和预算，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/validate_component_geometry.mjs",
+                  "purpose": "拒绝没有真实网格的对象，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/audit_component_runtime_geometry.mjs",
+                  "purpose": "审计全部 GLB 运行几何，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/validate_component_library.mjs",
+                  "purpose": "复核公共组件目录，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/validate_public_asset_store.mjs",
+                  "purpose": "复核 Ubuntu 资产仓，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/build_functional_class_tags.mjs",
+                  "purpose": "维护资产功能类别标签，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/import_custom_component_package.mjs",
+                  "purpose": "导入新准入的定制组件，这个文件在当前步骤提供正式依据。"
+                }
+              ],
+              "criteria": [
+                "每个来源对象恰好对应一个 assetStatus=matched 且 componentId 指向通过准入的真实 GLB",
+                "全部对象满足才走“是”；任一对象缺失走“否”，回到正式资产准入和匹配步骤，禁止生成色块"
+              ]
+            },
+            {
+              "id": "compile",
+              "type": "process",
+              "x": 1740,
+              "y": 95,
+              "w": 430,
+              "h": 510,
+              "title": "编译唯一当前模型和编辑器",
+              "lines": [
+                "墙门窗、空间、精细家具、灯光相机",
+                "二维三维共用同一模型"
+              ],
+              "responsibility": "编译器和唯一模板生成当前项目模型，提供结构、组件和场景直接编辑。",
+              "detailRef": "coauthoring-editor",
+              "files": [
+                {
+                  "path": "scripts/compile_coauthoring_model.mjs",
+                  "purpose": "合并当前结构、组件和场景，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/interior-coauthoring-template/index.html",
+                  "purpose": "实现唯一交互编辑器，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/interior-coauthoring-template/coauthoring-model.json",
+                  "purpose": "提供无色块示例模型数据，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/interior-coauthoring-template/coauthoring-model.js",
+                  "purpose": "提供同一示例模型启动数据，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/sidebar-function-contract.md",
+                  "purpose": "规定侧栏与直接操控，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/structure-and-window-method.md",
+                  "purpose": "规定墙和门窗编辑，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/scene-light-camera-method.md",
+                  "purpose": "规定灯光和相机编辑，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/annotation-and-measurement-method.md",
+                  "purpose": "规定标注与测量，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/white-model-contrast-system.md",
+                  "purpose": "规定白模和源色外观，这个文件在当前步骤提供正式依据。"
+                }
+              ]
+            },
+            {
+              "id": "runtime",
+              "type": "process",
+              "x": 90,
+              "y": 820,
+              "w": 560,
+              "h": 560,
+              "title": "加载真实组件并执行编辑碰撞",
+              "lines": [
+                "全部 GLB 真正加载后才算 ready",
+                "移动、旋转、缩放和墙门窗共用碰撞内核"
+              ],
+              "responsibility": "组件运行时加载真实资产并让用户安全调整大小、方向和位置。",
+              "files": [
+                {
+                  "path": "assets/component-library/component-library.js",
+                  "purpose": "加载 GLB 并调整宽深高，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/index.js",
+                  "purpose": "汇总组件目录，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/movable-green/catalog.js",
+                  "purpose": "提供活动家具目录，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/fixed-purple/catalog.js",
+                  "purpose": "提供固定安装类目录，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/shared/library-contract.js",
+                  "purpose": "声明共同字段，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/shared/placement-geometry.js",
+                  "purpose": "执行放置与碰撞几何，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/validate_coauthoring_collisions.mjs",
+                  "purpose": "真实浏览器回归编辑和碰撞，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/node_component_loader.mjs",
+                  "purpose": "让 Node 读取组件模块，这个文件在当前步骤提供正式依据。"
+                }
+              ]
+            },
+            {
+              "id": "catalog",
+              "type": "process",
+              "x": 710,
+              "y": 790,
+              "w": 620,
+              "h": 620,
+              "title": "读取公共资产事实与离线运行库",
+              "lines": [
+                "类别、方向、许可、成员、排除和运行几何",
+                "Three.js、GLB 加载器与场景导出器"
+              ],
+              "responsibility": "组件运行时只消费当前正式目录和随包离线依赖，不联网猜资产。",
+              "files": [
+                {
+                  "path": "assets/component-library/catalog/public-assets.json",
+                  "purpose": "公共资产唯一目录，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/catalog/public-asset-selection.json",
+                  "purpose": "公共资产精确成员，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/catalog/functional-class-tags.v1.json",
+                  "purpose": "资产功能类别标签，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/catalog/directional-axis-tags.v1.json",
+                  "purpose": "资产方向轴标签，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/catalog/runtime-geometry-admission.v1.js",
+                  "purpose": "运行几何准入事实，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/catalog/source-asset-exclusions.json",
+                  "purpose": "来源资产排除清单，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/catalog/platform-taxonomy.json",
+                  "purpose": "平台分类枚举，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/interior-coauthoring-template/vendor/three.module.js",
+                  "purpose": "离线 Three.js 运行库，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/interior-coauthoring-template/vendor/loaders/GLTFLoader.js",
+                  "purpose": "离线 GLB 加载器，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/interior-coauthoring-template/vendor/exporters/GLTFExporter.global.js",
+                  "purpose": "离线场景导出器，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/interior-coauthoring-template/vendor/utils/BufferGeometryUtils.js",
+                  "purpose": "离线几何工具，这个文件在当前步骤提供正式依据。"
+                }
+              ]
+            },
+            {
+              "id": "deliver",
+              "type": "store",
+              "x": 1400,
+              "y": 790,
+              "w": 590,
+              "h": 620,
+              "title": "封装、验收并交付当前 HTML",
+              "lines": [
+                "内联实际使用资产",
+                "保存、截图、计时和原生清单"
+              ],
+              "responsibility": "建模 Agent 生成自包含 HTML、记录当前模型摘要，并让用户保存后回传。",
+              "files": [
+                {
+                  "path": "scripts/build_standalone_html.py",
+                  "purpose": "生成单文件 HTML，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/export_native_model_manifest.mjs",
+                  "purpose": "登记原生模型摘要，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/capture_html_views.mjs",
+                  "purpose": "执行原生视图截图，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/measure_html_camera_envelopes.mjs",
+                  "purpose": "向机位 Skill 提供当前包络，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/collect_modeling_stage_timing.py",
+                  "purpose": "记录各阶段用时，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "提供 Ubuntu 正式命令，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts_logic.md",
+                  "purpose": "登记脚本职责，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "templates.md",
+                  "purpose": "索引唯一模板和资产，这个文件在当前步骤提供正式依据。"
+                }
+              ]
+            },
+            {
+              "id": "explain",
+              "type": "store",
+              "x": 2060,
+              "y": 820,
+              "w": 330,
+              "h": 560,
+              "title": "保存同源说明和组件展厅",
+              "lines": [
+                "人类与 AI 读取同一流程事实",
+                "可浏览资产但不形成第二套目录"
+              ],
+              "responsibility": "Skill 保存说明书、正式清单和资产浏览工具，不能保留旧模板入口。",
+              "files": [
+                {
+                  "path": "references/skill-manual.json",
+                  "purpose": "说明书结构化事实源，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/skill-manual.md",
+                  "purpose": "AI 可读说明书，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "references/skill-flowchart.svg",
+                  "purpose": "流程总览图，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "SKILL_MANUAL.pdf",
+                  "purpose": "人类图文说明书，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "MANIFEST.json",
+                  "purpose": "正式文件清单，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "agents/openai.yaml",
+                  "purpose": "默认调用提示，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/validate_template_ownership.py",
+                  "purpose": "拒绝第二套模板，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "scripts/build_component_gallery_standalone.py",
+                  "purpose": "生成组件展厅，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/gallery/index.html",
+                  "purpose": "组件展厅页面，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/gallery/explorer.js",
+                  "purpose": "组件展厅交互，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/gallery/styles.css",
+                  "purpose": "组件展厅样式，这个文件在当前步骤提供正式依据。"
+                },
+                {
+                  "path": "assets/component-library/fixtures/match-fixture.json",
+                  "purpose": "匹配离线样本，这个文件在当前步骤提供正式依据。"
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "input",
+              "to": "import",
+              "points": [
+                [
+                  340,
+                  350
+                ],
+                [
+                  390,
+                  350
+                ]
+              ],
+              "label": "当前户型事实"
+            },
+            {
+              "from": "import",
+              "to": "match",
+              "points": [
+                [
+                  750,
+                  350
+                ],
+                [
+                  800,
+                  350
+                ]
+              ],
+              "label": "结构与家具对象"
+            },
+            {
+              "from": "match",
+              "to": "assets-ok",
+              "points": [
+                [
+                  1230,
+                  350
+                ],
+                [
+                  1290,
+                  350
+                ]
+              ],
+              "label": "资产匹配结果"
+            },
+            {
+              "from": "assets-ok",
+              "to": "compile",
+              "points": [
+                [
+                  1680,
+                  350
+                ],
+                [
+                  1740,
+                  350
+                ]
+              ],
+              "label": "是：全部真实资产"
+            },
+            {
+              "from": "assets-ok",
+              "to": "match",
+              "points": [
+                [
+                  1485,
+                  600
+                ],
+                [
+                  1485,
+                  690
+                ],
+                [
+                  1015,
+                  690
+                ],
+                [
+                  1015,
+                  590
+                ]
+              ],
+              "label": "否：补库后重匹配"
+            },
+            {
+              "from": "compile",
+              "to": "runtime",
+              "points": [
+                [
+                  1955,
+                  605
+                ],
+                [
+                  1955,
+                  720
+                ],
+                [
+                  370,
+                  720
+                ],
+                [
+                  370,
+                  820
+                ]
+              ],
+              "label": "当前编辑器模型"
+            },
+            {
+              "from": "runtime",
+              "to": "catalog",
+              "points": [
+                [
+                  650,
+                  1100
+                ],
+                [
+                  710,
+                  1100
+                ]
+              ],
+              "label": "正式资产事实"
+            },
+            {
+              "from": "catalog",
+              "to": "deliver",
+              "points": [
+                [
+                  1330,
+                  1100
+                ],
+                [
+                  1400,
+                  1100
+                ]
+              ],
+              "label": "加载完成模型"
+            },
+            {
+              "from": "deliver",
+              "to": "explain",
+              "points": [
+                [
+                  1990,
+                  1100
+                ],
+                [
+                  2060,
+                  1100
+                ]
+              ],
+              "label": "HTML 与正式清单"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "logicDetails": [
+    {
+      "id": "exact-asset-matching",
+      "title": "描线对象怎样只匹配真实资产",
+      "explanation": "这一页解释为什么绿色紫色不再切断同功能资产，以及地毯、书桌和台灯怎样避免变成色块。",
+      "logicExplanation": "匹配器先规范功能类别，只把 area-rug、floor-rug 和 carpet 合并为同一个 rug；其它类别保持严格一致。然后在全受管库查找同功能资产，绿色或紫色只继续控制对象是否可移动和安装，不再限制物理资产来自哪个目录。缺少方向标签的普通书桌仍使用来源旋转，不会被错误排除。所有胜出对象都必须具有 componentId、真实 GLB、尺寸和资产锁；没有候选时输出精确缺口并补库后重跑，页面没有任何色块渲染通路。",
+      "sourceRefs": [
+        {
+          "scenarioId": "build-editable-html",
+          "nodeId": "match",
+          "label": "主流程中的真实资产匹配"
+        }
+      ],
+      "algorithm": {
+        "inputs": [
+          "家具描线对象",
+          "公共资产目录",
+          "Ubuntu 资产仓"
+        ],
+        "rules": [
+          "规范登记过的功能同义词",
+          "全库只选同功能真实资产",
+          "编辑语义与物理分区分离",
+          "尺寸方向和资产摘要一并锁定"
+        ],
+        "failure": "没有真实同类资产时列出缺口并补库后重跑，禁止生成色块。",
+        "evidence": "component-layout 中 matched 数等于 placement 总数，unmatched 为零且每件 componentId 都能加载真实网格。"
+      },
+      "diagrams": []
+    },
+    {
+      "id": "coauthoring-editor",
+      "title": "唯一编辑器怎样保持真实资产可编辑",
+      "explanation": "这一页解释真实 GLB 加载、尺寸方向调整、碰撞和用户保存回传怎样共用同一模型。",
+      "logicExplanation": "编辑器只渲染真实 GLB，隐藏的来源 footprint 仅参与碰撞，不能作为资产加载完成证据。全部 GLB 真正 settled 后才把 ready 设为真；任一对象 unmatched 或加载失败都会留下明确错误而不会画出色块。组件宽、深、高可以按当前对象调整，四角手柄继续做等比例缩放，地毯可按平面尺寸独立适配并保持薄层。用户保存时把当前完整模型写回 HTML，回传后只覆盖项目唯一 current.html 和 current-model.json。",
+      "sourceRefs": [
+        {
+          "scenarioId": "build-editable-html",
+          "nodeId": "compile",
+          "label": "主流程中的唯一人机共创编辑器"
+        }
+      ],
+      "algorithm": {
+        "inputs": [
+          "当前 coauthoring model",
+          "已物化真实 GLB",
+          "用户鼠标和数值编辑"
+        ],
+        "rules": [
+          "真实网格加载后才算完成",
+          "来源 footprint 只做碰撞",
+          "尺寸方向编辑共用一个模型",
+          "保存回传原子覆盖当前版"
+        ],
+        "failure": "真实资产加载失败时报告具体对象并修资产或加载器，不显示替代色块。",
+        "evidence": "浏览器状态 rendered 等于 furniture total、failed 和 unmatched 都为零，控制台和 WebGL 错误为零。"
+      },
+      "diagrams": []
+    }
+  ]
+}

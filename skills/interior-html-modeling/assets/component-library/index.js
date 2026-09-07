@@ -10,7 +10,7 @@ import {
   MOVABLE_GREEN,
 } from "@interior/library-contract";
 
-export const COMPONENT_LIBRARY_VERSION = "5.0.0";
+export const COMPONENT_LIBRARY_VERSION = "6.1.1";
 
 export const COMPONENT_LIBRARY_BY_SEMANTIC = Object.freeze({
   [MOVABLE_GREEN]: MOVABLE_GREEN_COMPONENTS,

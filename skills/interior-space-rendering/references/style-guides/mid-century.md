@@ -13,7 +13,7 @@
 - 不把“中古”理解为堆满复古摆件或全屋深棕。
 - 不把当前布局替换成其它案例布局。
 - 产品选择优先读取平台当前项目/正式资产库中明确标记为中古风且品类匹配的资产。
-- 家具造型必须通过 `assetMatch` 或 `style-generic` 产品配方替换；类别、数量、位置、朝向和允许包络保持来源合同。
+- 家具类别、数量、位置、尺寸和朝向保持 Camera facts；造型与材质可在不改变这些事实的前提下按中古风精细化。
 
 Architectural Digest 将 mid-century modern 的年代范围概括为约 1933–1965，并强调其建筑、工业设计与室内设计共同语言；本 Skill 把它落实为清晰线条、强形体、诚实材料和克制有机曲线，而非复制历史房间。  
 来源：[Architectural Digest](https://www.architecturaldigest.com/story/midcentury-modern-decor-basics-that-every-beginner-should-know)

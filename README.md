@@ -1,4 +1,12 @@
-# Interior Design Skill Set
+# Interior Design Skill Set — 20260907-gpt5.6 历史基线
+
+本分支是 2026-09-07 从 Ubuntu `/home/agentops/.codex/skills` 只读采集的 GPT-5.6 使用基线，共 16 个设计主链、交付扩展及 CAD 辅助 Skills。不是 GPT-6 优化实现，未安装或覆盖任何设备。
+
+原仓库最后提交 `66f4815edb16db5b19e88aa262283e8075633490`（2026-08-08）另保存在 `20260808-历史备份` 分支。本分支保留 Skill 文档、模板、源码和随 Skill 提供的参考材料；不包含 CAD/Blender 安装程序、软件运行数据、客户项目、登录态或密钥。受管内部凭据保持设备原位。
+
+下一阶段：先评审五份 GPT-6 优化提案 PDF；获得确认后只在来酷隔离环境实现与测试，不修改 Ubuntu 现用 Skills。动线 Skill 当前只做备份，未删除。
+
+以下为仓库通用使用说明；具体 Skill 使用前提以本次实际采集文件为准，不为满足旧文档措辞改写历史源文件。
 
 室内设计与 CAD Codex Skills 的版本化备份和跨设备分发仓库。
 

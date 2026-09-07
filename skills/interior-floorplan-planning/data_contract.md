@@ -28,11 +28,38 @@
 
 ## 源事实
 
+### `floorplan-source-model.json`
+
+`interior.floorplan-source-model.v2` 在本轮已复核的源像素轮廓、结构语义与对象朝向之间
+建立唯一编译入口。顶层必须包含：
+
+```json
+{
+  "schema": "interior.floorplan-source-model.v2",
+  "orientationAngleUnit": "degrees",
+  "objects": [{
+    "id": "bed-main",
+    "rotationY": 90,
+    "orientation": {
+      "evidence": "source-symbol",
+      "localAxes": {"front": "+Z", "headboard": "-Z"}
+    }
+  }]
+}
+```
+
+`degrees` 是源模型唯一允许的方向角单位。正常源模型生产者必须自动写入该顶层字段；
+每个对象的 `rotationY` 都按度表达，不重复写对象级单位。编译器不得按数值大小猜测，
+不得接受缺失字段、无单位数字、弧度来源或两个并存的单位约定。编译时先用源方向轴与
+度数保持世界 facing，再只转换一次为 accepted handoff 的弧度 `rotationY`；源轮廓按该
+弧度逆旋转得到对象本地宽深，随后用同一弧度可以精确重建世界轮廓。HTML、Blender、
+CAD、动线、机位和渲染不得再次换单位或补偿。
+
 ### `source-evidence.json`
 
 ```json
 {
-  "schema": "interior.floorplan-source-evidence.v4",
+  "schema": "interior.floorplan-source-evidence.v5",
   "sourceSha256": "<source image sha256>",
   "sourceNormalization": {
     "method": "grayscale-local-contrast-union-v1",
@@ -94,6 +121,12 @@
       "primitiveTypes": ["wall-gap", "swing-arc"],
       "panelMaterial": "opaque"
     }
+  }],
+  "boundaryCandidates": [{
+    "id": "candidate-boundary-balcony-south",
+    "segment": [[80, 730], [420, 730]],
+    "discovery": "deterministic-source-boundary-trace",
+    "sourceCrop": "evidence-crops/candidate-boundary-balcony-south.png"
   }],
   "spaceLabelCandidates": [{
     "id": "label-living",
@@ -158,6 +191,12 @@
 中断、轨道、玻璃扇和门扇符号共同确定。`window/glazing` 不进入通行图，`sliding-door`
 必须进入通行图。
 
+`boundaryCandidates[]` 只登记不属于通高墙、门窗或功能分界的真实楼面边界。语义决定
+只允许 `railing|parapet|open-edge|full-height-glazing|not-boundary|unresolved`。栏杆、
+矮墙、开放边和落地玻璃都会封闭楼面轮廓，但不会被编译为通高墙，也不会进入通行图。
+阳台侧边若源图是通高双边墙，仍应登记为 `wallCandidates[]`；不得为了凑完整阳台而把
+所有侧边统一写成墙或栏杆。
+
 `sourceCoordinateFrame` 是唯一正式坐标系，固定为原图左上角原点、x 向右、y 向下。
 旋转、增强、放大或裁切查看图只能登记在 `inspectionViews[]`；每个查看图必须保存
 互逆的 `3x3` 变换和至少五个覆盖四角与中心的往返控制点。所有候选最后都写回原图
@@ -213,6 +252,14 @@ accepted 对象的 `outline` 不得穿过 accepted 门、移门或源图可见�
     "reason": "外墙中断与门扇符号共同确定入户门",
     "evidenceTypes": ["wall-gap", "door-symbol"]
   }],
+  "boundaries": [{
+    "candidateId": "candidate-boundary-balcony-south",
+    "classification": "railing",
+    "sourceLabelId": "label-balcony",
+    "height": 1.1,
+    "reason": "阳台外沿为连续栏杆线，不是双边通高墙",
+    "evidenceTypes": ["floor-edge", "railing-symbol"]
+  }],
   "objects": [{
     "candidateId": "candidate-object-living-sofa",
     "classification": "movable-furniture",
@@ -244,6 +291,11 @@ accepted 对象的 `outline` 不得穿过 accepted 门、移门或源图可见�
 每个开口候选必须有且仅有一个判断，并写明理由和证据类型；存在 `unresolved`
 时停止。墙与开口的语义判断分开登记，但都只引用同一个源证据台账。
 
+`boundaries[].classification` 只允许
+`railing|parapet|open-edge|full-height-glazing|not-boundary|unresolved`。accepted 边界必须
+绑定一个源房名 `sourceLabelId`，写明理由与证据类型；栏杆和矮墙可写实际高度，未知时
+默认 `1.1m`。边界候选与墙、开口、分界和对象 ID 全局唯一。
+
 `dividers[].classification` 只允许
 `semantic-divider|not-divider|unresolved`，且至少引用房名和结构端点两类证据。
 accepted 分界必须额外包含唯一 `traversal`：
@@ -256,9 +308,12 @@ accepted 分界必须额外包含唯一 `traversal`：
 `movable-furniture|fixed-cabinet-equipment|not-object|unresolved`。accepted 对象必须
 有名称并绑定一个已登记 `sourceLabelId`；还必须写
 `functionalClass/quantity=1/atomicObject=true`。`functionalClass` 使用小写连字符的
-单一功能类别，例如 `sofa|bed|dining-table|dining-chair|tv-console|toilet|washbasin`；
-`dining-set|bedroom-set|furniture-group` 等组合类别禁止进入正式数据。餐桌和六把椅子
-必须登记为七个候选对象，父级组合关系只能通过可选 `assemblyId` 表达，不能吞掉子对象。
+单一功能类别，例如 `sofa|sectional-sofa|bed|dining-table|dining-chair|bar-stool|tv-console|toilet|washbasin`；
+`dining-set|bedroom-set|furniture-group|kitchen-run` 等组合类别禁止作为原子对象进入正式
+数据。餐桌和六把椅子必须登记为七个候选对象；吧台与每把可见吧椅分别登记，吧椅使用 `bar-stool`，不能并入吧台或柜体；L 形/转角沙发必须使用 `sectional-sofa`，不能写成普通 `sofa`。连续厨房柜、L/U 形衣柜也必须按地柜、
+转角柜、水槽柜、高柜和设备等可见或确定性规划模块分件。父级组合关系只通过每个子对象
+相同的 `assemblyId` 与各自 `assemblyRole` 表达，不能吞掉子对象。用户已明确授权近似
+资产和调整时，Agent 在冻结组合范围内直接完成分件，不二次询问；只有结构证据冲突才停止。
 存在 `unresolved` 时停止。每个
 `objectCandidates[]` 必须恰有一个决定。空间拓扑编译后，同一个 accepted 对象的
 源图轮廓必须至少占有其声明空间的像素，且占入其它已编译空间的像素数必须为 `0`。
@@ -288,6 +343,8 @@ accepted 分界必须额外包含唯一 `traversal`：
   必须修源边界，禁止移动房名或把门改接到其它空间。
 - `semanticDividers[]`：所有 accepted 功能区之间的非墙分界；通行属性只从
   对应语义决定编译。
+- `cleanStructure.boundaryFeatures`：只由 source boundary candidate 和 semantic decision
+  编译，authored spec 不得手写。它参与楼面闭合但不成为墙。
 - `floorBoundary`、`spaces[]`、`compiledTopology`：只由 `topology_compiler.py` 生成；finalizer 在正式 `structure-data.json` 中规范化为 `floorBoundary`、`rooms[]`、`topology`。
 - `floorBoundary` 与贴外墙房间的 `polygon` 必须共享同一条边和同一顶点。轮廓简化
   造成的最大 `2px` 表示偏差由编译器投影回同一边并插入共享顶点；超过该由两次
@@ -310,6 +367,21 @@ finalizer 输出的编译后 spec 才包含这些派生字段。
 `sourceObjectCandidateId + traceId + roomId`；它只表达如何把已冻结轮廓编译为
 后端原生组件几何，不拥有另一套对象事实。`roomId` 不只核对文本引用：唯一源模型校验器直接把
 候选轮廓栅格与本轮拓扑 `assignment` 比较，拒绝进入其它空间的对象。
+
+每个 `trace-components.objects[]` 还必须显式包含 `rotationY` 与 `orientation`。
+`orientation.evidence` 只能是源图符号、源轮廓主轴或用户明确布局，`localAxes` 只表达
+`front/back/headboard` 对应的 `+X/-X/+Z/-Z`。它与中心、尺寸和轮廓一起成为下游
+建模、动线和渲染 JSON 的唯一朝向来源；任何后端不得自行翻转。`rotationY` 是把
+所声明局部方向轴旋转到世界方向的唯一变换，不是轮廓长边角度。来源可以用等价的
+`+X/-X/+Z/-Z` 表达，编译器必须先保持其世界方向不变，再统一输出
+`front=+Z`、`back/headboard=-Z` 的唯一局部轴和对应 `rotationY`。普通原子对象不得
+为了让 `width >= depth` 再追加 `90°`；只有 L 形模块拆分后的独立支臂可以拥有按
+支臂几何派生的旋转。
+
+`trace-components.assemblies[]` 是组合关系的唯一派生表。每项包含
+`id/functionalClass/roomId/compositionPolicy/childTraceIds`；`compositionPolicy` 固定为
+`source-evidenced-atomic-members`，成员不少于两个且只能属于一个组合。组合本身不生成
+placement、不进入资产匹配，也不能拥有第二套位置或轮廓。
 
 `spaceType` 只允许 `living/dining/kitchen/bedroom/bathroom/study/balcony/entrance/corridor/closet/storage/utility/multipurpose/other`。其中 `bedroom/bathroom/study/closet/storage` 必须使用 `enclosed`，不能通过把卧室或书房写成开放区来绕过门洞规则。
 
@@ -403,7 +475,7 @@ authored `semanticDividers[]` 必须逐项消费每个 accepted 分界候选，�
 {
   "schema": "interior.floorplan-handoff.v3",
   "floorplanId": "project-001",
-  "producer": {"skill": "interior-floorplan-planning", "version": "6.4.0"},
+  "producer": {"skill": "interior-floorplan-planning", "version": "9.0.0"},
   "layoutAuthority": {"schema": "interior.floorplan-layout-authority.v1"},
   "artifacts": {},
   "reports": {

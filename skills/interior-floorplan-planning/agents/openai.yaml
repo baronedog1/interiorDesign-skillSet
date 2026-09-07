@@ -1,4 +1,4 @@
 interface:
   display_name: "室内平面图规划"
   short_description: "户型规划、平面布局、墙窗空间描线与建模前置交接"
-  default_prompt: "当用户要求规划户型、做平面布局、描户型或把墙窗空间画准，或者户型建模只有原图而没有当前有效 handoff 时使用。先声明 layoutAuthority：原图已有完整家具则直接取证；空户型先锁定原图结构，用原生绘图生成并确认同画布二维布置图，再从该图取家具事实。墙、门窗和分区始终只认源图；门、玻璃推拉门、固定玻璃和窗按墙体中断、门扇弧、平行轨道、玻璃扇与宿主墙签名分类。正式坐标始终使用原图左上角像素，唯一 sourceObjectCandidateId 贯穿绿紫描线与组件。能由证据唯一证明的问题直接修正并重编译，只有真正 unresolved 才合并询问一次。输出 floorplan-handoff.v3 后默认转 interior-html-modeling；明确 Blender 或 CAD 时转对应后端。"
+  default_prompt: "当用户要求规划户型、做平面布局、描户型或把墙窗空间画准，或者户型建模只有原图而没有当前有效 handoff 时使用。先声明 layoutAuthority：原图已有完整家具则直接取证；空户型先锁定原图结构，用原生绘图生成并确认同画布二维布置图，再从该图取家具事实。墙、门窗和分区始终只认源图；门、玻璃推拉门、固定玻璃和窗按墙体中断、门扇弧、平行轨道、玻璃扇与宿主墙签名分类。正式坐标始终使用原图左上角像素，唯一 sourceObjectCandidateId 贯穿绿紫描线与组件；连续柜体拆为同一 assemblyId 下的来源可证原子模块，不生成巨型单件。能由证据唯一证明的问题直接修正并重编译；用户已明确授权的可逆匹配直接执行，不重复确认；只有证据冲突、归属无法唯一确定或无同用途资产时才合并询问一次。输出 floorplan-handoff.v3 后默认转 interior-html-modeling；明确 Blender 或 CAD 时转对应后端。"

@@ -12,6 +12,11 @@ import {
   assertComponentRoute,
   getComponentDefinition,
 } from "@interior/component-catalog";
+import {
+  RUNTIME_GEOMETRY_ADMISSION,
+  RUNTIME_GEOMETRY_NON_DEFAULT_BY_ID,
+  RUNTIME_GEOMETRY_REJECTED_ASSET_IDS,
+} from "./catalog/runtime-geometry-admission.v1.js";
 
 const APPEARANCE_MODES = new Set(["white-model", "source-color"]);
 const FINISH_PRESETS = new Set(["source-authored", "modern-light-wood"]);
@@ -168,10 +173,18 @@ function median(values) {
 }
 
 async function mountExternalComponent(group, definition, uniformScale, axisScale, appearance, finishPreset) {
+  if (RUNTIME_GEOMETRY_REJECTED_ASSET_IDS.has(definition.id)) {
+    throw new Error(`${definition.id}: asset is not admitted by the runtime geometry audit`);
+  }
   const prototype = await loadExternalScene(definition);
   const model = prototype.clone(true);
   model.name = `${definition.id}-authored-model`;
   prepareExternalMeshMaterials(model, definition, finishPreset);
+  const geometryAdmission = RUNTIME_GEOMETRY_NON_DEFAULT_BY_ID.get(definition.id) || {
+    frame: "native",
+    canonicalYawRadians: 0,
+  };
+  model.rotation.y += Number(geometryAdmission.canonicalYawRadians || 0);
   model.updateMatrixWorld(true);
 
   const bounds = new THREE.Box3().setFromObject(model);
@@ -206,6 +219,11 @@ async function mountExternalComponent(group, definition, uniformScale, axisScale
   group.add(model);
   setComponentAppearance(group, appearance);
   group.userData.externalAssetReady = true;
+  group.userData.runtimeGeometryAdmission = {
+    frame: geometryAdmission.frame,
+    canonicalYawRadians: Number(geometryAdmission.canonicalYawRadians || 0),
+    admissionDigestSha256: RUNTIME_GEOMETRY_ADMISSION.admissionDigestSha256,
+  };
   group.userData.authoredBounds = {
     width: scaledBounds.max.x - scaledBounds.min.x,
     depth: scaledBounds.max.z - scaledBounds.min.z,
@@ -249,7 +267,7 @@ function addTraceBoundFootprint(group, dimensions, adjustments = {}) {
 export function clampUniformScale(definition, scale) {
   const value = Number(scale ?? 1);
   if (!Number.isFinite(value)) return 1;
-  return Math.max(definition.uniformScaleRange.min, Math.min(definition.uniformScaleRange.max, value));
+  return value > 0 ? value : 1;
 }
 
 export function scaledDimensions(definition, uniformScale = 1) {
@@ -273,7 +291,11 @@ export function resolvedVisualScale(definition, options = {}) {
   const uniformScale = clampUniformScale(definition, options.uniformScale ?? 1);
   const base = scaledDimensions(definition, uniformScale);
   const requested = options.visualDimensions;
-  const scaleMode = definition.editorCapabilities?.scaleMode || "uniform-only";
+  const planarFree = /(^|-)rug$|carpet/.test(String(definition.functionalClass || definition.categoryName || ""));
+  const declaredScaleMode = definition.editorCapabilities?.scaleMode || "uniform-only";
+  const scaleMode = planarFree
+    ? "planar-free"
+    : requested ? "free-resize" : declaredScaleMode;
   if (!requested) {
     return {
       uniformScale,
@@ -282,9 +304,6 @@ export function resolvedVisualScale(definition, options = {}) {
       scaleMode,
     };
   }
-  if (scaleMode !== "axis-limited") {
-    throw new Error(`${definition.id}: visualDimensions are only allowed for reviewed axis-limited components`);
-  }
   const dimensions = {};
   const axisScale = {};
   for (const axis of ["width", "depth", "height"]) {
@@ -292,7 +311,9 @@ export function resolvedVisualScale(definition, options = {}) {
     if (!Number.isFinite(value) || value <= 0) {
       throw new Error(`${definition.id}: visualDimensions.${axis} must be positive`);
     }
-    axisScale[axis] = clampAxisScale(definition, axis, value / base[axis]);
+    axisScale[axis] = planarFree || scaleMode === "free-resize"
+      ? value / base[axis]
+      : clampAxisScale(definition, axis, value / base[axis]);
     dimensions[axis] = base[axis] * axisScale[axis];
   }
   return { uniformScale, axisScale, dimensions, scaleMode };

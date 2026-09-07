@@ -1,155 +1,118 @@
 ---
 name: interior-html-modeling
-description: 当用户说“对这个户型建模”“只对这个空间建模”“做户型白模”“做 Three.js / 可交互 HTML / 3D 空间模型”，未指定 Blender/CAD 后端而要求整屋或指定空间建模，或要求在平面/三维中编辑相机、灯光、天花、窗型、阳台围护、墙端点、组件与持续预览时使用；整屋与单空间必须从同一 accepted handoff、同一模板、同一组件匹配器和同一碰撞链编译，只通过 model-scope 声明范围，生成 self-contained HTML 与原生模型清单供统一机位、渲染和交付链继续使用。
-metadata: {"category":"interior-design","skill_type":"business","source_authority":"gcp-manager-shared-baseline","default_for_all_agents":false,"model_backend":"html-threejs","floorplan_handoff_schema":"interior.floorplan-handoff.v3","model_scope_schema":"interior.model-scope.v1","structure_schema":"interior.floorplan-structure.v3","trace_components_schema":"interior.trace-components.v2","component_layout_schema":"interior.component-layout.v4","relation_hints_schema":"interior.layout-relation-hints.v2","scene_rig_schema":"interior.scene-rig.v1","camera_plan_schema":"interior.camera-plan.v8","native_model_manifest_schema":"interior.native-model-manifest.v1","custom_component_registry_schema":"interior.custom-component-registry.v3","public_component_catalog_schema":"interior.public-component-catalog.v5","component_library_version":"5.0.0","version":"17.0.0"}
+description: 当用户要求把已编译户型快速生成可编辑 HTML/Three.js 整屋模型，或在 AI 初稿上直接调整墙、门窗、精细家具、摄像机与灯光时使用。未明确要求 Blender/CAD 时，本 Skill 是默认建模后端。
+metadata: {"category":"interior-design","skill_type":"business","source_authority":"gcp-manager-shared-baseline","default_for_all_agents":false,"model_backend":"html-threejs","floorplan_handoff_schema":"interior.floorplan-handoff.v3","structure_schema":"interior.floorplan-structure.v4","component_layout_schema":"interior.component-layout.v5","native_model_manifest_schema":"interior.native-model-manifest.v1","version":"34.0.0"}
 ---
 
 # Interior HTML Modeling
 
-所有上游文件先按 [data_contract.md](data_contract.md) 的 `semantic-content-first-v1` 发现；推荐目录和文件名只用于排序。阳台围护只能裁切到对应房间 polygon 的真实边界区间，混合墙的客厅区间必须保留原墙体。
+## 定位
 
-## 使用前准备
+本 Skill 只有一个产品：`室内户型人机共创模板`。
 
-- 管理员预装 Node.js 20+、Python 3.10+、非 Snap Chrome/Chromium + WebGL2，并提供版本化公共组件资产仓；通过 `CHROME_BIN` 与 `INTERIOR_COMPONENT_ASSET_STORE` 指向设备路径。
-- 先读取 [ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md) 与 [local_runtime.md](local_runtime.md)，完成资产 manifest、Three.js 加载、桌面/390×844、console、WebGL2 和非空 canvas preflight。
-- 必须已有 accepted `floorplan-handoff`；浏览器、资产仓或 handoff 缺失时在编译前标记 `blocked`，不得任务内下载浏览器、用 CDN 或项目临时方盒替代公共组件事实源。
+AI 先从 `floorplan-handoff.v3` 一次生成完整三维初稿，用户再在同一 HTML 中直接修正少量问题。它不是复杂 CAD，也不要求用户从零建模。
 
-## 目标
+唯一活动模板位于：
 
-把 `interior-floorplan-planning` 已确认的户型事实确定性编译为唯一可编辑 HTML。整屋与单空间只有一个编译器；单空间仅用 `interior.model-scope-request.v1` 选择主空间和必要相邻上下文，禁止另写局部 HTML、手工几何或项目专用家具。不要重新识图、修墙、移动来源对象或从历史项目复制 JSON。
+`assets/interior-coauthoring-template/`
 
-本 Skill 同时拥有室内链唯一的通用组件目录，但不拥有单品建模方法：
+不得保留第二套模板、旧版本目录、按版本命名的 HTML、兼容入口或任务级模板副本。历史报告可以保留文字和截图，但不得保留可再次运行的旧模板代码。
 
-- `assets/base-floorplan-template/`：唯一户型 HTML 模板。
-- `assets/component-library/catalog/public-assets.json`：公共组件元数据唯一事实源。
-- Ubuntu 受管资产仓：公共组件源码、运行 GLB、预览和逐项哈希唯一二进制事实源。
-- `movable-green/` 与 `fixed-purple/` 只是上游描线语义分区，不再各自拥有另一套模型来源或材质规则。
+## 输入
 
-## 触发与路由
+- `interior.floorplan-handoff.v3`；
+- 其中的 `interior.floorplan-structure.v4` 和 `interior.trace-components.v2`；
+- 可选模型范围、产品绑定和 scene rig。
 
-- 户型建模、单空间建模、白模、交互 HTML、Three.js 空间：使用本 Skill；单空间不是新后端或新模板。
-- 用户只说“对户型建模”且没有指定后端：默认使用本 Skill。
-- 用户明确要求 Blender、`.blend`、CAD、STEP 或 Text2CAD：分别使用 `interior-blender-modeling` 或 `interior-cad-modeling`；三个建模 Skill 不互相调用。
-- 只有户型图/CAD/草图：先调用 `interior-floorplan-planning`，同任务继续本 Skill。
-- 单个沙发、桌、椅、柜或品牌 SKU 建模：调用 `movable-furniture-modeling`；完成后本 Skill 只导入验收包。
-- 模型 accepted 后：先调用 `interior-circulation-planning` 独立复核连接、动线和摆放关系；合格后再调用 `interior-camera-capture`。
-- 保持空间不变出效果图：调用 `interior-space-rendering`。
-- 项目创建、上传、HTML 预览和社区发布：调用 `idk-canvas-ingest-agent`。
+生产任务不重新看图猜坐标，也不运行后置强校验。尺寸、拓扑、墙门窗和对象几何由平面 Skill 同一次算法编译；本 Skill 只消费该事实并立即生成可编辑模型。
+
+## 输出
+
+1. `interior.component-layout.v5`；
+2. `coauthoring-model.json` 与 `coauthoring-model.js`；
+3. 自包含的 `室内户型人机共创模板.html`；
+4. `interior.native-model-manifest.v1`；
+5. 用户点击“保存新版 HTML”后得到的完整当前 HTML；它是用户修改后的唯一回传载体，不再要求用户同时管理第二份修订 JSON；
+6. `interior.user-returned-html-receipt.v1`，记录旧版摘要、当前摘要、对象数量和原子覆盖结果。
+
+单文件超过 30MB 时不得静默留在本机；按 Bridge 规范走飞书云盘 fallback、拆包或 OSS/CDN。
+
+## 唯一生产流程
+
+1. 用 `import_floorplan_handoff.mjs` 创建项目，禁止从旧项目复制模板代码。
+2. 用 `match_trace_components.mjs` 按规范化后的相同 `functionalClass` 匹配受管资产并物化项目实际使用的 GLB。绿色/紫色只表示编辑语义，不能阻止完全相同功能类别的正式资产被采用。没有精确同类资产时必须先补入受管资产再继续，禁止生成色块或轮廓替身。
+3. 匹配器自动调用 `compile_coauthoring_model.mjs`，把墙、门窗、房间、精细家具、摄像机和灯光编译为编辑器唯一模型。
+4. 用 `build_standalone_html.py` 生成单文件；最终文件不得引用外部脚本、CSS、模型数据或 GLB。
+5. 客户生产任务直接交付 HTML。保存按钮旁必须明确提示：“修改后请保存并把新 HTML 发回；模型会把它作为当前版覆盖工作区旧版”。
+6. 收到用户回传 HTML 后，只运行 `import_returned_html.py`：从文件内 `#template-data` 读取当前模型，核对项目身份，然后原子覆盖工作区唯一 `current.html` 和 `current-model.json`。不得让旧 HTML、localStorage 或任务目录副本继续成为事实源。
+7. 覆盖成功后直接进入非阻断动线提示和算法机位，不再要求平面 Skill 重新确认用户已经明确做出的可逆编辑。
+
+## 交互合同
+
+- 三维和二维共用同一个模型；二维只是正交俯视，不维护第二份墙线。
+- 左键空白处旋转、右键平移、滚轮缩放；“适应窗口”按当前屏幕重新居中。
+- 结构、组件、场景三个编辑域明确分开，点击对象不得自动跨域。
+- 结构页顶部固定一行六个无文字 SVG 扁平按钮：选择、调整墙、添加墙、加窗、加门、删除。每个按钮必须有 `aria-label` 和悬停/键盘聚焦提示，不得用字符图标或把说明常驻挤占侧栏。
+- 墙支持选择、双击进入编辑、端点拉长/缩短、磁吸、添加和删除。同一直线只允许端点接触，不允许正长度重叠；墙体只有接近 90° 的垂直相交可以穿越，斜交、穿门窗或穿家具都必须停在最后合法位置。
+- 双击墙后，墙厚输入必须出现在当前对象顶部快捷区；修改厚度与拖端点共用碰撞内核，不能挤入相邻平行墙。垂直墙允许相交，不因厚度接触被误拒绝。
+- 门窗必须附着宿主墙，可新增、移动、改宽高和删除；二维/三维使用同一坐标逻辑。同墙门窗至少保留 8cm 墙带，不能越出墙端、墙高或被其它墙穿过。
+- 组件页顶部固定选择、新增、显隐、删除四个 SVG 快捷按钮；删除不得藏在检查器底部。双击组件显示一个移动点与四个角点，拖任一角点只做宽、深、高等比例缩放，不显示第二套数字缩放控件。
+- 组件页支持精细家具选择、移动、旋转、隐藏、复位、缩放和删除；所有正式资产都可按当前对象宽、深、高调整，双击后的四角手柄继续做等比例缩放。地毯允许在平面两个方向独立适配并保持真实薄层高度。禁止退化成通用方盒或半透明色块。拖动和属性修改统一使用来源真实 footprint、竖向范围、户型边界、墙体实段和其它非地毯组件做碰撞判定。
+- 所有创建、拖动、立面编辑和数值修改共用同一碰撞内核。接触允许、穿透拒绝；旧 handoff 已接受的嵌入/组合可以保持或沿脱离方向移动，但不能新增或加深穿透。
+- 固定柜体、冰箱、洗手盆和洗衣机在模板载入时先做一次确定性固定构件归一化：删除被专用柜完整覆盖的重复通用柜，按最小位移解除边界、墙体和固定构件互穿；不能因为活动椅、桌等源位置关系把柜体推离原墙面。柜体顶部不得高于 `ceilingHeight`（未声明时等于墙高）。
+- 场景页支持摄像机和灯光添加、选择与调整。
+- 顶栏必须提供独立的“家具”和“空间标志”显隐按钮；图层页继续提供墙、门窗、家具、天花板、吊灯、摄像机、灯光、空间名和网格控制。天花默认隐藏，显示高度等于墙顶；吊灯显隐不得关闭实际光照计算。
+- 所有编辑进入统一撤销/重做栈；导入、导出和截图可用。浏览器 localStorage 不能覆盖文件内模型，用户回传的完整 HTML 才是跨会话唯一当前版。
+- 机位 Skill 只通过 `__INTERIOR_COAUTHORING_EDITOR__` 的稳定算法桥设置相机、临时隐藏最小遮挡和读取代码投影事实；不得再依赖旧模板私有接口。
+- 墙体编辑不得重建精细家具。局部拖动期间只更新当前对象，不能把相机手势和对象手势同时触发。
+
+## 精细家具合同
+
+- 绿色对象只匹配 `movable-green`，紫色对象只匹配 `fixed-purple`。
+- 资产必须与来源 `functionalClass` 一致，禁止跨类别替代。
+- 正式资产使用受管组件库的真实网格、来源尺寸、方向轴和许可记录。
+- `area-rug/floor-rug/carpet` 只作为 `rug` 的规范同义词；其它功能类别不得跨类替代。
+- 绿色/紫色是对象可移动或安装语义，不是资产库隔离墙；同功能资产可以来自任一物理分区，项目继续保留原编辑语义。
+- 每个对象必须具有 `assetStatus=matched`、真实 `componentId` 和可加载 GLB。匹配不到时在同一任务补充受管资产，禁止输出色块、轮廓体或程序化方盒。
+- 项目去重运行资产上限 14MiB，单文件上限 29MiB；不得提高参数绕过。
+- 商业发布仍按实际使用资产逐项复核许可，不能用浏览器加载成功代替许可验收。
+
+## 校验边界
+
+客户任务只硬停止于：
+
+- 必需 handoff 缺失或确实属于另一项目；
+- JSON 损坏到无法加载；
+- 浏览器核心无法启动，用户看不到任何模型；
+- 需要付费、公开发布或不可逆动作而未获授权。
+
+轻微同类外观差异、原户型动线问题和可逆编辑不是生产硬停止；但缺少真实资产意味着模型尚未生成完成，必须补库后继续，不能用色块伪装完成。
+
+强结构校验、全库审计、跨屏交互回归和负向扫描只在 Skill 修改/发版时运行。回归失败必须修算法或模板后再发布，不能把失败门禁留给客户任务。
+
+## 发版验收
+
+- `validate_template_ownership.py` 证明全 Skills 只有一个活动模板所有者；
+- 活动 Skill 内不存在旧模板目录、版本化模板名或旧公共 API；
+- 最终单文件在 Ubuntu Chrome 渲染盒真实打开；
+- 受管家具 `matched = furniture total`，未匹配数、色块数和资产加载失败数均为 0；
+- 结构顶部恰有六个 SVG-only 快捷按钮且均有 tooltip/无障碍名称；组件删除只在顶部快捷区出现；
+- 真实鼠标完成墙选择、端点拖动，期间相机位姿不变且家具不重建；
+- `validate_coauthoring_collisions.mjs` 在最终 standalone 中真实拖动家具和门窗、拖四角手柄等比缩放、修改墙厚，并证明固定构件初始穿模为 0、柜体超高、家具互穿/穿墙/越界、门窗重叠、共线墙重叠和斜交墙被拒绝，垂直墙相交被允许；
+- 天花板与吊灯两个图层开关真实改变可见状态；所有家具必须生成真实受管网格，隐藏碰撞轮廓不得被误计为资产加载完成；
+- 家具和空间标志两个顶栏开关都真实改变可见状态；
+- 控制台错误和 WebGL 上下文丢失为 0；
+- GCP 共享基线与 Ubuntu 活动副本逐文件一致；
+- 不重启 Bridge。
 
 ## 高频数据入口
 
-- 数据对象、ID、哈希与交接：[data_contract.md](data_contract.md)
-- 天花、灯具、窗型、阳台、墙端点补丁和连续碰撞：[references/backend-architectural-options.md](references/backend-architectural-options.md)
-- 固定执行、质量门与失败恢复：[playbook.md](playbook.md)
-- 模板、公共目录与资产仓结构：[templates.md](templates.md)
-- 脚本职责与退出条件：[scripts_logic.md](scripts_logic.md)
-- 本地命令与浏览器验收：[local_runtime.md](local_runtime.md)
-- 设备、共享仓和许可环境边界：[ENVIRONMENT_CONTRACT.md](ENVIRONMENT_CONTRACT.md)
-
-## 唯一事实源
-
-| 事实 | 唯一位置 |
-|---|---|
-| 户型墙窗、空间、连接和源对象 | 当前 `floorplan-handoff.v3` |
-| 整屋或单空间编译范围 | 项目 `model-scope.json`，只能由 importer 从 `model-scope-request.v1` 编译 |
-| 公共组件条目、标签、许可和运行路径 | `assets/component-library/catalog/public-assets.json` |
-| 公共组件可承接的原子功能类别 | `assets/component-library/catalog/functional-class-tags.v1.json` |
-| 公共组件精确成员 | `assets/component-library/catalog/public-asset-selection.json` |
-| 未通过来源/格式/几何审计的对象 | `assets/component-library/catalog/source-asset-exclusions.json` |
-| 平台分类与风格枚举快照 | `assets/component-library/catalog/platform-taxonomy.json` |
-| 公共组件二进制与校验回执 | `$INTERIOR_COMPONENT_ASSET_STORE` |
-| 当前项目使用了哪些组件 | 项目 `component-layout.json` |
-| 当前组件的审阅方向轴与关系目标提示 | `component-layout.json.relationHints` |
-| 朝向、贴墙、房间归属、净距、通道和连接是否通过 | `interior-circulation-planning` 的当前 `circulation-audit.v2/result.v2` |
-| 当前项目实际取入的模型和哈希 | 项目 `component-assets.lock.json` |
-| 自定义单品 | 项目 `custom-components/registry.json` |
-| 灯光与编辑相机 | 项目 `scene-rig.json` |
-| 正式截图机位 | 项目 `camera-plan.json`，由机位 Skill 维护 |
-| HTML 后端身份、模型哈希和截图适配器 | 项目 `native-model-manifest.json` |
-
-## 公共组件硬规则
-
-1. 正式目录中每一项必须是可编辑源码派生的真实 glTF/GLB，`builder=external-gltf`、`primitiveBoxOnly=false`。旧方盒家具、旧程序化柜体、旧挂画、旧吊灯和项目原创通用饰品全部退出正式目录。
-2. 公共目录当前由 Poly Haven、Amazon Berkeley Objects 与 Sweet Home 3D 官方列出的 BlendSwap CC0 库组成。数量、分类和来源以 `public-assets.json` 动态统计为准，不在其它文档手写第二份清单。
-3. Poly Haven 模型为 `CC0-1.0`，可自动进入研究、商业和发布链。ABO 数据集官网与桶内许可声明 `CC-BY-4.0`，但 AWS Registry 仍显示 `CC-BY-NC-4.0`；研究使用允许，自动商业与社区发布必须阻塞并等待人工许可复核。ABO 始终随项目 lock 保存作者、来源、许可、冲突状态和修改说明。
-4. Poly Haven 只从逐项审阅的室内资产白名单收录；ABO 只有标题类别与官方 `product_type` 类别一致时才能进入候选。禁止用宽泛关键词或数量配额补齐目录，禁止把工具、游戏设备、户外路灯等错类资产塞进室内组件库。
-5. 每项必须保存来源 URL、API/数据集、作者、许可、可编辑格式、源色/PBR、标准尺寸、安装方式、用途、颜色、平台分类和标签。入选清单是唯一成员事实；远端缓存里多出来的模型不能自动进入目录。
-6. 沙发必须有 `seatingCapacity`。风格、材质、颜色、用途必须分字段维护：木色不等于中式，名称含 Chinese 不等于新中式。无法从造型和来源证据判断风格时写 `styleNeutral=true`，不得猜测。
-7. 一体成型塑料椅等通用品不写假风格，使用“简易、大排档、户外、易清洁”等用途标签。
-8. 所有绿色和紫色组件均使用同一几何提供 `white-model` 与 `source-color`。默认白模；切换源色只换材质，不改变 ID、位置、比例或碰撞脚印。
-9. 默认只允许等比例缩放。仅目录明确标记 `axis-limited` 的直线柜体可在审核范围内分别调整宽、深、高；软包、洁具、灯具和自由曲面不得非等比拉伸。调整后的落地组件顶面、吊柜“离地高度 + 柜高”必须低于墙高 `0.05m`。
-10. 多层柜体优先拆成独立地柜、吊柜、高柜和台面设备模块。只有目录声明的独立模块或真实 glTF 节点可以隐藏/删除；禁止用材质名、网格序号或视觉猜测伪造“可删层”。
-11. “新中式”先选现代、简洁、比例合适的中性家具和通用封闭柜体，再以木饰面、留白和配色表达；`old/vintage/antique/ornate/traditional` 资产不得自动匹配。博古架、仿古屏风只在用户明确要古典陈设时使用。
-12. 初始位置、方向和碰撞脚印由项目来源描线决定；公共模型决定可见三维外形。当前值只有
-    两种合法修正来源：用户明确布局纠正，或 `interior-circulation-planning` 的
-    `adjustment-plan.v2` 唯一摘要绑定可逆操作。两者都用同一个 `reviewedAdjustment`
-    保存来源、当前值和证据；当前值成为唯一执行事实，`source*` 永远只保留溯源证据。
-13. 大型二进制不复制进 Skill。项目只按 `component-layout.json` 取入实际使用的模型；standalone 也只内联当前项目用到的 GLB。
-14. 组件“正面、背面、床头端”等方向必须来自真实 GLB 的浏览器审阅轴，不得从文件名、包围盒长边或品类常识猜测。HTML 只提供方向轴和可选目标/墙体提示；餐椅朝桌、床头贴墙、沙发背贴墙、沙发朝电视柜、柜门朝内以及动线净宽全部由 `interior-circulation-planning` 的统一算法复算。
-
-## 执行顺序
-
-1. 在空目录运行 `import_floorplan_handoff.mjs`。导入器只接受本轮附件对应、哈希闭合且状态 accepted 的 handoff。整屋不传 scope；单空间传 `--model-scope model-scope-request.json`，由导入器确定性生成 `model-scope.json`。请求只声明主空间、必要相邻上下文和原因，不能携带另一套墙、门窗、家具或模板。
-2. 读取 `trace-components.json`；每个 accepted `sourceObjectCandidateId` 必须一对一进入 match 和 placement，不补造、不合并、不删除、不平移避碰。空户型项目也只能读取上游已确认原生平面布局产生的对象事实，不得在三维阶段重新设计。
-3. 运行 `match_trace_components.mjs`。每条 trace 必须为 `quantity=1` 的原子对象，并先按完全相等的 `functionalClass` 与绿/紫分区过滤；之后才比较形态、尺寸和有证据的风格。没有同功能资产时停止，禁止把餐桌降级成茶几、坐便器降级成洗手台或跨类别 fallback。
-4. 用户明确要求补齐、但原图没有清晰描线证据的功能对象，只能追加为 `user-explicit-addition`，记录用户指令和设计新增 ID；不得伪造来源 trace。新增对象从一开始就执行房间、墙、开口、碰撞和层高检查。
-5. 正式导入不保留模板空布局。匹配器先撤销旧输出，再按“同绿紫分区 + 同原子 `functionalClass` + 同轮廓类别 + 资产允许的比例/轴向缩放”选中组件；同类别多个合格资产按风格、尺寸、文本分数和稳定资产 ID 确定性择一，不要求用户确认。随后自动调用 `materialize_component_assets.mjs`，只取当前项目组件并生成 `component-assets.lock.json`。资产仓不可用、任一资产未通过仓库校验或项目文件哈希不符时，不得写出正式 `component-layout.json`；全部成功后才原子提交。不存在 `deferred`、方盒占位或临时重模分支。
-6. 如用户指定单品，使用 `import_custom_component_package.mjs` 导入已验收 v3 包；禁止把项目单品悄悄写回公共目录。
-7. 打开 HTML，核对 handoff 墙窗和空间保留为可追溯来源；结构页不得增删墙、改房间或改开口类别，唯一允许的局部结构编辑是沿原轴拖动既有墙端点，并生成 `structure-edit-patch.v1`。每件组件可隐藏/显示/删除/移动/旋转/复位，且白模/源色均来自同一模型。为实际使用的组件登记浏览器审阅方向轴和可选目标/墙体提示；不得在本 Skill 自报餐椅、床、沙发、净距或通道已经通过。审核过的直线柜体显示宽深高控件；其它组件只显示等比尺度。
-8. 平面和三维进入时都以户型包围盒中心为 Orbit 焦点。场景页中相机、灯光本体支持单击选中、双击进入编辑和直接拖动；预览窗可从右下角缩放并保持 16:9，切换视图或页签不消失。点击空白取消对象选择后，方向键平移整个画布焦点。水泥毛坯皮肤是结构默认状态并同时覆盖墙和地板，测距网格位于户型下方并延伸到户型外。Q1 隐藏组件且不显示槽位覆盖，Q2 显示同一家具柜体白模；两者保持同一水泥墙地面、相机和模型状态。semantic frame 必须导出组件完整 placement 与 `relationHints`，供下游 JSON 表达位置、朝向目标和贴墙关系。天花可一键显示/隐藏；灯具使用可编辑资产与 scene rig；窗框可在同一洞口内切换样式；阳台可按证据选择开放栏杆或封闭玻璃；墙端点编辑只能沿原轴并导出结构补丁；组件拖动必须连续碰撞并停在首次接触处。
-9. 初始来源锁定 placement 不用第二套近似算法推翻上游事实。用户明确新增、用户在 HTML
-   编辑或带合法 `reviewedAdjustment` 的纠错 placement，只在本 Skill 执行边界、墙、
-   真实开口、组件碰撞和层高即时检查；失败即回滚。方向、贴墙、房间归属、家具净距和
-   通道只在导出当前模型后由动线 Skill 正式计算。
-10. 运行数据、组件目录、资产仓、模板、scene rig、standalone 和浏览器验收。
-11. 运行 `export_native_model_manifest.mjs`，把 standalone HTML、模型范围、模型哈希、公共坐标变换和 `capture_html_views.mjs` 写入 `native-model-manifest.json`。
-    `capture_html_views.mjs` 只是后端适配器，正式截图只能由 `interior-camera-capture/scripts/capture_model_views.py` 调度。调度器先验证相机和设备压力，再持有全局截图槽位；适配器在页面脚本执行前把外部 accepted `camera-plan.v8` 锁定为唯一运行时机位。standalone 内嵌历史机位只能供交互预览，不能覆盖正式计划；禁止项目脚本直接启动 Chrome 或事后补截图字段。
-12. 将 handoff、当前 `component-layout.v4`、原生模型清单和模型哈希交给
-    `interior-circulation-planning`。若返回 `correction-ready`，立即运行
-    `apply_circulation_adjustment.mjs` 应用唯一选中操作，不询问用户；重新构建 standalone、
-    导出新 manifest 并全量重审。只有 `circulation-result.v2` 放行后才能找机位。
-13. 用户要求上传或社区发布时，把已验收产物交给 `idk-canvas-ingest-agent`；本 Skill 不读取平台凭据。
-
-## 核心命令
-
-```bash
-node scripts/import_floorplan_handoff.mjs --handoff <handoff-dir>/floorplan-handoff.json [--model-scope <model-scope-request.json>] --out <empty-project>
-node scripts/match_trace_components.mjs --trace <project>/trace-components.json --out <project>/component-layout.json [--commercial|--publish]
-node scripts/apply_circulation_adjustment.mjs --layout <project>/component-layout.json --plan <project>/circulation-adjustment-plan.json --out <project>/component-layout.next.json
-python3 scripts/build_standalone_html.py --project <project> --out <project>.html
-node scripts/export_native_model_manifest.mjs --html <project>.html --handoff <project>/floorplan-handoff/floorplan-handoff.json --structure <project>/structure-data.json --components <project>/component-layout.json --model-scope <project>/model-scope.json --backend-options <project>/backend-options.json --capture-adapter scripts/capture_html_views.mjs --out <project>/native-model-manifest.json
-```
-
-完整公共目录浏览只在 Ubuntu 通过 HTTP 读取受管资产仓。飞书交付用抽样 standalone，不把数百个模型塞进一个 HTML。
-
-## 验收
-
-### 目录与许可
-
-- `validate_component_library.mjs`：运行目录与 canonical JSON 完全一致；所有类别至少 20 项；标签、沙发人数、实用椅例外、双外观和许可完整。
-- `validate_public_asset_store.mjs`：所有计划项都有完整源码树、有效 GLB、逐文件哈希回执；失败数为 0。Poly Haven 的 `.gltf`、`.bin`、纹理和官方文件描述缺一不可。预览缩略图缺失只记 warning，不得把有效 3D 源码判失败。
-- Skill 内不存在旧 `movable-green/assets`、旧 asset manifest、程序化通用 builder 或二进制全量副本。
-- 当前全部目录项允许本次研究使用；`--commercial/--publish` 只放行 `commercialUseAllowed=true`。ABO 条目因官方登记冲突必须在自动门禁失败，不能由 Agent 自行忽略。
-
-### 项目与浏览器
-
-- `component-layout.json` 与 `component-assets.lock.json` ID 集合一致，缺模型或哈希变化立即失败。
-- `model-scope.json` 必须把全部来源房间唯一分为主空间、允许上下文和排除空间；单空间运行时只能显示前两者。其模板、组件目录、碰撞、场景和截图适配器必须与整屋完全相同，`customProjectGeometryAllowed=false`。
-- 抽样至少覆盖每个类别、两个来源和绿/紫两分区；白模与源色截图不同但几何边界相同。
-- 抽样源码可在 Blender 或等价工具中导入、选择网格并编辑；`axis-limited` 柜体须验证三个轴的上下界、墙高门禁和吊柜独立删除。
-- Chrome 桌面和 390px 移动端画布非空，GLB 加载失败、控制台错误、WebGL context loss 均为 0。
-- 平面/三维居中、预览窗缩放、相机/灯光单击或双击选中与直接拖动、空白画布方向键平移、持续实时预览、水泥墙地、天花显隐、窗型切换、结构补丁导出、连续碰撞停止、户型外测距网格以及组件逐件操作全部通过。
-- `relationHints` 的浏览器审阅轴、目标/墙体引用和允许接触声明完整；不得包含距离、点积、净空、房间归属或通过结论。正式朝向、贴墙、房间完整包含、家具净距和过道净空必须由同模型的 `circulation-result.v2` 通过。
-- 开放空间需要视觉分界时，在 `relationHints.spaceDividerMarkers` 只引用上游 `semanticDividers[].id` 并渲染低矮地面标志；不得改写 handoff，也不得为客厅/阳台等开放分界新增假墙。
-- standalone 只包含当前 placement 使用的模型；不存在未使用模型二进制；单资产 `≤8MB`、原始资产合计 `≤18MB`、最终单文件 `<29MB`，超限必须使用 webStandalone 优化变体或停止，禁止生成 100MB 级文件。
-
-## 交付
-
-- 当前项目或 self-contained standalone HTML；
-- `native-model-manifest.json` 与正式截图调度器产生的 HTML 原生截图回执；
-- `floorplan-handoff/`、导入 receipt、`model-scope.json`、`structure-data.json`、`component-layout.json`、`component-assets.lock.json`、`scene-rig.json`；
-- 当前目录 JSON、资产仓 inventory 和机器可读验收报告；
-- 公共组件抽样展厅、桌面/移动端截图；
-- 来源与许可说明。
-
-飞书任务不得只给 `/home/agentops/...` 路径。大文件按飞书云盘、OSS/CDN 或平台项目交付；研究限定资产不得发布到公开社区。
+- [AI 可读完整说明书](references/skill-manual.md)
+- [人类 A3 图文说明书](SKILL_MANUAL.pdf)
+- [同源流程总览](references/skill-flowchart.svg)
+- [模板与资产](templates.md)
+- [数据合同](data_contract.md)
+- [执行流程](playbook.md)
+- [脚本职责](scripts_logic.md)
+- [本地命令](local_runtime.md)
+- [环境边界](ENVIRONMENT_CONTRACT.md)

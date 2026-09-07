@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 4,
+  "skillId": "interior-blender-modeling",
+  "displayName": "HTML 布局事实到精细 Blender 整屋",
+  "version": "5.0.0",
+  "purpose": "只复用 HTML 的户型与家具数据，按房间风格从 Blender 多款精细资产中选型，并用受管 CC0 PBR 墙、地、顶材质和 Eevee 灯光执行同一冻结机位。",
+  "overview": {
+    "subtitle": "HTML 管布局；Blender 管精细几何与可追溯 PBR 材质；Camera 只维护一套机位算法。",
+    "nodes": [
+      {
+        "id":"overview-input","scenarioId":"build-current-html-as-blender","type":"io","x":60,"y":360,"w":560,"h":480,"title":"读取唯一布局事实","lines":["current-model + structure；不读 HTML GLB"],"responsibility":"读取当前户型、房间和家具 transform，并加载 Blender 原生资产目录与风格预设。",
+        "files":[
+          {"path":"SKILL.md","purpose":"定义触发、唯一事实源、精细资产、PBR 材质和禁止事项。"},{"path":"playbook.md","purpose":"说明完整执行顺序。"},{"path":"data_contract.md","purpose":"规定输入输出、选型、PBR 材质和朝向字段。"},{"path":"templates.md","purpose":"解释资产、材质、风格和渲染模板资源。"},{"path":"assets/blender-component-library/catalog.json","purpose":"登记同类多款资产、摘要、许可、来源轴、前向轴、朝向和缩放。"},{"path":"assets/blender-component-library/precision-asset-acquisition.v1.json","purpose":"登记人工审过且允许获取的免费资产 ID。"},{"path":"assets/blender-component-library/acquisition-manifest.v1.json","purpose":"登记实际下载来源、许可、文件大小和摘要。"},{"path":"assets/blender-material-library/catalog.json","purpose":"登记墙面、天花、木地板和湿区瓷砖的 PBR 模板、物理尺寸和贴图摘要。"},{"path":"assets/blender-material-library/material-acquisition.v1.json","purpose":"登记人工审定、允许获取的 Poly Haven CC0 材质与分辨率。"},{"path":"assets/blender-material-library/acquisition-manifest.v1.json","purpose":"登记实际材质文件来源、许可、大小和 SHA-256。"},{"path":"assets/blender-style-presets/warm-modern-neutral.json","purpose":"登记房间选型、PBR 材质模板映射、Eevee 灯光和色调策略。"},{"path":"assets/blender-template/backend-options.json","purpose":"登记后端、材质事实源与 Eevee 原生渲染行为。"},{"path":"references/architecture.md","purpose":"解释 HTML、Blender、Camera 分层。"},{"path":"references/contracts.md","purpose":"列出交接与交付合同。"}
+        ]
+      },
+      {
+        "id":"overview-build","type":"process","x":850,"y":250,"w":760,"h":700,"title":"编译、验收并隔离截图","lines":["精确资产；关系朝向；材质；单图进程"],"responsibility":"唯一编译器建立原生模型，验证器重开，截图批处理只执行冻结机位并控制资源。",
+        "files":[
+          {"path":"scripts/acquire_blenderkit_assets.py","purpose":"获取显式审过的免费 BlenderKit 资产并生成审计清单。"},{"path":"scripts/acquire_polyhaven_materials.py","purpose":"获取显式登记的 Poly Haven CC0 PBR 材质并核对摘要。"},{"path":"scripts/init_blender_model_project.py","purpose":"建立 v5 项目并绑定组件与材质 catalog。"},{"path":"scripts/build_floorplan_scene.py","purpose":"唯一房间选型、轴向归一、结构、PBR 材质和精细资产编译器。"},{"path":"scripts/validate_blender_scene.py","purpose":"重开验证原生模型、选型与风格字段。"},{"path":"scripts/export_native_model_manifest.py","purpose":"生成原生模型清单。"},{"path":"scripts/export_camera_scene.py","purpose":"导出真实网格与语义审计包。"},{"path":"scripts/capture_blender_batch.py","purpose":"逐机位隔离 Blender 进程并合并回执。"},{"path":"scripts/capture_blender_views.py","purpose":"剪除非目标房间资产并执行单张 Eevee 冻结机位渲染。"},{"path":"scripts/resolve_component_motion.py","purpose":"计算组件连续首次接触位移。"},{"path":"scripts/test_mcp_connection.py","purpose":"只读检查 Blender 连接和文件。"},{"path":"scripts/common.py","purpose":"提供 JSON 和摘要函数。"},{"path":"scripts_logic.md","purpose":"登记唯一脚本职责。"},{"path":"local_runtime.md","purpose":"给出受管 Ubuntu 命令。"},{"path":"ENVIRONMENT_CONTRACT.md","purpose":"说明权威源、设备、资产仓、材质仓和渲染盒。"}
+        ]
+      },
+      {
+        "id":"overview-output","type":"store","x":1840,"y":360,"w":520,"h":480,"title":"交付模型、截图和说明","lines":["blend、GLB、PNG、JSON、回执、说明书"],"responsibility":"保存自包含原生模型、同源截图与可审计 Skill 说明。",
+        "files":[
+          {"path":"agents/openai.yaml","purpose":"这个文件用来提供默认调用提示。"},{"path":"references/skill-manual.json","purpose":"这个文件用来保存说明书唯一结构化事实。"},{"path":"references/skill-manual.md","purpose":"这个文件用来提供 AI 可读派生说明。"},{"path":"references/skill-flowchart.svg","purpose":"这个文件用来向人类展示唯一生产流程的矢量总览。"},{"path":"SKILL_MANUAL.pdf","purpose":"这个文件用来提供人类 A3 说明书。"},{"path":"MANIFEST.json","purpose":"这个文件用来登记唯一活动文件和版本。"}
+        ]
+      }
+    ],
+    "edges":[
+      {"from":"overview-input","to":"overview-build","points":[[620,600],[850,600]],"label":"布局、catalog、风格"},
+      {"from":"overview-build","to":"overview-output","points":[[1610,600],[1840,600]],"label":"验收模型和冻结截图"}
+    ]
+  },
+  "concepts": [],
+  "scenarios": [
+    {
+      "id":"build-current-html-as-blender",
+      "yamlPhrase":"把当前可编辑 HTML 户型继续生成精细 Blender 整屋模型、交付 .blend/GLB，或让通用机位算法直接在 Blender 原生场景截图",
+      "title":"把当前 HTML 布局编译成精细 Blender 并原生截图",
+      "explanation":"用户确认 HTML 布局后明确要求 Blender 精细模型或 Blender 原生机位图时调用。",
+      "inputKey":"current-html-facts-to-native-blender",
+      "narrative":"系统只拿 HTML 里的墙门窗、房间和家具 transform，不搬 HTML 模型。每件家具按 functionalClass、房间和风格标签从 Blender 原生多款资产中确定性选择；Y-up 等来源先按 catalog 预旋转归一，再按 JSON 尺寸和靠墙/关系语义放置。墙面、天花、干区木地板和湿区瓷砖分别使用受管 PBR 模板；模板包含真实贴图、物理映射尺寸、来源、许可和摘要，禁止运行时程序噪声或纯色回退。Camera 仍只在 HTML 当前版求解一次机位；Blender 每张图单独启动受管进程，在 Eevee 分配纹理前删掉非目标房间家具并清理孤儿数据，因此既保留真实 PBR、AgX、灯光和阴影，又不突破内存上限。缺资产或材质就先人工审查候选，不能自动搜索后入库，也不能回退白模。",
+      "input":"项目唯一 current-model、同版 structure、Blender 组件 catalog、PBR 材质 catalog、风格预设和冻结 Camera plan",
+      "output":"自包含 blend、派生 GLB、原生清单、十空间 PNG 与同名 JSON、批处理回执",
+      "diagrams":[{
+        "title":"布局事实到原生 Blender 的唯一链",
+        "nodes":[
+          {"id":"s-input","type":"io","x":50,"y":280,"w":390,"h":320,"title":"读取布局和审定资产","lines":["结构、家具 transform、免费资产与 PBR 材质"],"responsibility":"绑定当前模型与结构，只获取显式审过的免费 Blender 资产和 CC0 PBR 材质，不导入 HTML 几何。","files":[{"path":"scripts/acquire_blenderkit_assets.py","purpose":"这个文件用来获取审定资产并记录来源和摘要。"},{"path":"scripts/acquire_polyhaven_materials.py","purpose":"这个文件用来获取审定 PBR 材质并核对来源、许可和摘要。"},{"path":"scripts/init_blender_model_project.py","purpose":"这个文件用来核对项目身份并建立唯一 Blender 项目。"}]},
+          {"id":"s-build","type":"process","x":610,"y":260,"w":450,"h":360,"title":"按房间选型并编译","lines":["同类多款；轴向归一；墙地顶 PBR"],"responsibility":"唯一编译器按房间风格选型、归一来源轴，并按物理尺寸映射受管墙、地、顶 PBR 模板。","files":[{"path":"scripts/build_floorplan_scene.py","purpose":"这个文件用来执行结构、PBR 材质、选型、轴向和朝向的完整确定性编译。"}]},
+          {"id":"s-validate","type":"process","x":1230,"y":260,"w":440,"h":360,"title":"重开并验证","lines":["44组件；零未匹配；零方盒"],"responsibility":"验证模型身份、资产和朝向字段。","files":[{"path":"scripts/validate_blender_scene.py","purpose":"这个文件用来重新打开并验证 Blender 原生场景。"}]},
+          {"id":"s-capture","type":"process","x":1840,"y":260,"w":440,"h":360,"title":"执行 Eevee 冻结机位","lines":["单图进程；目标房间剪枝；PBR 与 AgX"],"responsibility":"批处理逐图释放内存，单图适配器剪除外房家具并用 Eevee 渲染，不重算角度。","files":[{"path":"scripts/capture_blender_batch.py","purpose":"这个文件用来逐张隔离 Blender 进程并合并截图回执。"},{"path":"scripts/capture_blender_views.py","purpose":"这个文件用来剪枝目标房间并执行 Eevee 冻结相机渲染。"}]}
+        ],
+        "edges":[
+          {"from":"s-input","to":"s-build","points":[[440,440],[610,440]],"label":"当前事实"},
+          {"from":"s-build","to":"s-validate","points":[[1060,440],[1230,440]],"label":"原生模型"},
+          {"from":"s-validate","to":"s-capture","points":[[1670,440],[1840,440]],"label":"模型 + 冻结计划"}
+        ],
+        "annotations":[{"x":100,"y":820,"w":2100,"h":250,"title":"为什么不再搬 HTML 模型","wrap":138,"paragraphs":["HTML 的模型面向浏览器编辑和轻量预览，Blender 需要独立的精细几何、可追溯材质和明确朝向。两者只共用布局事实，避免把低精度浏览器资产误当成最终 Blender 资产。","资源限制不通过降低模型质量解决。资产按类共享网格，贴图运行副本受控，正式截图每张独立进程；这样不提高设备内存上限，也不恢复任何低质量降级分支。"]}]
+      }]
+    }
+  ],
+  "logicDetails": [],
+  "fileDescriptions": {
+    "ENVIRONMENT_CONTRACT.md":"说明权威源、Ubuntu 运行时、资产仓、材质仓、渲染盒和同步关系。","MANIFEST.json":"登记版本和全部活动文件。","SKILL.md":"定义触发、事实源、精细资产、PBR 材质和禁止事项。","SKILL_MANUAL.pdf":"人类 A3 图文说明书。","agents/openai.yaml":"提供 Codex 默认调用提示。","assets/blender-component-library/acquisition-manifest.v1.json":"记录实际获取资产的来源、许可、大小和摘要。","assets/blender-component-library/catalog.json":"登记 Blender 同类多款精细资产、选型和朝向合同。","assets/blender-component-library/precision-asset-acquisition.v1.json":"登记人工审过的免费资产 ID。","assets/blender-material-library/acquisition-manifest.v1.json":"记录实际获取 PBR 材质的来源、许可、文件大小和摘要。","assets/blender-material-library/catalog.json":"登记墙面、天花、木地板和瓷砖 PBR 模板及物理映射。","assets/blender-material-library/material-acquisition.v1.json":"登记人工审定的 Poly Haven CC0 材质。","assets/blender-style-presets/warm-modern-neutral.json":"登记房间选型、结构 PBR 模板、Eevee 灯光和贴图预算。","assets/blender-template/backend-options.json":"固定后端、材质事实源与 Eevee 原生渲染选项。","data_contract.md":"规定输入、输出、选型、PBR 材质与朝向字段。","local_runtime.md":"记录 Ubuntu 正式命令。","playbook.md":"说明唯一执行流程。","references/architecture.md":"解释三层职责。","references/contracts.md":"列出交接合同。","references/skill-flowchart.svg":"流程总览。","references/skill-manual.json":"说明书唯一结构化事实源。","references/skill-manual.md":"AI 可读说明书。","scripts/acquire_blenderkit_assets.py":"获取审定免费资产并生成审计清单。","scripts/acquire_polyhaven_materials.py":"获取审定 CC0 PBR 材质并生成审计清单。","scripts/build_floorplan_scene.py":"唯一 Blender PBR 编译器。","scripts/capture_blender_batch.py":"逐图隔离截图批处理。","scripts/capture_blender_views.py":"目标房间剪枝与 Eevee 冻结机位适配器。","scripts/common.py":"JSON 与摘要函数。","scripts/export_camera_scene.py":"导出网格语义审计包。","scripts/export_native_model_manifest.py":"生成原生模型清单。","scripts/init_blender_model_project.py":"建立 v5 项目并绑定组件与材质 catalog。","scripts/resolve_component_motion.py":"连续首次接触计算。","scripts/test_mcp_connection.py":"连接和重开检查。","scripts/validate_blender_scene.py":"重开验证原生模型。","scripts_logic.md":"登记脚本职责。","templates.md":"说明唯一模板、组件资产与 PBR 材质。"
+  }
+}

@@ -45,7 +45,7 @@ def main() -> int:
     report_path = Path(args.build_report).resolve()
     report = json.loads(report_path.read_text(encoding="utf-8"))
     errors: list[str] = []
-    if report.get("schema") != "interior.blender-build-report.v1" or report.get("accepted") is not True:
+    if report.get("schema") != "interior.blender-build-report.v5" or report.get("accepted") is not True:
         errors.append("build report is not accepted")
     blend_path = Path(bpy.data.filepath).resolve()
     if not blend_path.is_file() or digest(blend_path) != report.get("nativeModelSha256"):
@@ -60,11 +60,13 @@ def main() -> int:
         if polluted:
             errors.append(f"asset-local cameras/lights leaked into FURNITURE: {polluted}")
     components = [obj for obj in bpy.data.objects if obj.get("interiorEntityType") == "component"]
-    source_ids = [obj.get("sourceObjectCandidateId") for obj in components]
-    if len(components) != report.get("counts", {}).get("components"):
+    entity_ids = [obj.get("interiorEntityId") for obj in components]
+    if len(components) != report.get("counts", {}).get("furniture"):
         errors.append("component root count differs from the build report")
-    if None in source_ids or len(source_ids) != len(set(source_ids)):
-        errors.append("component sourceObjectCandidateId is not one-to-one")
+    if None in entity_ids or len(entity_ids) != len(set(entity_ids)):
+        errors.append("component entity IDs are not one-to-one")
+    if any(not obj.get("componentId") or not obj.get("assetSha256") for obj in components):
+        errors.append("component root lacks managed asset identity")
     entity_meshes = [
         obj for obj in bpy.data.objects
         if obj.type in {"MESH", "CURVE", "SURFACE", "META", "FONT"} and obj.get("interiorEntityId")
@@ -73,6 +75,18 @@ def main() -> int:
         errors.append("scene has no renderable entity-tagged geometry")
     if report.get("primitiveFurnitureFallbackCount") != 0:
         errors.append("primitive furniture fallback is present")
+    if report.get("unmatchedFurnitureCount") != 0:
+        errors.append("unmatched furniture is present")
+    if any(not obj.get("frontAxisLocal") or not obj.get("orientationMode") for obj in components):
+        errors.append("component root lacks orientation contract")
+    if any(not obj.get("assetSelection") or not obj.get("assetStyleTags") for obj in components):
+        errors.append("component root lacks material asset selection contract")
+    if not bpy.context.scene.get("interiorStylePreset"):
+        errors.append("scene lacks embedded Blender style preset")
+    required_material_ids = {"wall-white-plaster", "ceiling-soft-plaster", "floor-warm-oak", "floor-interior-ceramic"}
+    material_ids = {str(material.get("interiorMaterialId", "")) for material in bpy.data.materials}
+    if not required_material_ids.issubset(material_ids):
+        errors.append("scene lacks required PBR building material templates")
     result = {
         "schema": "interior.blender-scene-validation.v1",
         "accepted": not errors,

@@ -15,6 +15,7 @@
       "bbox": {"width": 1.6897, "depth": 0.9604},
       "center": [1.5, 1.5],
       "rotationY": 0,
+      "orientation": {"evidence": "source-symbol", "localAxes": {"front": "+Z", "back": "-Z"}},
       "roomId": "living",
       "typeHint": "双人沙发",
       "shapeEvidence": {
@@ -38,6 +39,7 @@
       "bbox": {"width": 0.4832, "depth": 0.486},
       "center": [3.5, 1.5],
       "rotationY": 0,
+      "orientation": {"evidence": "source-outline-axis", "localAxes": {"front": "+Z", "back": "-Z"}},
       "roomId": "living",
       "typeHint": "圆凳",
       "shapeEvidence": {
@@ -61,6 +63,7 @@
       "bbox": {"width": 1.6092, "depth": 0.499},
       "center": [1.5, 4.5],
       "rotationY": 0,
+      "orientation": {"evidence": "source-symbol", "localAxes": {"front": "+Z", "back": "-Z"}},
       "roomId": "bedroom",
       "typeHint": "收纳柜",
       "shapeEvidence": {
@@ -84,6 +87,7 @@
       "bbox": {"width": 0.3357, "depth": 0.3357},
       "center": [3.5, 4.5],
       "rotationY": 0,
+      "orientation": {"evidence": "source-outline-axis", "localAxes": {"front": "+Z"}},
       "roomId": "dining",
       "typeHint": "圆形吊灯",
       "shapeEvidence": {
@@ -93,6 +97,65 @@
         "handedness": "none",
         "outline": [[0.5,0],[0.433,0.25],[0.25,0.433],[0,0.5],[-0.25,0.433],[-0.433,0.25],[-0.5,0],[-0.433,-0.25],[-0.25,-0.433],[0,-0.5],[0.25,-0.433],[0.433,-0.25]]
       }
+    },
+    {
+      "traceId": "purple-kitchen-base-01",
+      "sourceObjectCandidateId": "fixture-kitchen-base-01",
+      "name": "厨房地柜",
+      "semantic": "fixed-purple",
+      "functionalClass": "base-cabinet",
+      "atomicObject": true,
+      "quantity": 1,
+      "assemblyId": "kitchen-run-fixture",
+      "assemblyRole": "base",
+      "shapeClass": "rectilinear",
+      "componentHint": "sh3d-cc0-kitchen-base-cabinet",
+      "bbox": {"width": 0.6, "depth": 0.612},
+      "center": [6.0, 1.0],
+      "rotationY": 0,
+      "orientation": {"evidence": "source-symbol", "localAxes": {"front": "+Z", "back": "-Z"}},
+      "roomId": "kitchen",
+      "typeHint": "厨房地柜",
+      "shapeEvidence": {
+        "coordinateSpace": "bbox-normalized",
+        "outlineSource": "public-library-fixture",
+        "curveEdgeRatio": 0,
+        "handedness": "none",
+        "outline": [[-0.5,-0.5],[0.5,-0.5],[0.5,0.5],[-0.5,0.5]]
+      }
+    },
+    {
+      "traceId": "purple-kitchen-sink-01",
+      "sourceObjectCandidateId": "fixture-kitchen-sink-01",
+      "name": "厨房水槽柜",
+      "semantic": "fixed-purple",
+      "functionalClass": "sink-base-cabinet",
+      "atomicObject": true,
+      "quantity": 1,
+      "assemblyId": "kitchen-run-fixture",
+      "assemblyRole": "base-sink",
+      "shapeClass": "rectilinear",
+      "componentHint": "sh3d-cc0-kitchen-sink-base",
+      "bbox": {"width": 0.6, "depth": 0.612},
+      "center": [6.65, 1.0],
+      "rotationY": 0,
+      "orientation": {"evidence": "source-symbol", "localAxes": {"front": "+Z", "back": "-Z"}},
+      "roomId": "kitchen",
+      "typeHint": "厨房水槽柜",
+      "shapeEvidence": {
+        "coordinateSpace": "bbox-normalized",
+        "outlineSource": "public-library-fixture",
+        "curveEdgeRatio": 0,
+        "handedness": "none",
+        "outline": [[-0.5,-0.5],[0.5,-0.5],[0.5,0.5],[-0.5,0.5]]
+      }
     }
-  ]
+  ],
+  "assemblies": [{
+    "id": "kitchen-run-fixture",
+    "functionalClass": "kitchen-run",
+    "roomId": "kitchen",
+    "compositionPolicy": "source-evidenced-atomic-members",
+    "childTraceIds": ["purple-kitchen-base-01", "purple-kitchen-sink-01"]
+  }]
 }

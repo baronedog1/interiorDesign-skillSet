@@ -2,11 +2,10 @@ import { pathToFileURL } from "node:url";
 import path from "node:path";
 
 const skillRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
-const templateRoot = path.join(skillRoot, "assets", "base-floorplan-template");
+const templateRoot = path.join(skillRoot, "assets", "interior-coauthoring-template");
 const componentRoot = path.join(skillRoot, "assets", "component-library");
 const aliases = new Map([
   ["three", path.join(templateRoot, "vendor", "three.module.js")],
-  ["three/addons/controls/OrbitControls.js", path.join(templateRoot, "vendor", "controls", "OrbitControls.js")],
   ["three/addons/loaders/GLTFLoader.js", path.join(templateRoot, "vendor", "loaders", "GLTFLoader.js")],
   ["three/addons/utils/BufferGeometryUtils.js", path.join(templateRoot, "vendor", "utils", "BufferGeometryUtils.js")],
   ["@interior/library-contract", path.join(componentRoot, "shared", "library-contract.js")],

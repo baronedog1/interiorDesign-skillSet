@@ -71,18 +71,20 @@ export function compileModelScope(request, structure, binding) {
     throw new Error("model scope mode must be whole-floor or room-subset");
   }
 
+  // A room list is not permission to rebuild an isolated room. Unless the user
+  // explicitly requested an independent-space deliverable, compile the accepted
+  // floorplan as one model and let the camera plan choose which rooms to shoot.
+  const independentSpaceRequested =
+    input.mode === "room-subset" && input.explicitIndependentSpaceRequest === true;
+  const effectiveMode = independentSpaceRequested ? "room-subset" : "whole-floor";
+
   let requestedRoomIds;
   let allowedContextRoomIds;
   let reason;
-  if (input.mode === "whole-floor") {
+  if (effectiveMode === "whole-floor") {
     requestedRoomIds = roomIds;
     allowedContextRoomIds = [];
     reason = "compile-the-complete-accepted-floorplan";
-    for (const field of ["requestedRoomIds", "allowedContextRoomIds", "excludedRoomIds"]) {
-      if (input[field] != null && input[field].length) {
-        throw new Error(`whole-floor model scope must not narrow ${field}`);
-      }
-    }
   } else {
     requestedRoomIds = uniqueStrings(input.requestedRoomIds, "requestedRoomIds");
     allowedContextRoomIds = uniqueStrings(input.allowedContextRoomIds || [], "allowedContextRoomIds");
@@ -92,14 +94,14 @@ export function compileModelScope(request, structure, binding) {
     const overlap = requestedRoomIds.filter((roomId) => allowedContextRoomIds.includes(roomId));
     if (overlap.length) throw new Error(`requested and context rooms overlap: ${overlap.join(", ")}`);
     reason = String(input.reason || "").trim();
-    if (!reason) throw new Error("room-subset model scope requires a reason");
+    if (!reason) reason = "user-explicitly-requested-independent-space-model";
     assertContextConnected(structure, requestedRoomIds, allowedContextRoomIds);
   }
 
   const allowed = new Set([...requestedRoomIds, ...allowedContextRoomIds]);
   const scope = {
     schema: MODEL_SCOPE_SCHEMA,
-    mode: input.mode,
+    mode: effectiveMode,
     requestedRoomIds,
     allowedContextRoomIds,
     excludedRoomIds: roomIds.filter((roomId) => !allowed.has(roomId)),
@@ -113,6 +115,9 @@ export function compileModelScope(request, structure, binding) {
       structureDataSha256: binding.structureDataSha256,
     },
   };
+  if (effectiveMode === "room-subset") {
+    scope.explicitIndependentSpaceRequest = true;
+  }
   scope.scopeDigestSha256 = digest(scope);
   return scope;
 }
@@ -131,6 +136,7 @@ export function validateCompiledModelScope(scope, structure, binding) {
       requestedRoomIds: scope.requestedRoomIds,
       allowedContextRoomIds: scope.allowedContextRoomIds,
       reason: scope.reason,
+      explicitIndependentSpaceRequest: scope.explicitIndependentSpaceRequest,
     };
   const recomputed = compileModelScope(request, structure, binding);
   if (canonical(recomputed) !== canonical(scope)) throw new Error("model scope differs from deterministic compilation");

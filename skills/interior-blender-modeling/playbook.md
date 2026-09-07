@@ -1,44 +1,25 @@
 # 执行 Playbook
 
-## 阶段 1：冻结输入
+## 1. 冻结布局事实
 
-验证 handoff 与全部 artifact。输出 `input-lock.json`。结构错误退回平面 Skill，不在 Blender 中补墙。
+读取项目唯一 `current-model.json/coauthoring-model.json` 与同一 `floorplanId` 的 `structure-data.json`。HTML 只负责结构与家具 transform；不得读取 HTML GLB、资产锁或旧 `.blend` 作为 Blender 几何。
 
-## 阶段 2：资产选择
+## 2. 解析精细资产与朝向
 
-先按上游原子 `functionalClass` 查询 Blender 专属 catalog，只保留明确支持同一功能类的资产，再比较尺度、风格和安装方式。优先真实 `.blend`，其次有完整 PBR 的 GLB。检查审阅方向轴、原点、单位和许可。没有同类资产时标记 `blocked-asset-gap`，不得跨类别凑用。
+按 `functionalClass + room style tags` 在 Blender catalog 中选择原生 `.blend`。普通卫生间、主卫、厨房和阳台可使用同类不同款；未通过轴向/组合审查的下载资产标记 `research-only`，不能进入生产。按 JSON 宽深高精确缩放，位置保持不变；非 Z-up 资产先归一轴向。每项记录候选数、匹配标签、来源 yaw、前向轴、优先墙、关系目标和最终 yaw。
 
-## 阶段 3：结构物化
+## 3. 编译与材质
 
-先生成地面、墙与真实洞口，再生成窗/门/栏杆。每一源 wall/opening ID 只出现一次。窗框、玻璃和门扇是洞口子对象，不得成为第二套结构坐标。
+结构、洞口、房间地面和天花由代码生成；建筑表面从材料 catalog 读取受管 PBR 三图。墙使用暖白细灰泥，天花使用低凹凸白灰泥，干区使用暖木板，厨房、卫生间、主卫和阳台使用室内陶瓷砖。无 UV 程序几何统一使用三轴 Box 投影和登记物理尺度；缺图或摘要变化立即停止。家具与建筑贴图随后一起打包进自包含 `.blend`。
 
-## 阶段 4：天花与灯具
+## 4. 原生验收
 
-按 room polygon 生成独立天花。天花事实默认存在、检查视图默认隐藏，可一键显示；正式相机渲染按镜头需要显示。吊灯根节点吸附 ceiling root；高度变化同时检查最低点净高。没有吊顶设计要求时使用平整天花，不自动堆造型。
+重开 `.blend` 检查八个集合、组件根、实体标签、资产摘要、朝向字段、家具数量、零未匹配和零 primitive。失败只修 catalog、编译器或输入事实。
 
-## 阶段 5：组件
+## 5. 冻结机位原生截图
 
-从资产仓 link/append 实际模型。先测量全部可渲染子物体的世界包围盒，按目标宽、深、高三轴中最严格比例统一缩放；再应用轴适配和 handoff 旋转，最后按旋转后真实包围盒重新居中并接地。不能依赖下载模型的原点，也不能为了塞进槽位而做 X/Y/Z 非等比缩放。白模与源色是同一网格的两套 material override；白模覆盖每个 `component-part`，槽位引导隐藏根节点及全部子物体。
+Camera 先在 HTML 当前版求解一次 v3 计划。Blender 只执行相同 plan。Ubuntu 使用 `capture_blender_batch.py` 每张图单独启动受管 Blender；单图适配器在 Eevee 加载纹理前移除非目标房间家具与地面并清理孤儿数据，只保留结构及当前空间精细资产，然后应用冻结坐标、FOV、windowCenter、显隐和 projectionCrop。
 
-## 阶段 6：编辑和碰撞
+## 完成标准
 
-- 墙端点只允许沿原切向延长/缩短；Blender 生成 patch 后交 `interior-floorplan-planning/validate_structure_edit_patch.py`，通过新 handoff revision 重新构建，不改旧结构事实。
-- 组件拖动先从 Blender depsgraph 取 world bounds 和障碍物，交 `resolve_component_motion.py` 做连续扫掠；找到首次碰撞参数并停在接触前的 epsilon。
-- Blender operator 只提交通过检查的 transform；失败恢复上个 accepted revision。
-
-## 阶段 7：原生验收
-
-重新打开 `.blend` 并运行 `validate_blender_scene.py`，检查集合、ID、原子功能类、数量、资产相机/灯污染、坐标和哈希。逐组件检查中心误差 `<=2mm`、接地误差 `<=2mm`、高度不越界。导出 manifest 后先执行统一动线审计；只有通过后才生成机位预览，并分别实际查看同机位槽位引导图与白模图。机位截图必须直接由 Blender camera/render 产生。
-
-动线返回 `correction-ready` 时，脚本验证计划、候选和操作摘要后更新
-`native-layout-overrides.v1`，每轮只应用一个目标中心/朝向并重建原生场景。来源 handoff
-不变；新实体携带 `circulation-deterministic-correction`，新模型哈希必须从头审计。
-确定性修正不询问用户；算法无解、事实冲突或用户显式变换冲突才合并询问一次。
-
-## 错误归属
-
-- 墙窗/空间错：上游证据或 handoff。
-- 对象位置/方向错：handoff object facts 或显式项目 revision。
-- 可见外形错：Blender 资产选择/轴/尺度。
-- 穿模：碰撞或编辑提交逻辑。
-- 截图错：机位 Skill 或 Blender capture adapter。
+`.blend` 可重开、贴图自包含、全部家具由精确资产组成；十张截图与同名 JSON 绑定同一 `.blend` 和同一 plan，批处理回执 `requested=delivered`、`failed=0`。

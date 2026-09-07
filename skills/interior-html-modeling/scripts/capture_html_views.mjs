@@ -7,6 +7,8 @@ import path from "node:path";
 import net from "node:net";
 import { pathToFileURL } from "node:url";
 
+const DETERMINISTIC_CAMERA_METHOD_PATTERN = /^deterministic-room-first-camera-v[0-9]+(?:\.[0-9]+)?$/;
+
 function parseArgs(argv) {
   const args = {};
   for (let index = 0; index < argv.length; index += 1) {
@@ -133,11 +135,11 @@ async function main() {
   }
   const planPath = path.resolve(args["shots-manifest"]);
   const plan = JSON.parse(await fs.readFile(planPath, "utf8"));
-  if (plan.schema !== "interior.camera-plan.v8" || plan.schemaVersion !== "8.0") {
-    throw new Error("camera plan must use interior.camera-plan.v8");
+  if (plan.schema !== "interior.camera-plan.v9" || plan.schemaVersion !== "9.0") {
+    throw new Error("camera plan must use interior.camera-plan.v9");
   }
-  if (plan.methodVersion !== "deterministic-wall-normal-camera-v7") {
-    throw new Error("camera plan must use deterministic-wall-normal-camera-v7");
+  if (!DETERMINISTIC_CAMERA_METHOD_PATTERN.test(plan.methodVersion || "")) {
+    throw new Error("camera plan must use the deterministic-room-first-camera method family");
   }
   if (plan.modelBackend !== "html-threejs" || plan.sourceModelSha256 !== htmlSha256) {
     throw new Error("camera plan backend/model hash differs from native HTML");
@@ -366,7 +368,7 @@ async function main() {
               Object.defineProperty(window, "__CAMERA_PLAN_RUNTIME_SOURCE__", {
                 configurable: false,
                 enumerable: true,
-                value: "external-formal-camera-plan-v8",
+                value: "external-formal-camera-plan-v9",
                 writable: false,
               });
             })();`,
@@ -387,7 +389,7 @@ async function main() {
             "window.__INTERIOR_MODEL_EDITOR__.getActiveCapturePoseAudit()",
           );
           const runtimePlanSource = await evaluate("window.__CAMERA_PLAN_RUNTIME_SOURCE__");
-          if (runtimePlanSource !== "external-formal-camera-plan-v8") {
+          if (runtimePlanSource !== "external-formal-camera-plan-v9") {
             throw new Error(`${shot.shotId}: external camera-plan override did not take effect`);
           }
           if (poseAudit?.schema !== "interior.html-capture-pose-audit.v1"
@@ -567,11 +569,15 @@ async function main() {
             readability,
           };
           record.consoleErrors = consoleErrors;
-          record.ok = record.imageEvidence.obviouslyNonBlank
-            && record.furnishedQaEvidence.obviouslyNonBlank
+          record.qaWarnings = [];
+          if (!record.furnishedQaEvidence.obviouslyNonBlank) {
+            record.qaWarnings.push("furnished-qa image is unreadable; regenerate Q2 before final quadrant delivery");
+          }
+          record.generationReady = record.imageEvidence.obviouslyNonBlank
             && record.cameraPlanEvidence.obviouslyNonBlank
             && readability?.readable === true
             && record.consoleErrors.length === 0;
+          record.ok = record.generationReady;
           if (!readability?.readable) {
             record.retakeReason = "槽位引导画面亮度或层次不可读，必须调整本 shot 的打光/曝光后重拍";
           }

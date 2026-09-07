@@ -34,7 +34,7 @@ if (!project || project === path.parse(project).root) {
 const store = path.resolve(
   option("--store")
     || process.env.INTERIOR_COMPONENT_ASSET_STORE
-    || "/home/agentops/agent-runtime/shared-assets/interior-component-library-v5",
+    || "/home/agentops/agent-runtime/shared-assets/interior-component-library-v6",
 );
 const commercial = process.argv.includes("--commercial");
 const publish = process.argv.includes("--publish");
@@ -64,7 +64,9 @@ if (process.argv.includes("--all")) {
 } else {
   if (!fs.statSync(layoutPath, { throwIfNoEntry: false })?.isFile()) fail(`missing component layout: ${layoutPath}`);
   const layout = JSON.parse(fs.readFileSync(layoutPath, "utf8"));
-  requestedIds = [...new Set((layout.placements || []).map((placement) => placement.componentId))];
+  requestedIds = [...new Set((layout.placements || [])
+    .map((placement) => placement.componentId)
+    .filter(Boolean))];
 }
 
 const assets = new Map(catalog.assets.map((asset) => [asset.id, asset]));

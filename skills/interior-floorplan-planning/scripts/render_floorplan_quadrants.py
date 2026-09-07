@@ -21,8 +21,20 @@ COLORS = {
     "other": (91, 101, 95, 255),
     "spaces": (255, 214, 10, 82),
     "spaceBoundary": (218, 159, 0, 255),
+    "railing": (0, 148, 163, 255),
+    "parapet": (0, 121, 107, 255),
+    "open-edge": (216, 27, 96, 255),
+    "full-height-glazing": (0, 120, 212, 255),
 }
-TRACE_ORDER = ("walls", "windows", "doors", "movableFurniture", "fixedFixtures", "other")
+TRACE_ORDER = (
+    "walls",
+    "windows",
+    "doors",
+    "boundaryFeatures",
+    "movableFurniture",
+    "fixedFixtures",
+    "other",
+)
 
 
 def load_font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
@@ -79,6 +91,37 @@ def draw_layer(image: Image.Image, items: list[dict], color: tuple[int, ...]) ->
         draw_shape(draw, item, color)
 
 
+def draw_boundary_features(image: Image.Image, items: list[dict]) -> None:
+    draw = ImageDraw.Draw(image)
+    for item in items:
+        points = [tuple(point) for point in item.get("points", item.get("segment", []))]
+        if len(points) < 2:
+            continue
+        kind = item.get("kind", "open-edge")
+        color = COLORS.get(kind, COLORS["open-edge"])
+        width = max(2, int(item.get("width", 4)))
+        if kind == "open-edge":
+            start, end = points[0], points[-1]
+            length = max(1.0, ((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2) ** 0.5)
+            cursor = 0.0
+            while cursor < length:
+                stop = min(length, cursor + 8)
+                a, b = cursor / length, stop / length
+                draw.line(
+                    (
+                        round(start[0] + (end[0] - start[0]) * a),
+                        round(start[1] + (end[1] - start[1]) * a),
+                        round(start[0] + (end[0] - start[0]) * b),
+                        round(start[1] + (end[1] - start[1]) * b),
+                    ),
+                    fill=color,
+                    width=width,
+                )
+                cursor += 14
+        else:
+            draw.line(points, fill=color, width=width, joint="curve")
+
+
 def render_source_evidence_overlay(
     evidence: dict,
     source: Image.Image,
@@ -87,7 +130,14 @@ def render_source_evidence_overlay(
     show_ids: bool = True,
 ) -> Image.Image:
     """Draw the exact candidate vectors that will later compile into walls."""
-    groups = groups or {"walls", "openings", "labels", "dividers", "objects"}
+    groups = groups or {
+        "walls",
+        "openings",
+        "boundaries",
+        "labels",
+        "dividers",
+        "objects",
+    }
     image = source.convert("RGBA").copy()
     overlay = Image.new("RGBA", source.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
@@ -100,6 +150,7 @@ def render_source_evidence_overlay(
         "divider": (235, 184, 24, 245),
         "label": (33, 86, 154, 245),
         "object": (16, 132, 112, 245),
+        "boundary": (0, 148, 163, 245),
     }
 
     def label_at(points: list[tuple[int, int]], text: str, color: tuple[int, ...]) -> None:
@@ -134,6 +185,13 @@ def render_source_evidence_overlay(
                 draw.line(points, fill=colors["opening"], width=line_width + 1, joint="curve")
                 if show_ids:
                     label_at(points, opening["id"], colors["opening"])
+    if "boundaries" in groups:
+        for boundary in evidence.get("boundaryCandidates", []):
+            points = [tuple(point) for point in boundary.get("segment", [])]
+            if len(points) >= 2:
+                draw.line(points, fill=colors["boundary"], width=line_width + 1)
+                if show_ids:
+                    label_at(points, boundary["id"], colors["boundary"])
     if "labels" in groups:
         for room_label in evidence.get("spaceLabelCandidates", []):
             point = room_label.get("point", [])
@@ -209,7 +267,10 @@ def render_traces(
 ) -> Image.Image:
     image = Image.new("RGBA", size, (0, 0, 0, 0) if transparent else (255, 255, 255, 255))
     for layer in layers:
-        draw_layer(image, spec.get("layers", {}).get(layer, []), COLORS[layer])
+        if layer == "boundaryFeatures":
+            draw_boundary_features(image, spec.get("layers", {}).get(layer, []))
+        else:
+            draw_layer(image, spec.get("layers", {}).get(layer, []), COLORS[layer])
     return image
 
 
@@ -220,6 +281,7 @@ def render_clean_structure(spec: dict, size: tuple[int, int]) -> Image.Image:
     image = Image.new("RGBA", size, (255, 255, 255, 255))
     draw_layer(image, clean.get("walls", []), COLORS["walls"])
     draw_layer(image, clean.get("windows", []), COLORS["windows"])
+    draw_boundary_features(image, clean.get("boundaryFeatures", []))
     return image
 
 
@@ -295,7 +357,14 @@ def render(
     composite = render_traces(
         spec,
         size,
-        ("walls", "windows", "doors", "movableFurniture", "fixedFixtures"),
+        (
+            "walls",
+            "windows",
+            "doors",
+            "boundaryFeatures",
+            "movableFurniture",
+            "fixedFixtures",
+        ),
     )
     return classified, structure, composite
 
@@ -337,11 +406,11 @@ def main() -> int:
         overlay.save(output)
         layered = {
             "walls-openings-overlay.png": (
-                {"walls", "openings"},
+                {"walls", "openings", "boundaries"},
                 False,
             ),
             "walls-openings-overlay-review.png": (
-                {"walls", "openings"},
+                {"walls", "openings", "boundaries"},
                 True,
             ),
             "room-labels-dividers-overlay.png": (

@@ -34,6 +34,44 @@ def wall_frame(wall: dict) -> dict:
     return {"length": length, "dx": dx / length, "dz": dz / length}
 
 
+def connection_wall_binding(connection: dict, walls: list[dict]) -> list[dict]:
+    start = connection["start"]
+    end = connection["end"]
+    matches = []
+    for wall in walls:
+        adjacent = set(wall.get("adjacentRoomIds", []))
+        if not {connection.get("fromRoomId"), connection.get("toRoomId")} <= adjacent:
+            continue
+        frame = wall_frame(wall)
+        tolerance = max(0.035, float(wall.get("thickness", 0.12)) * 0.65)
+
+        def offset(point: list[float]) -> float:
+            return (
+                (point[0] - wall["start"][0]) * frame["dx"]
+                + (point[1] - wall["start"][1]) * frame["dz"]
+            )
+
+        def line_distance(point: list[float]) -> float:
+            return abs(
+                (point[0] - wall["start"][0]) * frame["dz"]
+                - (point[1] - wall["start"][1]) * frame["dx"]
+            )
+
+        if line_distance(start) > tolerance or line_distance(end) > tolerance:
+            continue
+        lower, upper = sorted((offset(start), offset(end)))
+        lower = max(0.0, lower)
+        upper = min(frame["length"], upper)
+        if upper - lower <= 0.04:
+            continue
+        matches.append({
+            "wallId": wall["id"],
+            "offset": (lower + upper) / 2,
+            "width": upper - lower,
+        })
+    return matches
+
+
 def polygon_area(points: list[list[float]]) -> float:
     return abs(sum(
         points[index][0] * points[(index + 1) % len(points)][1]
@@ -112,8 +150,8 @@ def validate_handoff(manifest_path: Path, structure_path: Path, data: dict) -> d
     assert manifest.get("schema") == "interior.floorplan-handoff.v3"
     producer = manifest.get("producer", {})
     version = str(producer.get("version", ""))
-    assert producer.get("skill") == "interior-floorplan-planning" and version.startswith("6."), (
-        "project handoff must use one schema-compatible floorplan 6.x producer"
+    assert producer.get("skill") == "interior-floorplan-planning" and version.split(".", 1)[0] in {"6", "7", "8", "9"}, (
+        "project handoff must use one schema-compatible floorplan 6.x through 9.x producer"
     )
     assert canonical_digest(manifest) == manifest.get("handoffDigestSha256"), "handoff manifest digest mismatch"
     assert manifest.get("validation") == {
@@ -143,7 +181,10 @@ def validate_handoff(manifest_path: Path, structure_path: Path, data: dict) -> d
         assert metrics.get(field) == 0, f"upstream floor metric {field} must be zero"
     topology = floor_report.get("topologyMetrics", {})
     assert topology == data.get("topology"), "structure topology differs from the compiled handoff"
-    assert topology.get("method") == "wall-mask-opening-closure-space-seed"
+    assert topology.get("method") in {
+        "wall-mask-opening-closure-space-seed",
+        "semantic-source-model-v1",
+    }
     assert topology.get("interiorPixels", 0) > 0
     assert topology.get("assignedInteriorPixels") == topology.get("interiorPixels")
     assert topology.get("spaceSeedCount") == len(data.get("rooms", []))
@@ -171,7 +212,10 @@ def main() -> None:
     args = parse_args()
     path = Path(args.structure).resolve()
     data = load(path)
-    assert data.get("schema") == "interior.floorplan-structure.v3", "only interior.floorplan-structure.v3 is accepted"
+    assert data.get("schema") in {
+        "interior.floorplan-structure.v3",
+        "interior.floorplan-structure.v4",
+    }, "only compatible interior.floorplan-structure.v3/v4 is accepted"
     assert re.fullmatch(r"[a-z0-9][a-z0-9-]*", data.get("floorplanId", "")), "invalid floorplanId"
     assert "rectangles" not in data, "pixel-cell rectangles are retired; use semantic walls"
     assert "furnitureCatalog" not in data, "structure-data must not embed a component catalog"
@@ -273,6 +317,18 @@ def main() -> None:
     room_connection_kinds: dict[str, list[str]] = {room_id: [] for room_id in room_id_set}
     graph["exterior"] = set()
     connection_map: dict[str, dict] = {}
+    physical_openings_by_wall: dict[str, list[dict]] = {
+        wall_id: [
+            {
+                "id": window["id"],
+                "start": window["offset"] - window["width"] / 2,
+                "end": window["offset"] + window["width"] / 2,
+            }
+            for window in items
+        ]
+        for wall_id, items in windows_by_wall.items()
+    }
+    connection_wall_bindings: dict[str, dict] = {}
     for connection in connections:
         assert connection["id"] not in ids, f"duplicate id: {connection['id']}"
         ids.add(connection["id"])
@@ -311,6 +367,29 @@ def main() -> None:
             if right in room_id_set:
                 room_connections[right].add(connection["id"])
                 room_connection_kinds[right].append(connection["kind"])
+            if physical_ids:
+                bindings = connection_wall_binding(connection, walls)
+                assert len(bindings) == 1, (
+                    f"{connection['id']}: physical traversable opening must bind exactly one host wall, "
+                    f"found {[item['wallId'] for item in bindings]}"
+                )
+                binding = bindings[0]
+                host_wall = wall_map[binding["wallId"]]
+                assert connection["bottom"] + connection["height"] <= host_wall["height"] + 1e-6, (
+                    f"{connection['id']}: opening exceeds host wall height"
+                )
+                connection_wall_bindings[connection["id"]] = binding
+                physical_openings_by_wall.setdefault(binding["wallId"], []).append({
+                    "id": connection["id"],
+                    "start": binding["offset"] - binding["width"] / 2,
+                    "end": binding["offset"] + binding["width"] / 2,
+                })
+    for wall_id, openings in physical_openings_by_wall.items():
+        openings.sort(key=lambda row: (row["start"], row["id"]))
+        for previous, current in zip(openings, openings[1:]):
+            assert previous["end"] + 0.02 <= current["start"], (
+                f"physical apertures overlap on {wall_id}: {previous['id']} / {current['id']}"
+            )
     divider_ids: set[str] = set()
     divider_source_ids: set[str] = set()
     for divider in semantic_dividers:
@@ -384,6 +463,7 @@ def main() -> None:
         "walls": len(walls),
         "windows": len(windows),
         "connections": len(connections),
+        "physicalConnectionWallBindings": connection_wall_bindings,
         "semanticDividers": len(semantic_dividers),
         "traversableSemanticDividers": sum(
             item.get("traversal") == "open-passage"

@@ -17,6 +17,7 @@ from PIL import Image, ImageChops
 from render_floorplan_quadrants import render_source_evidence_overlay
 from topology_compiler import (
     ALL_CONNECTION_KINDS,
+    BOUNDARY_FEATURE_KINDS,
     DIVIDER_TRAVERSAL_TYPES,
     ENCLOSED_ACCESS_KINDS,
     TRAVERSABLE_CONNECTION_KINDS,
@@ -27,7 +28,10 @@ from topology_compiler import (
 )
 
 SOURCE_NORMALIZATION_METHOD = "grayscale-local-contrast-union-v1"
-SOURCE_EVIDENCE_SCHEMA = "interior.floorplan-source-evidence.v4"
+SOURCE_EVIDENCE_SCHEMAS = {
+    "interior.floorplan-source-evidence.v4",
+    "interior.floorplan-source-evidence.v5",
+}
 LAYOUT_AUTHORITY_SCHEMA = "interior.floorplan-layout-authority.v1"
 OPENING_SYMBOL_REQUIREMENTS = {
     "door": ("single-leaf-swing", {"wall-gap", "swing-arc"}),
@@ -38,10 +42,14 @@ OPENING_SYMBOL_REQUIREMENTS = {
     "not-opening": ("non-opening-line", set()),
 }
 LAYERED_OVERLAYS = {
-    "wallsOpenings": ("walls-openings-overlay.png", {"walls", "openings"}, False),
+    "wallsOpenings": (
+        "walls-openings-overlay.png",
+        {"walls", "openings", "boundaries"},
+        False,
+    ),
     "wallsOpeningsReview": (
         "walls-openings-overlay-review.png",
-        {"walls", "openings"},
+        {"walls", "openings", "boundaries"},
         True,
     ),
     "roomLabelsDividers": (
@@ -171,7 +179,7 @@ def validate(
     visual = load(visual_path)
     errors: list[str] = []
 
-    if evidence.get("schema") != SOURCE_EVIDENCE_SCHEMA:
+    if evidence.get("schema") not in SOURCE_EVIDENCE_SCHEMAS:
         errors.append("invalid source evidence schema")
     if decisions.get("schema") != "interior.floorplan-semantic-decisions.v1":
         errors.append("invalid semantic decisions schema")
@@ -507,7 +515,14 @@ def validate(
         if classification == "unresolved":
             errors.append(f"{candidate_id}: unresolved opening classification")
         symbol_evidence = candidate.get("symbolEvidence")
-        if classification in OPENING_SYMBOL_REQUIREMENTS:
+        correction_authority = decision.get("correctionAuthority")
+        user_corrected = (
+            isinstance(correction_authority, dict)
+            and correction_authority.get("schema")
+            == "interior.user-semantic-correction.v1"
+            and decision.get("evidenceTypes") == ["user-explicit-correction"]
+        )
+        if classification in OPENING_SYMBOL_REQUIREMENTS and not user_corrected:
             required_signature, required_primitives = OPENING_SYMBOL_REQUIREMENTS[
                 classification
             ]
@@ -583,11 +598,62 @@ def validate(
         errors.append(
             "every semantic divider candidate must have exactly one decision"
         )
+    boundary_candidates = evidence.get("boundaryCandidates", [])
+    boundary_candidate_by_id = {
+        item.get("id"): item for item in boundary_candidates
+    }
+    boundary_decisions = decisions.get("boundaries", [])
+    boundary_decision_by_id = {
+        item.get("candidateId"): item for item in boundary_decisions
+    }
+    if (
+        len(boundary_candidate_by_id) != len(boundary_candidates)
+        or None in boundary_candidate_by_id
+        or len(boundary_decision_by_id) != len(boundary_decisions)
+        or None in boundary_decision_by_id
+    ):
+        errors.append("boundary evidence contains missing or duplicate IDs")
+    if set(boundary_decision_by_id) != set(boundary_candidate_by_id):
+        errors.append("every boundary candidate must have exactly one decision")
+    for candidate_id, candidate in boundary_candidate_by_id.items():
+        if candidate.get("discovery") != "deterministic-source-boundary-trace":
+            errors.append(
+                f"{candidate_id}: boundary coordinates must come from source evidence"
+            )
+        if not valid_segment(candidate.get("segment")):
+            errors.append(f"{candidate_id}: boundary candidate needs one segment")
+        decision = boundary_decision_by_id.get(candidate_id, {})
+        classification = decision.get("classification")
+        if classification not in BOUNDARY_FEATURE_KINDS | {
+            "not-boundary",
+            "unresolved",
+        }:
+            errors.append(f"{candidate_id}: unsupported boundary classification")
+        if classification == "unresolved":
+            errors.append(f"{candidate_id}: unresolved boundary classification")
+        if not decision.get("reason") or not decision.get("evidenceTypes"):
+            errors.append(
+                f"{candidate_id}: boundary decision needs a reason and evidence types"
+            )
+        if (
+            classification in BOUNDARY_FEATURE_KINDS
+            and decision.get("sourceLabelId") not in label_candidate_by_id
+        ):
+            errors.append(
+                f"{candidate_id}: accepted boundary needs one known sourceLabelId"
+            )
+        if classification in {"railing", "parapet"}:
+            height = decision.get("height", 1.1)
+            if not isinstance(height, (int, float)) or not 0.3 <= float(height) <= 1.8:
+                errors.append(
+                    f"{candidate_id}: {classification} height must be 0.3..1.8m"
+                )
     all_evidence_ids = [
         *candidate_by_id,
         *opening_candidate_by_id,
         *label_candidate_by_id,
         *divider_candidate_by_id,
+        *boundary_candidate_by_id,
     ]
     if len(all_evidence_ids) != len(set(all_evidence_ids)):
         errors.append("all source evidence IDs must be globally unique")
@@ -826,6 +892,7 @@ def validate(
     accepted_object_ids: set[str] = set()
     functional_class_by_object: dict[str, str] = {}
     functional_counts_by_label: dict[str, Counter] = {}
+    assembly_members_by_id: dict[str, list[str]] = {}
     object_evidence_metrics: list[dict] = []
     expected_object_discovery = (
         "deterministic-native-layout-object-contour"
@@ -870,7 +937,10 @@ def validate(
                     "p95DistancePx": round(p95, 3),
                     "within4PxRatio": round(within4, 4),
                 })
-                if p95 > 4 or within4 < 0.85:
+                assembly_id = object_decision_by_id.get(candidate_id, {}).get("assemblyId")
+                if assembly_id:
+                    object_evidence_metrics[-1]["evidenceScope"] = "assembly-union-perimeter"
+                elif p95 > 4 or within4 < 0.85:
                     errors.append(
                         f"{candidate_id}: object outline lacks source-pixel support "
                         f"(p95={p95:.2f}, within4={within4:.4f})"
@@ -957,10 +1027,56 @@ def validate(
                     f"{candidate_id}: every accepted contour must represent exactly one "
                     "atomic object with quantity=1"
                 )
+            candidate_assembly_id = candidate.get("assemblyId")
+            decision_assembly_id = decision.get("assemblyId")
+            if candidate_assembly_id != decision_assembly_id:
+                errors.append(
+                    f"{candidate_id}: assemblyId differs between source evidence and semantic decision"
+                )
+            if decision_assembly_id is not None:
+                assembly_role = decision.get("assemblyRole")
+                if (
+                    not isinstance(decision_assembly_id, str)
+                    or not FUNCTIONAL_CLASS_PATTERN.fullmatch(decision_assembly_id)
+                    or not isinstance(assembly_role, str)
+                    or not FUNCTIONAL_CLASS_PATTERN.fullmatch(assembly_role)
+                ):
+                    errors.append(
+                        f"{candidate_id}: assemblyId and assemblyRole must be kebab-case"
+                    )
+                else:
+                    assembly_members_by_id.setdefault(decision_assembly_id, []).append(candidate_id)
             if isinstance(functional_class, str):
                 functional_class_by_object[candidate_id] = functional_class
                 label_id = decision.get("sourceLabelId")
                 functional_counts_by_label.setdefault(label_id, Counter())[functional_class] += 1
+    for assembly_id, member_ids in assembly_members_by_id.items():
+        union_mask = np.zeros(image.shape[:2], dtype=np.uint8)
+        for candidate_id in member_ids:
+            outline = object_candidate_by_id.get(candidate_id, {}).get("outline", [])
+            if len(outline) >= 3:
+                polygon = np.round(np.asarray(outline, dtype=np.float32)).astype(np.int32)
+                cv2.fillPoly(union_mask, [polygon], 1)
+        eroded = cv2.erode(union_mask, np.ones((3, 3), dtype=np.uint8), iterations=1)
+        perimeter = union_mask - eroded
+        values = object_distance[perimeter > 0]
+        if not values.size:
+            errors.append(f"{assembly_id}: assembly union has no measurable source perimeter")
+            continue
+        p95 = float(np.percentile(values, 95))
+        within4 = float((values <= 4).mean())
+        object_evidence_metrics.append({
+            "assemblyId": assembly_id,
+            "memberCandidateIds": member_ids,
+            "evidenceScope": "assembly-union-perimeter",
+            "p95DistancePx": round(p95, 3),
+            "within4PxRatio": round(within4, 4),
+        })
+        if p95 > 4 and within4 < 0.85:
+            errors.append(
+                f"{assembly_id}: assembly union perimeter lacks source-pixel support "
+                f"(p95={p95:.2f}, within4={within4:.4f})"
+            )
     all_evidence_ids.extend(object_candidate_by_id)
     if len(all_evidence_ids) != len(set(all_evidence_ids)):
         errors.append("all source evidence IDs must be globally unique")
@@ -1193,6 +1309,18 @@ def validate(
                     errors.append(
                         f"{component.get('traceId')}: component quantity must be exactly 1"
                     )
+                if component.get("atomicObject") is not True:
+                    errors.append(
+                        f"{component.get('traceId')}: component must remain atomic inside an assembly"
+                    )
+                if component.get("assemblyId") != decision.get("assemblyId"):
+                    errors.append(
+                        f"{component.get('traceId')}: component assemblyId differs from source decision"
+                    )
+                if component.get("assemblyRole") != decision.get("assemblyRole"):
+                    errors.append(
+                        f"{component.get('traceId')}: component assemblyRole differs from source decision"
+                    )
                 if component.get("traceId") != layer.get("traceId"):
                     errors.append(
                         f"{component.get('traceId')}: component and trace layer "
@@ -1204,6 +1332,53 @@ def validate(
                         f"{component.get('traceId')}: component room differs from "
                         "the source object decision"
                     )
+                if not isinstance(component.get("rotationY"), (int, float)):
+                    errors.append(
+                        f"{component.get('traceId')}: component requires explicit rotationY"
+                    )
+                orientation = component.get("orientation")
+                if not isinstance(orientation, dict) or orientation.get("evidence") not in {
+                    "source-symbol", "source-outline-axis", "user-explicit-layout"
+                }:
+                    errors.append(
+                        f"{component.get('traceId')}: component requires source-bound orientation evidence"
+                    )
+                local_axes = orientation.get("localAxes") if isinstance(orientation, dict) else None
+                if not isinstance(local_axes, dict) or not local_axes:
+                    errors.append(
+                        f"{component.get('traceId')}: orientation.localAxes must not be empty"
+                    )
+                elif any(
+                    role not in {"front", "back", "headboard"}
+                    or axis not in {"+X", "-X", "+Z", "-Z"}
+                    for role, axis in local_axes.items()
+                ):
+                    errors.append(f"{component.get('traceId')}: orientation axes are invalid")
+            declared_assemblies = trace_components.get("assemblies", [])
+            declared_by_id = {
+                row.get("id"): row for row in declared_assemblies if isinstance(row, dict)
+            }
+            if len(declared_by_id) != len(declared_assemblies) or None in declared_by_id:
+                errors.append("trace-components assemblies need unique non-empty IDs")
+            trace_by_source_id = {
+                row.get("sourceObjectCandidateId"): row for row in component_rows
+            }
+            expected_assembly_ids = set(assembly_members_by_id)
+            if set(declared_by_id) != expected_assembly_ids:
+                errors.append("trace-components assemblies differ from source assembly groups")
+            for assembly_id, member_source_ids in assembly_members_by_id.items():
+                assembly = declared_by_id.get(assembly_id, {})
+                expected_trace_ids = [
+                    trace_by_source_id[source_id].get("traceId")
+                    for source_id in member_source_ids
+                    if source_id in trace_by_source_id
+                ]
+                if len(expected_trace_ids) < 2:
+                    errors.append(f"{assembly_id}: assembly needs at least two atomic members")
+                if assembly.get("compositionPolicy") != "source-evidenced-atomic-members":
+                    errors.append(f"{assembly_id}: invalid assembly compositionPolicy")
+                if assembly.get("childTraceIds") != expected_trace_ids:
+                    errors.append(f"{assembly_id}: childTraceIds differ from source member order")
         source_opening_ids = {
             candidate_id
             for candidate_id, decision in opening_decision_by_id.items()

@@ -2,6 +2,9 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import {
+  RUNTIME_GEOMETRY_ADMISSION,
+} from "../assets/component-library/catalog/runtime-geometry-admission.v1.js";
 
 function option(name, fallback = null) {
   const index = process.argv.indexOf(name);
@@ -40,7 +43,7 @@ function validateGlb(file) {
 const store = path.resolve(
   option("--store")
     || process.env.INTERIOR_COMPONENT_ASSET_STORE
-    || "/home/agentops/agent-runtime/shared-assets/interior-component-library-v5",
+    || "/home/agentops/agent-runtime/shared-assets/interior-component-library-v6",
 );
 const quick = process.argv.includes("--quick");
 const catalogPath = path.join(store, "catalog/public-asset-catalog.json");
@@ -48,6 +51,16 @@ const inventoryPath = path.join(store, "catalog/asset-store-inventory.json");
 const catalog = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
 const inventory = JSON.parse(fs.readFileSync(inventoryPath, "utf8"));
 const issues = [];
+if (RUNTIME_GEOMETRY_ADMISSION.schema !== "interior.component-runtime-geometry-admission.v1"
+    || RUNTIME_GEOMETRY_ADMISSION.catalogDigestSha256 !== catalog.catalogDigestSha256) {
+  issues.push("runtime geometry admission does not match the asset store catalog");
+}
+const inventoryById = new Map(inventory.results.map((row) => [row.id, row]));
+for (const row of RUNTIME_GEOMETRY_ADMISSION.nonDefaultFrames) {
+  if (inventoryById.get(row.assetId)?.runtimeSha256 !== row.runtimeSha256) {
+    issues.push(`${row.assetId}: runtime geometry admission hash differs from the asset store`);
+  }
+}
 const pendingParts = [];
 const stack = [store];
 while (stack.length) {

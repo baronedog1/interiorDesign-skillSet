@@ -1,0 +1,107 @@
+{
+  "schema": "interior.component-directional-axis-tags.v1",
+  "evidencePolicy": "historical-browser-reviewed-consensus",
+  "assets": [
+    {
+      "assetId": "abo-b07qhyf1ny",
+      "axes": { "front": "+X", "back": "-X" },
+      "reviewCount": 2
+    },
+    {
+      "assetId": "abo-b0728nwfcg",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 1
+    },
+    {
+      "assetId": "abo-b0725z23g4",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 1
+    },
+    {
+      "assetId": "ph-painted-wooden-chair-01",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 1
+    },
+    {
+      "assetId": "ph-old-bed-frame",
+      "axes": { "headboard": "-Z", "front": "+Z" },
+      "reviewCount": 2
+    },
+    {
+      "assetId": "ph-sofa-03",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 2
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-002-bed",
+      "axes": { "headboard": "-Z", "front": "+Z" },
+      "reviewCount": 2
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-140-winchester-sofa",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 2
+    },
+    {
+      "assetId": "sh3d-cc0-neutral-upholstered-bed",
+      "axes": { "headboard": "-Z", "front": "+Z" },
+      "reviewCount": 5
+    },
+    {
+      "assetId": "sh3d-cc0-kitchen-base-cabinet",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 1
+    },
+    {
+      "assetId": "sh3d-cc0-kitchen-sink-base",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 1
+    },
+    {
+      "assetId": "ph-modern-arm-chair-01",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 4
+    },
+    {
+      "assetId": "ph-metal-office-desk",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 4
+    },
+    {
+      "assetId": "abo-b07tr659g8",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 2
+    },
+    {
+      "assetId": "abo-b07b78rct5",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 1
+    },
+    {
+      "assetId": "ph-schoolchair-01",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 4
+    },
+    {
+      "assetId": "sh3d-contributions-336-shoe-cabinet",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 4
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-021-corner-sofa",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 1
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-067-corner-sofa",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 1
+    },
+    {
+      "assetId": "sh3d-scopia-071-bar-chair",
+      "axes": { "front": "+Z", "back": "-Z" },
+      "reviewCount": 1,
+      "evidence": "source-obj-high-back-centroid-at-negative-z-20260813"
+    }
+  ]
+}

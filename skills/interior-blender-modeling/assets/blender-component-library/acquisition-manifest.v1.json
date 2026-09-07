@@ -1,0 +1,192 @@
+{
+  "schema": "interior.blender-asset-acquisition-manifest.v1",
+  "provider": "BlenderKit",
+  "requestSha256": "2752fa6507586ea44d0294cf386e046ec66761c38884c3ed276426a766b4e6f9",
+  "sceneUuid": "59a6b063-b76c-415a-b564-63405cadcfc9",
+  "assets": [
+    {
+      "assetId": "toilet-modern-premium",
+      "assetBaseId": "c1d7bdc5-25be-42ab-89cb-4eb03d6acc64",
+      "functionalClass": "toilet",
+      "styleTags": [
+        "modern",
+        "premium",
+        "white-ceramic"
+      ],
+      "name": "Toilet",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/c1d7bdc5-25be-42ab-89cb-4eb03d6acc64/",
+      "fileType": "resolution_1K",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/toilet-modern-premium/toilet-modern-premium.blend",
+      "bytes": 748374,
+      "sha256": "2bc8b21a91e546265c2aa3893dba08a3a52dd68be58f1c5cfd88b936668e91f0"
+    },
+    {
+      "assetId": "toilet-modern-compact",
+      "assetBaseId": "718c9dd8-45b1-47df-bea3-055151b55752",
+      "functionalClass": "toilet",
+      "styleTags": [
+        "modern",
+        "compact",
+        "white-ceramic"
+      ],
+      "name": "Modern toilet",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/718c9dd8-45b1-47df-bea3-055151b55752/",
+      "fileType": "blend",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/toilet-modern-compact/toilet-modern-compact.blend",
+      "bytes": 494500,
+      "sha256": "7048404628f6de4de4fcc06a2f25d48e3b4d271529f06cec1cba57b1dc691aab"
+    },
+    {
+      "assetId": "toilet-ceramic-detail",
+      "assetBaseId": "6a342733-c5cd-4d2c-a3ee-4c24cf4a67cb",
+      "functionalClass": "toilet",
+      "styleTags": [
+        "modern",
+        "detailed",
+        "white-ceramic"
+      ],
+      "name": "Toilet ceramic white",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/6a342733-c5cd-4d2c-a3ee-4c24cf4a67cb/",
+      "fileType": "resolution_1K",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/toilet-ceramic-detail/toilet-ceramic-detail.blend",
+      "bytes": 1402940,
+      "sha256": "5c167e6d5cd2ad5bb4bde372e61bb4d1088c1fc3de7c3c2d3f7e8555c7fe3806"
+    },
+    {
+      "assetId": "vanity-modern-minimal",
+      "assetBaseId": "06b44363-546e-4c69-970d-323de3957f14",
+      "functionalClass": "bathroom-vanity",
+      "styleTags": [
+        "modern",
+        "minimal",
+        "warm-wood"
+      ],
+      "name": "Modern Minimalist Bathroom Vanity",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/06b44363-546e-4c69-970d-323de3957f14/",
+      "fileType": "resolution_1K",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/vanity-modern-minimal/vanity-modern-minimal.blend",
+      "bytes": 5814386,
+      "sha256": "0df2872954e1594545406c68cce01be80f924bd9fa23c979a1d558a18770b376"
+    },
+    {
+      "assetId": "vanity-wall-midcentury",
+      "assetBaseId": "e6235706-a9d0-409b-a67a-2fb0e807ac0f",
+      "functionalClass": "bathroom-vanity",
+      "styleTags": [
+        "modern",
+        "midcentury",
+        "warm-wood"
+      ],
+      "name": "Wall-Mount Bathroom Vanity Set",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/e6235706-a9d0-409b-a67a-2fb0e807ac0f/",
+      "fileType": "resolution_1K",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/vanity-wall-midcentury/vanity-wall-midcentury.blend",
+      "bytes": 4540193,
+      "sha256": "7fabe984fa8ee8992aefca1be839b4cbe4ada9bc73fd7c5977440a69aef875cd"
+    },
+    {
+      "assetId": "washbasin-modern-compact",
+      "assetBaseId": "ac1d6866-a121-4d34-bd6b-a1b0724a9d6a",
+      "functionalClass": "washbasin",
+      "styleTags": [
+        "modern",
+        "compact",
+        "white-ceramic"
+      ],
+      "name": "Modern Bathroom sink",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/ac1d6866-a121-4d34-bd6b-a1b0724a9d6a/",
+      "fileType": "blend",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/washbasin-modern-compact/washbasin-modern-compact.blend",
+      "bytes": 354259,
+      "sha256": "7c1f1220fe33e165cea92585686b284ad48385616332928e3c5591df63ea4312"
+    },
+    {
+      "assetId": "kitchen-sink-cupboard-wood",
+      "assetBaseId": "41ee20f7-4aba-40ab-8360-a531c6cf1654",
+      "functionalClass": "sink-base-cabinet",
+      "styleTags": [
+        "modern",
+        "warm-wood",
+        "integrated-sink"
+      ],
+      "name": "Cupboard var 1.5 with sink",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/41ee20f7-4aba-40ab-8360-a531c6cf1654/",
+      "fileType": "resolution_1K",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/kitchen-sink-cupboard-wood/kitchen-sink-cupboard-wood.blend",
+      "bytes": 1513968,
+      "sha256": "11d4b678bd751797d9932236707e79b0b60a2921fbbbfc479d26baba85185d81"
+    },
+    {
+      "assetId": "kitchen-cabinet-modern-drawer",
+      "assetBaseId": "b47245aa-d7d4-44de-921c-32d5119c8da1",
+      "functionalClass": "base-cabinet",
+      "styleTags": [
+        "modern",
+        "white",
+        "modular",
+        "drawer"
+      ],
+      "name": "Kitchen Cabinet",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/b47245aa-d7d4-44de-921c-32d5119c8da1/",
+      "fileType": "resolution_1K",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/kitchen-cabinet-modern-drawer/kitchen-cabinet-modern-drawer.blend",
+      "bytes": 272140,
+      "sha256": "8bfdcee6f36f1c7c5c808cd972551279adaa4e1d7a01b73099e38c9c711ee92b"
+    },
+    {
+      "assetId": "kitchen-cupboard-drawer-detailed",
+      "assetBaseId": "6a4924b1-8555-4ccf-af50-c78e0a2deae9",
+      "functionalClass": "base-cabinet",
+      "styleTags": [
+        "modern",
+        "white",
+        "modular",
+        "drawer",
+        "detailed"
+      ],
+      "name": "Cupboard var 2.7",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/6a4924b1-8555-4ccf-af50-c78e0a2deae9/",
+      "fileType": "resolution_1K",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/kitchen-cupboard-drawer-detailed/kitchen-cupboard-drawer-detailed.blend",
+      "bytes": 1323335,
+      "sha256": "9ce88e008e13af659d8c3f0014a2fcd97ff80ccbd44eefe5482ce87f36156249"
+    },
+    {
+      "assetId": "washing-machine-white-midea",
+      "assetBaseId": "9fe09fee-ceb5-41b6-a2f1-9fabdcd04985",
+      "functionalClass": "washing-machine",
+      "styleTags": [
+        "modern",
+        "white",
+        "front-load",
+        "detailed"
+      ],
+      "name": "Midea washing machine",
+      "license": "royalty_free",
+      "isFree": true,
+      "sourcePage": "https://www.blenderkit.com/asset-gallery-detail/9fe09fee-ceb5-41b6-a2f1-9fabdcd04985/",
+      "fileType": "resolution_1K",
+      "path": "/home/agentops/agent-runtime/shared-assets/blender-interior-research/precision-v2/washing-machine-white-midea/washing-machine-white-midea.blend",
+      "bytes": 1394921,
+      "sha256": "ffd7b36ba32e4e377cf92399f650396824d42ebddca87cc75e4397eb01107e81"
+    }
+  ]
+}

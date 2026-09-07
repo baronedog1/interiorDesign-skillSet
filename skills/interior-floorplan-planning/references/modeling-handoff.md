@@ -30,9 +30,9 @@
 ## 家具
 
 1. 绿色映射 `movable-green`，紫色映射 `fixed-purple`。
-2. 轮廓换算真实 width/depth；方向换算 `rotationY`；中心进入 `position`。
-3. 类型映射已实现的 `modelType`。电视柜不得只写 cabinet，需写 `tv-console`；橱柜/灶台写 `kitchen-run`。
-4. 不确定类型、尺寸或空间归属时先确认，不用 generic block。
+2. reviewed source model 顶层唯一 `orientationAngleUnit=degrees`；先把源度数转换一次为弧度，再逆旋转世界轮廓得到真实本地 `width/depth`，accepted `rotationY` 只保存该弧度，中心进入 `position`。禁止无单位输入、数值大小推断或后端二次换算。
+3. 类型必须细化到可匹配的 `functionalClass`。电视柜不得只写 cabinet，需写 `tv-console`；连续橱柜按可见柜段拆为 `base-cabinet`、`corner-base-cabinet`、`sink-base-cabinet`、`cooktop` 等原子成员，并用一个 `assemblyId` 表达整组关系，禁止把整套橱柜写成一个 `kitchen-run` 巨型单件。
+4. 用户已明确授权近似匹配或直接修正时，将授权作为可追溯输入继续执行，不重复确认。只有来源证据真正冲突、空间归属无法唯一确定，或资产库不存在同用途原子组件时才停止；禁止 generic block。
 
 ## 最小复核
 

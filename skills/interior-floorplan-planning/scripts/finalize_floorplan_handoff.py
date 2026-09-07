@@ -16,14 +16,15 @@ import sys
 import cv2
 
 from topology_compiler import compile_space_topology
+from compile_floorplan_handoff import validate_compiled_structure
 
 
 SCHEMAS = {
     "traceSpec": "interior.floorplan-trace.v3",
-    "structureData": "interior.floorplan-structure.v3",
+    "structureData": "interior.floorplan-structure.v4",
     "traceComponents": "interior.trace-components.v2",
 }
-PRODUCER_VERSION = "6.4.0"
+PRODUCER_VERSION = "9.0.0"
 
 
 def digest(path: Path) -> str:
@@ -149,6 +150,7 @@ def compile_structure_data(trace_spec: dict) -> dict:
         windows.append({
             "id": source_id,
             "name": source.get("name", source_id),
+            "existence": "present",
             "wallId": host_id,
             "offset": round(offset, 5),
             "width": round(window_width, 5),
@@ -178,6 +180,23 @@ def compile_structure_data(trace_spec: dict) -> dict:
                 if source.get("sourceDividerIds")
                 else {}
             ),
+        })
+
+    boundary_features = []
+    for source in trace_spec["cleanStructure"].get("boundaryFeatures", []):
+        segment = source.get("segment", [])
+        if len(segment) != 2:
+            raise ValueError(f"{source.get('id')}: boundary feature needs one segment")
+        boundary_features.append({
+            "id": source["id"],
+            "kind": source["kind"],
+            "roomId": source["roomId"],
+            "start": transform(segment[0]),
+            "end": transform(segment[1]),
+            "bottom": float(source.get("bottom", 0.0)),
+            "height": float(source.get("height", 1.1)),
+            "sourceTraceIds": list(source.get("sourceTraceIds") or [source["id"]]),
+            "reason": source.get("reason"),
         })
 
     semantic_dividers = [{
@@ -231,11 +250,13 @@ def compile_structure_data(trace_spec: dict) -> dict:
         "walls": walls,
         "windows": windows,
         "connections": connections,
+        "boundaryFeatures": boundary_features,
         "semanticDividers": semantic_dividers,
         "topology": topology,
         "layers": {
             "walls": True,
             "windows": True,
+            "boundaryFeatures": True,
             "fixedFixtures": True,
             "movableFurniture": True,
             "grid": True,
@@ -482,6 +503,10 @@ def main() -> int:
             ),
             {},
         )
+        if source_candidate.get("assemblyId") != decision.get("assemblyId"):
+            raise SystemExit(
+                f"{source_object_id}: source candidate assemblyId differs from the semantic decision"
+            )
         if layer.get("points") != source_candidate.get("outline"):
             raise SystemExit(
                 f"{source_object_id}: trace points differ from the frozen source "
@@ -505,11 +530,58 @@ def main() -> int:
                 f"{source_object_id}: component semantic differs from the "
                 "source object decision"
             )
+        if layer.get("assemblyId") != decision.get("assemblyId") \
+                or component.get("assemblyId") != decision.get("assemblyId"):
+            raise SystemExit(
+                f"{source_object_id}: assemblyId differs across evidence, trace and component"
+            )
+        if layer.get("assemblyRole") != decision.get("assemblyRole") \
+                or component.get("assemblyRole") != decision.get("assemblyRole"):
+            raise SystemExit(
+                f"{source_object_id}: assemblyRole differs across trace and component"
+            )
         if not expected_room or component.get("roomId") != expected_room:
             raise SystemExit(
                 f"{source_object_id}: component room differs from the "
                 "source object decision"
             )
+        if not isinstance(component.get("rotationY"), (int, float)):
+            raise SystemExit(f"{source_object_id}: trace-component requires an explicit rotationY")
+        orientation = component.get("orientation")
+        if not isinstance(orientation, dict) or orientation.get("evidence") not in {
+            "source-symbol", "source-outline-axis", "user-explicit-layout"
+        }:
+            raise SystemExit(
+                f"{source_object_id}: trace-component requires source-bound orientation evidence"
+            )
+        local_axes = orientation.get("localAxes")
+        if not isinstance(local_axes, dict) or not local_axes:
+            raise SystemExit(f"{source_object_id}: orientation.localAxes must not be empty")
+        for role, axis in local_axes.items():
+            if role not in {"front", "back", "headboard"} or axis not in {"+X", "-X", "+Z", "-Z"}:
+                raise SystemExit(f"{source_object_id}: invalid orientation axis {role}={axis}")
+
+    expected_assemblies: dict[str, list[str]] = {}
+    for source_object_id, decision in object_decisions.items():
+        assembly_id = decision.get("assemblyId")
+        if assembly_id:
+            expected_assemblies.setdefault(assembly_id, []).append(
+                component_by_source_id[source_object_id]["traceId"]
+            )
+    declared_assemblies = components.get("assemblies", [])
+    declared_by_id = {
+        row.get("id"): row for row in declared_assemblies if isinstance(row, dict)
+    }
+    if len(declared_by_id) != len(declared_assemblies) \
+            or set(declared_by_id) != set(expected_assemblies):
+        raise SystemExit("trace-components assembly registry differs from source decisions")
+    for assembly_id, child_trace_ids in expected_assemblies.items():
+        assembly = declared_by_id[assembly_id]
+        if len(child_trace_ids) < 2:
+            raise SystemExit(f"{assembly_id}: assembly needs at least two atomic members")
+        if assembly.get("compositionPolicy") != "source-evidenced-atomic-members" \
+                or assembly.get("childTraceIds") != child_trace_ids:
+            raise SystemExit(f"{assembly_id}: assembly membership is invalid")
 
     source_image = cv2.imread(str(paths["sourceImage"]), cv2.IMREAD_COLOR)
     if source_image is None:
@@ -525,6 +597,11 @@ def main() -> int:
         raise SystemExit("room topology compilation failed:\n" + "\n".join(topology["errors"]))
     compiled_trace = topology["traceSpec"]
     structure = compile_structure_data(compiled_trace)
+    structure_errors = validate_compiled_structure(structure)
+    if structure_errors:
+        raise SystemExit(
+            "compiled structure rejected before handoff:\n" + "\n".join(structure_errors)
+        )
     room_ids = {room["id"] for room in compiled_trace["spaces"]}
     unresolved_component_rooms = sorted({
         row.get("roomId")
@@ -592,7 +669,7 @@ def main() -> int:
 
     clean_ids = {
         trace_id
-        for layer in ("walls", "windows", "connections")
+        for layer in ("walls", "windows", "connections", "boundaryFeatures")
         for item in compiled_trace.get("cleanStructure", {}).get(layer, [])
         for trace_id in [
             item["id"],

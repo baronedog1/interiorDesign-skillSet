@@ -1,7 +1,7 @@
 {
   "schema": "interior.component-functional-class-tags.v1",
   "generator": "build_functional_class_tags.mjs/v1",
-  "count": 337,
+  "count": 579,
   "assets": [
     {
       "assetId": "abo-b0711q7wk7",
@@ -87,8 +87,7 @@
       "assetId": "abo-b072zk8897",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
-        "tv-console"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -528,7 +527,7 @@
       "assetId": "abo-b075z8628k",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
+        "storage-cabinet",
         "tv-console"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
@@ -697,7 +696,7 @@
       "assetId": "abo-b07b77vxn8",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
+        "storage-cabinet",
         "tv-console"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
@@ -706,7 +705,7 @@
       "assetId": "abo-b07b78g1bw",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
+        "storage-cabinet",
         "tv-console"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
@@ -715,7 +714,7 @@
       "assetId": "abo-b07b78rct5",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
+        "storage-cabinet",
         "tv-console"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
@@ -724,7 +723,7 @@
       "assetId": "abo-b07b79wskt",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
+        "storage-cabinet",
         "tv-console"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
@@ -1005,8 +1004,7 @@
       "assetId": "abo-b07hsgcngt",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
-        "tv-console"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -1735,7 +1733,7 @@
       "assetId": "ph-chinese-cabinet",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -1943,7 +1941,7 @@
       "assetId": "ph-gothiccabinet-01",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2143,8 +2141,7 @@
       "assetId": "ph-modern-wooden-cabinet",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
-        "tv-console"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2192,7 +2189,7 @@
       "assetId": "ph-painted-wooden-cabinet",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2200,7 +2197,7 @@
       "assetId": "ph-painted-wooden-cabinet-02",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2440,7 +2437,7 @@
       "assetId": "ph-vintage-cabinet-01",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2589,6 +2586,513 @@
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
     {
+      "assetId": "sh3d-blendswap-cc-0-001-armchair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-002-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-003-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-004-bedside-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "side-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-005-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-006-bookcase",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "bookcase",
+        "shelving"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-015-desk-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "decorative-light",
+        "table-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-016-double-oven",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "oven"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-021-corner-sofa",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sectional-sofa",
+        "sofa"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-024-cooktop",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "cooktop"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-026-oak-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "dining-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-027-oak-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-028-oven",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "oven"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-031-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "dining-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-034-radiator",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "bathroom-radiator"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-035-radiator",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "bathroom-radiator"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-037-relax-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-040-shower-head-and-faucet",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-fixture"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-041-shower-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-052-television-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "storage-cabinet",
+        "tv-console"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-057-toilet-unit",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "toilet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-062-washbasin",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "washbasin"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-065-deck-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "outdoor-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-067-corner-sofa",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sectional-sofa",
+        "sofa"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-068-wardrobe",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "wardrobe"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-075-desk",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "desk"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-079-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "dining-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-086-armchair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-087-baby-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "crib",
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-088-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-093-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "dining-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-099-armchair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-101-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "dining-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-104-bidet",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "bidet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-108-chair-with-cushion",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "dining-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-118-folding-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "folding-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-121-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "decorative-light",
+        "table-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-128-refrigerator",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "refrigerator"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-131-shower-stall",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-enclosure"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-132-sofa",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-134-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-137-wall-light",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "decorative-light",
+        "wall-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-139-winchester-armchair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-140-winchester-sofa",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-144-drawers-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "dresser",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-145-glass-door-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "glass-door-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-146-high-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "tall-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-151-large-fridge",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "refrigerator"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-152-desk",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "desk"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-153-lower-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "base-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-154-lower-corner-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "corner-base-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-156-pedestrian-railing",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "balcony-railing"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-157-pedestrian-railing",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "balcony-railing"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-161-range-hood",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "range-hood"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-165-sink-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "sink-base-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-166-small-upper-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "wall-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-169-stove",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "cooktop"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-172-upper-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "wall-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-blendswap-cc-0-173-upper-corner-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "corner-wall-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
       "assetId": "sh3d-cc0-gas-cooktop",
       "category": "appliance",
       "supportedFunctionalClasses": [
@@ -2600,7 +3104,8 @@
       "assetId": "sh3d-cc0-generic-closed-cupboard",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "closed-cupboard"
+        "closed-cupboard",
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2609,8 +3114,7 @@
       "category": "storage",
       "supportedFunctionalClasses": [
         "base-cabinet",
-        "sideboard",
-        "tv-console"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2619,8 +3123,7 @@
       "category": "storage",
       "supportedFunctionalClasses": [
         "corner-base-cabinet",
-        "sideboard",
-        "tv-console"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2629,8 +3132,7 @@
       "category": "storage",
       "supportedFunctionalClasses": [
         "base-cabinet",
-        "sideboard",
-        "tv-console"
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2638,8 +3140,7 @@
       "assetId": "sh3d-cc0-kitchen-glass-wall-cabinet",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
-        "tv-console",
+        "storage-cabinet",
         "wall-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
@@ -2657,8 +3158,8 @@
       "assetId": "sh3d-cc0-kitchen-sink-base",
       "category": "storage",
       "supportedFunctionalClasses": [
-        "sideboard",
-        "sink-base-cabinet"
+        "sink-base-cabinet",
+        "storage-cabinet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     },
@@ -2717,7 +3218,1607 @@
         "toilet"
       ],
       "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-001-washbasin-with-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "bathroom-vanity",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-014-crib",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "crib",
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-015-loft-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "bunk-bed",
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-017-small-chest",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "dresser",
+        "sideboard",
+        "tv-console"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-018-five-panes-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "casement-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-019-five-panes-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "casement-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-020-front-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "single-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-021-garage-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "garage-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-022-patio-glass-door-unit",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "glass-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-023-picture-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "fixed-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-025-six-door-french-style",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "folding-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-026-sliding-french-doors",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "sliding-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-029-deck-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "outdoor-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-032-glass-door-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "glass-door-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-034-microwave",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "microwave"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-035-microwave-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "storage-cabinet",
+        "tall-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-039-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-045-floor-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "floor-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-046-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "decorative-light",
+        "table-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-047-pendant-light",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "pendant-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-049-armchair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-051-bookcase",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "bookcase",
+        "shelving"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-053-computer-desk",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "desk"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-054-computer-desk",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "desk"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-055-desk",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "desk"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-059-glass-door-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "glass-door-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-062-rectangular-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-063-round-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-065-square-coffee-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "coffee-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-066-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-067-coffee-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "coffee-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-075-curtain",
+      "category": "rug-textile",
+      "supportedFunctionalClasses": [
+        "curtain",
+        "rug"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-087-railing",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "balcony-railing"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-088-rounded-edges-railing",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "balcony-railing"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-089-rounded-edges-railing",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "balcony-railing"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-093-smaller-railing",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "balcony-railing"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-100-venetian-blind",
+      "category": "rug-textile",
+      "supportedFunctionalClasses": [
+        "rug",
+        "window-blind"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-112-triple-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "casement-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-113-emergency-glass-double-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "double-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-115-gray-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "base-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-116-gray-cabinet-with-basin",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "bathroom-vanity",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-117-gray-glass-door-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "glass-door-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-119-gray-upper-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "wall-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-136-mirror",
+      "category": "mirror",
+      "supportedFunctionalClasses": [
+        "mirror"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-137-oval-mirror",
+      "category": "mirror",
+      "supportedFunctionalClasses": [
+        "mirror"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-138-rectangular-mirror",
+      "category": "mirror",
+      "supportedFunctionalClasses": [
+        "mirror"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-139-accordion-fold-doors",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "folding-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-140-red-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "base-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-141-red-cabinet-with-basin",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "bathroom-vanity",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-144-upper-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "wall-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-145-glass-door-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "glass-door-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-146-hood",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "range-hood"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-148-oven",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "oven"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-149-fridge",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "refrigerator"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-151-shower-cubicle",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-enclosure"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-152-shower-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-161-small-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table",
+        "side-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-162-bookcase",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "bookcase",
+        "shelving"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-183-captain-s-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-187-microwave",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "microwave"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-189-coffee-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "coffee-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-201-daybed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-202-garage-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "garage-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-204-wardrobe",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "wardrobe"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-209-black-deck-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table",
+        "outdoor-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-211-black-deck-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "outdoor-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-214-stove",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "cooktop"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-216-wood-corner-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "corner-base-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-217-wood-drawer-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "dresser"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-220-wood-lower-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "base-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-224-refrigerator",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "refrigerator"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-226-wood-cabinet-with-sink",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "sink-base-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-227-dishwasher",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "dishwasher"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-238-desk-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "decorative-light",
+        "table-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-241-glass-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "glass-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-245-hanging-light",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "pendant-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-247-office-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "office-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-248-office-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "office-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-249-office-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "office-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-254-sofa",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-255-sofa",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-257-sofa",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-259-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "single-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-264-towel-and-medicine-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "bathroom-mirror-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-267-fancy-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "casement-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-268-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "fixed-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-271-opened-patio-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "sliding-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-272-patio-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "glass-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-273-patio-side-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "glass-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-323-wardrobe",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "wardrobe"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-329-garden-sofa",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-330-sofa-bed",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa",
+        "sofa-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-331-opened-sofa-bed",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa",
+        "sofa-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-334-fridge",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "refrigerator"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-336-shoe-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "shoe-cabinet",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-337-bedside-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "side-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-341-coffee-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "coffee-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-344-stove",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "cooktop"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-355-swinging-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "rocking-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-357-bath-l-shape",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "bathtub"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-358-cupboard-mirror",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "bathroom-mirror-cabinet",
+        "closed-cupboard",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-360-washbasin-with-cabinet",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "bathroom-vanity",
+        "storage-cabinet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-375-craftsman-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "single-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-397-picnic-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table",
+        "outdoor-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-404-rocking-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "rocking-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-410-shower-cabin",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-enclosure"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-411-slider-pocket-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "sliding-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-417-hanged-toilet",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "toilet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-420-corner-washbasin",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "washbasin"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-421-washer-dryer",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "washer-dryer"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-424-window-2x3",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "casement-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-425-deep-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "fixed-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-426-flat-roof-skylight-bubble",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "skylight"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-428-ceiling-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "ceiling-light",
+        "pendant-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-432-door-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "glass-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-436-fixed-small-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "fixed-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-437-shop-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "fixed-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-438-neoclassic-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "casement-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-461-child-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "child-bed",
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-465-couch-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "coffee-table",
+        "dining-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-469-double-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "double-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-472-folding-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "folding-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-476-sliding-doors",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "sliding-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-479-wall-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "wall-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-480-mezzanine-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "bunk-bed",
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-483-painting-light",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "decorative-light",
+        "wall-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-490-blind",
+      "category": "rug-textile",
+      "supportedFunctionalClasses": [
+        "rug",
+        "window-blind"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-492-half-round-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table",
+        "side-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-493-corner-shower-curtain",
+      "category": "rug-textile",
+      "supportedFunctionalClasses": [
+        "rug",
+        "shower-curtain"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-496-wall-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "wall-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-499-double-french-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "french-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-502-french-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "french-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-contributions-503-front-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "single-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-katorlegaz-040-hanging-light",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "pendant-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-katorlegaz-044-track-lights",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "decorative-light",
+        "track-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-katorlegaz-070-window-blind",
+      "category": "rug-textile",
+      "supportedFunctionalClasses": [
+        "rug",
+        "window-blind"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-katorlegaz-077-bathmat",
+      "category": "rug-textile",
+      "supportedFunctionalClasses": [
+        "bathmat",
+        "rug"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-katorlegaz-088-shower-curtain",
+      "category": "rug-textile",
+      "supportedFunctionalClasses": [
+        "rug",
+        "shower-curtain"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-katorlegaz-089-shower-head-and-faucet",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-fixture"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-001-washbasin",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "washbasin"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-002-washbasin",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "washbasin"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-005-wardrobe",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "wardrobe"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-052-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "single-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-058-pendant-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "pendant-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-068-washbasin",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "washbasin"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-071-bar-chair",
+      "category": "stool",
+      "supportedFunctionalClasses": [
+        "bar-stool",
+        "stool"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-077-child-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "child-bed",
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-079-crib",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "crib",
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-099-beach-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "outdoor-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-101-chandelier-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "pendant-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-110-corner-bathtub",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "bathtub"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-126-baby-high-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "high-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-131-clothes-washing-machine",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "washing-machine"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-132-dryer-machine",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "dryer"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-154-curtain",
+      "category": "rug-textile",
+      "supportedFunctionalClasses": [
+        "curtain",
+        "rug"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-193-changing-table",
+      "category": "storage",
+      "supportedFunctionalClasses": [
+        "changing-table",
+        "sideboard"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-199-garage-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "garage-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-213-ceiling-lamp",
+      "category": "lighting",
+      "supportedFunctionalClasses": [
+        "ceiling-light",
+        "pendant-light"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-214-turn-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "skylight"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-217-double-door",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "double-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-218-double-door-with-panes",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "double-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-219-double-door-with-panes",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "double-door"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-221-sliding-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "sliding-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-224-double-french-window-3-panes",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "french-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-227-double-french-window-small-panes",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "french-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-228-triple-french-window",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "french-window"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-288-convertible-sofa-bz",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa",
+        "sofa-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-289-opened-convertible-sofa-bz",
+      "category": "sofa",
+      "supportedFunctionalClasses": [
+        "sofa",
+        "sofa-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-300-table-on-trestles",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table",
+        "outdoor-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-342-small-oven",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "oven"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-343-doormat",
+      "category": "rug-textile",
+      "supportedFunctionalClasses": [
+        "doormat",
+        "rug"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-345-mezzanine-bed",
+      "category": "bed",
+      "supportedFunctionalClasses": [
+        "bunk-bed",
+        "double-bed"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-359-children-chair",
+      "category": "chair",
+      "supportedFunctionalClasses": [
+        "accent-chair",
+        "child-chair"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-360-children-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "child-table",
+        "dining-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-374-island-bath",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "bathtub"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-376-hood",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "range-hood"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-386-rattan-table",
+      "category": "table",
+      "supportedFunctionalClasses": [
+        "dining-table",
+        "outdoor-table"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-466-small-dishwasher",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "dishwasher"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-479-japanese-toilet-unit",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "toilet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-485-mixer-tap-for-bath-and-shower",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-fixture"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-487-mixer-tap-for-shower",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-fixture"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-492-shower-cabin",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "appliance",
+        "shower-enclosure"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
+    },
+    {
+      "assetId": "sh3d-scopia-497-turkish-toilet",
+      "category": "appliance",
+      "supportedFunctionalClasses": [
+        "toilet"
+      ],
+      "evidence": "provider-title-category-and-reviewed-dimensions-v1"
     }
   ],
-  "tagsDigestSha256": "f9d10ebc2a747e9dae506f767c60b86a594dd99b31d2658e08aa24d9b779a020"
+  "tagsDigestSha256": "c8ef22e56fb0be366705b7fa5ea480fe18ecc3de4257a8f092aa1b8c3af1789e"
 }

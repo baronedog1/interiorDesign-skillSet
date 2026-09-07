@@ -51,7 +51,10 @@ function classesFor(asset) {
       else if (/base cabinet/.test(name)) add("base-cabinet");
       else if (/wall cabinet|upper cabinet/.test(name)) add("wall-cabinet");
       else if (/tall.*cabinet|high cabinet/.test(name)) add("tall-cabinet");
-      else if (/cupboard/.test(name)) add("closed-cupboard");
+      else if (/shoe cabinet/.test(name)) add("shoe-cabinet", "storage-cabinet");
+      else if (/laundry|washer cabinet|utility cabinet/.test(name)) add("utility-cabinet", "storage-cabinet");
+      else if (/cupboard/.test(name)) add("closed-cupboard", "storage-cabinet");
+      else if (/cabinet/.test(name)) add("storage-cabinet");
       else add("sideboard");
       if ((result.has("sideboard") || /credenza|buffet|low cabinet/.test(name))
           && Number(asset.defaultDimensions?.height) <= 0.95) add("tv-console");

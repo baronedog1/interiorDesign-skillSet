@@ -1,0 +1,914 @@
+{
+  "schemaVersion": 4,
+  "skillId": "interior-camera-capture",
+  "displayName": "室内空间唯一机位生成与截图",
+  "version": "47.0.1",
+  "purpose": "从项目唯一当前 HTML 只求解一次正式机位，优先消费带来源证据的用户有向机位意图，并在未指定时使用主体正面轴、靠墙设备有符号正面和多主体投影避挡；让 Blender、CAD 强制复用同一冻结计划，并以 Camera facts 与配对 PNG 直接交接效果图。",
+  "overview": {
+    "subtitle": "只有一条客户生产链：当前 HTML → 唯一求解器 → 冻结一次 → HTML/Blender/CAD 原样截图与事实 JSON。",
+    "nodes": [
+      {
+        "id": "overview-in",
+        "scenarioId": "capture-current-model",
+        "type": "io",
+        "x": 70,
+        "y": 560,
+        "w": 470,
+        "h": 250,
+        "title": "输入当前后端整屋模型",
+        "lines": [
+          "HTML、Blender 或 CAD 与同版结构数据"
+        ],
+        "responsibility": "用户或上游建模 Skill 提供项目当前 HTML、同一版户型结构和可选原生后端模型；机位只能从当前 HTML 求解一次。",
+        "files": [
+          {
+            "path": "SKILL.md",
+            "purpose": "说明何时调用机位 Skill 以及正式交付边界"
+          }
+        ]
+      },
+      {
+        "id": "overview-run",
+        "type": "process",
+        "x": 850,
+        "y": 500,
+        "w": 700,
+        "h": 370,
+        "title": "HTML求解一次，后端复用冻结计划",
+        "lines": [
+          "HTML模板调用唯一求解器，Blender和CAD模板只能消费结果"
+        ],
+        "responsibility": "机位 Agent 先用HTML冻结计划；Blender和CAD只负责原生渲染，不得再次求解或移动相机。",
+        "files": [
+          {
+            "path": "scripts/run_camera_pipeline.py",
+            "purpose": "固定串起场景生成、机位求解、原生事实收敛和正式截图"
+          },
+          {
+            "path": "scripts/unified_camera_solver.py",
+            "purpose": "作为唯一拥有机位决策权的代码文件"
+          }
+        ]
+      },
+      {
+        "id": "overview-out",
+        "type": "store",
+        "x": 1850,
+        "y": 535,
+        "w": 470,
+        "h": 300,
+        "title": "交付截图与同名事实 JSON",
+        "lines": [
+          "每个空间一张正式 PNG",
+          "同名 JSON 记录相机、主体和入画对象"
+        ],
+        "responsibility": "机位 Agent 保存完整截图和机器可复核事实；效果图流程直接读取这对文件，不再等待 scene-map 中转。",
+        "files": [
+          {
+            "path": "data_contract.md",
+            "purpose": "规定计划、图片、事实 JSON 和直接下游交接分别保存什么"
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "overview-in",
+        "to": "overview-run",
+        "points": [
+          [
+            540,
+            685
+          ],
+          [
+            850,
+            685
+          ]
+        ],
+        "label": "当前模型与结构"
+      },
+      {
+        "from": "overview-run",
+        "to": "overview-out",
+        "points": [
+          [
+            1550,
+            685
+          ],
+          [
+            1850,
+            685
+          ]
+        ],
+        "label": "冻结机位和正式图片"
+      }
+    ]
+  },
+  "concepts": [],
+  "scenarios": [
+    {
+      "id": "capture-current-model",
+      "yamlPhrase": "当前整屋 HTML、Blender 或 CAD 模型需要按空间自动求机位、截图并输出同名场景事实 JSON",
+      "title": "从当前整屋模型自动生成每个空间的正式机位图",
+      "explanation": "用户已经有当前整屋模型，希望自动找到各空间机位并获得截图和事实 JSON 时调用。",
+      "inputKey": "current-interior-model-and-shot-request",
+      "narrative": "当用户已经完成当前 HTML，并希望从 HTML、Blender 或 CAD 得到同角度截图时，就进入这一条流程。系统只允许 HTML 模板导出真实 Three.js 场景并调用唯一求解器；它从房间边界推导马桶、浴室柜、洗衣机和洗手盆的背墙与有符号正面，背面镜头不能胜出。若一个空间包含多件必拍主体，还会用原生 Entity-ID 投影计算它们的重叠率和中心间距，优先选择互不遮挡的严格墙法线候选。正式计划冻结后，Blender 和 CAD 必须携带同一个计划文件和摘要，只能转换坐标与渲染，不能再算一次。全部候选都有提示时仍交付最佳可用镜头，不用质量门禁扣图。",
+      "input": "项目唯一当前 HTML 或原生模型、同一 revision 的户型结构、需要拍摄的空间列表",
+      "output": "冻结机位计划、每空间正式 PNG、同名场景事实 JSON、逐阶段计时和流水线完成回执",
+      "diagrams": [
+        {
+          "title": "唯一场景生成器和唯一机位求解器的完整生产链",
+          "subtitle": "任何事实不成立都回到当前模型修复；没有备用算法、降级场景或人工逐图坐标。",
+          "nodes": [
+            {
+              "id": "input",
+              "type": "io",
+              "x": 40,
+              "y": 170,
+              "w": 310,
+              "h": 310,
+              "title": "读取唯一当前模型",
+              "lines": [
+                "当前 HTML / 原生模型",
+                "同版结构与空间请求"
+              ],
+              "responsibility": "机位 Agent 读取项目当前事实，不接受旧相机坐标或历史截图作为输入。",
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "规定正式触发条件与边界"
+                },
+                {
+                  "path": "playbook.md",
+                  "purpose": "说明从当前模型到正式截图的连续做法"
+                },
+                {
+                  "path": "data_contract.md",
+                  "purpose": "规定输入身份、版本和输出对象"
+                },
+                {
+                  "path": "ENVIRONMENT_CONTRACT.md",
+                  "purpose": "说明 GCP、Ubuntu、运行时和浏览器之间的关系"
+                }
+              ]
+            },
+            {
+              "id": "scene",
+              "type": "process",
+              "x": 400,
+              "y": 150,
+              "w": 390,
+              "h": 350,
+              "title": "HTML准备唯一求解场景",
+              "lines": [
+                "HTML生成GLTF、网格包络和房间事实",
+                "Blender/CAD不再提供第二求解场景"
+              ],
+              "responsibility": "HTML模板生成唯一求解场景；Blender和CAD必须等待这份计划冻结后再进入截图。",
+              "detailRef": "scene-generator",
+              "files": [
+                {
+                  "path": "scripts/run_camera_pipeline.py",
+                  "purpose": "作为唯一客户入口加载后端模板并调用共同求解器"
+                },
+                {
+                  "path": "assets/backend-templates/html.json",
+                  "purpose": "声明 HTML 场景生成与 Three.js 原生截图适配"
+                },
+                {
+                  "path": "assets/backend-templates/blender.json",
+                  "purpose": "声明 Blender 只消费冻结计划并执行原生截图"
+                },
+                {
+                  "path": "assets/backend-templates/cad.json",
+                  "purpose": "声明 CAD 只消费冻结计划、转换合同并截图"
+                },
+                {
+                  "path": "scripts/generate_vtk_camera_scene.py",
+                  "purpose": "核对身份和对象数量并写出正式场景包"
+                },
+                {
+                  "path": "scripts/export_html_camera_scene.mjs",
+                  "purpose": "在真实浏览器中导出当前模型和原生 GLTF"
+                },
+                {
+                  "path": "scripts/semantic_vtk_scene.py",
+                  "purpose": "把原生 GLTF 导入 VTK 并提供实体、深度和射线事实"
+                },
+                {
+                  "path": "references/requirements.txt",
+                  "purpose": "固定场景生成和求解所需的 Python 依赖版本"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "给出 Ubuntu 上唯一正式运行命令"
+                }
+              ]
+            },
+            {
+              "id": "scene-ok",
+              "type": "decision",
+              "x": 840,
+              "y": 130,
+              "w": 340,
+              "h": 390,
+              "title": "场景事实完整一致吗？",
+              "lines": [
+                "户型身份一致",
+                "全部家具都有真实网格且没有重复"
+              ],
+              "responsibility": "场景生成器用代码检查当前模型与导出网格的一一对应关系，不能用代理场景或猜测继续。",
+              "files": [
+                {
+                  "path": "references/algorithm.md",
+                  "purpose": "规定场景、主体、墙法线和取景计算使用的统一公式"
+                },
+                {
+                  "path": "scripts/audit_delivery.py",
+                  "purpose": "在发版时核对真实回执、正式图片、旧文件和唯一决策入口"
+                }
+              ],
+              "criteria": [
+                "当前模型与结构属于同一户型版本，模型家具 ID 与原生网格 ID 完全相等且每件至少有一个网格",
+                "全部证据满足才走“是”；任一身份、对象或网格缺失都走“否”，回到当前模型修复"
+              ]
+            },
+            {
+              "id": "solve",
+              "type": "process",
+              "x": 1230,
+              "y": 150,
+              "w": 390,
+              "h": 350,
+              "title": "唯一严格正视求解器选出正式机位",
+              "lines": [
+                "主体、设备正面、投影避挡与自然视野",
+                "墙体证据裁切左右和底部非目标区域"
+              ],
+              "responsibility": "唯一求解器枚举严格墙法线方向，先比较靠墙设备正面和多主体原生投影重叠，再从完整入画候选中选择，不产生斜视或降级结果。",
+              "detailRef": "sole-solver",
+              "files": [
+                {
+                  "path": "scripts/unified_camera_solver.py",
+                  "purpose": "唯一计算主体、设备正面、多主体避挡、站位、FOV、移轴和最终选择"
+                },
+                {
+                  "path": "scripts_logic.md",
+                  "purpose": "登记全部正式脚本并声明只有统一求解器拥有决策权"
+                },
+                {
+                  "path": "tests/test_contracts.py",
+                  "purpose": "回归方法版本、严格法线、设备正面、多主体避挡、唯一决策文件和无降级分支"
+                }
+              ]
+            },
+            {
+              "id": "capture",
+              "type": "process",
+              "x": 1670,
+              "y": 150,
+              "w": 350,
+              "h": 350,
+              "title": "冻结计划并原样截图",
+              "lines": [
+                "原样应用位置、FOV、移轴与墙体裁切框",
+                "顶部保留，投影重映射到最终 PNG"
+              ],
+              "responsibility": "HTML、Blender、CAD 原生截图器只消费同一冻结机位，顺序生成每张 PNG 和原生场景事实。",
+              "files": [
+                {
+                  "path": "scripts/capture_frozen_html_plan.mjs",
+                  "purpose": "在当前 HTML 中原样应用冻结机位并生成图片与事实"
+                },
+                {
+                  "path": "scripts/export_backend_camera_plan.py",
+                  "purpose": "当后端合同需要时无损转换同一冻结姿态，不能重新取景"
+                },
+                {
+                  "path": "data_contract.md",
+                  "purpose": "规定同名 Camera facts 与 PNG 直接交给效果图 Skill"
+                }
+              ]
+            },
+            {
+              "id": "output",
+              "type": "store",
+              "x": 2070,
+              "y": 170,
+              "w": 300,
+              "h": 310,
+              "title": "保存正式交付和同源说明",
+              "lines": [
+                "PNG + 同名 JSON",
+                "计划、逐阶段计时、回执和发布说明"
+              ],
+              "responsibility": "机位 Agent 保存正式交付，并让人类和 AI 都能从同一份 Skill 说明理解唯一流程。",
+              "files": [
+                {
+                  "path": "agents/openai.yaml",
+                  "purpose": "提供给 Codex 的默认调用提示"
+                },
+                {
+                  "path": "references/skill-manual.json",
+                  "purpose": "作为说明书唯一结构化事实源"
+                },
+                {
+                  "path": "references/skill-manual.md",
+                  "purpose": "提供给 AI 阅读的同源说明书"
+                },
+                {
+                  "path": "references/skill-flowchart.svg",
+                  "purpose": "提供唯一流程总览图"
+                },
+                {
+                  "path": "SKILL_MANUAL.pdf",
+                  "purpose": "提供给普通人阅读的 A3 图文说明书"
+                },
+                {
+                  "path": "MANIFEST.json",
+                  "purpose": "登记正式版本和全部活动文件"
+                }
+              ]
+            },
+            {
+              "id": "repair",
+              "type": "process",
+              "x": 810,
+              "y": 890,
+              "w": 420,
+              "h": 280,
+              "title": "修复当前模型或场景导出代码",
+              "lines": [
+                "修复身份、缺失网格或对象重复",
+                "然后从同一入口重新生成"
+              ],
+              "responsibility": "模型或 Skill 维护者修复真实错误，不能新加一套代理场景或备用求解器绕过问题。",
+              "files": [
+                {
+                  "path": "scripts/generate_vtk_camera_scene.py",
+                  "purpose": "重新执行同一套身份与网格一致性检查"
+                },
+                {
+                  "path": "references/algorithm.md",
+                  "purpose": "确认修复仍遵守唯一场景和唯一求解公式"
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "input",
+              "to": "scene",
+              "points": [
+                [
+                  350,
+                  325
+                ],
+                [
+                  400,
+                  325
+                ]
+              ],
+              "label": "当前模型与结构"
+            },
+            {
+              "from": "scene",
+              "to": "scene-ok",
+              "points": [
+                [
+                  790,
+                  325
+                ],
+                [
+                  840,
+                  325
+                ]
+              ],
+              "label": "原生场景包"
+            },
+            {
+              "from": "scene-ok",
+              "to": "solve",
+              "points": [
+                [
+                  1180,
+                  325
+                ],
+                [
+                  1230,
+                  325
+                ]
+              ],
+              "label": "是：进入唯一求解器"
+            },
+            {
+              "from": "solve",
+              "to": "capture",
+              "points": [
+                [
+                  1620,
+                  325
+                ],
+                [
+                  1670,
+                  325
+                ]
+              ],
+              "label": "冻结机位计划"
+            },
+            {
+              "from": "capture",
+              "to": "output",
+              "points": [
+                [
+                  2020,
+                  325
+                ],
+                [
+                  2070,
+                  325
+                ]
+              ],
+              "label": "正式图片与事实"
+            },
+            {
+              "from": "scene-ok",
+              "to": "repair",
+              "points": [
+                [
+                  1010,
+                  520
+                ],
+                [
+                  1010,
+                  890
+                ]
+              ],
+              "label": "否：修复真实错误"
+            },
+            {
+              "from": "repair",
+              "to": "scene",
+              "points": [
+                [
+                  810,
+                  1030
+                ],
+                [
+                  600,
+                  1030
+                ],
+                [
+                  600,
+                  500
+                ]
+              ],
+              "label": "修复后重新生成场景"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "logicDetails": [
+    {
+      "id": "scene-generator",
+      "title": "三类原生模型到统一语义场景",
+      "explanation": "这一页解释后端模板怎样把 HTML、Blender、CAD 原生事实统一成同一个求解输入，以及对象和网格怎样一一核对。",
+      "logicExplanation": "HTML 模板让当前页面自己导出运行时模型和 GLTF；Blender 与 CAD 模板读取对应建模 Skill 从当前原生模型导出的场景包。三个后端都统一提供稳定 Entity-ID、户型、结构版本、房间、语义、方向和真实网格包络，再送入同一个 VTK 求解层。模板不读取历史相机、不构造简化方盒，也不包含另一套 selector。任何缺失都会明确失败并指向当前模型或场景导出代码；修复后仍从同一个入口重跑。",
+      "sourceRefs": [
+        {
+          "scenarioId": "capture-current-model",
+          "nodeId": "scene",
+          "label": "场景流程中的“导出真实 HTML 网格并生成 VTK 场景”"
+        }
+      ],
+      "algorithm": {
+        "inputs": [
+          "HTML、Blender 或 CAD 当前原生模型",
+          "同版结构数据"
+        ],
+        "rules": [
+          "后端模板生成或接收当前模型 GLTF",
+          "模型对象与原生网格一一对应",
+          "户型身份必须一致"
+        ],
+        "failure": "明确停止并修复当前模型或导出代码，不构造替代场景。",
+        "evidence": "场景生成回执、GLTF 摘要、对象与网格计数完全一致。"
+      },
+      "diagrams": [
+        {
+          "title": "后端模板怎样得到共同求解所需的真实场景",
+          "nodes": [
+            {
+              "id": "sg-in",
+              "type": "io",
+              "x": 80,
+              "y": 300,
+              "w": 420,
+              "h": 280,
+              "title": "当前后端模型和结构",
+              "lines": [
+                "同一项目、同一版户型"
+              ],
+              "responsibility": "场景准备接收 HTML、Blender 或 CAD 当前模型和同版结构数据。",
+              "files": [
+                {
+                  "path": "scripts/generate_vtk_camera_scene.py",
+                  "purpose": "接收唯一正式输入并组织场景生成"
+                }
+              ]
+            },
+            {
+              "id": "sg-export",
+              "type": "process",
+              "x": 730,
+              "y": 280,
+              "w": 500,
+              "h": 320,
+              "title": "后端导出当前原生运行态",
+              "lines": [
+                "当前模型与稳定实体 ID",
+                "真实 GLTF 与网格包络"
+              ],
+              "responsibility": "HTML 从页面运行态导出；Blender/CAD 从当前原生模型导出，不使用历史文件。",
+              "files": [
+                {
+                  "path": "scripts/export_html_camera_scene.mjs",
+                  "purpose": "导出真实运行态模型和 GLTF"
+                }
+              ]
+            },
+            {
+              "id": "sg-check",
+              "type": "decision",
+              "x": 1480,
+              "y": 250,
+              "w": 470,
+              "h": 380,
+              "title": "对象和网格完全一致吗？",
+              "lines": [
+                "身份、数量、ID、网格数"
+              ],
+              "responsibility": "生成器比较模型清单和原生几何清单。",
+              "files": [
+                {
+                  "path": "scripts/semantic_vtk_scene.py",
+                  "purpose": "读取 GLTF 并提供真实几何事实"
+                }
+              ],
+              "criteria": [
+                "户型身份一致且每个模型对象恰好对应至少一个网格",
+                "全部满足走“是”；任何缺失或重复走“否”并停止"
+              ]
+            },
+            {
+              "id": "sg-out",
+              "type": "store",
+              "x": 2080,
+              "y": 300,
+              "w": 280,
+              "h": 280,
+              "title": "正式 VTK 场景包",
+              "lines": [
+                "GLTF、原生几何、房间事实、回执"
+              ],
+              "responsibility": "生成器保存唯一可供求解器读取的真实场景包。",
+              "files": [
+                {
+                  "path": "data_contract.md",
+                  "purpose": "规定场景包正式文件和身份关系"
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "sg-in",
+              "to": "sg-export",
+              "points": [
+                [
+                  500,
+                  440
+                ],
+                [
+                  730,
+                  440
+                ]
+              ],
+              "label": "当前模型"
+            },
+            {
+              "from": "sg-export",
+              "to": "sg-check",
+              "points": [
+                [
+                  1230,
+                  440
+                ],
+                [
+                  1480,
+                  440
+                ]
+              ],
+              "label": "原生场景事实"
+            },
+            {
+              "from": "sg-check",
+              "to": "sg-out",
+              "points": [
+                [
+                  1950,
+                  440
+                ],
+                [
+                  2080,
+                  440
+                ]
+              ],
+              "label": "是：保存正式场景"
+            },
+            {
+              "from": "sg-check",
+              "to": "sg-in",
+              "points": [
+                [
+                  1715,
+                  630
+                ],
+                [
+                  1715,
+                  900
+                ],
+                [
+                  290,
+                  900
+                ],
+                [
+                  290,
+                  580
+                ]
+              ],
+              "label": "否：修复后重来"
+            }
+          ],
+          "annotations": [
+            {
+              "x": 80,
+              "y": 1050,
+              "w": 2200,
+              "h": 250,
+              "title": "为什么必须从当前原生模型生成场景",
+              "wrap": 140,
+              "paragraphs": [
+                "当前原生模型才是用户正在编辑和保存的模型事实。HTML 让页面自己导出运行时模型和真实 GLTF；Blender/CAD 由对应建模 Skill 从当前原生文件导出同样的稳定实体与真实网格，再由共同 VTK 层读取。它不会拿历史 JSON、代理方盒或旧相机计划拼一个看似可用的场景。",
+                "如果户型身份不同、家具 ID 缺失、同一对象重复或某件家具没有真实网格，流程会明确失败，并指出应修复当前模型还是导出器。修复后仍从同一入口重跑，不新增备用场景，也不让下游求解器在错误几何上继续工作。"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sole-solver",
+      "title": "唯一严格正视机位求解器",
+      "explanation": "这一页解释主体、墙法线、站位、FOV、移轴和真实像素如何在同一个求解器里完成。",
+      "logicExplanation": "求解器先按房间功能选择主体组，再从真实背景墙内法线生成严格正视候选。房内存在自然视野解时优先房内；否则沿同一法线后退。每个候选都计算主体大小、上下空间、遮挡、透视和墙体裁切，这些结果统一写入 qualityAdvisories 并参与排序，不再形成 质量硬门禁。只要存在几何上有效的严格正视候选，就选择排序最高的一张并交给截图器；没有达到理想质量时仍照常交付，同时把问题留给通用算法研发。只有模型、结构、墙体或真实网格事实缺失，导致连严格正视几何候选都不存在时，才停止并修输入。",
+      "sourceRefs": [
+        {
+          "scenarioId": "capture-current-model",
+          "nodeId": "solve",
+          "label": "场景流程中的“唯一严格正视求解器选出正式机位”"
+        }
+      ],
+      "algorithm": {
+        "inputs": [
+          "真实 VTK 场景",
+          "空间多边形",
+          "拍摄空间列表"
+        ],
+        "rules": [
+          "选择主体组和真实背景墙",
+          "只生成墙法线严格正视候选",
+          "求最小必要 FOV 与移轴",
+          "用实体和深度事实确认完整可见"
+        ],
+        "failure": "只有模型、结构、墙体或真实网格事实缺失，导致没有严格正视几何候选时才停止；质量提示不阻断截图。",
+        "evidence": "计划中的镜头来自唯一 strict-wall-frontal 候选族，qualityAdvisories 随图交付，deliveryBlockedByQuality=false。"
+      },
+      "diagrams": [
+        {
+          "title": "唯一求解器从主体到冻结机位",
+          "nodes": [
+            {
+              "id": "ss-in",
+              "type": "io",
+              "x": 60,
+              "y": 300,
+              "w": 330,
+              "h": 280,
+              "title": "真实空间与拍摄请求",
+              "lines": [
+                "房间、多边形、墙、家具和开口"
+              ],
+              "responsibility": "求解器读取场景生成器给出的真实几何。",
+              "files": [
+                {
+                  "path": "scripts/unified_camera_solver.py",
+                  "purpose": "读取全部求解输入"
+                }
+              ]
+            },
+            {
+              "id": "ss-subject",
+              "type": "process",
+              "x": 540,
+              "y": 280,
+              "w": 380,
+              "h": 320,
+              "title": "选择主体和真实背景墙",
+              "lines": [
+                "按空间功能组成必须拍全的主体组",
+                "背景墙提供严格法线"
+              ],
+              "responsibility": "统一求解器确定画面必须表达什么，以及正对哪面真实墙。",
+              "files": [
+                {
+                  "path": "references/algorithm.md",
+                  "purpose": "规定主体分组和真实墙法线公式"
+                }
+              ]
+            },
+            {
+              "id": "ss-candidate",
+              "type": "process",
+              "x": 1070,
+              "y": 280,
+              "w": 400,
+              "h": 320,
+              "title": "计算站位、FOV 和移轴",
+              "lines": [
+                "只生成严格墙法线方向",
+                "完整入画优先"
+              ],
+              "responsibility": "统一求解器计算每个严格正视站位需要的视野和移轴。",
+              "files": [
+                {
+                  "path": "scripts/unified_camera_solver.py",
+                  "purpose": "生成并评分唯一候选族"
+                }
+              ]
+            },
+            {
+              "id": "ss-pass",
+              "type": "process",
+              "x": 1620,
+              "y": 250,
+              "w": 420,
+              "h": 380,
+              "title": "计算质量提示并排序",
+              "lines": [
+                "主体、上下空间、遮挡和裁切只参与排序",
+                "没有达到理想值也继续交付"
+              ],
+              "responsibility": "统一求解器把真实像素结果写成质量提示并选择当前最优严格正视候选，不把提示变成客户门禁。",
+              "files": [
+                {
+                  "path": "scripts/semantic_vtk_scene.py",
+                  "purpose": "提供 Entity-ID、Depth 和射线证据"
+                },
+                {
+                  "path": "tests/test_contracts.py",
+                  "purpose": "回归严格法线与唯一算法边界"
+                }
+              ]
+            },
+            {
+              "id": "ss-out",
+              "type": "store",
+              "x": 2160,
+              "y": 300,
+              "w": 210,
+              "h": 280,
+              "title": "冻结机位",
+              "lines": [
+                "位置、目标、FOV、移轴和显隐"
+              ],
+              "responsibility": "求解器保存唯一正式机位，截图器只能原样消费。",
+              "files": [
+                {
+                  "path": "data_contract.md",
+                  "purpose": "规定冻结机位计划的字段与用途"
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "ss-in",
+              "to": "ss-subject",
+              "points": [
+                [
+                  390,
+                  440
+                ],
+                [
+                  540,
+                  440
+                ]
+              ],
+              "label": "场景事实"
+            },
+            {
+              "from": "ss-subject",
+              "to": "ss-candidate",
+              "points": [
+                [
+                  920,
+                  440
+                ],
+                [
+                  1070,
+                  440
+                ]
+              ],
+              "label": "主体和墙法线"
+            },
+            {
+              "from": "ss-candidate",
+              "to": "ss-pass",
+              "points": [
+                [
+                  1470,
+                  440
+                ],
+                [
+                  1620,
+                  440
+                ]
+              ],
+              "label": "严格正视候选"
+            },
+            {
+              "from": "ss-pass",
+              "to": "ss-out",
+              "points": [
+                [
+                  2040,
+                  440
+                ],
+                [
+                  2160,
+                  440
+                ]
+              ],
+              "label": "排序最高：冻结机位"
+            }
+          ],
+          "annotations": [
+            {
+              "x": 80,
+              "y": 1050,
+              "w": 2200,
+              "h": 250,
+              "title": "为什么只有一个严格正视求解器",
+              "wrap": 140,
+              "paragraphs": [
+                "主体选择、背景墙、站位、视野范围、移轴、真实像素复核和必要显隐都在同一个求解器中完成。候选方向只能来自真实墙法线，因此每个正式镜头都能解释自己正对哪面墙；画面装不下时扩大 FOV 或使用移轴，但不改走斜视分支。",
+                "VTK 实体和深度事实用于比较候选的主体可见性、上下空间和遮挡情况；HTML 可以用 Three.js 原生事实复核，Blender/CAD 使用各自导出的原生网格事实。结果全部写入 qualityAdvisories 并参与排序；即使没有达到全部理想目标，也仍冻结当前排序最高的严格正视候选并由原生后端截图。渲染器只能消费冻结结果，不能偷偷移动相机、改 FOV、改裁切框或选择第二套角度。"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fileDescriptions": {
+    "assets/backend-templates/html.json": "声明 HTML 场景生成、原生探测和 Three.js 截图适配。",
+    "assets/backend-templates/blender.json": "声明 Blender 必须复用 HTML 冻结计划并执行原生截图。",
+    "assets/backend-templates/cad.json": "声明 CAD 必须复用同一计划、转换合同并执行截图。",
+    "SKILL.md": "定义调用场景、唯一生产流程和禁止恢复的旧做法。",
+    "ENVIRONMENT_CONTRACT.md": "说明权威源、Ubuntu 运行时和同步关系。",
+    "agents/openai.yaml": "提供 Codex 默认调用提示。",
+    "data_contract.md": "规定输入、计划、图片、事实 JSON 和下游交接。",
+    "local_runtime.md": "记录 Ubuntu 正式命令与依赖。",
+    "playbook.md": "说明从当前模型到正式交付的完整流程。",
+    "references/algorithm.md": "解释唯一场景与机位算法公式。",
+    "references/requirements.txt": "固定 Python 运行依赖。",
+    "scripts/audit_delivery.py": "审计真实流水线、旧文件和唯一决策入口。",
+    "scripts/capture_frozen_html_plan.mjs": "按冻结机位在 HTML 中截图，原样应用左右和底部墙体裁切，并把投影坐标映射到最终 PNG。",
+    "scripts/export_backend_camera_plan.py": "在后端合同需要时无损转换冻结计划，不能改选机位。",
+    "scripts/export_html_camera_scene.mjs": "从当前 HTML 导出真实模型和 GLTF。",
+    "scripts/generate_vtk_camera_scene.py": "生成唯一 VTK 场景包。",
+    "scripts/run_camera_pipeline.py": "唯一客户生产入口；HTML只求解一次，Blender/CAD只复用冻结计划并记录总耗时。",
+    "scripts/semantic_vtk_scene.py": "提供 VTK 实体、深度和射线事实。",
+    "scripts/unified_camera_solver.py": "唯一拥有主体、自然视野排序、后退站位、目标房间墙体裁切、显隐和最终选择权的求解器。",
+    "scripts_logic.md": "登记正式脚本和决策权。",
+    "tests/test_contracts.py": "回归版本、法线、唯一入口和无降级分支。",
+    "references/skill-manual.json": "说明书唯一结构化事实源。",
+    "references/skill-manual.md": "AI 可读说明书。",
+    "references/skill-flowchart.svg": "唯一流程总览图。",
+    "SKILL_MANUAL.pdf": "人类 A3 图文说明书。",
+    "MANIFEST.json": "登记版本和全部正式文件。"
+  }
+}

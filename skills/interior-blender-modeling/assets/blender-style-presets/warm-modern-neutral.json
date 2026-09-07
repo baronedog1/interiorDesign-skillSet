@@ -1,0 +1,25 @@
+{
+  "schema": "interior.blender-style-preset.v3",
+  "styleId": "warm-modern-neutral",
+  "maxTextureDimension": 1024,
+  "assetSelection": {
+    "defaultTags":["modern","neutral"],
+    "roomTags": {
+      "kitchen":["modern","warm-wood","white","integrated-sink","modular"],
+      "bathroom":["modern","compact","white-ceramic","minimal","warm-wood"],
+      "master-bath":["modern","premium","white-ceramic","midcentury","warm-wood"],
+      "balcony":["modern","compact","white-ceramic","neutral"]
+    }
+  },
+  "render": {"engine":"BLENDER_EEVEE_NEXT","samples":16,"resolution":[960,600],"transparent":false,"ambientStrength":0.2,"cameraFillEnergy":360,"roomKeyEnergy":300,"exposure":-0.35,"look":"AgX - Medium High Contrast"},
+  "materialTemplates": {
+    "wall":{"materialId":"wall-white-plaster","tint":[1,0.96,0.88,1],"tintMode":"MIX","tintStrength":0.65,"normalStrength":0.03,"bumpDistance":0.006,"roughnessMultiplier":1.05,"mappingRotationDegrees":0},
+    "ceiling":{"materialId":"ceiling-soft-plaster","tint":[1,1,0.98,1],"tintMode":"MIX","tintStrength":0.78,"normalStrength":0.0,"bumpDistance":0.002,"roughnessMultiplier":1.15,"mappingRotationDegrees":0},
+    "dryFloor":{"materialId":"floor-warm-oak","tint":[1,0.86,0.72,1],"tintMode":"MIX","tintStrength":0.08,"normalStrength":0.18,"bumpDistance":0.012,"roughnessMultiplier":0.82,"mappingRotationDegrees":90},
+    "wetFloor":{"materialId":"floor-interior-ceramic","tint":[0.98,0.95,0.90,1],"tintMode":"MIX","tintStrength":0.18,"normalStrength":0.14,"bumpDistance":0.010,"roughnessMultiplier":0.75,"mappingRotationDegrees":0}
+  },
+  "wetRoomTypes":["bathroom","master-bath","kitchen","balcony"],
+  "door": {"baseColor":[0.34,0.16,0.07,1],"roughness":0.45},
+  "frame": {"baseColor":[0.055,0.06,0.065,1],"roughness":0.25,"metallic":0.72},
+  "glass": {"baseColor":[0.18,0.42,0.52,0.24],"roughness":0.1}
+}

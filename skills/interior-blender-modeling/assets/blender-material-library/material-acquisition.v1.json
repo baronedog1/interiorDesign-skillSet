@@ -1,0 +1,10 @@
+{
+  "schema": "interior.blender-material-acquisition-request.v1",
+  "resolution": "1k",
+  "materials": [
+    {"materialId":"wall-white-plaster","polyHavenAssetId":"white_plaster_02","roles":["wall"],"physicalWidthMeters":1.0},
+    {"materialId":"ceiling-soft-plaster","polyHavenAssetId":"white_plaster_02","roles":["ceiling"],"physicalWidthMeters":1.0},
+    {"materialId":"floor-warm-oak","polyHavenAssetId":"wooden_floor_02","roles":["dry-floor"],"physicalWidthMeters":1.9},
+    {"materialId":"floor-interior-ceramic","polyHavenAssetId":"interior_tiles","roles":["wet-floor"],"physicalWidthMeters":1.9}
+  ]
+}

@@ -8,32 +8,32 @@ import { compileModelScope } from "./model_scope_contract.mjs";
 
 const REQUIRED_ARTIFACTS = new Set([
   "sourceImage",
-  "sourceEvidence",
-  "sourceEvidenceOverlay",
-  "evidenceOverlay_wallsOpenings",
-  "evidenceOverlay_wallsOpeningsReview",
-  "evidenceOverlay_roomLabelsDividers",
-  "evidenceOverlay_roomLabelsDividersReview",
-  "evidenceOverlay_objects",
-  "evidenceOverlay_objectsReview",
-  "semanticDecisions",
-  "wallGeometry",
-  "agentVisualReview",
+  "sourceModel",
   "visualOverlay",
-  "roomContactSheet",
   "traceSpec",
   "quadrantsImage",
   "structureImage",
-  "classifiedOverlay",
-  "traceCombinationImage",
   "structureData",
   "traceComponents",
 ]);
-const REQUIRED_REPORTS = new Set(["sourceModelValidation"]);
+const REQUIRED_REPORTS = new Set([]);
 
 function fail(message) {
   console.error(message);
   process.exit(1);
+}
+
+function makeProjectTemplateWritable(root) {
+  fs.chmodSync(root, fs.statSync(root).mode | 0o700);
+  for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
+    const target = path.join(root, entry.name);
+    if (entry.isDirectory()) {
+      fs.chmodSync(target, fs.statSync(target).mode | 0o700);
+      makeProjectTemplateWritable(target);
+      continue;
+    }
+    if (entry.isFile()) fs.chmodSync(target, fs.statSync(target).mode | 0o600);
+  }
 }
 
 function option(name) {
@@ -78,7 +78,7 @@ function oneEditOrEqual(left, right) {
 
 function compatibleFloorplanProducer(producer) {
   return producer?.skill === "interior-floorplan-planning"
-    && /^6\.[0-9]+\.[0-9]+$/.test(String(producer?.version || ""));
+    && /^(6|7|8|9)\.[0-9]+\.[0-9]+$/.test(String(producer?.version || ""));
 }
 
 function discoverRoleEntries(entries, requiredRoles, label) {
@@ -157,8 +157,12 @@ if (fs.existsSync(out) && fs.readdirSync(out).length) fail(`target is not empty:
 const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 if (manifest.schema !== "interior.floorplan-handoff.v3") fail("only interior.floorplan-handoff.v3 is accepted");
 if (!compatibleFloorplanProducer(manifest.producer)) {
-  fail("handoff producer must be a schema-compatible interior-floorplan-planning 6.x release");
+  fail("handoff producer must be a schema-compatible interior-floorplan-planning 6.x through 9.x release");
 }
+const coauthoringDraft = manifest.workflowStage === "coauthoring-draft"
+  || manifest.validationMode === "release-regression-only"
+  || Object.values(manifest.validation || {}).some((value) => value !== true);
+const algorithmNotices = [];
 const layoutAuthority = manifest.layoutAuthority;
 if (layoutAuthority?.schema !== "interior.floorplan-layout-authority.v1") {
   fail("handoff requires interior.floorplan-layout-authority.v1");
@@ -167,6 +171,7 @@ if (!["source-furnished", "native-layout-furnished"].includes(layoutAuthority.mo
   fail(`unsupported layoutAuthority.mode ${layoutAuthority.mode}`);
 }
 const requiredArtifacts = new Set(REQUIRED_ARTIFACTS);
+if (!coauthoringDraft) requiredArtifacts.add("agentVisualReview");
 if (layoutAuthority.mode === "native-layout-furnished") {
   requiredArtifacts.add("nativeLayout");
 } else if (manifest.artifacts?.nativeLayout) {
@@ -178,9 +183,7 @@ const manifestDigest = crypto.createHash("sha256").update(canonical(digestPayloa
 if (manifestDigest !== manifest.handoffDigestSha256) fail("handoff manifest digest mismatch");
 const artifactRoles = discoverRoleEntries(manifest.artifacts, requiredArtifacts, "artifact");
 const reportRoles = discoverRoleEntries(manifest.reports, REQUIRED_REPORTS, "report");
-if (!Object.values(manifest.validation || {}).length || Object.values(manifest.validation).some((value) => value !== true)) {
-  fail("handoff source-model and Agent visual review must both pass");
-}
+if (coauthoringDraft) algorithmNotices.push("当前为可编辑人机共创初稿；未运行生产后置强校验。");
 
 const artifactPathDiscoveries = [];
 const artifacts = Object.fromEntries(
@@ -195,7 +198,7 @@ const traceComponents = JSON.parse(fs.readFileSync(artifacts.traceComponents, "u
 for (const [label, data] of Object.entries({ structure, traceSpec, traceComponents })) {
   if (data.floorplanId !== manifest.floorplanId) fail(`${label} floorplanId does not match handoff`);
 }
-if (structure.schema !== "interior.floorplan-structure.v3") fail("structure-data schema is invalid");
+if (!["interior.floorplan-structure.v3", "interior.floorplan-structure.v4"].includes(structure.schema)) fail("structure-data schema is invalid");
 if (traceSpec.schema !== "interior.floorplan-trace.v3") fail("trace-spec schema is invalid");
 if (traceComponents.schema !== "interior.trace-components.v2") fail("trace-components schema is invalid");
 const modelScopeRequestArg = option("--model-scope");
@@ -213,27 +216,15 @@ try {
   fail(`model scope rejected: ${error.message}`);
 }
 
-const sourceModelReport = JSON.parse(fs.readFileSync(reports.sourceModelValidation, "utf8"));
-if (
-  sourceModelReport.schema !== "interior.floorplan-source-model-validation.v1"
-  || sourceModelReport.passed !== true
-  || (sourceModelReport.errors || []).length
-  || sourceModelReport.traceSpecSha256 !== artifactRoles.discovered.traceSpec.sha256
-) {
-  fail("sourceModelValidation is not a clean report for this trace spec");
-}
-for (const field of ["missedPixels", "outsidePixels", "overlapCorePixels"]) {
-  if (sourceModelReport.independentFloorMetrics?.[field] !== 0) fail(`independent floor metric ${field} must be zero`);
-}
-if (
-  sourceModelReport.objectMetrics?.acceptedObjects !== (traceComponents.objects || []).length
-  || sourceModelReport.objectMetrics?.traceComponents !== (traceComponents.objects || []).length
-) {
-  fail("source object evidence and trace-components counts differ");
+const sourceModelReport = reports.sourceModelValidation
+  ? JSON.parse(fs.readFileSync(reports.sourceModelValidation, "utf8"))
+  : null;
+if (sourceModelReport?.passed === false || (sourceModelReport?.errors || []).length) {
+  algorithmNotices.push("平面研发报告包含提示；已进入 HTML 供用户直接校正。");
 }
 
 const structureRegistry = new Set(manifest.sourceTraceRegistry?.structureTraceIds || []);
-for (const item of [...(structure.walls || []), ...(structure.windows || [])]) {
+for (const item of [...(structure.walls || []), ...(structure.windows || []), ...(structure.boundaryFeatures || [])]) {
   if (!item.sourceTraceIds?.length) fail(`${item.id}: sourceTraceIds are required`);
   for (const traceId of item.sourceTraceIds) {
     if (!structureRegistry.has(traceId)) fail(`${item.id}: unresolved sourceTraceId ${traceId}`);
@@ -268,33 +259,56 @@ if (objectRegistry.size !== objectCandidateIds.size || ![...objectRegistry].ever
   fail("source object candidate registry differs from trace-components");
 }
 
-const structureValidation = spawnSync(
-  "python3",
-  [
-    path.join(skillRoot, "scripts", "validate_structure_data.py"),
-    "--handoff",
-    manifestPath,
-    artifacts.structureData,
-  ],
-  { encoding: "utf8" },
-);
-if (structureValidation.status !== 0) {
-  fail(
-    "compiled room topology was rejected before template import:\n"
-    + (structureValidation.stderr || structureValidation.stdout || "unknown structure validation error"),
+if (process.argv.includes("--release-regression")) {
+  const structureValidation = spawnSync(
+    "python3",
+    [
+      path.join(skillRoot, "scripts", "validate_structure_data.py"),
+      "--handoff",
+      manifestPath,
+      artifacts.structureData,
+    ],
+    { encoding: "utf8" },
   );
+  if (structureValidation.status !== 0) {
+    fail(
+      "release regression rejected compiled room topology:\n"
+      + (structureValidation.stderr || structureValidation.stdout || "unknown structure validation error"),
+    );
+  }
 }
 
 fs.mkdirSync(out, { recursive: true });
-fs.cpSync(path.join(skillRoot, "assets", "base-floorplan-template"), out, { recursive: true });
+fs.cpSync(path.join(skillRoot, "assets", "interior-coauthoring-template"), out, { recursive: true });
 fs.cpSync(path.join(skillRoot, "assets", "component-library"), path.join(out, "component-library"), { recursive: true });
-fs.rmSync(path.join(out, "component-layout.json"), { force: true });
-fs.rmSync(path.join(out, "component-assets.lock.json"), { force: true });
 fs.cpSync(handoffRoot, path.join(out, "floorplan-handoff"), { recursive: true });
+// Installed skills may be immutable. Normalize the complete copied project only
+// after every authoritative tree has been copied so no late subtree stays read-only.
+makeProjectTemplateWritable(out);
 fs.copyFileSync(artifacts.structureData, path.join(out, "structure-data.json"));
 fs.copyFileSync(artifacts.traceComponents, path.join(out, "trace-components.json"));
 fs.copyFileSync(artifacts.structureImage, path.join(out, "structure-source.png"));
 fs.writeFileSync(path.join(out, "model-scope.json"), `${JSON.stringify(modelScope, null, 2)}\n`);
+// The template carries a gallery sample for direct opening, but a real project
+// must never inherit that sample as its model.  Remove it immediately and
+// create the minimal authored scene rig required by the one compiler.  The
+// matcher will now always compile this project's own structure and assets.
+fs.rmSync(path.join(out, "coauthoring-model.json"), { force: true });
+fs.rmSync(path.join(out, "coauthoring-model.js"), { force: true });
+fs.writeFileSync(path.join(out, "scene-rig.json"), `${JSON.stringify({
+  schema: "interior.scene-rig.v1",
+  coordinateSystem: "threejs-world-y-up-meters",
+  gizmosVisible: true,
+  rendering: {
+    toneMapping: "ACESFilmic",
+    exposure: 1,
+    ambientIntensity: 0.85,
+    hemisphereIntensity: 0.9,
+    detailFillIntensity: 0.55,
+  },
+  cameras: [],
+  lights: [],
+}, null, 2)}\n`);
 
 const receipt = {
   schema: "interior.floorplan-import-receipt.v1",
@@ -306,8 +320,11 @@ const receipt = {
   layoutAuthority,
   importer: {
     skill: "interior-html-modeling",
-    version: "17.0.0",
+    version: "34.0.0",
   },
+  workflowStage: "coauthoring-draft",
+  validationMode: "release-regression-only",
+  algorithmNotices,
   modelScope: {
     mode: modelScope.mode,
     requestedRoomIds: modelScope.requestedRoomIds,
@@ -328,5 +345,5 @@ console.log(JSON.stringify({
   out,
   floorplanId: manifest.floorplanId,
   handoffDigestSha256: manifest.handoffDigestSha256,
-  next: "run match_trace_components.mjs, then validate structure and component layout",
+  next: "run match_trace_components.mjs and build the editable HTML; release validators are not production gates",
 }, null, 2));
