@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "平面规划 · 尺度、拓扑与锚点",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "overview": {
     "title": "从客户原图生成可追溯的布局 JSON",
     "nodes": [
@@ -267,10 +267,284 @@
     {
       "id": "workflow",
       "title": "从客户原图生成可追溯的布局 JSON",
-      "input": "原图、尺寸、客户需求",
-      "output": "布局 JSON；可选原生平面图",
+      "input": "户型原图、已有对话、尺寸；用户需求可以尚未明确",
+      "output": "布局JSON＋需求侧车，按需原生平面方案图",
       "explanation": "本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。",
       "diagrams": [
+        {
+          "title": "先理解居住需求，再进入下一页的几何规划",
+          "nodes": [
+            {
+              "id": "source",
+              "type": "io",
+              "x": 53,
+              "y": 220,
+              "w": 534,
+              "h": 250,
+              "title": "原图＋已有对话",
+              "lines": [
+                "空白图提供建筑事实，不提供客户画像",
+                "已有家具和颜色也不自动代表偏好"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "missing",
+              "type": "decision",
+              "x": 788,
+              "y": 130,
+              "w": 744,
+              "h": 420,
+              "title": "有影响本次设计的偏好缺口或冲突？",
+              "lines": [
+                "看居住人数/功能/习惯/取舍",
+                "未知≠否定；不重复询问已有答案"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "interview",
+              "type": "process",
+              "x": 1680,
+              "y": 180,
+              "w": 499,
+              "h": 340,
+              "title": "分轮需求访谈",
+              "lines": [
+                "先功能和生活习惯，再相关空间、预算和风格",
+                "问题随回答调整；不设置固定轮数"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22,
+              "detailRef": "interview"
+            },
+            {
+              "id": "brief",
+              "type": "process",
+              "x": 788,
+              "y": 800,
+              "w": 744,
+              "h": 310,
+              "title": "复述需求及空间影响",
+              "lines": [
+                "区分必须满足、偏好、待定、授权自由发挥",
+                "关键歧义补问；明确答案不再逐条审批"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "waiting",
+              "type": "process",
+              "x": 1680,
+              "y": 850,
+              "w": 499,
+              "h": 310,
+              "title": "尚未答复：保留提问",
+              "lines": [
+                "可做尺度与不变结构；不替用户决定房间用途",
+                "等待与实际工作分别计时"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                },
+                {
+                  "path": "../interior-html-modeling/playbook/timing.md",
+                  "purpose": "记录提问、答复与等待"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "next",
+              "type": "store",
+              "x": 788,
+              "y": 1380,
+              "w": 744,
+              "h": 260,
+              "title": "进入几何规划与需求交接",
+              "lines": [
+                "下一页：墙门窗→功能区→锚点→layout",
+                "已知约束落实；未知保留，不伪称用户确认"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                },
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff携带需求，不替Agent提问"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "source",
+              "to": "missing",
+              "points": [
+                [
+                  586,
+                  345
+                ],
+                [
+                  788,
+                  340
+                ]
+              ],
+              "label": "先读已有信息"
+            },
+            {
+              "from": "missing",
+              "to": "interview",
+              "points": [
+                [
+                  1531,
+                  340
+                ],
+                [
+                  1680,
+                  340
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "missing",
+              "to": "brief",
+              "points": [
+                [
+                  1159,
+                  550
+                ],
+                [
+                  1159,
+                  800
+                ]
+              ],
+              "label": "否：直接沿用"
+            },
+            {
+              "from": "interview",
+              "to": "brief",
+              "points": [
+                [
+                  1929,
+                  520
+                ],
+                [
+                  1929,
+                  660
+                ],
+                [
+                  1601,
+                  660
+                ],
+                [
+                  1601,
+                  950
+                ],
+                [
+                  1531,
+                  950
+                ]
+              ],
+              "label": "收到明确答复/授权"
+            },
+            {
+              "from": "interview",
+              "to": "waiting",
+              "points": [
+                [
+                  2179,
+                  350
+                ],
+                [
+                  2249,
+                  350
+                ],
+                [
+                  2249,
+                  1000
+                ],
+                [
+                  2179,
+                  1000
+                ]
+              ],
+              "label": "仍在等待"
+            },
+            {
+              "from": "brief",
+              "to": "next",
+              "points": [
+                [
+                  1159,
+                  1110
+                ],
+                [
+                  1159,
+                  1380
+                ]
+              ],
+              "label": "按需求规划"
+            },
+            {
+              "from": "waiting",
+              "to": "next",
+              "points": [
+                [
+                  1929,
+                  1160
+                ],
+                [
+                  1929,
+                  1280
+                ],
+                [
+                  1601,
+                  1280
+                ],
+                [
+                  1601,
+                  1510
+                ],
+                [
+                  1531,
+                  1510
+                ]
+              ],
+              "label": "仅独立结构/授权探索"
+            }
+          ]
+        },
         {
           "title": "从客户原图生成可追溯的布局 JSON",
           "nodes": [
@@ -281,9 +555,9 @@
               "y": 190,
               "w": 660,
               "h": 230,
-              "title": "P1 原图、尺寸、需求",
+              "title": "P1 原图与本轮已梳理的需求",
               "lines": [
-                "先读墙门窗、阳台与房间用途"
+                "先读访谈记录，不把样板家具当用户偏好"
               ],
               "files": [
                 {
@@ -390,7 +664,7 @@
               "h": 260,
               "title": "layout.json 交给 HTML 建模",
               "lines": [
-                "只生成 JSON；疑问与观察同交付"
+                "layout.json＋layout.requirements.json；需求revision与疑问一起交接"
               ],
               "files": [
                 {
@@ -398,7 +672,8 @@
                   "purpose": "handoff/observe/anchor 三条实际命令"
                 }
               ],
-              "bodySize": 22
+              "bodySize": 22,
+              "detailRef": "brief-handoff"
             },
             {
               "id": "native",
@@ -545,6 +820,265 @@
     }
   ],
   "logicDetails": [
+    {
+      "id": "interview",
+      "code": "INTERVIEW",
+      "title": "按生活情境逐轮追问，不使用整套固定问卷",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "Agent通过实际对话提问；没有自动访谈脚本。图中“收到答复”是对话事件，不是轮询等待进程。",
+      "diagrams": [
+        {
+          "title": "缺口→选问题→实际答复→需求状态",
+          "nodes": [
+            {
+              "id": "topics",
+              "type": "process",
+              "x": 53,
+              "y": 190,
+              "w": 525,
+              "h": 360,
+              "title": "按本次任务选择高影响主题",
+              "lines": [
+                "谁住/床位与功能→使用习惯与保留物",
+                "按回答深入办公、聚餐、洗烘、储物等",
+                "再问投入范围、风格喜恶与参考图"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "ask",
+              "type": "process",
+              "x": 726,
+              "y": 190,
+              "w": 525,
+              "h": 360,
+              "title": "一次问少量相关问题",
+              "lines": [
+                "说明为何影响布局；吸收一句话中的多个答案",
+                "不懂风格：用颜色/材料/感觉对比",
+                "可拒答、待定或授权推荐，不代答"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "reply",
+              "type": "decision",
+              "x": 1426,
+              "y": 150,
+              "w": 665,
+              "h": 420,
+              "title": "收到答复或明确委托了吗？",
+              "lines": [
+                "无答复不等于默认同意",
+                "真实askedAt/answeredAt随执行记录"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "hold",
+              "type": "process",
+              "x": 726,
+              "y": 840,
+              "w": 595,
+              "h": 330,
+              "title": "保留待定项和本轮问题",
+              "lines": [
+                "只推进不依赖答案的读图/尺度/结构",
+                "缺颜色可先布局；缺关键用途不擅自决定"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "update",
+              "type": "process",
+              "x": 1479,
+              "y": 840,
+              "w": 613,
+              "h": 330,
+              "title": "理解答案并记录影响",
+              "lines": [
+                "confirmed / tentative / unknown / delegated",
+                "冲突说明取舍；不暗中删需求",
+                "按新答案再次判断实质缺口，必要时下一轮"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "result",
+              "type": "store",
+              "x": 726,
+              "y": 1400,
+              "w": 1015,
+              "h": 260,
+              "title": "本轮需求记录＋待定事项",
+              "lines": [
+                "items存主题/值/状态/来源/优先级/影响；rounds存实际问答时间",
+                "已有信息足够或用户授权时转规划；否则带着新缺口返回主页访谈判断"
+              ],
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "topics",
+              "to": "ask",
+              "points": [
+                [
+                  578,
+                  370
+                ],
+                [
+                  726,
+                  370
+                ]
+              ],
+              "label": "跳过已知与不相关项"
+            },
+            {
+              "from": "ask",
+              "to": "reply",
+              "points": [
+                [
+                  1251,
+                  370
+                ],
+                [
+                  1426,
+                  360
+                ]
+              ],
+              "label": "发给用户"
+            },
+            {
+              "from": "reply",
+              "to": "hold",
+              "points": [
+                [
+                  1759,
+                  570
+                ],
+                [
+                  1759,
+                  680
+                ],
+                [
+                  1365,
+                  680
+                ],
+                [
+                  1365,
+                  1000
+                ],
+                [
+                  1321,
+                  1000
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "reply",
+              "to": "update",
+              "points": [
+                [
+                  2091,
+                  360
+                ],
+                [
+                  2205,
+                  360
+                ],
+                [
+                  2205,
+                  1000
+                ],
+                [
+                  2091,
+                  1000
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "hold",
+              "to": "result",
+              "points": [
+                [
+                  1024,
+                  1170
+                ],
+                [
+                  1024,
+                  1400
+                ]
+              ],
+              "label": "未完成状态"
+            },
+            {
+              "from": "update",
+              "to": "result",
+              "points": [
+                [
+                  1785,
+                  1170
+                ],
+                [
+                  1785,
+                  1320
+                ],
+                [
+                  1575,
+                  1320
+                ],
+                [
+                  1575,
+                  1400
+                ]
+              ],
+              "label": "新增需求/下一轮缺口"
+            }
+          ]
+        }
+      ]
+    },
     {
       "id": "facts",
       "code": "FACTS",
@@ -1130,6 +1664,293 @@
           ]
         }
       ]
+    },
+    {
+      "id": "brief-handoff",
+      "code": "BRIEF",
+      "title": "需求侧车随布局交接，技术一致性不等于问卷门禁",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "同项目与结构检查保护资料不串用；不会要求items填满或所有状态confirmed。",
+      "diagrams": [
+        {
+          "title": "handoff / anchor 的需求保留路径",
+          "nodes": [
+            {
+              "id": "input",
+              "type": "io",
+              "x": 44,
+              "y": 180,
+              "w": 551,
+              "h": 300,
+              "title": "布局与可选需求文件",
+              "lines": [
+                "显式--requirements优先，否则找输入同名侧车",
+                "observe只观察，不改需求"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff携带需求，不替Agent提问"
+                },
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "访谈分轮、主题、状态与交接合同"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "exists",
+              "type": "decision",
+              "x": 761,
+              "y": 140,
+              "w": 700,
+              "h": 400,
+              "title": "发现需求文件或显式指定？",
+              "lines": [
+                "显式路径缺失是文件错误，不当作没有偏好"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff携带需求，不替Agent提问"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "valid",
+              "type": "decision",
+              "x": 1566,
+              "y": 140,
+              "w": 700,
+              "h": 400,
+              "title": "schema/项目/条目结构一致？",
+              "lines": [
+                "projectId=layout.id；revision整数；items数组",
+                "条目ID唯一，值/来源/主题/四种状态明确"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff携带需求，不替Agent提问"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "old",
+              "type": "decision",
+              "x": 761,
+              "y": 790,
+              "w": 700,
+              "h": 400,
+              "title": "无输入需求但目标已有旧侧车？",
+              "lines": [
+                "防止新布局误配上一份需求"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff携带需求，不替Agent提问"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "error",
+              "type": "process",
+              "x": 1566,
+              "y": 830,
+              "w": 700,
+              "h": 310,
+              "title": "报告具体资料不一致",
+              "lines": [
+                "修正项目绑定/JSON或选择新输出",
+                "不覆盖为通过；不以偏好完成率阻断设计"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff携带需求，不替Agent提问"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "plain",
+              "type": "store",
+              "x": 44,
+              "y": 1350,
+              "w": 656,
+              "h": 260,
+              "title": "历史或纯描图兼容输出",
+              "lines": [
+                "没有侧车时仍输出layout与observations",
+                "Agent不能以省参数绕过必要访谈"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff携带需求，不替Agent提问"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "copy",
+              "type": "store",
+              "x": 1566,
+              "y": 1350,
+              "w": 700,
+              "h": 260,
+              "title": "同交付需求JSON与摘要",
+              "lines": [
+                "保留未知/委托/所有答复；不修改几何schema",
+                "HTML Agent先读，落实到功能、锚点、CMF"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "handoff携带需求，不替Agent提问"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "原子JSON写入与摘要"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "input",
+              "to": "exists",
+              "points": [
+                [
+                  595,
+                  330
+                ],
+                [
+                  761,
+                  340
+                ]
+              ],
+              "label": "解析输入"
+            },
+            {
+              "from": "exists",
+              "to": "valid",
+              "points": [
+                [
+                  1461,
+                  340
+                ],
+                [
+                  1566,
+                  340
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "exists",
+              "to": "old",
+              "points": [
+                [
+                  1111,
+                  540
+                ],
+                [
+                  1111,
+                  790
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "valid",
+              "to": "error",
+              "points": [
+                [
+                  1916,
+                  540
+                ],
+                [
+                  1916,
+                  830
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "valid",
+              "to": "copy",
+              "points": [
+                [
+                  2266,
+                  340
+                ],
+                [
+                  2328,
+                  340
+                ],
+                [
+                  2328,
+                  1480
+                ],
+                [
+                  2266,
+                  1480
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "old",
+              "to": "error",
+              "points": [
+                [
+                  1461,
+                  990
+                ],
+                [
+                  1566,
+                  990
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "old",
+              "to": "plain",
+              "points": [
+                [
+                  1111,
+                  1190
+                ],
+                [
+                  1111,
+                  1280
+                ],
+                [
+                  372,
+                  1280
+                ],
+                [
+                  372,
+                  1350
+                ]
+              ],
+              "label": "否"
+            }
+          ]
+        }
+      ]
     }
   ],
   "dependencyFiles": [
@@ -1163,6 +1984,7 @@
     "manual/skill-manual.json": "同源说明书内容与图形",
     "manual/skill-manual.md": "同源说明书内容与图形",
     "playbook.md": "读图、尺度、空间功能和动线方法",
-    "scripts/run.py": "handoff/observe/anchor 三条实际命令"
+    "scripts/run.py": "handoff/observe/anchor 三条实际命令",
+    "playbook/requirements-interview.md": "分轮访谈、生活情境问题、确认/待定/授权状态及需求JSON交接"
   }
 }

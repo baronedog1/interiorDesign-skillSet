@@ -1,12 +1,12 @@
 # 平面规划 · 尺度、拓扑与锚点 说明书
 
-版本：3.0.0
+版本：3.1.0
 
 ~~~yaml
 ---
 name: interior-floorplan-planning
-description: 将客户户型图、尺寸和需求整理为米制布局 JSON；规划墙门窗、功能区、家具锚点及动线，可用宿主原生绘图探索平面方案。不交付平面 HTML。
-metadata: {version: "3.0.0", category: interior-design}
+description: 通过分轮需求访谈了解居住、功能、布局和风格偏好，将客户户型图与确认需求整理为米制布局JSON；规划墙门窗、家具锚点和动线，可用原生绘图探索方案。不交付平面HTML。
+metadata: {version: "3.1.0", category: interior-design}
 ---
 ~~~
 
@@ -16,11 +16,34 @@ metadata: {version: "3.0.0", category: interior-design}
 
 本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。
 
-输入：原图、尺寸、客户需求
-输出：布局 JSON；可选原生平面图
+输入：户型原图、已有对话、尺寸；用户需求可以尚未明确
+输出：布局JSON＋需求侧车，按需原生平面方案图
+
+#### 先理解居住需求，再进入下一页的几何规划
+- source：原图＋已有对话；空白图提供建筑事实，不提供客户画像；已有家具和颜色也不自动代表偏好
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- missing：有影响本次设计的偏好缺口或冲突？；看居住人数/功能/习惯/取舍；未知≠否定；不重复询问已有答案
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- interview：分轮需求访谈；先功能和生活习惯，再相关空间、预算和风格；问题随回答调整；不设置固定轮数（详见 interview）
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- brief：复述需求及空间影响；区分必须满足、偏好、待定、授权自由发挥；关键歧义补问；明确答案不再逐条审批
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- waiting：尚未答复：保留提问；可做尺度与不变结构；不替用户决定房间用途；等待与实际工作分别计时
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+  - ../interior-html-modeling/playbook/timing.md：记录提问、答复与等待
+- next：进入几何规划与需求交接；下一页：墙门窗→功能区→锚点→layout；已知约束落实；未知保留，不伪称用户确认
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+  - scripts/run.py：handoff携带需求，不替Agent提问
+- source → missing：先读已有信息
+- missing → interview：是
+- missing → brief：否：直接沿用
+- interview → brief：收到明确答复/授权
+- interview → waiting：仍在等待
+- brief → next：按需求规划
+- waiting → next：仅独立结构/授权探索
 
 #### 从客户原图生成可追溯的布局 JSON
-- input：P1 原图、尺寸、需求；先读墙门窗、阳台与房间用途
+- input：P1 原图与本轮已梳理的需求；先读访谈记录，不把样板家具当用户偏好
   - playbook.md：读图、尺度、空间功能和动线方法
 - scale：尺度和方向可信？；像素只用于读图；以标注距离定标（详见 facts）
   - playbook.md：读图、尺度、空间功能和动线方法
@@ -32,7 +55,7 @@ metadata: {version: "3.0.0", category: interior-design}
   - playbook.md：读图、尺度、空间功能和动线方法
 - anchor：P3 先算家具锚点与使用区；床头/沙发背靠指定墙；保留开门、柜门、拉椅及通路（详见 anchors）
   - scripts/run.py：handoff/observe/anchor 三条实际命令
-- out：layout.json 交给 HTML 建模；只生成 JSON；疑问与观察同交付
+- out：layout.json 交给 HTML 建模；layout.json＋layout.requirements.json；需求revision与疑问一起交接（详见 brief-handoff）
   - scripts/run.py：handoff/observe/anchor 三条实际命令
 - native：用户要多方案：原生平面绘图；附原图探索方案 → 识图选定 → 回 P2 整理事实；图片不是测量值；不生成平面 HTML
   - playbook.md：读图、尺度、空间功能和动线方法
@@ -53,9 +76,34 @@ metadata: {version: "3.0.0", category: interior-design}
 - manual/skill-manual.json：同源说明书内容与图形
 - manual/skill-manual.md：同源说明书内容与图形
 - playbook.md：读图、尺度、空间功能和动线方法
+- playbook/requirements-interview.md：分轮访谈、生活情境问题、确认/待定/授权状态及需求JSON交接
 - scripts/run.py：handoff/observe/anchor 三条实际命令
 
 ## 具体逻辑解释
+
+### 按生活情境逐轮追问，不使用整套固定问卷
+
+Agent通过实际对话提问；没有自动访谈脚本。图中“收到答复”是对话事件，不是轮询等待进程。
+
+#### 缺口→选问题→实际答复→需求状态
+- topics：按本次任务选择高影响主题；谁住/床位与功能→使用习惯与保留物；按回答深入办公、聚餐、洗烘、储物等；再问投入范围、风格喜恶与参考图
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- ask：一次问少量相关问题；说明为何影响布局；吸收一句话中的多个答案；不懂风格：用颜色/材料/感觉对比；可拒答、待定或授权推荐，不代答
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- reply：收到答复或明确委托了吗？；无答复不等于默认同意；真实askedAt/answeredAt随执行记录
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- hold：保留待定项和本轮问题；只推进不依赖答案的读图/尺度/结构；缺颜色可先布局；缺关键用途不擅自决定
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- update：理解答案并记录影响；confirmed / tentative / unknown / delegated；冲突说明取舍；不暗中删需求；按新答案再次判断实质缺口，必要时下一轮
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- result：本轮需求记录＋待定事项；items存主题/值/状态/来源/优先级/影响；rounds存实际问答时间；已有信息足够或用户授权时转规划；否则带着新缺口返回主页访谈判断
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- topics → ask：跳过已知与不相关项
+- ask → reply：发给用户
+- reply → hold：否
+- reply → update：是
+- hold → result：未完成状态
+- update → result：新增需求/下一轮缺口
 
 ### 尺度与拓扑算法
 
@@ -116,3 +164,32 @@ metadata: {version: "3.0.0", category: interior-design}
 - d → e：锚点
 - e → f：是
 - e → bad：否：回源
+
+### 需求侧车随布局交接，技术一致性不等于问卷门禁
+
+同项目与结构检查保护资料不串用；不会要求items填满或所有状态confirmed。
+
+#### handoff / anchor 的需求保留路径
+- input：布局与可选需求文件；显式--requirements优先，否则找输入同名侧车；observe只观察，不改需求
+  - scripts/run.py：handoff携带需求，不替Agent提问
+  - playbook/requirements-interview.md：访谈分轮、主题、状态与交接合同
+- exists：发现需求文件或显式指定？；显式路径缺失是文件错误，不当作没有偏好
+  - scripts/run.py：handoff携带需求，不替Agent提问
+- valid：schema/项目/条目结构一致？；projectId=layout.id；revision整数；items数组；条目ID唯一，值/来源/主题/四种状态明确
+  - scripts/run.py：handoff携带需求，不替Agent提问
+- old：无输入需求但目标已有旧侧车？；防止新布局误配上一份需求
+  - scripts/run.py：handoff携带需求，不替Agent提问
+- error：报告具体资料不一致；修正项目绑定/JSON或选择新输出；不覆盖为通过；不以偏好完成率阻断设计
+  - scripts/run.py：handoff携带需求，不替Agent提问
+- plain：历史或纯描图兼容输出；没有侧车时仍输出layout与observations；Agent不能以省参数绕过必要访谈
+  - scripts/run.py：handoff携带需求，不替Agent提问
+- copy：同交付需求JSON与摘要；保留未知/委托/所有答复；不修改几何schema；HTML Agent先读，落实到功能、锚点、CMF
+  - scripts/run.py：handoff携带需求，不替Agent提问
+  - ../interior-html-modeling/scripts/engine/python/common.py：原子JSON写入与摘要
+- input → exists：解析输入
+- exists → valid：是
+- exists → old：否
+- valid → error：否
+- valid → copy：是
+- old → error：是
+- old → plain：否

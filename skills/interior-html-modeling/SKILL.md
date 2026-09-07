@@ -1,11 +1,13 @@
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.0.0", category: interior-design}
+metadata: {version: "3.0.1", category: interior-design}
 ---
 # HTML 室内共建
 
 消费当前 `layout.json`，交付 `model.html`、`scene.json`。用户编辑后以最新完整 HTML 为准；导出布局重新编译，不能用旧模型覆盖用户修改。
+
+先读取同名 `layout.requirements.json` 或规划明确交接的需求文件，访谈规则归[平面布局Skill](../interior-floorplan-planning/playbook/requirements-interview.md)。依用户已确认的功能、习惯、优先级、保留家具与风格实施建模，不从空白图猜偏好；未知与授权自由发挥分开。仅缺颜色不阻止基础结构建模；影响用途/容量的实质缺口回规划访谈，不重复询问已有答案。每次向机位、渲染、方案册交接同时说明这份需求及当前revision。
 
 正式入口 `python scripts/run.py build layout.json --out DIR`。按需 `import-html FILE --out layout.json`、`asset-bundle library.json --out assets.json`、`style-resolve 风格名称`、`style-evidence recipe.json`、`style-add recipe.json`。
 

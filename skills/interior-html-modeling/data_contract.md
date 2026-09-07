@@ -1,5 +1,7 @@
 # 五项设计链的数据合同
 
+客户偏好是规划Skill维护的 `interior.requirements/1` 独立JSON，不改几何schema；结构详见[访谈与需求交接](../interior-floorplan-planning/playbook/requirements-interview.md)。Agent先读同名 `.requirements.json`（或已明确交接路径），落实到当前layout/customStyle并向下游携带原记录。编译器不会自动推断自然语言需求，也不以缺少可选偏好阻止可独立的结构工作。
+
 平面只生成 `interior.layout/1` JSON；HTML 编译生成 `interior.scene/1`；机位生成 `interior.cameras/1` 和 `interior.renders/1` 真实 WebGL 参考截图；效果图使用 `interior.ai-request/1`、`interior.native-image-job/1`、真实宿主调用回执及 `interior.ai-result/1`。平台另用 `baiende.project-binding.v1`，不污染布局。
 
 schema 的唯一机器定义位于 `scripts/engine/schemas/`。米制，平面 [x,z]、三维 [x,y,z]，Y 向上，rotationY 用度，组件地面中心原点、正面 +Z。墙 a/b 为中心线，开口 offset 从 a 到起边；rooms 多边形计面积，openConnections 代表无墙开放连接。

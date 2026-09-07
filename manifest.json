@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-07T14:42:28.797Z",
+  "snapshotAt": "2026-09-07T15:08:05.822Z",
   "source": {
     "type": "mixed-device-snapshot",
     "currentDesignRelease": {
@@ -32,7 +32,7 @@
     ]
   },
   "skillCount": 16,
-  "fileCount": 625,
+  "fileCount": 626,
   "skills": [
     {
       "id": "booklet-production",
@@ -145,20 +145,20 @@
     {
       "id": "interior-floorplan-planning",
       "path": "skills/interior-floorplan-planning",
-      "version": "3.0.0",
+      "version": "3.1.0",
       "sourceDevice": "lecoo-windows-codex",
-      "fileCount": 9,
-      "bytes": 4133947,
-      "sha256": "1b3dfbbbe1bf19cbb9a4b9482148224c36b286660ba6a2bf81595c0cdbeafe69"
+      "fileCount": 10,
+      "bytes": 5549968,
+      "sha256": "3ef7510ec77fabbd68a8fde6a5dd6e3ced9a8b3a6dbd6af68dabf6711aa7d2d0"
     },
     {
       "id": "interior-html-modeling",
       "path": "skills/interior-html-modeling",
-      "version": "3.0.0",
+      "version": "3.0.1",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 74,
-      "bytes": 27113203,
-      "sha256": "1663926a7b7743eef7b6ee3ff5a89157f1a0342bb849f6fd590ce42bdd326ec2"
+      "bytes": 27120051,
+      "sha256": "1fa44a012154e3c386d4291ce24627519665b6dd0da18c224ec61cd5f7beda2a"
     },
     {
       "id": "interior-space-rendering",

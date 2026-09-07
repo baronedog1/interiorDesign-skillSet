@@ -6,8 +6,8 @@
 
 | Skill | 版本 | 职责 |
 |---|---|---|
-| [interior-floorplan-planning](skills/interior-floorplan-planning/SKILL.md) | 3.0.0 | 原图、尺度、拓扑、动线与家具锚点，交付布局 JSON |
-| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.0.0 | 代码生成离线 HTML 模型、CMF 风格、家具替换、量尺与保存 |
+| [interior-floorplan-planning](skills/interior-floorplan-planning/SKILL.md) | 3.1.0 | 分轮需求访谈、尺度/拓扑/动线与家具锚点，交付布局及需求JSON |
+| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.0.1 | 代码生成离线 HTML 模型、CMF 风格、家具替换、量尺与保存 |
 | [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.0.0 | 从真实模型求机位并截图，默认完整场景 |
 | [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.0.0 | 同机位参照、原生绘图与指定资产约束 |
 | [idk-canvas-ingest-agent](skills/idk-canvas-ingest-agent/SKILL.md) | 3.1.0 | 百恩得资产检索／下载与私有平台交付 |

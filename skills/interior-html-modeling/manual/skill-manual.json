@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "HTML 建模 · 编译、编辑与状态交接",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "overview": {
     "title": "HTML 编辑：不同意图进入不同状态域",
     "nodes": [
@@ -241,15 +241,21 @@
               "x": 70,
               "y": 200,
               "w": 770,
-              "h": 260,
+              "h": 370,
               "title": "当前 JSON 或用户编辑后的完整 HTML",
               "lines": [
-                "最新编辑是事实源，不拿旧模型覆盖"
+                "最新编辑是事实源，不拿旧模型覆盖",
+                "先读同名需求侧车，已确认功能/习惯/风格落实到布局与CMF",
+                "未知或授权推荐不冒称确认；向下游携带同一revision"
               ],
               "files": [
                 {
                   "path": "scripts/run.py",
                   "purpose": "模型/风格/资产命令入口"
+                },
+                {
+                  "path": "../interior-floorplan-planning/playbook/requirements-interview.md",
+                  "purpose": "Agent需求读取与缺口回问"
                 }
               ],
               "bodySize": 22
@@ -396,11 +402,11 @@
                 ],
                 [
                   1705,
-                  550
+                  620
                 ],
                 [
                   510,
-                  550
+                  620
                 ],
                 [
                   510,
@@ -1417,7 +1423,12 @@
       ]
     }
   ],
-  "dependencyFiles": [],
+  "dependencyFiles": [
+    {
+      "path": "../interior-floorplan-planning/playbook/requirements-interview.md",
+      "purpose": "需求状态及规划访谈的唯一合同"
+    }
+  ],
   "fileDescriptions": {
     "MANIFEST.json": "发布版本与完整文件清单",
     "SKILL.md": "调用范围、输入输出与关键规则",
