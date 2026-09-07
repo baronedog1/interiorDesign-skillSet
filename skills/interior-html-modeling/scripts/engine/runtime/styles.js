@@ -1,5 +1,5 @@
-/* Executable style recipes. The editor UI is neutral; style changes materials AND
- * selected family geometry. No duplicate editor template per style. */
+/* Executable style recipes. The editor UI is neutral; style switching preserves geometry; only CMF changes. Initial recipes select
+ * family geometry. No duplicate editor template per style. */
 (function(C,T){'use strict';
  const original={};for(const[k,m]of Object.entries(C.M))original[k]={color:m.color?.getHex(),roughness:m.roughness,metalness:m.metalness,map:m.map,normalMap:m.normalMap,normalScale:m.normalScale?.clone()};
  const forms={sofa:['cloud','linear','timber','low','lattice'],bed:['soft','panel','timber','platform','lattice'],chair:['rounded','linear','timber','organic','lattice'],tables:['oval','rectilinear','tapered','organic','trestle'],cabinet:['fluted','flat','timber','block','lattice'],pendant:['dome','linear','sputnik','paper','lantern'],art:['arches','geometry','earth','ink']};
@@ -12,6 +12,7 @@
    m.map=base.map;m.normalMap=base.normalMap;if(m.normalScale&&base.normalScale)m.normalScale.copy(base.normalScale);
    if(r){const maps=C.materialAssets[r.surface];if(maps){m.map=maps.color||null;m.normalMap=maps.normal||null;if(m.normalScale)m.normalScale.set(r.surface==='fabric'?.28:.13,r.surface==='fabric'?.28:.13);}else if(['paint','plaster'].includes(r.surface)){m.map=null;m.normalMap=r.surface==='plaster'?C.materialAssets.plaster.normal:base.normalMap;}}
    m.userData.role=k;m.needsUpdate=true;}
+  C.scene?.traverse(o=>{for(const m of (Array.isArray(o.material)?o.material:[o.material])){const base=m&&C.M[m.userData.role];if(!base||m===base||m.userData.nativeMaterial||m.userData.cmfOverride)continue;m.color.copy(base.color).multiplyScalar(m.userData.cmfMultiplier??1);for(const k of ['roughness','metalness','map','normalMap'])m[k]=base[k];if(m.normalScale&&base.normalScale)m.normalScale.copy(base.normalScale);m.needsUpdate=true;}});
  };
  C.styleForms=forms;
  C.styledArt=function(kind){const c=document.createElement('canvas');c.width=c.height=512;const ctx=c.getContext('2d'),p=C.activeStyle.palette;ctx.fillStyle=p[0];ctx.fillRect(0,0,512,512);

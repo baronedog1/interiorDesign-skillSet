@@ -1,12 +1,12 @@
 # 机位截图 · 七类空间与真实成像 说明书
 
-版本：2.1.0
+版本：3.0.0
 
 ~~~yaml
 ---
 name: interior-camera-capture
 description: 从当前完整 HTML 的真实模型寻找全屋及各空间机位，冻结相机并输出原生 WebGL 参考截图；逐图识图，不改家具或冒充效果图。
-metadata: {version: "2.1.0", category: interior-design}
+metadata: {version: "3.0.0", category: interior-design}
 ---
 ~~~
 
@@ -25,9 +25,11 @@ metadata: {version: "2.1.0", category: interior-design}
 - q：场景、机位引用同版？；sceneKey/layoutHash/HTML 摘要一致
   - ../interior-html-modeling/scripts/engine/python/render.py：load_scene 与真实页面检查
   - ../interior-html-modeling/scripts/engine/schemas/cameras.schema.json：相机数据字段
-- fix：引用错误：更新当前源模型；回本页输入，不拿旧图冒充新结果
+- fix：引用错误：更新当前源模型；回本页输入，不拿旧图冒充新结果；随步骤记录开始、完成、耗时；代码与绘图等待分开。
   - ../interior-html-modeling/scripts/engine/python/common.py：JSON 与文件摘要
   - ../interior-html-modeling/scripts/engine/python/model.py：重新编译当前布局
+  - ../interior-html-modeling/playbook/timing.md：计时口径
+  - ../interior-html-modeling/scripts/engine/python/timing.py：正式命令自动计时
 - room：明确本房主体和表达关系；卧室/客厅/餐厅/厨房/卫浴/书房/阳台（详见 rooms）
   - playbook.md：主体、空间差异及识图方法
 - search：求解候选 → 冻结参数 → 真实截图；候选质量为观察，不用分数拦截整套图；看图不合格，定位空间语义或机位计算的源头（详见 search）
@@ -76,10 +78,10 @@ metadata: {version: "2.1.0", category: interior-design}
 - q → no：否
 
 #### 客厅：会客关系和电视方向必须互补
-- a：锁定客厅自己的沙发、茶几、电视和阳台通路；subjectIds 优先；依据原房间功能，餐桌不能代替客厅主体
+- a：锁定客厅自己的沙发、茶几、电视和阳台通路；洗衣机/台盆/坐凳按真实正面分别正视，长轴纵深仅作补充；各空间主图先输出，不把诊断或局部当合格主图
   - playbook.md：主体、空间差异及识图方法
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- sofa：会客机位：朝沙发正面；观察主沙发、单椅、茶几的整体关系；保留阳台通路，不让茶几占满近景
+- sofa：会客机位：朝沙发正面；第一张以沙发有符号正面轴求水平正视；电视以自身正面另求正视；斜图只是补充
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
 - tv：电视机位：从会客侧看电视组；目标包含电视柜和背景，保持真实比例；电视前景过大时改站位和目标，不缩电视
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
@@ -175,7 +177,7 @@ metadata: {version: "2.1.0", category: interior-design}
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
 - subject：有主体：沿通路求朝向与站位；保留客厅/阳台连接，不让座椅挡住通行关系；同一采样与投影算法，真实截图逐图看
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- out：明确输出：本阳台图与问题说明；出入口被遮或房间认错时回原图/主体；不是镜像图片修正
+- out：明确输出：本阳台图与问题说明；洗衣机/台盆/坐凳按真实正面分别正视，长轴纵深仅作补充；各空间主图先输出，不把诊断或局部当合格主图
   - scripts/run.py：find/apply/capture 入口
 - a → q：主体事实
 - q → subject：是

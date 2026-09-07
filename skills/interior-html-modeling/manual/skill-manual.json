@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "HTML 建模 · 编译、编辑与状态交接",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "overview": {
     "title": "HTML 编辑：不同意图进入不同状态域",
     "nodes": [
@@ -263,12 +263,21 @@
               "h": 280,
               "title": "编译一次完整编辑器",
               "lines": [
-                "建筑、组件、CMF、光源、相机和编辑数据同源"
+                "建筑、组件、CMF、光源、相机和编辑数据同源",
+                "随步骤记录开始、完成、耗时；代码与绘图等待分开。"
               ],
               "files": [
                 {
                   "path": "scripts/engine/python/model.py",
                   "purpose": "生成单文件 HTML 和 scene.json"
+                },
+                {
+                  "path": "playbook/timing.md",
+                  "purpose": "计时口径"
+                },
+                {
+                  "path": "scripts/engine/python/timing.py",
+                  "purpose": "正式命令自动计时"
                 }
               ],
               "bodySize": 22,
@@ -307,7 +316,8 @@
               "h": 230,
               "title": "只换风格 → CMF 域",
               "lines": [
-                "保持 forms、位置、灯光、相机；保留撤销"
+                "保持 forms、位置、灯光、相机；保留撤销",
+                "CLI与UI都保留forms/lighting；克隆墙地顶材质同步。"
               ],
               "files": [
                 {
@@ -796,7 +806,8 @@
               "title": "CMF 更新材质，不重建形体",
               "lines": [
                 "沿用当前 forms；不 rebuild、不改光/机位",
-                "配方 id/角色有效；错误回配方，不清空作品"
+                "配方 id/角色有效；错误回配方，不清空作品",
+                "CLI与UI都保留forms/lighting；克隆墙地顶材质同步。"
               ],
               "files": [
                 {
@@ -1479,6 +1490,8 @@
     "scripts/engine/styles/new-chinese/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
     "scripts/engine/styles/wabi-sabi/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
     "scripts/requirements.txt": "编译/截图 Python 依赖版本",
-    "scripts/run.py": "模型/风格/资产命令入口"
+    "scripts/run.py": "模型/风格/资产命令入口",
+    "playbook/timing.md": "六项共用的逐步骤时间、异步等待和历史未知口径",
+    "scripts/engine/python/timing.py": "命令/嵌套步骤计时及Agent动作start/finish"
   }
 }

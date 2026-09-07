@@ -1,12 +1,12 @@
 # 原生绘图 · 完整场景与空白槽位 说明书
 
-版本：2.1.0
+版本：3.0.0
 
 ~~~yaml
 ---
 name: interior-space-rendering
 description: 将同机位完整模型截图通过宿主原生绘图生成室内效果图，保留结构、家具、机位与材质意图，登记实际调用和逐图复核；不把 WebGL 截图当最终渲染。
-metadata: {version: "2.1.0", category: interior-design}
+metadata: {version: "3.0.0", category: interior-design}
 ---
 ~~~
 
@@ -24,8 +24,10 @@ metadata: {version: "2.1.0", category: interior-design}
   - scripts/run.py：ai-request/native-prepare/native-result 入口
 - q：用户明确要求白模／空白槽位？；默认 furnished；不因效果差自动切模式（详见 modes）
   - playbook.md：两模式、锁结构机位、家具细化与资产不变形
-- full：否：完整家具与细节截图；普通简化家具精细化，类别/数量/尺寸范围不变
+- full：否：完整家具与细节截图；普通简化家具精细化，类别/数量/尺寸范围不变；随步骤记录开始、完成、耗时；代码与绘图等待分开。；同空间先定样，再准备其它机位；见SERIES。（详见 consistency）
   - playbook.md：两模式、锁结构机位、家具细化与资产不变形
+  - ../interior-html-modeling/playbook/timing.md：计时口径
+  - ../interior-html-modeling/scripts/engine/python/timing.py：正式命令自动计时
 - empty：是：建筑截图＋原 JSON 槽位；家具/柜体暂隐；位置、尺寸、朝向仍固定
   - playbook.md：两模式、锁结构机位、家具细化与资产不变形
 - prompt：生成真实提示词与资产约束；锁房型、墙门窗和同机位；指定资产不变形（详见 assets）
@@ -129,3 +131,37 @@ metadata: {version: "2.1.0", category: interior-design}
 - call → review：自己看输出
 - review → out：是
 - review → out：否：带观察交付
+
+### 先定样，再衍生同空间机位
+
+结构只由当前机位截图控制；首张图控制家具与CMF，不复制首张镜头。
+
+#### 同空间多机位的真实参考链与计时
+- input：当前机位截图与空间系列；同布局、风格、模式、开放连接分组；先生成正视主图，不同系列可独立执行
+  - scripts/run.py：ai-request/native-*入口
+  - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记
+- has：已有本系列识图确认的首图？；读取 render-series.json；是：附定样；否：先做首图
+  - ../interior-html-modeling/scripts/engine/python/render.py：系列索引查找
+- first：首张：当前截图＋精确产品参考；粗模型只约束位置尺寸朝向；原生绘图精细化；墙门窗镜头不变
+  - scripts/run.py：ai-request/native-*入口
+  - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记
+- save：真实返回、逐图识图、登记定样；native-start / complete记录调用跨度；native-result保留观察；accepted登记首图
+  - scripts/run.py：ai-request/native-*入口
+  - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记
+- next：后续：新截图＋首张定样＋指定产品；新截图锁当前镜头，定样锁家具CMF；校核所有附图摘要，保留每次实际提示词
+  - scripts/run.py：ai-request/native-*入口
+  - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记
+- output：同空间一致的多机位图与完成时间；逐图复核结构、家具、镜头及crossViewConsistency；方案交方案册；图片任务直接交付，质量问题如实说明
+  - scripts/run.py：ai-request/native-*入口
+  - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记
+- input → has
+- has → first：否
+- has → next：是
+- first → save
+- save → next：后续机位准备时读取
+- next → output

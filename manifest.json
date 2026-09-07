@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-07T13:50:35.844Z",
+  "snapshotAt": "2026-09-07T14:42:28.797Z",
   "source": {
     "type": "mixed-device-snapshot",
     "currentDesignRelease": {
@@ -32,16 +32,16 @@
     ]
   },
   "skillCount": 16,
-  "fileCount": 623,
+  "fileCount": 625,
   "skills": [
     {
       "id": "booklet-production",
       "path": "skills/booklet-production",
-      "version": "4.0.0",
+      "version": "4.1.0",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 15,
-      "bytes": 7246931,
-      "sha256": "0bc74d0e8cc91d117253f5ed22a8ee086ba4e7123650ec263e3334aca3db8694"
+      "bytes": 7256785,
+      "sha256": "875cb86db139c2d7b24593f66d5037e04b84a1921fcf2b59e0319c6b69c82c7f"
     },
     {
       "id": "cad",
@@ -82,11 +82,11 @@
     {
       "id": "idk-canvas-ingest-agent",
       "path": "skills/idk-canvas-ingest-agent",
-      "version": "3.0.1",
+      "version": "3.1.0",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 11,
-      "bytes": 6787653,
-      "sha256": "fa9f7b23536b2a708de470916bec1543f9c5dc91736fef4bc5623ccc6538070d"
+      "bytes": 6792884,
+      "sha256": "f82876d62177412d8073ba78c31160cefa5c1d9274e45f7a9a0de676bc696b2c"
     },
     {
       "id": "imagegen-batch-orchestrator",
@@ -118,11 +118,11 @@
     {
       "id": "interior-camera-capture",
       "path": "skills/interior-camera-capture",
-      "version": "2.1.0",
+      "version": "3.0.0",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 9,
-      "bytes": 5281414,
-      "sha256": "708fee57bae8217a748e82f9fe17256827c4025fb25b015787d6c6d157e5a627"
+      "bytes": 5291855,
+      "sha256": "2a6b84d16139f4b9466377b2434dfaaa21beda83000ec9a80857a974c518d288"
     },
     {
       "id": "interior-circulation-planning",
@@ -145,29 +145,29 @@
     {
       "id": "interior-floorplan-planning",
       "path": "skills/interior-floorplan-planning",
-      "version": "2.1.0",
+      "version": "3.0.0",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 9,
-      "bytes": 4129676,
-      "sha256": "74710efd90dc962deb4f58dbf02c36306d8247196d4cd4c54224f120a2c6ee2e"
+      "bytes": 4133947,
+      "sha256": "1b3dfbbbe1bf19cbb9a4b9482148224c36b286660ba6a2bf81595c0cdbeafe69"
     },
     {
       "id": "interior-html-modeling",
       "path": "skills/interior-html-modeling",
-      "version": "2.1.0",
+      "version": "3.0.0",
       "sourceDevice": "lecoo-windows-codex",
-      "fileCount": 72,
-      "bytes": 27083723,
-      "sha256": "59bfba3f6c6bb4b5eeaf85ecc6676706886167581f16d474ebcac30ccea053fd"
+      "fileCount": 74,
+      "bytes": 27113203,
+      "sha256": "1663926a7b7743eef7b6ee3ff5a89157f1a0342bb849f6fd590ce42bdd326ec2"
     },
     {
       "id": "interior-space-rendering",
       "path": "skills/interior-space-rendering",
-      "version": "2.1.0",
+      "version": "3.0.0",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 9,
-      "bytes": 5144053,
-      "sha256": "e5c25a50818378e6fea990c4dd2650717c34d0a8367862db5aeb4da86c838b26"
+      "bytes": 5329485,
+      "sha256": "179fada0bb8f8eb96467f1d8b5b664e10e237e3a72abc5765da519ea3f8e964a"
     },
     {
       "id": "movable-furniture-modeling",

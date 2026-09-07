@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "机位截图 · 七类空间与真实成像",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "overview": {
     "title": "机位：空间语义先行，候选求解后看真实图片",
     "nodes": [
@@ -251,7 +251,8 @@
               "h": 260,
               "title": "引用错误：更新当前源模型",
               "lines": [
-                "回本页输入，不拿旧图冒充新结果"
+                "回本页输入，不拿旧图冒充新结果",
+                "随步骤记录开始、完成、耗时；代码与绘图等待分开。"
               ],
               "files": [
                 {
@@ -261,6 +262,14 @@
                 {
                   "path": "../interior-html-modeling/scripts/engine/python/model.py",
                   "purpose": "重新编译当前布局"
+                },
+                {
+                  "path": "../interior-html-modeling/playbook/timing.md",
+                  "purpose": "计时口径"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+                  "purpose": "正式命令自动计时"
                 }
               ],
               "bodySize": 22
@@ -617,7 +626,8 @@
               "h": 250,
               "title": "锁定客厅自己的沙发、茶几、电视和阳台通路",
               "lines": [
-                "subjectIds 优先；依据原房间功能，餐桌不能代替客厅主体"
+                "洗衣机/台盆/坐凳按真实正面分别正视，长轴纵深仅作补充",
+                "各空间主图先输出，不把诊断或局部当合格主图"
               ],
               "files": [
                 {
@@ -640,8 +650,8 @@
               "h": 360,
               "title": "会客机位：朝沙发正面",
               "lines": [
-                "观察主沙发、单椅、茶几的整体关系",
-                "保留阳台通路，不让茶几占满近景"
+                "第一张以沙发有符号正面轴求水平正视",
+                "电视以自身正面另求正视；斜图只是补充"
               ],
               "files": [
                 {
@@ -1653,7 +1663,8 @@
               "h": 220,
               "title": "明确输出：本阳台图与问题说明",
               "lines": [
-                "出入口被遮或房间认错时回原图/主体；不是镜像图片修正"
+                "洗衣机/台盆/坐凳按真实正面分别正视，长轴纵深仅作补充",
+                "各空间主图先输出，不把诊断或局部当合格主图"
               ],
               "files": [
                 {
@@ -2288,6 +2299,14 @@
     {
       "path": "../interior-html-modeling/scripts/engine/runtime/scene.js",
       "purpose": "当前建筑家具实例"
+    },
+    {
+      "path": "../interior-html-modeling/playbook/timing.md",
+      "purpose": "逐步骤计时共享依赖"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+      "purpose": "逐步骤计时共享依赖"
     }
   ],
   "fileDescriptions": {

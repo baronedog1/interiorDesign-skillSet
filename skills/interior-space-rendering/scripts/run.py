@@ -4,7 +4,9 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'interior-html-modeling/scripts/engine/python'))
 from bootstrap import ensure_runtime
 ensure_runtime()
-if len(sys.argv)>1 and sys.argv[1] in ['capture','ai-result']:
- raise SystemExit('Use camera Skill for screenshots; formal generated images require native-result with an actual host invocation.')
-from cli import main
-raise SystemExit(main('render'))
+from timing import command
+with command('interior-space-rendering'):
+ if len(sys.argv)>1 and sys.argv[1] in ['capture','ai-result']:
+  raise SystemExit('Use camera Skill for screenshots; formal generated images require native-result with an actual host invocation.')
+ from cli import main
+ raise SystemExit(main('render'))

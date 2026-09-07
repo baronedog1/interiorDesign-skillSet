@@ -8,6 +8,7 @@ from dataclasses import dataclass
 import numpy as np
 from shapely.geometry import Point, Polygon, LineString
 from common import require_schema
+from timing import traced
 
 
 def vec(x): return np.asarray(x, dtype=float)
@@ -186,14 +187,8 @@ def _preview(layout,room,frame,occluders,subjects=None,detail=False):
 
 
 def _room_preview(layout,room,frame,occluders):
-    shot=_preview(layout,room,frame,occluders)
-    if shot and shot['status']=='ready':return shot
-    details=[]
-    for p in _subjects(layout,room)[:3]:
-        candidate=_preview(layout,room,frame,occluders,[p],True)
-        if candidate and candidate['status']=='ready':details.append(candidate)
-    if details:return min(details,key=lambda s:(s['metrics']['foregroundCoverRatio'],s['fov']))
-    return shot
+    # A detail is not a substitute for the whole-space reference.
+    return _preview(layout,room,frame,occluders)
 
 
 def generic_presets(layout):
@@ -209,10 +204,13 @@ def generic_presets(layout):
     return presets
 
 
-def front_view(layout,room,frame,max_fov=90,occluders=None):
-    subjects=_subjects(layout,room)
-    if not subjects:return None
+def front_view(layout,room,frame,max_fov=90,occluders=None,subjects=None,label='front'):
+    subjects=_subjects(layout,room) if subjects is None else subjects
     occluders=occluders or Occluders(layout);poly=Polygon(room['polygon']);safe=poly.buffer(-.14)
+    empty=not subjects
+    if empty:
+        c=poly.representative_point()
+        subjects=[dict(id='__architecture__',position=[c.x,0,c.y],size=[.1,layout['floor']['height'],.1],rotationY=0)]
     _,center=_points(subjects,layout['floor']['height'])
     adjacent=[w for w in layout['walls'] if LineString([w['a'],w['b']]).distance(poly.boundary)<=w['thickness']/2+.16]
     wall=next((w for w in adjacent if w['id']==room.get('frontWallId')),None)
@@ -228,24 +226,40 @@ def front_view(layout,room,frame,max_fov=90,occluders=None):
         tangent=vec(wall['b'])-vec(wall['a']);tangent/=np.linalg.norm(tangent);normal=vec([-tangent[1],tangent[0]])
         p=poly.representative_point()
         if (vec([p.x,p.y])-vec(wall['a']))@normal<0:normal=-normal
+    else:
+        yaw=math.radians(subjects[0]['rotationY']);normal=vec([math.sin(yaw),math.cos(yaw)]);tangent=vec([normal[1],-normal[0]])
+    if not empty and any(k in subjects[0].get('componentId','') for k in ['sofa.','bed.','tv.','vanity','cabinet','kitchen','washer','bench.']):
+        # Furniture front is local +Z; never choose the reverse wall merely because it is closer.
+        yaw=math.radians(subjects[0]['rotationY']);front=vec([math.sin(yaw),math.cos(yaw)])
+        if not room.get('frontWallId') or abs(float(normal@front))>.99:normal=front;tangent=vec([normal[1],-normal[0]])
+    if empty:
+        # Only an empty architectural view uses the long axis; fixtures retain their true front.
+        edges=[vec(b)-vec(a) for a,b in zip(room['polygon'],room['polygon'][1:]+room['polygon'][:1])]
+        longest=max(edges,key=lambda e:np.linalg.norm(e));normal=longest/np.linalg.norm(longest);tangent=vec([normal[1],-normal[0]])
+    for direction in ([1,-1] if empty else [1]):
         distance=math.hypot(poly.bounds[2]-poly.bounds[0],poly.bounds[3]-poly.bounds[1])+.5
         for offset in [0,-.18,.18]:
             aim=center[[0,2]]+tangent*offset
             for d in np.linspace(distance,.5,35):
-                xz=aim+normal*d
+                xz=aim+normal*d*direction
                 if not safe.covers(Point(*xz)):continue
                 for h in [1.4,1.25,1.55]:
                     pos=[xz[0],h,xz[1]]
                     if not occluders.standing(pos):continue
                     result=_evaluate(layout,room,pos,[aim[0],h,aim[1]],subjects,frame,'front',occluders)
                     if result:
-                        score,shot=result;shot['metrics'].update({'wallNormalAligned':True,'referenceWallId':wall['id']});choices.append((score+abs(offset)*5,shot))
+                        score,shot=result
+                        actual=vec(shot['position'])[[0,2]]-vec(shot['target'])[[0,2]];actual/=np.linalg.norm(actual)
+                        angle=math.degrees(math.acos(float(np.clip(actual@(normal*direction),-1,1))))
+                        shot['metrics'].update({'frontAxis':list(map(float,normal*direction)),'referenceWallId':wall['id'] if wall else None,'horizontal':True,'frontAngleDegrees':round(angle,6)});choices.append((score+abs(offset)*5,shot))
     if not choices:
         p=poly.representative_point();target=[center[0],1.4,center[2]];pos=[p.x,1.4,p.y]
         if math.dist(pos,target)<.05:target[2]-=.5
         shot=base_shot(room['id']+'-front',room['name']+' · 正视待调整',room['id'],pos,target,80,frame,'front')
-        shot['status']='blocked';shot['subjectIds']=room['subjectIds'];shot['reviewNotes']=['未找到合法参考墙/避让墙厚、门扇与家具的正视站位；不跨房或隐去实体。'];return shot
+        shot['id']=room['id']+'-'+label;shot['status']='review';shot['subjectIds']=[] if empty else [p['id'] for p in subjects];shot['metrics']['frontSolved']=False;shot['reviewNotes']=['正视站位尚无可用解；这是诊断图，不是假称正视合格。回查主体/宿主墙/房间输入，不隐藏实体。'];return shot
     shot=min(choices,key=lambda x:x[0])[1];shot['metrics']['candidateCount']=len(choices)
+    shot['id']=room['id']+'-'+label;shot['name']=room['name']+' · '+label+' 正视';shot['metrics']['frontSolved']=True
+    if empty:shot['subjectIds']=[];shot['metrics']['architecturalSubject']=True
     if shot['fov']>max_fov:shot['fov']=max_fov;shot['status']='review'
     return shot
 
@@ -265,6 +279,7 @@ def validate_plan(plan,scene=None):
     return plan
 
 
+@traced('camera.find')
 def compile_cameras(scene,frame,add_front=True):
     layout=scene['layout'];rooms={r['id']:r for r in layout['rooms']};ps={p['id']:p for p in layout['placements']};shots=[];obstacles=Occluders(layout)
     for id,p in scene['presets'].items():
@@ -283,12 +298,30 @@ def compile_cameras(scene,frame,add_front=True):
         shots.append(s)
     if add_front:
         for room in layout['rooms']:
-            shot=front_view(layout,room,frame,occluders=obstacles)
-            if shot:shots.append(shot)
-            if shot and shot['status']!='ready' and not any(s['roomId']==room['id'] and s['status']=='ready' for s in shots):
-                candidates=[_preview(layout,room,frame,obstacles,[p],True) for p in _subjects(layout,room)[:3]]
-                choices=[s for s in candidates if s and s['status']=='ready']
-                if choices:
-                    s=min(choices,key=lambda x:x['metrics']['foregroundCoverRatio']);s['id']=room['id']+'-detail';shots.append(s)
+            own=[p for p in layout['placements'] if p['roomId']==room['id']]
+            sofas=[p for p in own if p['componentId'].startswith('sofa.')]
+            tvs=[p for p in own if p['componentId'].startswith('tv.')]
+            groups=[('sofa-front',sofas),('tv-front',tvs)] if sofas else [('front',None)]
+            if any(k in (room.get('type','')+' '+room['name']).lower() for k in ['balcony','阳台']):
+                fixtures=[p for p in own if any(k in p['componentId'] for k in ['washer','vanity','cabinet','bench.'])]
+                if fixtures:groups=[('front',[fixtures[0]])]+[('fixture-'+str(i)+'-front',[p]) for i,p in enumerate(fixtures[1:],1)]
+            for label,subjects in groups:
+                if subjects==[]:continue
+                shot=front_view(layout,room,frame,occluders=obstacles,subjects=subjects,label=label)
+                if shot:shots.append(shot)
+        # Per-room primary frames precede supplements. Overview/plan are not room photographs.
+        room_order={r['id']:i for i,r in enumerate(layout['rooms'])}
+        shots.sort(key=lambda s:(room_order.get(s['roomId'],-1),0 if s['kind']=='front' else 1))
+    for index,item in enumerate(scene.get('editorState',{}).get('cameras',[])):
+        camera=item['camera'];rid=camera.get('view') if camera.get('view') in rooms else None
+        s=base_shot('saved-'+str(index+1),item.get('name','用户保存机位'),rid,camera['position'],camera['target'],camera['fov'],frame)
+        s['metrics']['source']='user-saved-editor-camera'
+        s['subjectIds']=[p['id'] for p in _subjects(layout,rooms[rid])] if rid else []
+        if camera.get('type')=='orthographic':
+            s['projection']='orthographic';s['up']=[0,0,-1];bounds=Polygon(layout['floor']['outline']).bounds
+            s['orthographicSpan']=max(bounds[3]-bounds[1],(bounds[2]-bounds[0])*frame['height']/frame['width'])*1.16/max(camera.get('zoom',1),.01)
+        else:s['fov']=math.degrees(2*math.atan(math.tan(math.radians(s['fov'])/2)/max(camera.get('zoom',1),.01)))
+        s['visibility'].update(ceiling=bool(camera.get('roof')),cutaway=bool(camera.get('cut')))
+        shots.append(s)
     result={'schema':'interior.cameras/1','sceneKey':scene['sceneKey'],'layoutHash':scene['layoutHash'],'shots':shots}
     validate_plan(result,scene);return result

@@ -1,12 +1,12 @@
 # 平面规划 · 尺度、拓扑与锚点 说明书
 
-版本：2.1.0
+版本：3.0.0
 
 ~~~yaml
 ---
 name: interior-floorplan-planning
 description: 将客户户型图、尺寸和需求整理为米制布局 JSON；规划墙门窗、功能区、家具锚点及动线，可用宿主原生绘图探索平面方案。不交付平面 HTML。
-metadata: {version: "2.1.0", category: interior-design}
+metadata: {version: "3.0.0", category: interior-design}
 ---
 ~~~
 
@@ -24,8 +24,10 @@ metadata: {version: "2.1.0", category: interior-design}
   - playbook.md：读图、尺度、空间功能和动线方法
 - scale：尺度和方向可信？；像素只用于读图；以标注距离定标（详见 facts）
   - playbook.md：读图、尺度、空间功能和动线方法
-- uncertain：估算与疑问随稿保留；标注估算来源；不能称精准施工数据
+- uncertain：估算与疑问随稿保留；标注估算来源；不能称精准施工数据；随步骤记录开始、完成、耗时；代码与绘图等待分开。
   - playbook.md：读图、尺度、空间功能和动线方法
+  - ../interior-html-modeling/playbook/timing.md：计时口径
+  - ../interior-html-modeling/scripts/engine/python/timing.py：正式命令自动计时
 - topology：P2 建立全屋唯一拓扑；共享墙一次；门窗绑定宿主；客餐厅按原图区分
   - playbook.md：读图、尺度、空间功能和动线方法
 - anchor：P3 先算家具锚点与使用区；床头/沙发背靠指定墙；保留开门、柜门、拉椅及通路（详见 anchors）

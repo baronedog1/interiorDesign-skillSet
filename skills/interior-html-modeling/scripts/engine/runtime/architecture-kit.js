@@ -80,7 +80,7 @@ function floorArea(parent,bounds,kind,name){
   const buckets=Array.from({length:7},()=>[]),pw=.178,len=1.38;
   for(let z=z0;z<z1-.01;z+=pw){const dep=Math.min(pw,z1-z),offset=C.rand()*len;for(let x=x0-offset;x<x1;x+=len){const a=Math.max(x,x0),b=Math.min(x+len,x1);if(b-a<.007)continue;buckets[Math.floor(C.rand()*7)].push([a,b,z,dep]);}}
   for(let k=0;k<7;k++){
-   const m=C.M.oak.clone();m.color.copy(C.M.oak.color).multiplyScalar(1+(k-3)*.022);m.name='风格木地板 · 色差 '+k;
+   const m=C.M.oak.clone();m.userData.cmfMultiplier=1+(k-3)*.022;m.color.copy(C.M.oak.color).multiplyScalar(1+(k-3)*.022);m.name='风格木地板 · 色差 '+k;
    const inst=new T.InstancedMesh(new T.BoxGeometry(1,.022,1),m,buckets[k].length),dummy=new T.Object3D();
    buckets[k].forEach(([a,b,z,dep],i)=>{dummy.position.set((a+b)/2,-.002,z+dep/2);dummy.scale.set(b-a-.0015,1,dep-.0015);dummy.updateMatrix();inst.setMatrixAt(i,dummy.matrix);});inst.receiveShadow=true;inst.name='错缝长条橡木 / 实体分板';g.add(inst);
   }

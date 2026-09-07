@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "小酷设计编排与杂志式方案册",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "overview": {
     "title": "从客户户型，到对应的交付物",
     "nodes": [
@@ -331,12 +331,21 @@
               "lines": [
                 "规划：尺寸、拓扑、门窗、通路与家具锚点。",
                 "HTML：严格按代码生成；错在源头就改源头。",
-                "不把漂亮风格参考图当成客户户型。"
+                "不把漂亮风格参考图当成客户户型。",
+                "随步骤记录开始、完成、耗时；代码与绘图等待分开。"
               ],
               "files": [
                 {
                   "path": "playbook.md",
                   "purpose": "接收上游事实，不另造布局"
+                },
+                {
+                  "path": "../interior-html-modeling/playbook/timing.md",
+                  "purpose": "计时口径"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+                  "purpose": "正式命令自动计时"
                 }
               ]
             },
@@ -450,7 +459,8 @@
               "title": "发送完整方案 PDF",
               "lines": [
                 "平台上传按需调用平台 Skill。",
-                "方案册不自动等于施工图、报价或采购承诺。"
+                "方案册不自动等于施工图、报价或采购承诺。",
+                "方案默认高清PDF＋讲解；记录原生结果与有效DPI。"
               ],
               "files": []
             }
@@ -953,7 +963,8 @@
               "title": "打印两份 PDF → 独立引擎回读",
               "lines": [
                 "PyMuPDF 按每页真实内容生成预览。",
-                "记录页数、尺寸、字体嵌入、RGB 与摘要。"
+                "记录页数、尺寸、字体嵌入、RGB 与摘要。",
+                "方案默认高清PDF＋讲解；记录原生结果与有效DPI。"
               ],
               "files": [
                 {
@@ -1176,5 +1187,15 @@
     "playbook/example-brief.json": "可编辑的封面与平面页输入示例，图片替换为当前项目",
     "scripts/run.py": "本地生成、文字分页、PDF 双版本与回读",
     "scripts/scripts.md": "标准调用与错误说明"
-  }
+  },
+  "dependencyFiles": [
+    {
+      "path": "../interior-html-modeling/playbook/timing.md",
+      "purpose": "统一时间合同"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+      "purpose": "实际计时模块"
+    }
+  ]
 }

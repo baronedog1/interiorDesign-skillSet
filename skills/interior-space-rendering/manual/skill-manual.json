@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "原生绘图 · 完整场景与空白槽位",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "overview": {
     "title": "原生绘图：默认完整模型，白模仅明确要求时使用",
     "nodes": [
@@ -297,15 +297,26 @@
               "h": 290,
               "title": "否：完整家具与细节截图",
               "lines": [
-                "普通简化家具精细化，类别/数量/尺寸范围不变"
+                "普通简化家具精细化，类别/数量/尺寸范围不变",
+                "随步骤记录开始、完成、耗时；代码与绘图等待分开。",
+                "同空间先定样，再准备其它机位；见SERIES。"
               ],
               "files": [
                 {
                   "path": "playbook.md",
                   "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                },
+                {
+                  "path": "../interior-html-modeling/playbook/timing.md",
+                  "purpose": "计时口径"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+                  "purpose": "正式命令自动计时"
                 }
               ],
-              "bodySize": 22
+              "bodySize": 22,
+              "detailRef": "consistency"
             },
             {
               "id": "empty",
@@ -1149,6 +1160,282 @@
           ]
         }
       ]
+    },
+    {
+      "id": "consistency",
+      "code": "SERIES",
+      "title": "先定样，再衍生同空间机位",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "结构只由当前机位截图控制；首张图控制家具与CMF，不复制首张镜头。",
+      "diagrams": [
+        {
+          "title": "同空间多机位的真实参考链与计时",
+          "nodes": [
+            {
+              "id": "input",
+              "type": "io",
+              "x": 70,
+              "y": 260,
+              "w": 640,
+              "h": 330,
+              "title": "当前机位截图与空间系列",
+              "lines": [
+                "同布局、风格、模式、开放连接分组",
+                "先生成正视主图，不同系列可独立执行"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "ai-request/native-*入口"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "连通空间系列与定样引用"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "实际调用计时与结果登记"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "has",
+              "type": "decision",
+              "x": 865,
+              "y": 230,
+              "w": 650,
+              "h": 400,
+              "title": "已有本系列识图确认的首图？",
+              "lines": [
+                "读取 render-series.json",
+                "是：附定样；否：先做首图"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "系列索引查找"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "first",
+              "type": "process",
+              "x": 1680,
+              "y": 260,
+              "w": 650,
+              "h": 330,
+              "title": "首张：当前截图＋精确产品参考",
+              "lines": [
+                "粗模型只约束位置尺寸朝向",
+                "原生绘图精细化；墙门窗镜头不变"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "ai-request/native-*入口"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "连通空间系列与定样引用"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "实际调用计时与结果登记"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "save",
+              "type": "process",
+              "x": 1680,
+              "y": 870,
+              "w": 650,
+              "h": 360,
+              "title": "真实返回、逐图识图、登记定样",
+              "lines": [
+                "native-start / complete记录调用跨度",
+                "native-result保留观察；accepted登记首图"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "ai-request/native-*入口"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "连通空间系列与定样引用"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "实际调用计时与结果登记"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "next",
+              "type": "process",
+              "x": 70,
+              "y": 870,
+              "w": 970,
+              "h": 360,
+              "title": "后续：新截图＋首张定样＋指定产品",
+              "lines": [
+                "新截图锁当前镜头，定样锁家具CMF",
+                "校核所有附图摘要，保留每次实际提示词"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "ai-request/native-*入口"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "连通空间系列与定样引用"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "实际调用计时与结果登记"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "output",
+              "type": "output",
+              "x": 820,
+              "y": 1370,
+              "w": 1300,
+              "h": 230,
+              "title": "同空间一致的多机位图与完成时间",
+              "lines": [
+                "逐图复核结构、家具、镜头及crossViewConsistency",
+                "方案交方案册；图片任务直接交付，质量问题如实说明"
+              ],
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "ai-request/native-*入口"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "连通空间系列与定样引用"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "实际调用计时与结果登记"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "input",
+              "to": "has",
+              "points": [
+                [
+                  710,
+                  425
+                ],
+                [
+                  865,
+                  425
+                ]
+              ]
+            },
+            {
+              "from": "has",
+              "to": "first",
+              "label": "否",
+              "points": [
+                [
+                  1515,
+                  425
+                ],
+                [
+                  1680,
+                  425
+                ]
+              ]
+            },
+            {
+              "from": "has",
+              "to": "next",
+              "label": "是",
+              "points": [
+                [
+                  1190,
+                  630
+                ],
+                [
+                  1190,
+                  720
+                ],
+                [
+                  555,
+                  720
+                ],
+                [
+                  555,
+                  870
+                ]
+              ]
+            },
+            {
+              "from": "first",
+              "to": "save",
+              "points": [
+                [
+                  2005,
+                  590
+                ],
+                [
+                  2005,
+                  870
+                ]
+              ]
+            },
+            {
+              "from": "save",
+              "to": "next",
+              "label": "后续机位准备时读取",
+              "points": [
+                [
+                  1680,
+                  1050
+                ],
+                [
+                  1040,
+                  1050
+                ]
+              ]
+            },
+            {
+              "from": "next",
+              "to": "output",
+              "points": [
+                [
+                  555,
+                  1230
+                ],
+                [
+                  555,
+                  1485
+                ],
+                [
+                  820,
+                  1485
+                ]
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "dependencyFiles": [
@@ -1191,6 +1478,14 @@
     {
       "path": "../idk-canvas-ingest-agent/SKILL.md",
       "purpose": "需要私有上传时交给平台 Skill"
+    },
+    {
+      "path": "../interior-html-modeling/playbook/timing.md",
+      "purpose": "逐步骤计时共享依赖"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+      "purpose": "逐步骤计时共享依赖"
     }
   ],
   "fileDescriptions": {

@@ -1,12 +1,12 @@
 # 百恩得平台 · 素材流入与私有交付 说明书
 
-版本：3.0.1
+版本：3.1.0
 
 ~~~yaml
 ---
 name: idk-canvas-ingest-agent
 description: 设计链访问百恩得资产库、绑定同一私有项目、下载选定资产并上传图片或完整 HTML 时使用；独占受管 Key、API 和真实回读，不负责生成或美学验收。
-metadata: {version: "3.0.1", category: interior-design}
+metadata: {version: "3.1.0", category: interior-design}
 ---
 ~~~
 
@@ -25,8 +25,10 @@ metadata: {version: "3.0.1", category: interior-design}
 - q：本机受管身份可访问？；profile 实测；只用真实权限与 HTTPS（详见 identity）
   - playbook.md：平台操作授权与步骤
   - local_runtime.md：本机私有 Key、HTTPS、本地网络和字段合同
-- no：否：报告凭据/权限/服务故障；不输出 Key 或完整鉴权异常
+- no：否：报告凭据/权限/服务故障；不输出 Key 或完整鉴权异常；随步骤记录开始、完成、耗时；代码与绘图等待分开。
   - scripts/platform_bridge.py：实际白名单 API、下载、绑定和回读
+  - ../interior-html-modeling/playbook/timing.md：计时口径
+  - ../interior-html-modeling/scripts/engine/python/timing.py：正式命令自动计时
 - intent：读资产还是推送成果？；当前只支持私有项目；不是社区公开发布
   - scripts/platform_bridge.py：实际白名单 API、下载、绑定和回读
 - read：资产总览 → 条目 → 下载；用户选定素材，真实链接下载本机（详见 download）

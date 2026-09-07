@@ -2,10 +2,11 @@
 AI enhancement is an explicit external handoff, not a pretend image-provider implementation.
 """
 from __future__ import annotations
-import base64,json,os,shutil,sys
+import base64,json,os,shutil,sys,time
 from pathlib import Path
 from cameras import validate_plan
 from common import read,write,atomic_bytes,digest,file_sha,SHARED,require_schema
+from timing import traced,span,now
 
 def open_browser(playwright):
     executable=os.environ.get('INTERIOR_CHROMIUM') or shutil.which('chromium') or shutil.which('google-chrome') or shutil.which('msedge')
@@ -29,6 +30,7 @@ def load_scene(scene_path):
     if (path.parent/scene['layoutFile']).exists() and digest(read(path.parent/scene['layoutFile']))!=scene['layoutHash']:raise ValueError('layout 已更新但模型未重编译')
     return scene,html
 
+@traced('camera.capture-batch')
 def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,mode='pbr',overwrite=False,reference_mode='furnished',white_model_requested=False):
     from playwright.sync_api import sync_playwright
     scene,html=load_scene(scene_path);plan=read(cameras_path);validate_plan(plan,scene)
@@ -59,6 +61,7 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
                 page.wait_for_function('window.__CREAM_READY__===true || document.querySelector("#load-note")?.textContent.startsWith("加载失败：")',timeout=120000)
                 if not page.evaluate('window.__CREAM_READY__===true'):raise RuntimeError(page.locator('#load-note').inner_text())
                 for shot,key,file in work:
+                    started=now();clock=time.perf_counter()
                     row={'shotId':shot['id'],'inputKey':key,'cameraDigest':digest(shot),'sourceType':'webgl','mode':mode,'image':file.name,'status':'failed','providerRequestId':None}
                     try:
                         data=page.evaluate('(x)=>CREAM.captureFrame(x.shot,x.mode,x.options)',{'shot':shot,'mode':mode,'options':{'referenceMode':reference_mode,'whiteModelRequested':white_model_requested}})
@@ -70,11 +73,13 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
                         row.update({'sha256':file_sha(file),'width':data['width'],'height':data['height'],'status':'needs-review' if low or shot['status']=='review' else 'rendered','visibilitySamples':review,'note':'27点射线抽检是遮挡预警，不是逐像素视觉验收。'})
                         row.update(referenceMode=reference_mode,hiddenPlacementIds=data.get('hiddenPlacementIds',[]),whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False)
                     except Exception as exc:row['error']=str(exc)
+                    row['timing']={'startedAt':started,'finishedAt':now(),'elapsedMs':round((time.perf_counter()-clock)*1000,3),'kind':'code','scope':'capture-and-save-one-shot'}
                     saved[shot['id']]=row;manifest['results']=list(saved.values());manifest['skipped']=skipped;write(manifest_path,manifest)
             finally:browser.close()
     manifest['results']=list(saved.values());manifest['skipped']=skipped;manifest['executedThisRun']=len(work);manifest['complete']=all(x['status']!='failed' for x in manifest['results']) and not skipped;write(manifest_path,manifest);return manifest
 
-def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,product_refs=None,reference_mode='furnished',white_model_requested=False):
+@traced('render.prepare-request')
+def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,product_refs=None,reference_mode='furnished',white_model_requested=False,anchor_result=None):
     scene,_=load_scene(scene_path);plan=read(cameras_path);validate_plan(plan,scene);renders=read(renders_path)
     if plan['sceneKey']!=scene['sceneKey'] or renders.get('sceneKey')!=scene['sceneKey']:raise ValueError('场景/相机/截图不是同一版本')
     shot=next((s for s in plan['shots'] if s['id']==shot_id),None);row=next((x for x in renders.get('results',[]) if x['shotId']==shot_id),None)
@@ -108,6 +113,29 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
     request.update(referenceMode=reference_mode,whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False,placementSlots=slots)
     request['source']['role']='complete-model-frame' if reference_mode=='furnished' else 'empty-slot-architecture-frame'
     request['requiredReview']+=['furnitureDetail','assetIdentity','assetScale']
+    # Connected open rooms share furniture/CMF identity, but never share camera geometry.
+    group={shot['roomId']} if shot['roomId'] else set()
+    changed=True
+    while changed:
+        changed=False
+        for connection in scene['layout'].get('openConnections',[]):
+            pair=set(connection['rooms'])
+            if pair&group and not pair<=group:group|=pair;changed=True
+    series_key=digest({'layoutHash':scene['layoutHash'],'style':style_text,'rooms':sorted(group),'mode':reference_mode,'products':[{k:v for k,v in r.items() if k!='path'} for r in refs]})
+    series_path=Path(out_file).resolve().parent/'render-series.json'
+    registry=read(series_path) if series_path.exists() else {}
+    prior=anchor_result or registry.get(series_key,{}).get('resultPath')
+    request.update(roomId=shot['roomId'],consistencyGroup=sorted(group),seriesKey=series_key,seriesPath=str(series_path),styleBrief=style_text,consistencyReferences=[])
+    if prior:
+        previous=read(prior)
+        if previous.get('seriesKey')!=series_key or previous.get('status')!='accepted':raise ValueError('Anchor must be a visually reviewed result from this same space/style series')
+        if file_sha(previous['image'])!=previous['sha256']:raise ValueError('Anchor image changed; use its actual current result')
+        request['consistencyReferences']=[{'path':previous['image'],'sha256':previous['sha256'],'role':'same-space-appearance-only','shotId':previous['shotId']}]
+        text+='\n同空间定样图已经提供：只沿用其中家具身份、形体、颜色材质、纹理与灯光气氛；本次镜头、墙门窗和透视以第一张当前模型截图为准，不能复制定样图的镜头。指定产品仍优先，不在不同机位重新设计家具。'
+    else:
+        text+='\n这是该空间/风格的首张定样图。普通模型是位置、大小、朝向和大致样式参考，不是最终家具细节品质；将其升级成精细真实家具，不能保留粗糙块体当成效果图。'
+    request['requiredReview']+=['crossViewConsistency']
+    request['prompt']=text.strip()
     write(out_file,request);atomic_bytes(Path(out_file).with_suffix('.prompt.txt'),text.strip().encode('utf-8'));return request
 
 def ai_result(request_path,image_path,review_path,out_file):
@@ -119,4 +147,6 @@ def ai_result(request_path,image_path,review_path,out_file):
         if review.get(key) not in ['pass','fail']:raise ValueError('Review missing pass/fail field: '+key)
     from PIL import Image
     with Image.open(image) as im:im.verify()
-    artifact={'schema':'interior.ai-result/1','sourceType':'ai-generated','sceneKey':request['sceneKey'],'shotId':request['shotId'],'status':'accepted' if all(review[k]=='pass' for k in request['requiredReview']) else 'delivered-with-observations','requestDigest':digest(request),'image':str(image.resolve()),'sha256':file_sha(image),'review':review,'providerRequestId':review.get('providerRequestId'),'note':'结果由外部图像工具生成；此命令只核对文件与登记真实人工/视觉复核。'};write(out_file,artifact);return artifact
+    artifact={'schema':'interior.ai-result/1','sourceType':'ai-generated','sceneKey':request['sceneKey'],'shotId':request['shotId'],'status':'accepted' if all(review[k]=='pass' for k in request['requiredReview']) else 'delivered-with-observations','requestDigest':digest(request),'image':str(image.resolve()),'sha256':file_sha(image),'review':review,'providerRequestId':review.get('providerRequestId'),'note':'结果由外部图像工具生成；此命令只核对文件与登记真实人工/视觉复核。'}
+    artifact.update(seriesKey=request.get('seriesKey'),consistencyGroup=request.get('consistencyGroup'),consistencyReferences=request.get('consistencyReferences',[]),recordedAt=now())
+    write(out_file,artifact);return artifact

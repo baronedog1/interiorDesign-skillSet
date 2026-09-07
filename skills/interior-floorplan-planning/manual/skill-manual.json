@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "平面规划 · 尺度、拓扑与锚点",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "overview": {
     "title": "从客户原图生成可追溯的布局 JSON",
     "nodes": [
@@ -323,12 +323,21 @@
               "h": 230,
               "title": "估算与疑问随稿保留",
               "lines": [
-                "标注估算来源；不能称精准施工数据"
+                "标注估算来源；不能称精准施工数据",
+                "随步骤记录开始、完成、耗时；代码与绘图等待分开。"
               ],
               "files": [
                 {
                   "path": "playbook.md",
                   "purpose": "读图、尺度、空间功能和动线方法"
+                },
+                {
+                  "path": "../interior-html-modeling/playbook/timing.md",
+                  "purpose": "计时口径"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+                  "purpose": "正式命令自动计时"
                 }
               ],
               "bodySize": 22
@@ -1135,6 +1144,14 @@
     {
       "path": "../interior-html-modeling/scripts/engine/python/validate.py",
       "purpose": "保留真实几何观察"
+    },
+    {
+      "path": "../interior-html-modeling/playbook/timing.md",
+      "purpose": "逐步骤计时共享依赖"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+      "purpose": "逐步骤计时共享依赖"
     }
   ],
   "fileDescriptions": {

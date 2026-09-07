@@ -1,7 +1,7 @@
 ---
 name: interior-floorplan-planning
 description: 将客户户型图、尺寸和需求整理为米制布局 JSON；规划墙门窗、功能区、家具锚点及动线，可用宿主原生绘图探索平面方案。不交付平面 HTML。
-metadata: {version: "2.1.0", category: interior-design}
+metadata: {version: "3.0.0", category: interior-design}
 ---
 # 平面布局规划
 
@@ -14,3 +14,5 @@ metadata: {version: "2.1.0", category: interior-design}
 资产查询或平台交付调用 `idk-canvas-ingest-agent`。不得把平台 Key 放到布局、HTML 或报告。
 
 人读 [PDF](SKILL_MANUAL.pdf)，详细执行见 [运行说明](local_runtime.md)。
+
+每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](../interior-html-modeling/playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。

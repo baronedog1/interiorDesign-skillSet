@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：2.1.0
+版本：3.0.0
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "2.1.0", category: interior-design}
+metadata: {version: "3.0.0", category: interior-design}
 ---
 ~~~
 
@@ -22,12 +22,14 @@ metadata: {version: "2.1.0", category: interior-design}
 #### HTML 编辑：不同意图进入不同状态域
 - in：当前 JSON 或用户编辑后的完整 HTML；最新编辑是事实源，不拿旧模型覆盖
   - scripts/run.py：模型/风格/资产命令入口
-- build：编译一次完整编辑器；建筑、组件、CMF、光源、相机和编辑数据同源（详见 compile）
+- build：编译一次完整编辑器；建筑、组件、CMF、光源、相机和编辑数据同源；随步骤记录开始、完成、耗时；代码与绘图等待分开。（详见 compile）
   - scripts/engine/python/model.py：生成单文件 HTML 和 scene.json
+  - playbook/timing.md：计时口径
+  - scripts/engine/python/timing.py：正式命令自动计时
 - intent：用户要改什么？；风格、家具、结构/测量、保存不是同一动作
   - playbook.md：编辑职责、家具和动线知识
   - data_contract.md：布局、完整 HTML、材质与机位状态
-- cmf：只换风格 → CMF 域；保持 forms、位置、灯光、相机；保留撤销（详见 cmf）
+- cmf：只换风格 → CMF 域；保持 forms、位置、灯光、相机；保留撤销；CLI与UI都保留forms/lighting；克隆墙地顶材质同步。（详见 cmf）
   - scripts/engine/runtime/app.js：applyStyle/restoreCMF 与历史
 - asset：家具库 → 实例与材质槽；真实 GLB 同类替换；指定资产按比例与尺寸（详见 library）
   - scripts/engine/runtime/workspace.js：目录选择、资产替换和材质编辑
@@ -49,6 +51,7 @@ metadata: {version: "2.1.0", category: interior-design}
 - manual/skill-manual.json：同源说明书内容与图形
 - manual/skill-manual.md：同源说明书内容与图形
 - playbook.md：编辑职责、家具和动线知识
+- playbook/timing.md：六项共用的逐步骤时间、异步等待和历史未知口径
 - scripts/engine/LICENSE-Three.js.txt：原第三方运行库许可
 - scripts/engine/STYLE-GUIDE.md：风格扩展与 CMF 约束
 - scripts/engine/assets/library/PROVENANCE.md：样本来源说明
@@ -83,6 +86,7 @@ metadata: {version: "2.1.0", category: interior-design}
 - scripts/engine/python/native_image.py：实现 native_image 的确定性行为
 - scripts/engine/python/render.py：实现 render 的确定性行为
 - scripts/engine/python/styles.py：证据记录和 style-add
+- scripts/engine/python/timing.py：命令/嵌套步骤计时及Agent动作start/finish
 - scripts/engine/python/validate.py：技术输入和业务观察
 - scripts/engine/runtime/app.js：importProject/exportProject
 - scripts/engine/runtime/architecture-kit.js：门窗和墙构造
@@ -171,7 +175,7 @@ metadata: {version: "2.1.0", category: interior-design}
   - scripts/engine/python/styles.py：证据记录和 style-add
   - scripts/engine/schemas/style.schema.json：可用配方字段
   - scripts/engine/catalog/styles.json：保存新配方
-- apply：CMF 更新材质，不重建形体；沿用当前 forms；不 rebuild、不改光/机位；配方 id/角色有效；错误回配方，不清空作品
+- apply：CMF 更新材质，不重建形体；沿用当前 forms；不 rebuild、不改光/机位；配方 id/角色有效；错误回配方，不清空作品；CLI与UI都保留forms/lighting；克隆墙地顶材质同步。
   - scripts/engine/runtime/app.js：applyStyle/restoreCMF/撤销重做
   - scripts/engine/runtime/styles.js：配方角色映射
   - scripts/engine/runtime/materials.js：真实材质参数

@@ -1,12 +1,12 @@
 # 小酷设计编排与杂志式方案册 说明书
 
-版本：4.0.0
+版本：4.1.0
 
 ~~~yaml
 ---
 name: booklet-production
 description: 将同一室内设计方案的布局、空间图片、材料与用户产品整理成杂志式 HTML 和 PDF 方案册；用户只要图片时不调用。不负责重新建模或生成效果图。
-metadata: {"version":"4.0.0","source_authority":"lecoo-windows-device","category":"interior-design"}
+metadata: {"version":"4.1.0","source_authority":"lecoo-windows-device","category":"interior-design"}
 ---
 ~~~
 
@@ -22,8 +22,10 @@ metadata: {"version":"4.0.0","source_authority":"lecoo-windows-device","category
 #### 从客户户型，到对应的交付物
 - a：客户原图 + 偏好 + 交付目标；先区分完整方案、图片或单一步骤任务。；已有同版可靠成果按需复用，不强制重跑。
   - SKILL.md：方案册调用边界
-- b：规划 JSON → 代码生成整户型；规划：尺寸、拓扑、门窗、通路与家具锚点。；HTML：严格按代码生成；错在源头就改源头。；不把漂亮风格参考图当成客户户型。
+- b：规划 JSON → 代码生成整户型；规划：尺寸、拓扑、门窗、通路与家具锚点。；HTML：严格按代码生成；错在源头就改源头。；不把漂亮风格参考图当成客户户型。；随步骤记录开始、完成、耗时；代码与绘图等待分开。
   - playbook.md：接收上游事实，不另造布局
+  - ../interior-html-modeling/playbook/timing.md：计时口径
+  - ../interior-html-modeling/scripts/engine/python/timing.py：正式命令自动计时
 - c：初始机位看布局 → 用户风格入模；先看真实空间关系，再按用户偏好应用 CMF。；平台资产按需获取，指定家具保持尺寸比例。；改风格不默认改户型或家具摆放。
 - d：保存风格版 → 正式机位与截图；只改 CMF 可复用机位几何，但刷新同版截图。；改结构或家具包络，重新求解受影响视角。；旧截图不能配新模型。
 - f：原生绘图：同机位、同结构；默认带完整活动家具与细节。；用户明确要求才使用白模／空白槽位。；精细化普通家具；指定资产不变形、不失真。
@@ -33,7 +35,7 @@ metadata: {"version":"4.0.0","source_authority":"lecoo-windows-device","category
 - h：是：第六项 booklet-production；同版布局、风格、效果、材料组成方案册。；缺实际渲染只能标阶段方案。
   - playbook.md：杂志式内容编排
   - data_contract.md：brief 输入与来源
-- i：发送完整方案 PDF；平台上传按需调用平台 Skill。；方案册不自动等于施工图、报价或采购承诺。
+- i：发送完整方案 PDF；平台上传按需调用平台 Skill。；方案册不自动等于施工图、报价或采购承诺。；方案默认高清PDF＋讲解；记录原生结果与有效DPI。
 - a → b
 - b → c
 - c → d
@@ -107,7 +109,7 @@ metadata: {"version":"4.0.0","source_authority":"lecoo-windows-device","category
 - q：正文末段侵入页脚区域？；是：末段移到续页，再测量。；否：保持当前页，进入 PDF 输出。
 - r：建立同标题续页，移动末段；不重复铺图，不缩字，不修改源图。；循环至段落放下；无法排版报技术原因。
   - scripts/run.py：PAGINATE
-- p：打印两份 PDF → 独立引擎回读；PyMuPDF 按每页真实内容生成预览。；记录页数、尺寸、字体嵌入、RGB 与摘要。
+- p：打印两份 PDF → 独立引擎回读；PyMuPDF 按每页真实内容生成预览。；记录页数、尺寸、字体嵌入、RGB 与摘要。；方案默认高清PDF＋讲解；记录原生结果与有效DPI。
   - scripts/run.py：inspect_pdf
   - local_runtime.md：固定依赖
 - v：回读／浏览器／视觉发现问题？；字体、溢出、图像比例与来源均需查看。；这些检查不移动家具、不改空间设计。

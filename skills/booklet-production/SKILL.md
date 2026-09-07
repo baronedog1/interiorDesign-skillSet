@@ -1,7 +1,7 @@
 ---
 name: booklet-production
 description: 将同一室内设计方案的布局、空间图片、材料与用户产品整理成杂志式 HTML 和 PDF 方案册；用户只要图片时不调用。不负责重新建模或生成效果图。
-metadata: {"version":"4.0.0","source_authority":"lecoo-windows-device","category":"interior-design"}
+metadata: {"version":"4.1.0","source_authority":"lecoo-windows-device","category":"interior-design"}
 ---
 
 # 室内设计方案册
@@ -17,3 +17,7 @@ metadata: {"version":"4.0.0","source_authority":"lecoo-windows-device","category
 保留真实图的结构、比例和用户资产身份，不为了版面拉伸图片；平面图完整呈现。主图、图文、双图、材料页按内容选择，不固定每空间一套版式或固定页数。客户信息与素材只存在来酷项目目录；本 Skill 不读 API Key。需要平台素材或上传时调用 `idk-canvas-ingest-agent`，本机 PDF 不自动公开。
 
 运行环境见 [local_runtime.md](local_runtime.md)，脚本说明见 [scripts/scripts.md](scripts/scripts.md)，[流程说明书](SKILL_MANUAL.pdf)，[视觉样册及适用边界](expected_outcome/expected_outcome.md)。
+
+每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](../interior-html-modeling/playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
+
+用户说“交付方案”但未明确格式，默认交付带文字说明的 booklet-highres.pdf；只有明确仅要图片才省略 PDF。每张 render 图片关联 resultPath、shotId、schemeId；同一空间多机位一起讲清布局与材料，源图低分辨率不能靠放大宣称高清。

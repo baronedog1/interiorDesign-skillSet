@@ -5,6 +5,7 @@ from pathlib import Path
 from common import SHARED,read,write,digest,file_sha,canonical,runtime_identity,atomic_bytes,resources
 from validate import validate_layout
 from cameras import generic_presets,corners
+from timing import traced
 SCRIPTS=['three-r164.js','materials.js','styles.js','geometry.js','architecture-kit.js','components-base.js','style-components.js','components.js','scene.js','exporter.js','optimization.js','controls.js','lights.js','spatial.js','native-assets.js','workspace.js','app.js']
 def js_json(value):return json.dumps(value,ensure_ascii=False,separators=(',',':'),allow_nan=False).replace('<','\\u003c').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
 def shell():
@@ -15,11 +16,17 @@ def shell():
         if re.search('</script',src,re.I):raise ValueError('Inline script closing tag in '+name)
         scripts.append('<script>\n'+src+'\n</script>')
     return text.replace('__RUNTIME_SCRIPTS__','\n'.join(scripts)).replace('__COMPONENT_JSON__',js_json(catalog)).replace('__STYLE_JSON__',js_json(styles))
+@traced('model.compile')
 def build_model(layout_path,out_dir,presets_path=None,style_id=None):
     layout=read(layout_path)
     if style_id:
+        import copy
+        catalog=resources()[1]['styles']
+        original=layout.get('customStyle') or next(x for x in catalog if x['id']==layout['styleId'])
+        target=copy.deepcopy(next(x for x in catalog if x['id']==style_id))
+        target['forms']=copy.deepcopy(original['forms']);target['lighting']=copy.deepcopy(original['lighting'])
         layout['styleId']=style_id
-        if layout.get('customStyle',{}).get('id')!=style_id:layout.pop('customStyle',None)
+        layout['customStyle']=target
     from styles import validate_style
     _,catalog=resources();style=layout.get('customStyle') or next((x for x in catalog['styles'] if x['id']==layout['styleId']),None)
     if style and style['id']!=layout['styleId']:raise ValueError('Custom style id mismatch')
@@ -35,8 +42,15 @@ def build_model(layout_path,out_dir,presets_path=None,style_id=None):
             if math.dist(v['pos'],v['target'])<.05:raise ValueError('Preview position and target coincide')
             if not 20<=v['fov']<=100:raise ValueError('Invalid preview FOV')
         presets.update(supplied)
-    runtime_hash=runtime_identity();key=digest({'layout':digest(layout),'runtime':runtime_hash,'presets':presets})
+    editor_path=Path(layout_path).with_suffix('.editor.json')
+    editor=read(editor_path) if editor_path.exists() else None
+    runtime_hash=runtime_identity();key=digest({'layout':digest(layout),'runtime':runtime_hash,'presets':presets,'editorState':editor})
     html=shell().replace('__PROJECT_JSON__',js_json(layout)).replace('__PRESETS_JSON__',js_json(presets)).replace('__SCENE_KEY_JSON__',js_json(key)).replace('__STRUCTURE_KEY_JSON__',js_json(digest({k:layout[k] for k in ['floor','walls','openings','rooms','openConnections']})))
+    if editor:
+        # Existing editor import owns camera, view and display restoration. Store data, never execute source HTML.
+        editor['layout']=layout;editor['styleRecipe']=style
+        html=html.replace('<script>','<script type="application/json" id="saved-project" data-compiled>'+js_json(editor)+'</script>\n<script>',1)
     atomic_bytes(out/'model.html',html.encode('utf-8'));write(out/'layout.json',layout)
     scene={'schema':'interior.scene/1','sceneKey':key,'layoutHash':digest(layout),'runtimeHash':runtime_hash,'htmlFile':'model.html','htmlSha256':file_sha(out/'model.html'),'layoutFile':'layout.json','layout':layout,'presets':presets,'boxAuthority':'normalized-component-footprints','entities':[{'id':p['id'],'componentId':p['componentId'],'roomId':p['roomId'],'corners':corners(p)} for p in layout['placements']]}
+    if editor:scene['editorState']=editor
     write(out/'scene.json',scene);write(out/'layout-check.json',report);return scene

@@ -52,7 +52,9 @@ def bundle_library(index_path,out):
     for meta in index['items']:
         target=(path.parent/meta['modelPath']).resolve()
         if not target.is_relative_to(path.parent) or not target.is_file():raise ValueError('Asset path is missing or outside authorized directory')
-        blob=target.read_bytes();parse_glb(blob);a={k:v for k,v in meta.items() if k not in ['modelPath','thumbnail']};a.update(modelBase64=base64.b64encode(blob).decode(),sha256=hashlib.sha256(blob).hexdigest());assets.append(a)
+        blob=target.read_bytes();parse_glb(blob)
+        if meta.get('sha256') and meta['sha256']!=hashlib.sha256(blob).hexdigest():raise ValueError('Asset library hash does not match file')
+        a={k:v for k,v in meta.items() if k not in ['modelPath','thumbnail']};a.update(modelBase64=base64.b64encode(blob).decode(),sha256=hashlib.sha256(blob).hexdigest());assets.append(a)
     result={'schema':'interior.asset-bundle/1','assets':assets};write(out,result);return {'ok':True,'assets':len(assets),'output':str(out)}
 
 def import_html(path,out):
@@ -72,7 +74,9 @@ def import_html(path,out):
     if saved:layout['customStyle']=saved['styleRecipe']
     from validate import validate_layout
     validate_layout(layout,strict=True);write(out,layout)
-    return {'ok':True,'layout':str(out),'source':'returned-html-json-only','executedUntrustedScripts':False}
+    state_path=Path(out).with_suffix('.editor.json')
+    if saved:write(state_path,saved)
+    return {'ok':True,'layout':str(out),'editorState':str(state_path) if saved else None,'source':'returned-html-json-only','executedUntrustedScripts':False}
 
 def audit_placement(path,placement):
     import subprocess,shutil

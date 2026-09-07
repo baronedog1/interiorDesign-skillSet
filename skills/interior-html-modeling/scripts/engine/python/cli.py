@@ -21,8 +21,11 @@ def main(stage):
     else:
         req=sub.add_parser('ai-request');req.add_argument('scene');req.add_argument('cameras');req.add_argument('renders');req.add_argument('--shot',required=True);req.add_argument('--out',required=True);req.add_argument('--style');req.add_argument('--products',help='JSON list: [{placementId, path}]')
         req.add_argument('--reference-mode',choices=['furnished','empty-slots'],default='furnished');req.add_argument('--white-model-requested',action='store_true')
+        req.add_argument('--anchor-result',help='Reviewed first view result of the same open-space/style series')
         native=sub.add_parser('native-prepare');native.add_argument('request');native.add_argument('capabilities');native.add_argument('--out',required=True)
         native=sub.add_parser('native-result');native.add_argument('job');native.add_argument('image');native.add_argument('invocation');native.add_argument('review');native.add_argument('--out',required=True)
+        native=sub.add_parser('native-start');native.add_argument('job');native.add_argument('--out',required=True)
+        native=sub.add_parser('native-complete');native.add_argument('invocation');native.add_argument('image');native.add_argument('--out',required=True)
     a=p.parse_args()
     try:
         if stage=='model' and a.command in ['style-resolve','style-evidence']:
@@ -57,12 +60,15 @@ def main(stage):
             for s in cameras['shots']:
                 if s['projection']=='perspective':presets[s['id']]={'title':s['name']+('（需复核）' if s['status']!='ready' else ''),'pos':s['position'],'target':s['target'],'fov':s['fov']}
             text=text[:start]+js_json(presets)+text[end:];atomic_bytes(a.out,text.encode());r={'ok':True,'reviewHtml':a.out,'note':'相机审阅副本；正式渲染仍读取 scene.json 绑定的原模型和 cameras.json，勿覆盖源 model.html。'}
+        elif a.command in ['native-start','native-complete']:
+            from native_image import start,complete
+            r=start(a.job,a.out) if a.command=='native-start' else complete(a.invocation,a.image,a.out)
         elif a.command in ['native-prepare','native-result']:
             from native_image import prepare,finish
             r=prepare(a.request,a.capabilities,a.out) if a.command=='native-prepare' else finish(a.job,a.image,a.invocation,a.review,a.out)
         elif a.command=='ai-request':
             from render import ai_request
-            r=ai_request(a.scene,a.cameras,a.renders,a.shot,a.out,a.style,read(a.products) if a.products else None,a.reference_mode,a.white_model_requested)
+            r=ai_request(a.scene,a.cameras,a.renders,a.shot,a.out,a.style,read(a.products) if a.products else None,a.reference_mode,a.white_model_requested,a.anchor_result)
         else:raise ValueError('Unsupported command')
         print(json.dumps(r,ensure_ascii=False,indent=2));return 0 if r.get('ok',True) and not any(x.get('status')=='failed' for x in r.get('results',[])) else 2
     except Exception as e:

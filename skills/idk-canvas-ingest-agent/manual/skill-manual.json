@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "百恩得平台 · 素材流入与私有交付",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "overview": {
     "title": "平台操作：资产流入与交付流出分别处理",
     "nodes": [
@@ -295,12 +295,21 @@
               "h": 260,
               "title": "否：报告凭据/权限/服务故障",
               "lines": [
-                "不输出 Key 或完整鉴权异常"
+                "不输出 Key 或完整鉴权异常",
+                "随步骤记录开始、完成、耗时；代码与绘图等待分开。"
               ],
               "files": [
                 {
                   "path": "scripts/platform_bridge.py",
                   "purpose": "实际白名单 API、下载、绑定和回读"
+                },
+                {
+                  "path": "../interior-html-modeling/playbook/timing.md",
+                  "purpose": "计时口径"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+                  "purpose": "正式命令自动计时"
                 }
               ],
               "bodySize": 22
@@ -1072,6 +1081,14 @@
     {
       "path": "../interior-html-modeling/scripts/engine/python/common.py",
       "purpose": "绑定与回执 JSON 保存"
+    },
+    {
+      "path": "../interior-html-modeling/playbook/timing.md",
+      "purpose": "逐步骤计时共享依赖"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/timing.py",
+      "purpose": "逐步骤计时共享依赖"
     }
   ],
   "fileDescriptions": {
