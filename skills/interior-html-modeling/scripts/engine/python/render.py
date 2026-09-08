@@ -32,7 +32,9 @@ def image_slot_anchors(placements,shot):
             t=math.tan(math.radians(shot['fov'])/2);xy=a[:,:2]/(a[:,2,None]*np.asarray([t*aspect,t]));xy[:,1]-=shot.get('verticalShift',0)
         xy=np.column_stack(((xy[:,0]+1)/2,(1-xy[:,1])/2));lo=xy.min(axis=0);hi=xy.max(axis=0)
         if np.any(hi<0) or np.any(lo>1):continue
-        out.append({**{k:p[k]for k in ['id','componentId','roomId','position','size','rotationY']},'imageBounds01':[np.clip(lo,0,1).round(5).tolist(),np.clip(hi,0,1).round(5).tolist()],'partlyOutsideFrame':bool(np.any(lo<0)or np.any(hi>1)),'projectionOnlyNotVisibility':True})
+        yaw=math.radians(p['rotationY']);front=np.asarray([math.sin(yaw),0,math.cos(yaw)])
+        relative_yaw=round(math.degrees(math.atan2(float(front@r),float(front@(-f)))),2) if abs(float(f[1]))<.99 else None
+        out.append({**{k:p[k]for k in ['id','componentId','roomId','position','size','rotationY']},'cameraRelativeYawDegrees':relative_yaw,'imageBounds01':[np.clip(lo,0,1).round(5).tolist(),np.clip(hi,0,1).round(5).tolist()],'imageBoundsUnclipped01':[lo.round(5).tolist(),hi.round(5).tolist()],'partlyOutsideFrame':bool(np.any(lo<0)or np.any(hi>1)),'projectionOnlyNotVisibility':True})
     return out
 
 def open_browser(playwright):
@@ -129,13 +131,14 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
         if expanded==group:break
         group=expanded
     image_slots=image_slot_anchors([p for p in scene['layout']['placements']if p['roomId']in group],shot)
+    prompt_slots=[{k:v for k,v in p.items()if k not in ['position','rotationY','roomId']}for p in image_slots]
     if reference_mode=='empty-slots' and set(row.get('hiddenPlacementIds',[]))!=set(p['id'] for p in slots):raise ValueError('Empty reference must preserve all placement slots while hiding their visual instances')
     text='保持截图的房型、结构、墙体、门窗位置、空间尺度完全不变；相机位置、朝向、透视/正交方式、视野和裁切与截图一致，不扩房、不移墙、不增减门窗。\n'
     text+='默认完整粗模截图：图中普通家具是占位示意，不是款式、细部比例、工艺或光照的参考；不要复制其方块、厚底座、膨胀软包或低模轮廓。\n' if reference_mode=='furnished' else '用户明确选择空白槽位/白模模式：仅隐藏家具与柜体可见实例，建筑及原 JSON 槽位不变；仍按槽位放置精细家具，不任意重新布局。\n'
     text+='粗模只约束建筑、机位以及家具功能、数量、位置、朝向、约略尺度和通行关系。精细家具应按绑定参考图片的款式重建，再放入相应槽位；锁款锁参考图，不锁粗模造型。普通占位尺寸不是产品实测，更不是要求把参考家具非均匀拉伸到粗模外包盒。\n'
     text+='有产品/精细家具参考图时，保留图中该产品的造型、部件、材质及比例；不保留参考照片的房间、背景或镜头。按真实尺寸适配，尺寸未知时只作有说明的比例意向；尺寸冲突回到选型/布局处理，不变形硬塞。\n'
     text+='没有绑定款式参考且没有该家具的精细定样时，按用户风格设计可信家具工艺，不锁粗模身份；标为概念选型，不声称采购型号。固定的是建筑壳、墙门窗洞口位置尺寸、机位和主要家具功能布局，不是粗模里所有可见细节。门扇、窗框、分格、五金、玻璃与帘可按风格重新设计，但不移动/扩开洞口，不妨碍开合。\n'
-    text+='按下述同空间设计意图完成墙面、天花吊顶/收口、吊灯及辅助灯、挂画、器物、织物、绿植与生活布景，围绕主体有层次地选择，不要求每空间都加齐，不增设无需求的隔断柜或大件家具。吊顶在原建筑层高以内形成饰面，不凭空造承重梁；设计灯位不冒称现状电气点位。自然光、灯光、反射及接触阴影重新计算，不照抄粗模照明。窗外可形成符合楼层视线与日光方向的意向景观，不冒称现场实景，不改变窗洞。\n风格：'+style_text+'\n本连通空间且投影与画面相交的原JSON家具槽位：position=[x,y,z]米，size=[宽,高,深]米，rotationY=度。imageBounds01由当前真实相机计算，左上角为[0,0]、右下角为[1,1]，依次为包络左上/右下位置。按该位置与约略尺度放置产品，不能拉伸产品填满包络；框不是产品轮廓。partlyOutsideFrame表示允许被镜头自然裁切。投影不是可见性证明，墙后或被其它对象遮住的部分保持遮挡，不把画外/别房对象搬进画面。空槽模式下也不得丢掉这些位置关系：\n'+json.dumps(image_slots,ensure_ascii=False)
+    text+='按下述同空间设计意图完成墙面、天花吊顶/收口、吊灯及辅助灯、挂画、器物、织物、绿植与生活布景，围绕主体有层次地选择，不要求每空间都加齐，不增设无需求的隔断柜或大件家具。吊顶在原建筑层高以内形成饰面，不凭空造承重梁；设计灯位不冒称现状电气点位。自然光、灯光、反射及接触阴影重新计算，不照抄粗模照明。窗外可形成符合楼层视线与日光方向的意向景观，不冒称现场实景，不改变窗洞。\n风格：'+style_text+'\n当前画面家具位置与朝向（全部已转换到当前相机，不是户型世界坐标）：size=[宽,高,深]米。cameraRelativeYawDegrees=0表示家具正面朝向观众，±90为侧面，±180为背面；床的正面是从床尾正对床头，不是床侧。不得照搬产品参考照片拍摄角度。imageBounds01左上原点[0,0]、右下[1,1]；imageBoundsUnclipped01为裁切前范围，超出0–1的部分应自然出画，不退镜头把整件收进来。框只参考位置/约略尺度，不是产品轮廓；不拉伸产品填框。投影不是可见性证明，墙后部分保持遮挡，不把画外家具搬入镜头。\n'+json.dumps(prompt_slots,ensure_ascii=False)
     refs=[]
     for binding in product_refs or []:
         path=Path(binding['path']).resolve();id=binding['placementId']

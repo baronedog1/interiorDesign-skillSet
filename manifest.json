@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-08T07:47:42.914Z",
+  "snapshotAt": "2026-09-08T07:56:47.233Z",
   "source": {
     "type": "mixed-device-snapshot",
     "currentDesignRelease": {
@@ -154,20 +154,20 @@
     {
       "id": "interior-html-modeling",
       "path": "skills/interior-html-modeling",
-      "version": "3.1.4",
+      "version": "3.1.5",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 74,
-      "bytes": 27150895,
-      "sha256": "12f425ea79245650a735ecd3730c66aa0a5a9f233ed889bcc4343b4b3579b65c"
+      "bytes": 27151783,
+      "sha256": "e2d03212af364753c3c885f9ef737e801006125963229a379205d1036f4dda6f"
     },
     {
       "id": "interior-space-rendering",
       "path": "skills/interior-space-rendering",
-      "version": "3.2.3",
+      "version": "3.2.4",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 9,
-      "bytes": 7359951,
-      "sha256": "61520366a3c4703485e2be25b3786370032c6ab517a648f5d4b1ca95f1f8b6a9"
+      "bytes": 7359580,
+      "sha256": "9eb27aeae716e92bf5ddf088830ec7ac03aca86d41517d593fe156e174192d7a"
     },
     {
       "id": "movable-furniture-modeling",
