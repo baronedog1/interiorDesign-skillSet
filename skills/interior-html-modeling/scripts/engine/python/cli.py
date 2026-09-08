@@ -59,7 +59,7 @@ def main(stage):
             text=html.read_text(encoding='utf-8-sig');token='window.PREVIEW_PRESETS=';start=text.index(token)+len(token);end=text.index(';window.SCENE_KEY=',start)
             presets=dict(scene['presets']);
             for s in cameras['shots']:
-                if s['projection']=='perspective':presets[s['id']]={'title':s['name']+('（需复核）' if s['status']!='ready' else ''),'pos':s['position'],'target':s['target'],'fov':s['fov'],'verticalShift':s.get('verticalShift',0.)}
+                if s['projection']=='perspective':presets[s['id']]={'title':s['name']+('（需复核）' if s['status']!='ready' else ''),'pos':s['position'],'target':s['target'],'fov':s['fov'],'verticalShift':s.get('verticalShift',0.),'near':s.get('near',.04)}
             text=text[:start]+js_json(presets)+text[end:];atomic_bytes(a.out,text.encode());r={'ok':True,'reviewHtml':a.out,'note':'相机审阅副本；正式渲染仍读取 scene.json 绑定的原模型和 cameras.json，勿覆盖源 model.html。'}
         elif a.command in ['native-start','native-complete']:
             from native_image import start,complete

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "HTML 建模 · 编译、编辑与状态交接",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "overview": {
     "title": "HTML 编辑：不同意图进入不同状态域",
     "nodes": [
@@ -1818,7 +1818,7 @@
               "x": 70,
               "y": 210,
               "w": 1030,
-              "h": 270,
+              "h": 350,
               "title": "读取同版冻结机位",
               "lines": [
                 "普通镜头默认near=0.04m",
@@ -1828,6 +1828,10 @@
                 {
                   "path": "scripts/engine/schemas/cameras.schema.json",
                   "purpose": "机位参数"
+                },
+                {
+                  "path": "scripts/engine/python/cli.py",
+                  "purpose": "apply将near写入HTML机位审阅副本"
                 }
               ],
               "bodySize": 22

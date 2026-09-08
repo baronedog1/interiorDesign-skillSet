@@ -7,7 +7,7 @@
 | Skill | 版本 | 职责 |
 |---|---|---|
 | [interior-floorplan-planning](skills/interior-floorplan-planning/SKILL.md) | 3.3.0 | 需求到功能/结构家族选型、尺度/拓扑/动线与真实家具锚点 |
-| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.2.1 | 代码粗模、透明白模、画边及跨房间可见产品、CMF与设计意图交接 |
+| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.2.2 | 代码粗模、透明白模、画边及跨房间可见产品、CMF与设计意图交接 |
 | [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.2.1 | 主体正视、地面天花共同构图、真实可见空间与按用途选图 |
 | [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.3.1 | 固定建筑与布局、全屋选品按镜头附图、参考板适配容量、同空间原生绘图 |
 | [idk-canvas-ingest-agent](skills/idk-canvas-ingest-agent/SKILL.md) | 3.1.0 | 百恩得资产检索／下载与私有平台交付 |

@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：3.2.1
+版本：3.2.2
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.2.1", category: interior-design}
+metadata: {version: "3.2.2", category: interior-design}
 ---
 ~~~
 
@@ -303,6 +303,7 @@ metadata: {version: "3.2.1", category: interior-design}
 #### 完整主体优先：同源取景与交接
 - a：读取同版冻结机位；普通镜头默认near=0.04m；窄卧室虚拟机位带near及virtualRetreat
   - scripts/engine/schemas/cameras.schema.json：机位参数
+  - scripts/engine/python/cli.py：apply将near写入HTML机位审阅副本
 - b：保存原相机和显示状态；cameraSnapshot记录原near与镜头；输入墙体/家具保持原值，不删除实例
   - scripts/engine/runtime/app.js：快照、captureFrame与restoreCamera
 - q：本镜头有虚拟近裁切？；有near：相机从房外沿正面轴拍摄；无near：沿用普通房内机位

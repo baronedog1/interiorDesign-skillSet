@@ -173,7 +173,7 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
     frame_refs=[r for r in refs if r['placementId']in frame_ids]
     text+='\n当前画面产品绑定及真实尺寸（null 表示未知，不得把槽位尺寸冒称产品实测；应读取资产元数据或请用户补充）：\n'+json.dumps([{k:v for k,v in r.items() if k not in ['path','sha256']} for r in frame_refs],ensure_ascii=False)
     request={'schema':'interior.ai-request/1','status':'prepared-not-generated','sceneKey':scene['sceneKey'],'shotId':shot_id,'cameraDigest':digest(shot),'source':{'path':str(image),'sha256':row['sha256'],'role':'complete-model-frame'},'prompt':text.strip(),'subjects':subjects,'productReferences':refs,'requiredReview':['structure','openings','furnitureLayout','camera'],'generation':None,'note':'此文件是实际调用图像工具的输入，不是生成完成回执。风格参考不能覆盖结构。'}
-    request.update(referenceMode=reference_mode,whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False,placementSlots=slots,imageSlotAnchors=image_slots,frameProductReferences=frame_refs,cameraFrame={k:shot[k]for k in ['position','target','up','fov','frame','projection','verticalShift','orthographicSpan']if k in shot},referencePolicy=REFERENCE_POLICY)
+    request.update(referenceMode=reference_mode,whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False,placementSlots=slots,imageSlotAnchors=image_slots,frameProductReferences=frame_refs,cameraFrame={k:shot[k]for k in ['position','target','up','fov','frame','projection','verticalShift','orthographicSpan','near']if k in shot},referencePolicy=REFERENCE_POLICY)
     request['layoutReferences']=[]
     if reference_mode=='empty-slots' and row.get('layoutReference'):
         lr=row['layoutReference'];lp=(Path(renders_path).resolve().parent/lr['image']).resolve()
