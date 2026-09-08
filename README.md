@@ -7,9 +7,9 @@
 | Skill | 版本 | 职责 |
 |---|---|---|
 | [interior-floorplan-planning](skills/interior-floorplan-planning/SKILL.md) | 3.3.0 | 需求到功能/结构家族选型、尺度/拓扑/动线与真实家具锚点 |
-| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.2.0 | 代码粗模、透明白模、画边及跨房间可见产品、CMF与设计意图交接 |
-| [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.2.0 | 主体正视、地面天花共同构图、真实可见空间与按用途选图 |
-| [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.3.0 | 固定建筑与布局、全屋选品按镜头附图、参考板适配容量、同空间原生绘图 |
+| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.2.1 | 代码粗模、透明白模、画边及跨房间可见产品、CMF与设计意图交接 |
+| [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.2.1 | 主体正视、地面天花共同构图、真实可见空间与按用途选图 |
+| [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.3.1 | 固定建筑与布局、全屋选品按镜头附图、参考板适配容量、同空间原生绘图 |
 | [idk-canvas-ingest-agent](skills/idk-canvas-ingest-agent/SKILL.md) | 3.1.0 | 百恩得资产检索／下载与私有平台交付 |
 | [booklet-production](skills/booklet-production/SKILL.md) | 4.1.1 Windows | 杂志式 HTML／PDF 方案册，含模板和样册 |
 
@@ -31,6 +31,8 @@
 - 主图默认同时带到地面和天花，地毯、灯具、餐桌按表达目的调整比例；特写是补充，不替代主图。
 - 截图附当前空间、实际抽样可见的相邻空间及门窗状态，渲染保持连接关系和机位，可深化饰面与光影。
 - 可见性与画面比例是有限射线抽样，不是逐像素保证；窄卧室可能只露侧边地面。未确认的开合状态使用显式标注的关闭预览，不代表现场事实。
+
+窄卧室首图须拍全床体：先房内取景，无法自然完整时沿正面轴虚拟后退，冻结near近裁切参数。模型不变，真实截图和可见性共用near并恢复状态；明确标虚拟取景，不冒充实地摄影。渲染不得再次裁床或补回镜头前的剖切遮挡墙。
 
 ## 安装与就绪边界
 

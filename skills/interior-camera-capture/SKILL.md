@@ -1,7 +1,7 @@
 ---
 name: interior-camera-capture
 description: 从当前完整 HTML 的真实模型寻找全屋及各空间机位，冻结相机并输出原生 WebGL 参考截图；逐图识图，不改家具或冒充效果图。
-metadata: {version: "3.2.0", category: interior-design}
+metadata: {version: "3.2.1", category: interior-design}
 ---
 # 机位与模型截图
 

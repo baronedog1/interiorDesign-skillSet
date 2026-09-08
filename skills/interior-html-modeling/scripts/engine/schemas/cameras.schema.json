@@ -156,6 +156,10 @@
               "ceiling",
               "cutaway"
             ]
+          },
+          "near": {
+            "type": "number",
+            "exclusiveMinimum": 0
           }
         },
         "required": [

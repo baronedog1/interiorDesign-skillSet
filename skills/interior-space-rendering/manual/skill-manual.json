@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "原生绘图 · 粗模定位，参考图锁款",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "overview": {
     "title": "粗模定位 → 参考图片锁款 → 真实光影",
     "nodes": [
@@ -255,7 +255,8 @@
                   "purpose": "ai-request/native-prepare/native-result 入口"
                 }
               ],
-              "bodySize": 22
+              "bodySize": 22,
+              "detailRef": "whole-bed"
             },
             {
               "id": "q",
@@ -2516,6 +2517,224 @@
                   1485
                 ]
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "whole-bed",
+      "code": "BED",
+      "title": "虚拟机位的原生渲染",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "由已实现代码展开，真实模型不变；虚拟取景须明示。",
+      "diagrams": [
+        {
+          "title": "完整主体优先：同源取景与交接",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "process",
+              "x": 70,
+              "y": 210,
+              "w": 1030,
+              "h": 270,
+              "title": "同版完整床截图与产品/风格参考",
+              "lines": [
+                "截图管结构、位置与画幅；产品图管款式",
+                "用户美式轻奢意图进入design-brief"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "粗模/产品/风格职责"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "process",
+              "x": 1300,
+              "y": 210,
+              "w": 1030,
+              "h": 300,
+              "title": "读取实际空间与相机事实",
+              "lines": [
+                "读取spaceContext.cameraRepresentation",
+                "不是从截图猜户外/相邻房间"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+                  "purpose": "快照、captureFrame与restoreCamera"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1260,
+              "y": 650,
+              "w": 1080,
+              "h": 440,
+              "title": "当前截图是虚拟后退机位？",
+              "lines": [
+                "kind=virtual-axial-retreat"
+              ],
+              "files": [],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "normal",
+              "type": "process",
+              "x": 70,
+              "y": 690,
+              "w": 1030,
+              "h": 280,
+              "title": "保持普通房内画面",
+              "lines": [
+                "床头/床尾/两侧完整，不再裁断",
+                "沿用当前结构、家具位置与机位"
+              ],
+              "files": [],
+              "bodySize": 22
+            },
+            {
+              "id": "retreat",
+              "type": "process",
+              "x": 1300,
+              "y": 1200,
+              "w": 1030,
+              "h": 350,
+              "title": "解释近裁切，不补回遮挡墙",
+              "lines": [
+                "虚拟镜头不表示拆墙、扩房或缩床",
+                "精细家具替换保持完整床体与地面天花",
+                "只细化款式、材质、光影和陈设"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "同源近裁切遮挡计算"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1200,
+              "w": 1030,
+              "h": 350,
+              "title": "原生绘图与实际识图交付",
+              "lines": [
+                "真实调用后逐张看床体、风格与空间关系",
+                "同空间后续图复用精细定样，不独立猜款"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "保存PNG、请求与实际提示词"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  1100,
+                  345
+                ],
+                [
+                  1300,
+                  345
+                ]
+              ],
+              "label": "同版输入"
+            },
+            {
+              "from": "b",
+              "to": "q",
+              "points": [
+                [
+                  1815,
+                  510
+                ],
+                [
+                  1815,
+                  650
+                ]
+              ],
+              "label": "判断"
+            },
+            {
+              "from": "q",
+              "to": "normal",
+              "points": [
+                [
+                  1260,
+                  870
+                ],
+                [
+                  1100,
+                  830
+                ]
+              ],
+              "label": "否：普通"
+            },
+            {
+              "from": "normal",
+              "to": "out",
+              "points": [
+                [
+                  585,
+                  970
+                ],
+                [
+                  585,
+                  1200
+                ]
+              ],
+              "label": "继续"
+            },
+            {
+              "from": "q",
+              "to": "retreat",
+              "points": [
+                [
+                  1800,
+                  1090
+                ],
+                [
+                  1800,
+                  1200
+                ]
+              ],
+              "label": "是：虚拟"
+            },
+            {
+              "from": "retreat",
+              "to": "out",
+              "points": [
+                [
+                  1300,
+                  1375
+                ],
+                [
+                  1100,
+                  1375
+                ]
+              ],
+              "label": "同一交接"
             }
           ]
         }

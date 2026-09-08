@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：3.2.0
+版本：3.2.1
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.2.0", category: interior-design}
+metadata: {version: "3.2.1", category: interior-design}
 ---
 ~~~
 
@@ -20,7 +20,7 @@ metadata: {version: "3.2.0", category: interior-design}
 输出：可离线编辑 HTML + 场景合同
 
 #### HTML 编辑：不同意图进入不同状态域
-- in：当前 JSON 或用户编辑后的完整 HTML；最新编辑是事实源，不拿旧模型覆盖；先读同名需求侧车，已确认功能/习惯/风格落实到布局与CMF；未知或授权推荐不冒称确认；向下游携带同一revision
+- in：当前 JSON 或用户编辑后的完整 HTML；最新编辑是事实源，不拿旧模型覆盖；先读同名需求侧车，已确认功能/习惯/风格落实到布局与CMF；未知或授权推荐不冒称确认；向下游携带同一revision（详见 whole-bed）
   - scripts/run.py：模型/风格/资产命令入口
   - ../interior-floorplan-planning/playbook/requirements-interview.md：Agent需求读取与缺口回问
 - build：编译一次完整编辑器；建筑、组件、CMF、光源、相机和编辑数据同源；随步骤记录开始、完成、耗时；代码与绘图等待分开。（详见 compile）
@@ -295,3 +295,25 @@ metadata: {version: "3.2.0", category: interior-design}
 - transparent → neutral：否
 - retain → capture：捕获
 - neutral → capture：捕获
+
+### 近裁切与状态恢复
+
+由已实现代码展开，真实模型不变；虚拟取景须明示。
+
+#### 完整主体优先：同源取景与交接
+- a：读取同版冻结机位；普通镜头默认near=0.04m；窄卧室虚拟机位带near及virtualRetreat
+  - scripts/engine/schemas/cameras.schema.json：机位参数
+- b：保存原相机和显示状态；cameraSnapshot记录原near与镜头；输入墙体/家具保持原值，不删除实例
+  - scripts/engine/runtime/app.js：快照、captureFrame与restoreCamera
+- q：本镜头有虚拟近裁切？；有near：相机从房外沿正面轴拍摄；无near：沿用普通房内机位
+- normal：普通近裁切；相机near=0.04m；不继承上一张虚拟镜头；机位变化不残留裁切状态
+- retreat：同一near用于真实图与射线；只取相机空间z≤−near的实际交点；前方隔断只在本机位不可见，远处墙仍保留；观察房间和产品不能读到被裁掉的前景
+  - scripts/engine/python/cameras.py：同源近裁切遮挡计算
+- out：截图与空间事实交接后恢复；spaceContext标明虚拟取景与geometryUnchanged；finally恢复原near、显示、材质和相机；保存/导入机位沿用near，不改变户型
+  - scripts/engine/python/render.py：保存PNG、请求与实际提示词
+- a → b：同版输入
+- b → q：判断
+- q → normal：否：普通
+- normal → out：继续
+- q → retreat：是：虚拟
+- retreat → out：同一交接

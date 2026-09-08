@@ -31,7 +31,7 @@ def projected(shot,points):
     if not len(points): return {'complete':True,'minDepth':None,'maxAbsNDC':0.0}
     f,r,u=basis(shot['position'],shot['target'],shot['up'])
     delta=vec(points)-vec(shot['position']); depth=delta@f
-    if depth.min()<=.04: return {'complete':False,'minDepth':float(depth.min()),'maxAbsNDC':1e9}
+    if depth.min()<=shot.get('near',.04): return {'complete':False,'minDepth':float(depth.min()),'maxAbsNDC':1e9}
     t=math.tan(math.radians(shot['fov'])/2); aspect=shot['frame']['width']/shot['frame']['height']
     ndc=np.column_stack(((delta@r)/(depth*t*aspect),(delta@u)/(depth*t)))
     ndc[:,1]-=shot.get('verticalShift',0.)
@@ -81,6 +81,10 @@ class Occluders:
         local=np.einsum('bij,bj->bi',self.axes,vec(position)-self.centres)
         return not bool(np.any(np.all(np.abs(local)<self.halves+.08,axis=1)))
 
+    def with_near_plane(self,position,forward,near):
+        import copy
+        result=copy.copy(self);result.clip=(vec(position),vec(forward),near);return result
+
     def rays(self,position,directions,ignore=()):
         ds=vec(directions)
         if not len(self.ids):return np.full(len(ds),np.inf)
@@ -92,7 +96,12 @@ class Occluders:
         low=np.where(parallel,-np.inf,np.minimum(a,b));high=np.where(parallel,np.inf,np.maximum(a,b))
         entry=low.max(axis=2);exit=high.min(axis=2)
         invalid_parallel=np.any(parallel&(np.abs(origin)>self.halves),axis=2)
-        hit=(~invalid_parallel)&(exit>=np.maximum(entry,.04))
+        start=np.full(len(ds),.04)
+        if hasattr(self,'clip'):
+            cp,cf,near=self.clip
+            start=np.maximum(.04,(near-float((vec(position)-cp)@cf))/np.maximum(ds@cf,1e-8))
+        entry=np.maximum(entry,start[:,None])
+        hit=(~invalid_parallel)&(exit>=entry)
         if ignore:hit[:,np.isin(self.ids,list(ignore))]=False
         return np.where(hit,np.maximum(entry,.04),np.inf).min(axis=1)
 
@@ -167,8 +176,10 @@ def _front_points(subjects,height):
     return points,center,'complete-room-functional-face'
 
 
-def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=False):
+def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=False,near=None):
     # Primary candidates solve full-height composition before a mesh is captured.
+    whole_bed=any(p.get('componentId','').startswith('bed.') for p in subjects)
+    lens_cap=100. if whole_bed else 90.
     if kind=='front':
         _,center=_points(subjects,layout['floor']['height'],False)
         hf=vec(target)-vec(position);hf[1]=0;hf/=np.linalg.norm(hf);right=vec([-hf[2],0,hf[0]])
@@ -187,7 +198,8 @@ def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=F
         width=min(max(cross_room)-min(cross_room),max(subject_width*1.25,(max(cross_room)-min(cross_room))*.8))
         base=vec(position)+hf*depth_back
         points=[list(base+right*x+vec([0,y-base[1],0])) for x in [-width/2,width/2] for y in [.025,layout['floor']['height']-.025]]
-        framing='full-height-room-backdrop'
+        if whole_bed:points += [v for item in subjects for v in corners(item)]
+        framing='whole-subject-and-full-height-room' if whole_bed else 'full-height-room-backdrop'
     else:points,center=_points(subjects,layout['floor']['height'],detail)
     f,r,u=basis(position,target);delta=vec(points)-vec(position);depth=delta@f
     if depth.min()<=.06:return None
@@ -202,18 +214,21 @@ def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=F
     else:shift=0.;need_y=float(np.abs(vertical).max())/.94
     need=max(float(np.abs(delta@r/depth).max()/aspect)/.94,need_y)
     required=max(38. if kind=='front' else 44.,math.degrees(2*math.atan(need)))
-    shot=base_shot(room['id']+('-front' if kind=='front' else ''),room['name']+(' · 正视' if kind=='front' else ' · 局部' if detail else ''),room['id'],position,target,min(90.,required),frame,'detail' if detail else kind)
+    shot=base_shot(room['id']+('-front' if kind=='front' else ''),room['name']+(' · 正视' if kind=='front' else ' · 局部' if detail else ''),room['id'],position,target,min(lens_cap,required),frame,'detail' if detail else kind)
     if kind=='front':shot['verticalShift']=shift/math.tan(math.radians(shot['fov'])/2)
+    if near is not None:shot['near']=float(near)
     shot['subjectIds']=[p['id'] for p in subjects]
     composition_cost=0
     if kind=='front':
         options=[]
-        for lens in sorted(set([shot['fov'],min(90,shot['fov']+10),90.])):
+        for lens in sorted(set([shot['fov'],min(lens_cap,shot['fov']+10),lens_cap])):
             for bias in [0,-.12,.12]:
                 candidate={**shot,'fov':lens,'verticalShift':shift/math.tan(math.radians(lens)/2)+bias}
                 shares=surface_shares(candidate,room,layout['floor']['height'],occluders)
                 # Soft layout objectives; no blocking or automatic scene repair.
-                cost=max(0,min(floor_share,.10)-shares['floor'])*1400+max(0,min(ceiling_share,.10)-shares['ceiling'])*1400+abs(lens-required)*.8+abs(bias)*12
+                full=projected(candidate,[v for item in subjects for v in corners(item)])
+                crop_cost=max(0,full['maxAbsNDC']-.965)*3000 if whole_bed else 0
+                cost=crop_cost+max(0,min(floor_share,.10)-shares['floor'])*1400+max(0,min(ceiling_share,.10)-shares['ceiling'])*1400+abs(lens-required)*.8+abs(bias)*12
                 options.append((cost,candidate,shares))
         composition_cost,shot,shares=min(options,key=lambda x:x[0])
     clear=occluders.clear_ratio(position,subjects);foreground=occluders.foreground_ratio(shot,float(np.linalg.norm(center-vec(position))))
@@ -292,7 +307,7 @@ def generic_presets(layout):
     return presets
 
 
-def front_view(layout,room,frame,max_fov=90,occluders=None,subjects=None,label='front'):
+def front_view(layout,room,frame,max_fov=100,occluders=None,subjects=None,label='front'):
     subjects=_subjects(layout,room) if subjects is None else subjects
     occluders=occluders or Occluders(layout);poly=Polygon(room['polygon']);domain=_camera_domain(layout,room);safe=domain.buffer(-.14)
     empty=not subjects
@@ -328,10 +343,17 @@ def front_view(layout,room,frame,max_fov=90,occluders=None,subjects=None,label='
         distance=math.hypot(domain.bounds[2]-domain.bounds[0],domain.bounds[3]-domain.bounds[1])+.5
         for offset in [0,-.18,.18,-.4,.4]:
             aim=center[[0,2]]+tangent*offset
-            for d in np.linspace(distance,.5,35):
+            # Include the actual far room-boundary station, not only coarse distance bins.
+            ray=safe.intersection(LineString([aim,aim+normal*distance*direction]))
+            segments=list(ray.geoms) if hasattr(ray,'geoms') else [ray]
+            ends=[float((vec(v)-aim)@(normal*direction)) for g in segments if hasattr(g,'coords') for v in g.coords]
+            distances=sorted(set([*np.linspace(distance,.5,35),*[v-.005 for v in ends if v>.5]]),reverse=True)
+            for d in distances:
                 xz=aim+normal*d*direction
                 if not safe.covers(Point(*xz)):continue
-                for h in [layout['floor']['height']/2,1.2,1.5]:
+                heights=[layout['floor']['height']/2,1.2,1.5]
+                if any(p.get('componentId','').startswith('bed.') for p in subjects):heights += [.65,.85,1.0]
+                for h in heights:
                     pos=[xz[0],h,xz[1]]
                     if not occluders.standing(pos):continue
                     pitch=-math.radians(4) if room.get('cameraComposition',{}).get('emphasis')=='table' else 0.
@@ -342,6 +364,30 @@ def front_view(layout,room,frame,max_fov=90,occluders=None,subjects=None,label='
                         actual=vec(shot['position'])[[0,2]]-vec(shot['target'])[[0,2]];actual/=np.linalg.norm(actual)
                         angle=math.degrees(math.acos(float(np.clip(actual@(normal*direction),-1,1))))
                         shot['metrics'].update({'frontAxis':list(map(float,normal*direction)),'referenceWallId':wall['id'] if wall else None,'horizontal':abs(pitch)<1e-9,'pitchDegrees':round(math.degrees(pitch),3),'frontAngleDegrees':round(angle,6)});choices.append((score+abs(offset)*5,shot))
+    # Narrow-room subject views: room-first, then explicit virtual axial retreat.
+    # A camera near plane clips the foreground partition for this view only.
+    natural=[s for _,s in choices if s['metrics'].get('fullSubjectProjection',{}).get('complete') and s['fov']<=100 and s['metrics']['cameraHeight']>=1.0]
+    if not natural and not empty and any(p.get('componentId','').startswith('bed.') for p in subjects):
+        aim=center[[0,2]]
+        axis=poly.intersection(LineString([aim,aim+normal*30]))
+        segments=list(axis.geoms) if hasattr(axis,'geoms') else [axis]
+        ends=[float((vec(v)-aim)@normal) for g in segments if hasattr(g,'coords') for v in g.coords]
+        edge=max(ends,default=0)
+        for retreat in [.5,.8,1.2,1.6]:
+            d=edge+retreat;xz=aim+normal*d
+            for h in [1.2,1.4,1.6]:
+                pos=[xz[0],h,xz[1]];target=[aim[0],h,aim[1]]
+                near=retreat+max((w['thickness'] for w in adjacent),default=.2)/2+.03
+                forward=vec([-normal[0],0,-normal[1]])
+                minimum=min((vec(v)-vec(pos))@forward for p in subjects for v in corners(p))
+                if minimum<=near+.06:continue
+                clipped=occluders.with_near_plane(pos,forward,near)
+                result=_evaluate(layout,room,pos,target,subjects,frame,'front',clipped,near=near)
+                if result:
+                    score,shot=result
+                    shot['metrics'].update(frontAxis=list(map(float,normal)),referenceWallId=wall['id'] if wall else None,horizontal=True,pitchDegrees=0,frontAngleDegrees=0,virtualRetreat=True,retreatMetres=retreat,projectionCut='foreground-near-plane; geometry unchanged')
+                    shot['reviewNotes'].append('虚拟正视后退机位：仅本镜头近裁切前方隔断；保留模型，不是现场可站摄影位置。')
+                    choices.append((score+20+retreat*5,shot))
     if not choices:
         p=poly.representative_point();target=[center[0],1.4,center[2]];pos=[p.x,1.4,p.y]
         if math.dist(pos,target)<.05:target[2]-=.5
@@ -413,6 +459,7 @@ def compile_cameras(scene,frame,add_front=True):
         camera=item['camera'];rid=camera.get('view') if camera.get('view') in rooms else None
         s=base_shot('saved-'+str(index+1),item.get('name','用户保存机位'),rid,camera['position'],camera['target'],camera['fov'],frame)
         if 'verticalShift' in camera:s['verticalShift']=camera['verticalShift']
+        if camera.get('near',.04)>.04:s['near']=camera['near']
         s['metrics']['source']='user-saved-editor-camera'
         s['subjectIds']=[p['id'] for p in _subjects(layout,rooms[rid])] if rid else []
         if camera.get('type')=='orthographic':

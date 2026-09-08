@@ -30,4 +30,13 @@ class SourceRules(unittest.TestCase):
   walls=[dict(id='w'+str(i),a=a,b=b,height=2.7,thickness=.1)for i,(a,b)in enumerate(zip(room['polygon'],room['polygon'][1:]+room['polygon'][:1]))]
   layout={'rooms':[room],'floor':{'height':2.7},'walls':walls,'openings':[],'openConnections':[],'placements':[dict(id='sofa',roomId='r',componentId='sofa.straight',position=[2,0,.6],rotationY=0,size=[2,.8,.8])]}
   shot=front_view(layout,room,{'width':1280,'height':960});self.assertEqual(shot['visibility']['doorStateMode'],'source');self.assertTrue(shot['metrics']['ceilingAndFloorAnchors']);self.assertGreater(shot['metrics']['surfaceConstruction']['floor'],0);self.assertGreater(shot['metrics']['surfaceConstruction']['ceiling'],0)
+ def test_near_plane_ignores_only_foreground(self):
+  layout={'walls':[dict(id='front',a=[-2,1],b=[2,1],height=3,thickness=.1),dict(id='back',a=[-2,4],b=[2,4],height=3,thickness=.1)],'placements':[],'openings':[]}
+  normal=Occluders(layout);clip=normal.with_near_plane([0,1,0],[0,0,1],1.2)
+  self.assertLess(normal.rays([0,1,0],[[0,0,1]])[0],1.1);self.assertGreater(clip.rays([0,1,0],[[0,0,1]])[0],3.8)
+ def test_narrow_bed_uses_whole_subject_retreat(self):
+  room=dict(id='r',name='Bedroom',type='bedroom',polygon=[[0,0],[2.8,0],[2.8,2.6],[0,2.6]],subjectIds=['bed'])
+  walls=[dict(id='w'+str(i),a=a,b=b,height=2.7,thickness=.1)for i,(a,b)in enumerate(zip(room['polygon'],room['polygon'][1:]+room['polygon'][:1]))]
+  layout={'rooms':[room],'floor':{'height':2.7},'walls':walls,'openings':[],'openConnections':[],'placements':[dict(id='bed',roomId='r',componentId='bed.upholstered',position=[1.4,0,1.1],rotationY=0,size=[1.8,1.05,2.1])]}
+  shot=front_view(layout,room,{'width':1280,'height':960});self.assertTrue(shot['metrics']['fullSubjectProjection']['complete']);self.assertTrue(shot['metrics']['virtualRetreat']);self.assertGreater(shot['near'],.1);self.assertEqual(shot['metrics']['frontAngleDegrees'],0)
 if __name__=='__main__':unittest.main()

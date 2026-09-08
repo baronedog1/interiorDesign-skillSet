@@ -223,6 +223,8 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
         text+='\n当前空间、可见邻接空间及门后的目标必须与上述身份一致；阳台不是卧室，厨房不是普通房间。可见门洞不等于门后整间都入画。保持墙洞和隔断类别、门扇开合、玻璃透明/磨砂/实板性质；款式细节可精细化，但不得把关闭实门画成敞口、玻璃移门画成实墙。向外的目标为unknown时不擅自认定直通户外或另一间房；户外景观只能按已知朝向和设计意图演绎并标明非现场实景。主图保留当前截图已有天花与地面，不裁掉吊灯、吊顶或地面，不为精细家具改镜头。'
     else:
         request['spaceContextStatus']='legacy-capture-missing; recapture-for-current-task'
+    if shot.get('near'):
+        text+='\n本图为狭窄房间的虚拟正视后退机位，近裁切只为看全主体，并不表示拆墙或改变房型；沿用当前画面，不能补画镜头前被剖切的遮挡墙。必须保留完整床头、床尾、左右床边及现有地面天花。精细床按原位置朝向和尺度替换，不缩床、不重新裁图。'
     request['prompt']=text.strip()
     write(out_file,request);atomic_bytes(Path(out_file).with_suffix('.prompt.txt'),text.strip().encode('utf-8'));return request
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "HTML 建模 · 编译、编辑与状态交接",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "overview": {
     "title": "HTML 编辑：不同意图进入不同状态域",
     "nodes": [
@@ -253,7 +253,8 @@
                   "purpose": "Agent需求读取与缺口回问"
                 }
               ],
-              "bodySize": 22
+              "bodySize": 22,
+              "detailRef": "whole-bed"
             },
             {
               "id": "build",
@@ -1795,6 +1796,226 @@
                 ]
               ],
               "label": "捕获"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "whole-bed",
+      "code": "BED",
+      "title": "近裁切与状态恢复",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "由已实现代码展开，真实模型不变；虚拟取景须明示。",
+      "diagrams": [
+        {
+          "title": "完整主体优先：同源取景与交接",
+          "nodes": [
+            {
+              "id": "a",
+              "type": "process",
+              "x": 70,
+              "y": 210,
+              "w": 1030,
+              "h": 270,
+              "title": "读取同版冻结机位",
+              "lines": [
+                "普通镜头默认near=0.04m",
+                "窄卧室虚拟机位带near及virtualRetreat"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/schemas/cameras.schema.json",
+                  "purpose": "机位参数"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "b",
+              "type": "process",
+              "x": 1300,
+              "y": 210,
+              "w": 1030,
+              "h": 300,
+              "title": "保存原相机和显示状态",
+              "lines": [
+                "cameraSnapshot记录原near与镜头",
+                "输入墙体/家具保持原值，不删除实例"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/runtime/app.js",
+                  "purpose": "快照、captureFrame与restoreCamera"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1260,
+              "y": 650,
+              "w": 1080,
+              "h": 440,
+              "title": "本镜头有虚拟近裁切？",
+              "lines": [
+                "有near：相机从房外沿正面轴拍摄",
+                "无near：沿用普通房内机位"
+              ],
+              "files": [],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "normal",
+              "type": "process",
+              "x": 70,
+              "y": 690,
+              "w": 1030,
+              "h": 280,
+              "title": "普通近裁切",
+              "lines": [
+                "相机near=0.04m；不继承上一张虚拟镜头",
+                "机位变化不残留裁切状态"
+              ],
+              "files": [],
+              "bodySize": 22
+            },
+            {
+              "id": "retreat",
+              "type": "process",
+              "x": 1300,
+              "y": 1200,
+              "w": 1030,
+              "h": 350,
+              "title": "同一near用于真实图与射线",
+              "lines": [
+                "只取相机空间z≤−near的实际交点",
+                "前方隔断只在本机位不可见，远处墙仍保留",
+                "观察房间和产品不能读到被裁掉的前景"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/python/cameras.py",
+                  "purpose": "同源近裁切遮挡计算"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "store",
+              "x": 70,
+              "y": 1200,
+              "w": 1030,
+              "h": 350,
+              "title": "截图与空间事实交接后恢复",
+              "lines": [
+                "spaceContext标明虚拟取景与geometryUnchanged",
+                "finally恢复原near、显示、材质和相机",
+                "保存/导入机位沿用near，不改变户型"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/python/render.py",
+                  "purpose": "保存PNG、请求与实际提示词"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "a",
+              "to": "b",
+              "points": [
+                [
+                  1100,
+                  345
+                ],
+                [
+                  1300,
+                  345
+                ]
+              ],
+              "label": "同版输入"
+            },
+            {
+              "from": "b",
+              "to": "q",
+              "points": [
+                [
+                  1815,
+                  510
+                ],
+                [
+                  1815,
+                  650
+                ]
+              ],
+              "label": "判断"
+            },
+            {
+              "from": "q",
+              "to": "normal",
+              "points": [
+                [
+                  1260,
+                  870
+                ],
+                [
+                  1100,
+                  830
+                ]
+              ],
+              "label": "否：普通"
+            },
+            {
+              "from": "normal",
+              "to": "out",
+              "points": [
+                [
+                  585,
+                  970
+                ],
+                [
+                  585,
+                  1200
+                ]
+              ],
+              "label": "继续"
+            },
+            {
+              "from": "q",
+              "to": "retreat",
+              "points": [
+                [
+                  1800,
+                  1090
+                ],
+                [
+                  1800,
+                  1200
+                ]
+              ],
+              "label": "是：虚拟"
+            },
+            {
+              "from": "retreat",
+              "to": "out",
+              "points": [
+                [
+                  1300,
+                  1375
+                ],
+                [
+                  1100,
+                  1375
+                ]
+              ],
+              "label": "同一交接"
             }
           ]
         }

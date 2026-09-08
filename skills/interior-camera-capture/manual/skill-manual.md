@@ -1,12 +1,12 @@
 # 机位截图 · 七类空间与真实成像 说明书
 
-版本：3.2.0
+版本：3.2.1
 
 ~~~yaml
 ---
 name: interior-camera-capture
 description: 从当前完整 HTML 的真实模型寻找全屋及各空间机位，冻结相机并输出原生 WebGL 参考截图；逐图识图，不改家具或冒充效果图。
-metadata: {version: "3.2.0", category: interior-design}
+metadata: {version: "3.2.1", category: interior-design}
 ---
 ~~~
 
@@ -20,7 +20,7 @@ metadata: {version: "3.2.0", category: interior-design}
 输出：机位 JSON、实际 PNG、观察记录
 
 #### 机位：空间语义先行，候选求解后看真实图片
-- a：当前完整 HTML / scene / 认可机位；不覆盖用户已指定的机位；保持同版文件
+- a：当前完整 HTML / scene / 认可机位；不覆盖用户已指定的机位；保持同版文件（详见 whole-bed）
   - scripts/run.py：find/apply/capture 入口
 - q：场景、机位引用同版？；sceneKey/layoutHash/HTML 摘要一致
   - ../interior-html-modeling/scripts/engine/python/render.py：load_scene 与真实页面检查
@@ -233,3 +233,25 @@ metadata: {version: "3.2.0", category: interior-design}
 - full → out：全场景
 - empty → runtime：指定模式
 - runtime → out：真实帧
+
+### 完整床体的候选求解
+
+由已实现代码展开，真实模型不变；虚拟取景须明示。
+
+#### 完整主体优先：同源取景与交接
+- a：完整床体与建筑共同投影；床头/床尾/两侧/床脚八角点与建筑上下边界；不是只拟合背景墙；沿床自身正面轴
+  - ../interior-html-modeling/scripts/engine/python/cameras.py：完整床体、自然候选与虚拟后退求解
+- b：先求真实房内候选；房界精确远端与35档站位；共同算FOV/移轴；完整床FOV≤100°，不是拉长焦距
+  - ../interior-html-modeling/scripts/engine/schemas/cameras.schema.json：视角、移轴、near冻结参数
+- q：有床完整、眼高≥1米的房内候选？；投影maxAbsNDC≤0.965；FOV≤100°
+- normal：保留房内完整正视；主体完整优先，同时照顾地面天花；不缩床、不移墙、不后裁图
+- retreat：生成虚拟后退候选；退0.5/0.8/1.2/1.6m；眼高1.2/1.4/1.6m；near=退距+邻墙半厚+0.03m；不得切到床；裁切代价3000×max(0,NDC−.965)，连续排序
+  - ../interior-html-modeling/scripts/engine/python/cameras.py：同源近裁切遮挡计算
+- out：冻结整床镜头后真实识图；记录near/退距；保持床正面；不是房内可站摄影位置；模型数据不变
+  - ../interior-html-modeling/scripts/engine/python/render.py：保存PNG、请求与实际提示词
+- a → b：同版输入
+- b → q：判断
+- q → normal：是：房内
+- normal → out：继续
+- q → retreat：否：后退
+- retreat → out：同一交接

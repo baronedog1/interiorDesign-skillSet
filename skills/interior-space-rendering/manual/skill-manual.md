@@ -1,12 +1,12 @@
 # 原生绘图 · 粗模定位，参考图锁款 说明书
 
-版本：3.3.0
+版本：3.3.1
 
 ~~~yaml
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.3.0", category: interior-design}
+metadata: {version: "3.3.1", category: interior-design}
 ---
 ~~~
 
@@ -20,7 +20,7 @@ HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参�
 输出：原生图片、调用回执、逐图问题
 
 #### 粗模定位 → 参考图片锁款 → 真实光影
-- a：同版模型图、JSON、机位与指定资产；先看图和用户要求；不把配置当工具可用证明
+- a：同版模型图、JSON、机位与指定资产；先看图和用户要求；不把配置当工具可用证明（详见 whole-bed）
   - scripts/run.py：ai-request/native-prepare/native-result 入口
 - q：用户明确要求白模／空白槽位？；默认 furnished；不因效果差自动切模式（详见 modes）
   - playbook.md：两模式、锁结构机位、家具细化与资产不变形
@@ -241,3 +241,25 @@ HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参�
 - first → save
 - save → next：后续机位准备时读取
 - next → output
+
+### 虚拟机位的原生渲染
+
+由已实现代码展开，真实模型不变；虚拟取景须明示。
+
+#### 完整主体优先：同源取景与交接
+- a：同版完整床截图与产品/风格参考；截图管结构、位置与画幅；产品图管款式；用户美式轻奢意图进入design-brief
+  - playbook.md：粗模/产品/风格职责
+- b：读取实际空间与相机事实；读取spaceContext.cameraRepresentation；不是从截图猜户外/相邻房间
+  - ../interior-html-modeling/scripts/engine/runtime/app.js：快照、captureFrame与restoreCamera
+- q：当前截图是虚拟后退机位？；kind=virtual-axial-retreat
+- normal：保持普通房内画面；床头/床尾/两侧完整，不再裁断；沿用当前结构、家具位置与机位
+- retreat：解释近裁切，不补回遮挡墙；虚拟镜头不表示拆墙、扩房或缩床；精细家具替换保持完整床体与地面天花；只细化款式、材质、光影和陈设
+  - ../interior-html-modeling/scripts/engine/python/cameras.py：同源近裁切遮挡计算
+- out：原生绘图与实际识图交付；真实调用后逐张看床体、风格与空间关系；同空间后续图复用精细定样，不独立猜款
+  - ../interior-html-modeling/scripts/engine/python/render.py：保存PNG、请求与实际提示词
+- a → b：同版输入
+- b → q：判断
+- q → normal：否：普通
+- normal → out：继续
+- q → retreat：是：虚拟
+- retreat → out：同一交接
