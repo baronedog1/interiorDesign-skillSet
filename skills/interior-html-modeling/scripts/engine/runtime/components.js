@@ -12,7 +12,12 @@
  sideboard(p){const g=G(p,'餐边柜');B(g,1.94,.78,.43,0,.46,0,M.oak,.035);for(let i=0;i<3;i++){B(g,.63,.66,.025,-.65+i*.65,.475,.231,M.cream,.015);B(g,.12,.012,.022,-.65+i*.65,.62,.258,M.bronze,.005);}B(g,2.01,.04,.48,0,.875,0,M.travertine,.016);return g;},
  tv(p){const g=G(p,'电视/悬浮柜');B(g,3.15,2.60,.095,0,1.32,-.15,M.travertine,.03);B(g,2.94,.235,.41,0,.40,.1,M.oak,.045);for(let i=0;i<4;i++)B(g,.72,.185,.024,-1.105+i*.738,.42,.319,M.cream,.012);B(g,1.93,1.12,.045,-.10,1.52,-.08,M.black,.018);B(g,1.873,1.065,.007,-.10,1.52,-.052,M.screen,.013);C.vase(g,1.12,.53,.10,.21,.07);return g;},
  counter(p){const g=G(p,'地柜');B(g,.68,.78,.60,0,.43,0,M.oak,.012);B(g,.67,.065,.63,0,.867,0,M.travertine,.012);B(g,.64,.10,.53,0,.065,0,M.dark,.004);for(let i=0;i<3;i++){B(g,.65,.23,.032,0,.23+i*.24,.316,M.cream,.008);B(g,.22,.012,.021,0,.295+i*.24,.341,M.bronze,.004);}return g;},
- sink(p){const g=G(p,'水槽地柜');B(g,.96,.79,.60,0,.43,0,M.oak,.012);for(const x of[-.24,.24])B(g,.467,.72,.03,x,.47,.315,M.cream,.01);
+ sink(p){const g=G(p,'水槽地柜');
+  // A cabinet shell leaves the basin cavity open. A solid carcass box would
+  // intersect the bowl and expose a wooden slab through the countertop hole.
+  for(const x of[-.465,.465])B(g,.03,.79,.60,x,.43,0,M.oak,.008);
+  B(g,.90,.03,.60,0,.065,0,M.oak,.008);B(g,.90,.75,.025,0,.43,-.2875,M.oak,.008);
+  for(const x of[-.24,.24])B(g,.467,.72,.03,x,.47,.315,M.cream,.01);
   // A genuine countertop hole: four solid strips, not a black decal on a slab.
   for(const x of[-.413,.413])B(g,.17,.05,.65,x,.87,0,M.travertine,.008);for(const z of[-.278,.278])B(g,.68,.05,.094,0,.87,z,M.travertine,.006);
   B(g,.65,.018,.46,0,.68,0,M.black,.018);for(const x of[-.327,.327])B(g,.018,.18,.46,x,.78,0,M.black,.006);for(const z of[-.229,.229])B(g,.65,.18,.018,0,.78,z,M.black,.006);

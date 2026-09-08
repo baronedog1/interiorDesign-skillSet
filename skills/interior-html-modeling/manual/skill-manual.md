@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：3.1.1
+版本：3.1.2
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.1.1", category: interior-design}
+metadata: {version: "3.1.2", category: interior-design}
 ---
 ~~~
 
@@ -148,7 +148,7 @@ metadata: {version: "3.1.1", category: interior-design}
   - scripts/engine/runtime/native-assets.js：内嵌 GLB 实例
   - scripts/engine/runtime/workspace.js：文件选择与整体保存
   - scripts/engine/runtime/app.js：启动、交互、实际截图
-- d：单文件页面与运行时 · 前半段；每个文件真实参与离线编译，不写虚构文件覆盖
+- d：单文件页面与运行时 · 前半段；每个文件真实参与离线编译，不虚构文件覆盖；水槽：柜体壳板＋独立盆腔，实心柜块会遮盆
   - scripts/engine/runtime/studio.html：完整编辑器模板
   - scripts/engine/runtime/three-r164.js：Three.js 渲染器
   - scripts/engine/runtime/materials.js：材质构造
