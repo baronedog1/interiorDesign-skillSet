@@ -1,12 +1,12 @@
 # 机位截图 · 七类空间与真实成像 说明书
 
-版本：3.1.0
+版本：3.1.1
 
 ~~~yaml
 ---
 name: interior-camera-capture
 description: 从当前完整 HTML 的真实模型寻找全屋及各空间机位，冻结相机并输出原生 WebGL 参考截图；逐图识图，不改家具或冒充效果图。
-metadata: {version: "3.1.0", category: interior-design}
+metadata: {version: "3.1.1", category: interior-design}
 ---
 ~~~
 
@@ -139,7 +139,7 @@ metadata: {version: "3.1.0", category: interior-design}
 - q → out：否：带问题交付
 
 #### 厨房：沿操作面读懂台面、设备和通道
-- a：本厨房台柜与设备；只取本房 kitchen/cabinet 等实体
+- a：本厨房台柜与设备；首图：水槽工作面 / 台盆正面；不同朝向功能面不强塞同一包络；其他功能关系另作补充
   - playbook.md：主体、空间差异及识图方法
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
 - b：操作面决定观看方向，通道决定站位；保持烟灶/水槽/台面关系；不借隔壁房间站位；自然站位与柜体前沿分离，柜门开合区纳入观察
@@ -159,7 +159,7 @@ metadata: {version: "3.1.0", category: interior-design}
 - full → out：实际图
 
 #### 卫浴：先分台盆、马桶、淋浴，再求小空间视角
-- a：识别本房功能件及玻璃/门扇；台盆、马桶、淋浴位置不能互换；只从当前 room 选主体，不借邻房资产
+- a：识别本房功能件及玻璃/门扇；首图：水槽工作面 / 台盆正面；不同朝向功能面不强塞同一包络；其他功能关系另作补充
   - playbook.md：主体、空间差异及识图方法
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
 - b：以可用站位看功能关系；保持真实墙与玻璃，不为完整强行穿墙；包络抽样只是候选提示，不是透明表面视觉结论

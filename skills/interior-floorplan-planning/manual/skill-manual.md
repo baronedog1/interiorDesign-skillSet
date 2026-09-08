@@ -1,12 +1,12 @@
 # 平面规划 · 尺度、拓扑与锚点 说明书
 
-版本：3.2.0
+版本：3.2.1
 
 ~~~yaml
 ---
 name: interior-floorplan-planning
 description: 通过分轮需求访谈了解居住、功能、布局和风格偏好，将客户户型图与确认需求整理为米制布局JSON；规划墙门窗、家具锚点和动线，可用原生绘图探索方案。不交付平面HTML。
-metadata: {version: "3.2.0", category: interior-design}
+metadata: {version: "3.2.1", category: interior-design}
 ---
 ~~~
 
@@ -81,7 +81,7 @@ metadata: {version: "3.2.0", category: interior-design}
   - playbook/requirements-interview.md：读取需求与授权状态
 - revise：否：回需求解释与选型；不沿开放区边界自动排书架；不等渲染再隐藏问题家具
   - playbook.md：源头取舍与全屋识图
-- place：是：选择真实可用位置；沿墙或围绕功能中心；先考虑开合与通路；再选类别、尺寸、正面和风格
+- place：是：选择真实可用位置；先选类别与结构家族：直排 / 贵妃位等；沿墙或功能中心，保留开合与通行；再选尺寸与CMF，不缩错组件冒充正确款
   - scripts/run.py：明确宿主的anchor/handoff入口
 - out：全屋顶视 / 开放区轴测 → 解释大件位置；不合理回原需求或选型；合理则交接布局与需求；不新增一个事后移动家具的修补器
   - ../interior-html-modeling/data_contract.md：沿用布局与需求侧车

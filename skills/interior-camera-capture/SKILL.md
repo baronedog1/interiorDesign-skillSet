@@ -1,7 +1,7 @@
 ---
 name: interior-camera-capture
 description: 从当前完整 HTML 的真实模型寻找全屋及各空间机位，冻结相机并输出原生 WebGL 参考截图；逐图识图，不改家具或冒充效果图。
-metadata: {version: "3.1.0", category: interior-design}
+metadata: {version: "3.1.1", category: interior-design}
 ---
 # 机位与模型截图
 
@@ -17,4 +17,4 @@ metadata: {version: "3.1.0", category: interior-design}
 
 各空间第一张必须为正视主图，客厅分别正对沙发和电视；斜视、细节只作补充。用 find 正式求解，不用临时脚本覆盖自动计划。主体、朝向或构图不对，改输入或共享算法再生成；逐张看图，不能把局部图或诊断候选说成合格正视图。
 
-正视按主体占幅、可见性与就近站位求解，不强塞整层高。开放连接只扩展站位域，不扩展主体。按metrics.deliveryRole选primary；supplement按需，layout-reference不默认渲染。
+卧室首图是床头正视构图（允许床尾出前景），厨房/卫浴先取主要工作面；全房关系另有补充图。正视按主体占幅、可见性与就近站位求解，不强塞整层高。开放连接只扩展站位域，不扩展主体。按metrics.deliveryRole选primary；supplement按需，layout-reference不默认渲染。

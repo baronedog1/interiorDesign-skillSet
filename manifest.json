@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-08T06:23:40.374Z",
+  "snapshotAt": "2026-09-08T06:54:47.921Z",
   "source": {
     "type": "mixed-device-snapshot",
     "currentDesignRelease": {
@@ -118,11 +118,11 @@
     {
       "id": "interior-camera-capture",
       "path": "skills/interior-camera-capture",
-      "version": "3.1.0",
+      "version": "3.1.1",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 9,
-      "bytes": 4651737,
-      "sha256": "76a401005d35fd9aa7ccf7788d2738958772ec14c01f99f82ab722271584b19c"
+      "bytes": 4656977,
+      "sha256": "dc3b19debfb5cc9fae0a7912ae4bca2386e141eb7a1c7ef05a545e96efe3e405"
     },
     {
       "id": "interior-circulation-planning",
@@ -145,29 +145,29 @@
     {
       "id": "interior-floorplan-planning",
       "path": "skills/interior-floorplan-planning",
-      "version": "3.2.0",
+      "version": "3.2.1",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 10,
-      "bytes": 5723315,
-      "sha256": "543bea9c1f6d69f0b9cc0d717b06e115a5c93dff3747b780770d831a555c9cc2"
+      "bytes": 5726118,
+      "sha256": "4a1996ea32ff72e2447e213aecd68a591ecbdc5004d5ceb4c2466569ffc4b2a4"
     },
     {
       "id": "interior-html-modeling",
       "path": "skills/interior-html-modeling",
-      "version": "3.1.0",
+      "version": "3.1.1",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 74,
-      "bytes": 27140696,
-      "sha256": "b18d38fc94c03a1afaf47fcd31517f4b91990f040b33db004996056b94690002"
+      "bytes": 27145206,
+      "sha256": "d377fbe53c49f5420a2abd8698e0e3b17ab51b9604e7d55a855926032d8689d2"
     },
     {
       "id": "interior-space-rendering",
       "path": "skills/interior-space-rendering",
-      "version": "3.2.0",
+      "version": "3.2.1",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 9,
-      "bytes": 7354033,
-      "sha256": "555db2ffd8dce16bb4570a024a092df7bf5b81b2259856405f4181ff6376693a"
+      "bytes": 7352028,
+      "sha256": "eb91eabaf7f79e7265a2077c39a6a13d8c06259259077c152d99cebd9b4bbe72"
     },
     {
       "id": "movable-furniture-modeling",

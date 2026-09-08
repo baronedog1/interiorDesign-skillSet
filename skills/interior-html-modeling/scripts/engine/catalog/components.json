@@ -1,6 +1,6 @@
 {
   "schema": "interior.components/1",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "units": "m",
   "frontAxis": "+Z",
   "origin": "footprint-centre-at-floor",
@@ -12,7 +12,7 @@
     {
       "id": "sofa.cloud",
       "category": "sofa",
-      "name": "组合沙发（风格变体）",
+      "name": "贵妃位组合沙发（风格变体）",
       "builder": "sofa",
       "defaultSize": [
         3.4,
@@ -28,7 +28,36 @@
       "origin": "footprint-centre-at-floor",
       "approximation": "style-component-not-exact-product",
       "support": "floor",
-      "styleMode": "form-and-material"
+      "styleMode": "form-and-material",
+      "shape": {
+        "chaise": true,
+        "seats": 3
+      }
+    },
+    {
+      "id": "sofa.straight",
+      "category": "sofa",
+      "name": "直排双人沙发（风格变体）",
+      "builder": "sofa",
+      "defaultSize": [
+        2.12,
+        0.88,
+        0.94
+      ],
+      "resize": "fit-bounds",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "style-component-not-exact-product",
+      "support": "floor",
+      "styleMode": "form-and-material",
+      "shape": {
+        "chaise": false,
+        "seats": 2
+      }
     },
     {
       "id": "chair.dining",

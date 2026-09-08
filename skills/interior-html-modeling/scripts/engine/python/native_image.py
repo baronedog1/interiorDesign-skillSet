@@ -22,9 +22,17 @@ def complete(invocation_path,image_path,out):
 
 def references(request):
     refs=[request['source'],*request.get('consistencyReferences',[]),*request.get('productReferences',[]),*request.get('styleReferences',[])]
+    attached={}
     for ref in refs:
         if file_sha(ref['path'])!=ref['sha256']:raise ValueError('Attached reference changed: regenerate the request')
-    return refs
+        # A dining-set photo can bind several placements without attaching the
+        # same bytes five times. Keep semantic roles distinct and every binding.
+        key=(ref['role'],ref['sha256'])
+        if key not in attached:attached[key]=dict(ref)
+        if ref.get('placementId'):
+            ids=attached[key].setdefault('placementIds',[])
+            if ref['placementId'] not in ids:ids.append(ref['placementId'])
+    return list(attached.values())
 
 @traced('render.prepare-native-call')
 def prepare(request_path,capabilities_path,out):

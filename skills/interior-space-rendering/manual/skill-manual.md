@@ -1,12 +1,12 @@
 # 原生绘图 · 粗模定位，参考图锁款 说明书
 
-版本：3.2.0
+版本：3.2.1
 
 ~~~yaml
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.2.0", category: interior-design}
+metadata: {version: "3.2.1", category: interior-design}
 ---
 ~~~
 
@@ -154,7 +154,7 @@ HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参�
   - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
 - size：已给尺寸是否合法？；null合法；已给则为3个正有限数值；未知不代填粗模数值
   - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
-- emit：真实绑定进入prompt与原生附图；尺寸来自参考元数据/用户，未知明确标记；referenceGuide顺序：粗模→精细定样→产品图；实际比例/空间冲突由Agent识图与选型判断；源/输出画幅记录为提示，不拉伸图像修补
+- emit：真实绑定进入prompt与原生附图；完整绑定表跨机位复用；同图按职责+SHA合并；一张产品图可对应多个placementIds；顺序：粗模→精细定样→产品→风格；不虚构5张上限
   - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
   - ../interior-html-modeling/scripts/engine/python/native_image.py：真实附图顺序、原生调用与回收计时
   - ../interior-html-modeling/data_contract.md：参考角色、sourceFrame/outputFrame合同

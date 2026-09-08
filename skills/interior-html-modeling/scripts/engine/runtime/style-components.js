@@ -5,12 +5,12 @@
  function top(g,w,d,y,material,kind,h=.07){if(['oval','organic'].includes(kind)){const m=Y(g,w/2,w/2,h,0,y,0,material,64);m.scale.z=d/w;if(kind==='organic'){const a=m.geometry.attributes.position;for(let i=0;i<a.count;i++){const x=a.getX(i),z=a.getZ(i),t=Math.atan2(z,x),f=1+.065*Math.sin(t*3)+.035*Math.cos(t*5);a.setX(i,x*f);a.setZ(i,z*f);}m.geometry.computeVertexNormals();}return m;}return B(g,w,h,d,0,y,0,material,kind==='tapered'?.06:.016);}
  function flutes(g,w,h,y,z,material,spacing=.06){for(let x=-w/2+.02;x<w/2;x+=spacing)B(g,.022,h,.024,x,y,z,material,.007);}
  function cushion(g,w,h,d,x,y,z,m){return C.pillow(g,w,h,d,x,y,z,m);}
- function sofa(g,f){const cloud=f==='cloud',low=f==='low',timber=['timber','lattice'].includes(f),r=cloud?.12:low?.13:.045,baseY=low?.15:.28;
+ function sofa(g,f,shape={}){const cloud=f==='cloud',low=f==='low',timber=['timber','lattice'].includes(f),r=cloud?.12:low?.13:.045,baseY=low?.15:.28,seats=shape.seats||3;
   if(!low)feet(g,2.9,.79,.20,f==='linear'?'linear':timber?'timber':'rounded');B(g,3.24,.18,1.05,0,baseY,0,timber?M.walnut:M.boucle,r);
-  for(let i=0;i<3;i++){const x=(i-1)*1.02;B(g,1.0,.20,.86,x,baseY+.18,.065,M.boucle,r);B(g,1.03,.50,.21,x,baseY+.47,-.405,timber?M.oak:M.boucle,r);if(timber)cushion(g,.94,.47,.15,x,baseY+.47,-.25,M.linen);}
+  for(let i=0;i<seats;i++){const x=(i-(seats-1)/2)*3.06/seats,w=3.06/seats;B(g,w-.02,.20,.86,x,baseY+.18,.065,M.boucle,r);B(g,w+.01,.50,.21,x,baseY+.47,-.405,timber?M.oak:M.boucle,r);if(timber)cushion(g,w-.08,.47,.15,x,baseY+.47,-.25,M.linen);}
   for(const x of[-1.60,1.60]){if(timber){B(g,.09,.43,.98,x,baseY+.25,0,M.walnut,.018);B(g,.15,.065,1.03,x,baseY+.485,0,M.oak,.03);if(f==='lattice')for(let z=-.36;z<.4;z+=.12)B(g,.035,.35,.025,x,baseY+.265,z,M.walnut,.002);}else B(g,.20,.39,.99,x,baseY+.28,0,M.boucle,r);}
-  // Chaise shape is consistent in local +Z to preserve the user's L-sofa plan.
-  B(g,1.02,.18,.72,-1.03,baseY,.88,timber?M.walnut:M.boucle,r);B(g,1.02,.2,.72,-1.03,baseY+.18,.88,M.boucle,r);
+  // Shape belongs to component selection, not to a room or style preset.
+  if(shape.chaise!==false){B(g,1.02,.18,.72,-1.03,baseY,.88,timber?M.walnut:M.boucle,r);B(g,1.02,.2,.72,-1.03,baseY+.18,.88,M.boucle,r);}
   const colors=[M.sand,M.linen,M.sage];for(let i=0;i<3;i++){const p=cushion(g,.43,.40,.15,-1+i,baseY+.52,-.12,colors[i]);p.rotation.z=(i-1)*.08;}
   if(low){B(g,3.19,.055,1.00,0,.035,.01,M.walnut,.01);}
  }
@@ -58,8 +58,8 @@
   else if(f==='lantern'){Y(g,.19,.19,.30,0,y,0,M.linen,48);for(let i=0;i<12;i++){const a=i*Math.PI/6;C.rod(g,[.193*Math.cos(a),y-.154,.193*Math.sin(a)],[.193*Math.cos(a),y+.154,.193*Math.sin(a)],.005,M.walnut);}for(const yy of[y-.154,y+.154])C.ring(g,.195,.008,0,yy,0,M.walnut,Math.PI/2);}
   else{C.lathe(g,[[0,.12],[.11,.12],[.25,.016],[.28,-.083],[.27,-.095],[0,-.095]],0,y,0,M.cream);C.sphere(g,.08,.06,.08,0,y-.07,0,M.led);}
  }
- C.buildStyled=function(builder,parent){const f=C.activeStyle.forms;const supported=['sofa','bed','chair','armchair','coffee','dining','wardrobe','sideboard','tv','pendant','tableLamp','floorLamp','art','rug'];if(!supported.includes(builder))return null;const g=G(parent,builder+' / '+C.activeStyle.name);
-  if(builder==='sofa')sofa(g,f.sofa);else if(builder==='bed')bed(g,f.bed);else if(builder==='chair'||builder==='armchair')chair(g,f.chair,builder==='armchair');else if(builder==='coffee'||builder==='dining')table(g,f.tables,builder==='coffee');else if(builder==='wardrobe'||builder==='sideboard')cabinet(g,f.cabinet,builder==='wardrobe');else if(builder==='tv')tv(g,f.cabinet);else if(['pendant','tableLamp','floorLamp'].includes(builder))pendant(g,f.pendant,builder==='tableLamp',builder==='floorLamp');
+ C.buildStyled=function(builder,parent,meta={}){const f=C.activeStyle.forms;const supported=['sofa','bed','chair','armchair','coffee','dining','wardrobe','sideboard','tv','pendant','tableLamp','floorLamp','art','rug'];if(!supported.includes(builder))return null;const g=G(parent,builder+' / '+C.activeStyle.name);
+  if(builder==='sofa')sofa(g,f.sofa,meta.shape); else if(builder==='bed')bed(g,f.bed);else if(builder==='chair'||builder==='armchair')chair(g,f.chair,builder==='armchair');else if(builder==='coffee'||builder==='dining')table(g,f.tables,builder==='coffee');else if(builder==='wardrobe'||builder==='sideboard')cabinet(g,f.cabinet,builder==='wardrobe');else if(builder==='tv')tv(g,f.cabinet);else if(['pendant','tableLamp','floorLamp'].includes(builder))pendant(g,f.pendant,builder==='tableLamp',builder==='floorLamp');
   else if(builder==='art'){B(g,.86,1.06,.035,0,.53,0,M.walnut,.005);B(g,.81,1.01,.021,0,.53,.027,C.styledArt(f.art),.002);}
   else if(builder==='rug'){B(g,3.5,.024,2.8,0,.015,0,M.rug,.01);if(f.art==='geometry'){for(let x of[-1.3,1.3])B(g,.09,.002,2.50,x,.029,0,M.sage,.001);B(g,2.65,.002,.11,0,.029,1.07,M.sage,.001);}else if(f.art==='ink'){B(g,3.2,.002,2.5,0,.029,0,M.linen,.001);B(g,3.10,.002,2.40,0,.032,0,M.rug,.001);}}
   g.userData.styleVariant=builder+':'+(f[{sofa:'sofa',bed:'bed',chair:'chair',armchair:'chair',coffee:'tables',dining:'tables',wardrobe:'cabinet',sideboard:'cabinet',tv:'cabinet',pendant:'pendant',floorLamp:'pendant',tableLamp:'pendant',art:'art',rug:'art'}[builder]]);return g;

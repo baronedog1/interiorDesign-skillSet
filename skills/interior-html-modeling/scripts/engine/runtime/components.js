@@ -34,7 +34,7 @@
   });return box;};
  C.instantiate=function(parent,spec,registry){const meta=registry.components.find(x=>x.id===spec.componentId);if(!meta)throw Error('未知 componentId: '+spec.componentId);
   const saved=C.assets;C.assets=[];const holder=new T.Group();let built;
-  built=C.buildStyled(meta.builder,holder);
+  built=C.buildStyled(meta.builder,holder,meta);
   if(!built)switch(meta.builder){
   case 'sofa':built=C.sofa(holder,0,0);built.rotation.y=Math.PI;break;
   case 'chair':built=C.chair(holder,0,0,Math.PI);break;

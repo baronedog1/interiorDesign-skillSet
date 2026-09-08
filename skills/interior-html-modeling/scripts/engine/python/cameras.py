@@ -144,9 +144,26 @@ def _points(subjects,height,detail=False):
     return points,center
 
 
+def _front_points(subjects,height):
+    """Photographic subject region, not a requirement to fit every near corner.
+    A bed-head photograph may let the foot continue out of the foreground.
+    This changes framing points only; never scale, hide or move the bed itself.
+    """
+    if subjects and subjects[0].get('componentId','').startswith('bed.'):
+        bed=subjects[0];w,h,d=bed['size'];x,y,z=bed['position']
+        a=math.radians(bed['rotationY']);c,s=math.cos(a),math.sin(a)
+        points=[[x+c*u+s*v,y+yy,z-s*u+c*v]
+                for u in [-w/2,w/2] for yy in [h*.35,h] for v in [-d/2,0]]
+        a=vec(points)
+        return points,(a.min(axis=0)+a.max(axis=0))/2,'bed-head-and-upper-bed'
+    points,center=_points(subjects,height,True)
+    return points,center,'functional-ensemble'
+
+
 def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=False):
     # Primary photographs frame the furniture ensemble, not a compulsory floor-to-ceiling box.
-    points,center=_points(subjects,layout['floor']['height'],detail or kind=='front')
+    if kind=='front':points,center,framing=_front_points(subjects,layout['floor']['height'])
+    else:points,center=_points(subjects,layout['floor']['height'],detail)
     f,r,u=basis(position,target);delta=vec(points)-vec(position);depth=delta@f
     if depth.min()<=.06:return None
     aspect=frame['width']/frame['height'];vertical=delta@u/depth
@@ -161,6 +178,8 @@ def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=F
     bounds=projection.get('ndcBounds',[[-1,-1],[1,1]])
     width=(bounds[1][0]-bounds[0][0])/2
     shot['metrics']={**projection,'subjectWidthFraction':round(width,3),'requiredFov':round(required,3),'insideRoom':Polygon(room['polygon']).covers(Point(position[0],position[2])),'cameraHeight':float(position[1]),'ceilingAndFloorAnchors':not(detail or kind=='front'),'purpose':'detail' if detail else 'room','clearSampleRatio':round(clear,3),'foregroundCoverRatio':round(foreground,3)}
+    if kind=='front':
+        shot['metrics'].update(framing=framing,fullSubjectProjection=projected(shot,[v for p in subjects for v in corners(p)]))
     if not shot['metrics']['complete'] or clear<.55 or foreground>.35:
         shot['status']='review';shot['reviewNotes']=['完整包络、遮挡抽样或近景占幅存在风险；保留候选，实际截图复核。不隐藏实体。']
     else:shot['reviewNotes']=['几何检查可用；实际截图仍需逐图视觉复核。']
@@ -236,7 +255,7 @@ def front_view(layout,room,frame,max_fov=90,occluders=None,subjects=None,label='
     if empty:
         c=poly.representative_point()
         subjects=[dict(id='__architecture__',position=[c.x,0,c.y],size=[.1,layout['floor']['height'],.1],rotationY=0)]
-    _,center=_points(subjects,layout['floor']['height'])
+    _,center,_=_front_points(subjects,layout['floor']['height'])
     adjacent=[w for w in layout['walls'] if LineString([w['a'],w['b']]).distance(poly.boundary)<=w['thickness']/2+.16]
     wall=next((w for w in adjacent if w['id']==room.get('frontWallId')),None)
     if wall is None:
@@ -328,6 +347,12 @@ def compile_cameras(scene,frame,add_front=True):
             sofas=[p for p in own if p['componentId'].startswith('sofa.')]
             tvs=[p for p in own if p['componentId'].startswith('tv.')]
             groups=[('sofa-front',sofas),('tv-front',tvs)] if sofas else [('front',None)]
+            # One front photographs one functional face. A whole-room envelope
+            # spanning a bed, wardrobe and desk is a layout view, not a bed-head shot.
+            name=(room.get('type','')+' '+room['name']).lower()
+            for names,components in [(['bedroom','卧'],['bed.']),(['kitchen','厨'],['kitchen.sink']),(['bath','卫'],['bath.vanity'])]:
+                primary=next((p for p in own if any(p['componentId'].startswith(k) for k in components)),None)
+                if primary and any(k in name for k in names):groups=[('front',[primary])];break
             if any(k in (room.get('type','')+' '+room['name']).lower() for k in ['balcony','阳台']):
                 fixtures=[p for p in own if any(k in p['componentId'] for k in ['washer','vanity','cabinet','bench.'])]
                 if fixtures:groups=[('front',[fixtures[0]])]+[('fixture-'+str(i)+'-front',[p]) for i,p in enumerate(fixtures[1:],1)]

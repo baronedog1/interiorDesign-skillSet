@@ -153,8 +153,9 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
         text+='\n同空间精细定样图已经提供：只沿用其中可见家具的精细款式、形体与CMF，不回退粗模造型；本次建筑与镜头以第一张粗模截图为准。绑定产品参考优先于定样；定样中不可见的家具不能声称已锁款。同一日景系列的光源保持物理一致，但按当前视角重新计算光影，不复制上一张的阴影图案。'
     else:
         text+='\n这是该空间/风格的首张精细定样。绑定参考图决定对应家具款式；其余家具重新设计为真实精细产品，不照抄粗模。后续同空间机位再以本张精细图统一外观。'
-    attached=[request['source'],*request['consistencyReferences'],*refs,*style_refs]
-    request['referenceGuide']=[{'imageIndex':i+1,'role':r['role'],'placementId':r.get('placementId')} for i,r in enumerate(attached)]
+    from native_image import references
+    attached=references(request)
+    request['referenceGuide']=[{'imageIndex':i+1,'role':r['role'],'placementIds':r.get('placementIds',[])} for i,r in enumerate(attached)]
     text+='\n实际附图顺序与职责（图片编号从1起）：\n'+json.dumps(request['referenceGuide'],ensure_ascii=False)
     request['requiredReview']+=['crossViewConsistency']
     request['prompt']=text.strip()

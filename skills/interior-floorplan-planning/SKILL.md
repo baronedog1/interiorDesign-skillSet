@@ -1,7 +1,7 @@
 ---
 name: interior-floorplan-planning
 description: 通过分轮需求访谈了解居住、功能、布局和风格偏好，将客户户型图与确认需求整理为米制布局JSON；规划墙门窗、家具锚点和动线，可用原生绘图探索方案。不交付平面HTML。
-metadata: {version: "3.2.0", category: interior-design}
+metadata: {version: "3.2.1", category: interior-design}
 ---
 # 平面布局规划
 

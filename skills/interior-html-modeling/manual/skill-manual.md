@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：3.1.0
+版本：3.1.1
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.1.0", category: interior-design}
+metadata: {version: "3.1.1", category: interior-design}
 ---
 ~~~
 
@@ -125,7 +125,7 @@ metadata: {version: "3.1.0", category: interior-design}
 按实际输入、计算、分支和文件消费者展开。
 
 #### 编译链：输入到离线页面的全部代码文件
-- a：读取、校验、生成模型标识；读当前布局与需求；不凭空补大件；按源布局编译，粗模不是精细款式依据
+- a：读取、校验、生成模型标识；需求→类别→结构家族→目录componentId；直排/贵妃位由组件选型，不由风格强加；产品改变家族时回布局再编译
   - scripts/run.py：模型/风格/资产命令入口
   - scripts/engine/python/bootstrap.py：切换 Windows 专用 Python
   - scripts/engine/python/cli.py：分派 build/import-html
