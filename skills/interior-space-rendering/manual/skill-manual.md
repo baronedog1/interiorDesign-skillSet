@@ -1,12 +1,12 @@
 # 原生绘图 · 粗模定位，参考图锁款 说明书
 
-版本：3.2.2
+版本：3.2.3
 
 ~~~yaml
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.2.2", category: interior-design}
+metadata: {version: "3.2.3", category: interior-design}
 ---
 ~~~
 
@@ -171,10 +171,11 @@ HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参�
 按实际输入、计算、分支和文件消费者展开。
 
 #### 真实出图链：准备不是调用，提示词不是保真证明
-- a：校对参照和实际工具清单；sceneKey/cameraDigest/图像SHA同版；产品图摘要和尺寸来源随请求携带
+- a：完整系列选型 → 当前画面产品 → 按职责/SHA去重；完整清单参与系列身份；只附当前投影产品；显式空附图不回退全套；画外产品不搬入镜头
   - scripts/run.py：ai-request/native-prepare/native-result 入口
   - ../interior-html-modeling/scripts/engine/python/render.py：ai_request 生成完整实际 prompt
   - ../interior-html-modeling/scripts/engine/python/cli.py：三个命令与参数分派
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：references 读取 frameProductReferences 并去重
 - q：当前宿主有原生绘图工具？；实际 toolName；无工具不能假写 available
   - ../interior-html-modeling/scripts/engine/python/native_image.py：prepare 只生成 ready-for-host-call/unavailable
   - local_runtime.md：原生工具运行与权限边界

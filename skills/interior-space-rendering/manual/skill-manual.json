@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "原生绘图 · 粗模定位，参考图锁款",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "overview": {
     "title": "粗模定位 → 参考图片锁款 → 真实光影",
     "nodes": [
@@ -1597,10 +1597,10 @@
               "y": 200,
               "w": 1040,
               "h": 340,
-              "title": "校对参照和实际工具清单",
+              "title": "完整系列选型 → 当前画面产品 → 按职责/SHA去重",
               "lines": [
-                "sceneKey/cameraDigest/图像SHA同版",
-                "产品图摘要和尺寸来源随请求携带"
+                "完整清单参与系列身份；只附当前投影产品",
+                "显式空附图不回退全套；画外产品不搬入镜头"
               ],
               "files": [
                 {
@@ -1614,6 +1614,10 @@
                 {
                   "path": "../interior-html-modeling/scripts/engine/python/cli.py",
                   "purpose": "三个命令与参数分派"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "references 读取 frameProductReferences 并去重"
                 }
               ],
               "bodySize": 22

@@ -31,3 +31,5 @@ productReferences保留逐placement绑定；native_image.references按(role,sha2
 ## 图像内槽位交接
 
 `placementSlots` 保留完整世界坐标；`cameraFrame` 保留实际冻结相机。`imageSlotAnchors` 只列当前连通空间中投影与画面相交的实例，以同一相机把旋转包络投影为左上原点的 0–1 范围；先裁近裁面，再执行透视或正交投影及镜头偏移。它是位置/约略尺度参考，不是可见遮罩、产品轮廓或缩放目标；不可将画外物体搬进画面或拉伸产品填框。
+
+`productReferences` 是连通空间完整产品绑定，参与同系列身份计算；`frameProductReferences` 是投影与当前画面相交的绑定，仅后者进入当前提示词与实际附图。缺省该字段才兼容旧请求，显式空列表不能回退整套产品。产品未入本镜头不等于系列换款；投影不证明墙后可见性。
