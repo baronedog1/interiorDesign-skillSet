@@ -9,30 +9,23 @@ const cutMats=new Map();
 C.resetArchitectureMaterials=function(){for(const m of cutMats.values())m.dispose();cutMats.clear();};
 function clipGroup(g,height){if(height===null)return;const plane=new T.Plane(new T.Vector3(0,-1,0),height);g.traverse(o=>{if(!o.isMesh)return;const old=o.material,key=old.uuid+'-'+height;let m=cutMats.get(key);if(!m){m=old.clone();m.clippingPlanes=[plane];m.clipShadows=true;cutMats.set(key,m);}o.material=m;});}
 C.doors=[];
-function door(g,c,w,h,thick){
- const d=C.group(g,'门扇 · 可开合',c-w/2,0,0);d.rotation.y=1.3;C.doors.push(d);
- C.box(d,w-.035,h-.03,.044,w/2,h/2,0,C.M.cream,.016,'实木复合平板门');
- C.box(d,w-.14,h-.20,.01,w/2,h/2,.027,C.M.plaster,.006,'门扇内嵌细边');
- for(const side of [-1,1]){
-  C.cyl(d,.028,.028,.013,w-.13,1.02,side*.035,C.M.bronze,24,'门锁底座').rotation.x=Math.PI/2;
-  C.rod(d,[w-.13,1.02,side*.04],[w-.13,1.02,side*.092],.012,C.M.bronze);
-  C.rod(d,[w-.13,1.02,side*.092],[w-.25,1.02,side*.092],.012,C.M.bronze,'杠杆式门把手');
+function openingAssembly(g,o,t){
+ const a=o.assembly;if(!a)throw Error('缺少编译门窗状态 '+o.id);
+ const group=C.group(g,'门窗 '+o.id);group.userData.openingId=o.id;
+ if(o.type!=='passage'){
+  for(const x of[o.c-o.w/2,o.c+o.w/2])C.box(group,.045,o.h,.07,x,o.b+o.h/2,0,C.M.bronze,.004,'洞口边框');
+  for(const y of[o.b,o.b+o.h])C.box(group,o.w,.04,.07,o.c,y,0,C.M.bronze,.004,'洞口横框');
  }
- for(const y of [.22,1.15,2.05])C.cyl(d,.014,.014,.09,.023,y,0,C.M.bronze,12,'金属合页');
- return d;
-}
-function windowDetail(g,o,t){
- const c=o.c,w=o.w,h=o.h,b=o.b;
- C.box(g,w+.13,.055,t+.18,c,b-.035,0,C.M.travertine,.008,'石材窗台');
- for(const xx of [c-w/2+.025,c+w/2-.025])C.box(g,.047,h,.072,xx,b+h/2,0,C.M.cream,.007,'窄边窗框');
- for(const yy of [b+.023,b+h-.023])C.box(g,w,.046,.072,c,yy,0,C.M.cream,.007,'窗框横樘');
- const cnt=Math.max(2,Math.round(w/.95));
- for(let i=0;i<cnt;i++){
-  const xx=c-w/2+(i+.5)*w/cnt;
-  C.box(g,w/cnt-.035,h-.07,.012,xx,b+h/2,0,C.M.glass,0,'独立玻璃窗扇');
-  if(i>0)C.box(g,.027,h,.052,c-w/2+i*w/cnt,b+h/2,.006,C.M.bronze,.003,'窗扇竖梃');
+ for(const p of a.panels){
+  const leaf=C.group(group,'按源状态装配的扇',...p.center,p.yaw),[w,h,d]=p.size;
+  let mat=p.infill==='solid'?C.M.cream:C.M.glass;
+  if(p.infill==='frosted-glass'){mat=C.M.glass.clone();mat.transparent=false;mat.opacity=1;mat.roughness=.9;mat.color.set('#d9dedc');}
+  C.box(leaf,w,h,d,0,0,0,mat,.002,'门窗填充');
+  for(const x of[-w/2,w/2])C.box(leaf,.025,h,.035,x,0,0,C.M.bronze,.003,'扇竖框');
+  for(const y of[-h/2,h/2])C.box(leaf,w,.025,.035,0,y,0,C.M.bronze,.003,'扇横框');
+  if(o.type==='door'||o.type==='sliding')C.box(leaf,.022,.15,.045,w/2-.09,-.05,.04,C.M.bronze,.006,'门把手');
  }
- C.box(g,.016,.13,.024,c+w/2-.10,b+h*.48,.052,C.M.bronze,.006,'窗把手');
+ return group;
 }
 C.curtain=function(parent,width,height,x,y,z,rot=0){
  const g=C.group(parent,'双层落地窗帘',x,y,z,rot);
@@ -53,20 +46,7 @@ function wall(parent,id,ax,az,bx,bz,t,openings=[],cut=.92,wallHeight=C.H){
  const solid=(start,end,bottom,top)=>{if(end-start>.005&&top-bottom>.005)C.box(g,end-start,top-bottom,t,(start+end)/2,(top+bottom)/2,0,C.M.plaster,.009,id+' · 墙实体');};
  const skirting=(start,end)=>{if(end-start<.01)return;for(const s of [-1,1])C.box(g,end-start,.075,.018,(start+end)/2,.047,s*(t/2+.009),C.M.cream,.004,'踢脚线 / 阴影缝');};
  for(const o of ops){const a=o.c-o.w/2,b=o.c+o.w/2;solid(from,a,0,H);skirting(from,a);solid(a,b,0,o.b);solid(a,b,o.b+o.h,H);if(o.b>0)skirting(a,b);
-  if(o.type==='window')windowDetail(g,o,t);
-  else if(o.type==='door'){
-   for(const xx of [a-.023,b+.023])C.box(g,.058,o.h+.035,t+.055,xx,o.h/2,0,C.M.cream,.006,'细窄门套');
-   C.box(g,o.w+.11,.065,t+.055,o.c,o.h+.025,0,C.M.cream,.006,'门套上横');
-   door(g,o.c,o.w,o.h,t);
-  }else if(o.type==='sliding'){
-   C.box(g,o.w,.055,.11,o.c,o.h-.025,0,C.M.bronze,.004,'吊轨玻璃门');
-   const sw=o.w*.51;const p=C.group(g,'厨房窄框长虹玻璃移门',a+sw/2,0,0);
-   C.box(p,sw,o.h-.10,.014,0,o.h/2,0,C.M.glass);
-   for(const xx of [-sw/2,sw/2])C.box(p,.025,o.h,.035,xx,o.h/2,0,C.M.bronze,.003);
-   for(const yy of [.035,o.h-.035])C.box(p,sw,.028,.035,0,yy,0,C.M.bronze);
-   for(let i=0;i<20;i++)C.box(p,.002,o.h-.1,.02,-sw/2+.015+i*sw/20,o.h/2,0,C.M.sheer);
-   C.box(p,.019,.27,.05,sw/2-.08,1.05,.038,C.M.bronze,.009);
-  }
+  openingAssembly(g,o,t);
   from=b;
  }
  solid(from,L,0,H);skirting(from,L);

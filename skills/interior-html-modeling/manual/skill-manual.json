@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "HTML 建模 · 编译、编辑与状态交接",
-  "version": "3.1.10",
+  "version": "3.2.0",
   "overview": {
     "title": "HTML 编辑：不同意图进入不同状态域",
     "nodes": [
@@ -120,12 +120,7 @@
           "墙门窗显式编辑；地面拉尺/面积",
           "完整 HTML 往返后再生成同版 scene"
         ],
-        "files": [
-          {
-            "path": "scripts/engine/runtime/app.js",
-            "purpose": "结构、测量、灯光、相机与导出"
-          }
-        ],
+        "files": [],
         "bodySize": 22,
         "detailRef": "editing"
       }
@@ -366,12 +361,7 @@
                 "墙门窗显式编辑；地面拉尺/面积",
                 "完整 HTML 往返后再生成同版 scene"
               ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "结构、测量、灯光、相机与导出"
-                }
-              ],
+              "files": [],
               "bodySize": 22,
               "detailRef": "editing"
             },
@@ -386,12 +376,7 @@
               "lines": [
                 "去材质风格，不将透光面变成实板"
               ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "捕获与恢复原材质"
-                }
-              ],
+              "files": [],
               "bodySize": 22,
               "detailRef": "clay-visibility"
             }
@@ -502,6 +487,180 @@
                 ]
               ],
               "label": "截图"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "room-frame-connections",
+      "title": "一个门窗编译结果，驱动模型与相机",
+      "input": "本轮源事实与用户完整空间表达要求",
+      "output": "可运行规则、可追溯镜头与空间关系",
+      "explanation": "把空间身份和构图放到生成源头；看图后修源规则，不增加事后阻断器。",
+      "diagrams": [
+        {
+          "title": "一个门窗编译结果，驱动模型与相机",
+          "nodes": [
+            {
+              "id": "input",
+              "type": "io",
+              "x": 650,
+              "y": 240,
+              "w": 1100,
+              "h": 240,
+              "title": "同版布局中的门型、两端与状态",
+              "lines": [
+                "有墙/无墙；平开/移门/敞口；透明/遮视",
+                "关闭、部分开、最大开必须与资料来源分开"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/schemas/layout.schema.json",
+                  "purpose": "唯一源字段"
+                }
+              ],
+              "bodySize": 23
+            },
+            {
+              "id": "compile",
+              "type": "process",
+              "x": 650,
+              "y": 630,
+              "w": 1100,
+              "h": 320,
+              "title": "resolve_openings：计算墙局部门扇",
+              "lines": [
+                "平开按合页与方向转动；双轨移门最大净开半幅",
+                "缺开合只采用注明未确认的关闭预览默认",
+                "禁止写死所有门同角度或固定半扇玻璃"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/python/openings.py",
+                  "purpose": "门型与开合一次编译；输出共享墙局部门扇姿态"
+                },
+                {
+                  "path": "scripts/engine/python/model.py",
+                  "purpose": "内嵌OPENING_STATES"
+                }
+              ],
+              "bodySize": 23
+            },
+            {
+              "id": "html",
+              "type": "process",
+              "x": 80,
+              "y": 1190,
+              "w": 1050,
+              "h": 330,
+              "title": "HTML装配真实状态",
+              "lines": [
+                "洞口墙体、扇的中心/尺度/角度、填充材料",
+                "旧全局开门不再覆盖；结构改变后重编译"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/runtime/architecture-kit.js",
+                  "purpose": "门窗装配"
+                },
+                {
+                  "path": "scripts/engine/runtime/scene.js",
+                  "purpose": "空间/表面标签"
+                },
+                {
+                  "path": "scripts/engine/runtime/studio.html",
+                  "purpose": "状态说明与编译数据入口"
+                }
+              ],
+              "bodySize": 23
+            },
+            {
+              "id": "camera",
+              "type": "process",
+              "x": 1260,
+              "y": 1190,
+              "w": 1050,
+              "h": 330,
+              "title": "机位计算使用同一个门扇姿态",
+              "lines": [
+                "实板遮挡、透明可透视、磨砂遮视",
+                "不另猜门状态，不把窗当通道"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/python/cameras.py",
+                  "purpose": "Occluders消费同一编译函数"
+                },
+                {
+                  "path": "scripts/engine/python/validate.py",
+                  "purpose": "视觉与通行连接分开"
+                },
+                {
+                  "path": "scripts/engine/tests/test_space_connections.py",
+                  "purpose": "门扇/移门/玻璃与主图构造的11项回归"
+                }
+              ],
+              "bodySize": 23
+            }
+          ],
+          "edges": [
+            {
+              "from": "input",
+              "to": "compile",
+              "points": [
+                [
+                  1200,
+                  480
+                ],
+                [
+                  1200,
+                  630
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "compile",
+              "to": "html",
+              "points": [
+                [
+                  1200,
+                  950
+                ],
+                [
+                  1200,
+                  1070
+                ],
+                [
+                  605,
+                  1070
+                ],
+                [
+                  605,
+                  1190
+                ]
+              ],
+              "label": "同一份"
+            },
+            {
+              "from": "compile",
+              "to": "camera",
+              "points": [
+                [
+                  1200,
+                  1070
+                ],
+                [
+                  1785,
+                  1070
+                ],
+                [
+                  1785,
+                  1190
+                ]
+              ],
+              "label": "同一份"
             }
           ]
         }
@@ -777,7 +936,7 @@
               "id": "a",
               "type": "io",
               "x": 70,
-              "y": 230,
+              "y": 250,
               "w": 670,
               "h": 240,
               "title": "用户偏好 / 风格名称",
@@ -796,7 +955,7 @@
               "id": "q",
               "type": "decision",
               "x": 910,
-              "y": 190,
+              "y": 210,
               "w": 880,
               "h": 350,
               "title": "已有同名/id 配方？",
@@ -816,7 +975,7 @@
               "id": "web",
               "type": "process",
               "x": 910,
-              "y": 720,
+              "y": 740,
               "w": 880,
               "h": 360,
               "title": "未知：宿主联网研究后整理配方",
@@ -825,10 +984,6 @@
                 "记录 URL、日期和支持结论；不冒充已检索"
               ],
               "files": [
-                {
-                  "path": "scripts/engine/python/styles.py",
-                  "purpose": "证据记录和 style-add"
-                },
                 {
                   "path": "scripts/engine/schemas/style.schema.json",
                   "purpose": "可用配方字段"
@@ -844,7 +999,7 @@
               "id": "apply",
               "type": "process",
               "x": 70,
-              "y": 1190,
+              "y": 1210,
               "w": 1080,
               "h": 370,
               "title": "CMF 更新材质，不重建形体",
@@ -873,7 +1028,7 @@
               "id": "save",
               "type": "store",
               "x": 1350,
-              "y": 1220,
+              "y": 1240,
               "w": 950,
               "h": 330,
               "title": "当前状态连同配方完整保存",
@@ -901,11 +1056,11 @@
               "points": [
                 [
                   740,
-                  350
+                  370
                 ],
                 [
                   910,
-                  365
+                  385
                 ]
               ],
               "label": "查询"
@@ -916,23 +1071,23 @@
               "points": [
                 [
                   1350,
-                  190
+                  210
                 ],
                 [
                   1350,
-                  175
+                  195
                 ],
                 [
                   48,
-                  175
+                  195
                 ],
                 [
                   48,
-                  1375
+                  1395
                 ],
                 [
                   70,
-                  1375
+                  1395
                 ]
               ],
               "label": "是：直接应用"
@@ -943,11 +1098,11 @@
               "points": [
                 [
                   1350,
-                  540
+                  560
                 ],
                 [
                   1350,
-                  720
+                  740
                 ]
               ],
               "label": "否"
@@ -958,19 +1113,19 @@
               "points": [
                 [
                   1350,
-                  1080
+                  1100
                 ],
                 [
                   1350,
-                  1130
+                  1150
                 ],
                 [
                   610,
-                  1130
+                  1150
                 ],
                 [
                   610,
-                  1190
+                  1210
                 ]
               ],
               "label": "配方"
@@ -981,11 +1136,11 @@
               "points": [
                 [
                   1150,
-                  1375
+                  1395
                 ],
                 [
                   1350,
-                  1385
+                  1405
                 ]
               ],
               "label": "更新后"
@@ -1128,10 +1283,6 @@
                 "materialOverrides 按材质名；uniform 保持比例；问题报告与模型同时保留"
               ],
               "files": [
-                {
-                  "path": "scripts/engine/runtime/workspace.js",
-                  "purpose": "选定实例替换与材质编辑"
-                },
                 {
                   "path": "scripts/engine/runtime/spatial.js",
                   "purpose": "使用区/边界观察"
@@ -1315,12 +1466,7 @@
                 "布局、材质、相机、灯光及量尺逐项查看",
                 "不靠重置作品掩盖状态丢失"
               ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "importProject/exportProject"
-                }
-              ],
+              "files": [],
               "bodySize": 22,
               "check": true
             },
@@ -1335,12 +1481,7 @@
               "lines": [
                 "保留用户当前作品，再回保存步骤"
               ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/workspace.js",
-                  "purpose": "完整状态恢复负责人"
-                }
-              ],
+              "files": [],
               "bodySize": 22
             },
             {
@@ -1475,7 +1616,7 @@
               "id": "snapshot",
               "type": "process",
               "x": 68,
-              "y": 170,
+              "y": 220,
               "w": 570,
               "h": 280,
               "title": "保存原状态，遍历可导出网格",
@@ -1495,7 +1636,7 @@
               "id": "transparent",
               "type": "decision",
               "x": 825,
-              "y": 160,
+              "y": 210,
               "w": 723,
               "h": 340,
               "title": "材质透明、透射或使用遮罩？",
@@ -1509,7 +1650,7 @@
               "id": "retain",
               "type": "process",
               "x": 1683,
-              "y": 190,
+              "y": 240,
               "w": 553,
               "h": 280,
               "title": "保留原材质",
@@ -1528,7 +1669,7 @@
               "id": "neutral",
               "type": "process",
               "x": 910,
-              "y": 700,
+              "y": 750,
               "w": 553,
               "h": 280,
               "title": "替换为中性不透明材质",
@@ -1543,7 +1684,7 @@
               "id": "capture",
               "type": "process",
               "x": 1683,
-              "y": 700,
+              "y": 750,
               "w": 553,
               "h": 340,
               "title": "完成捕获后恢复原引用",
@@ -1567,7 +1708,7 @@
               "id": "visible",
               "type": "process",
               "x": 80,
-              "y": 1220,
+              "y": 1270,
               "w": 2160,
               "h": 300,
               "title": "同机位记录跨房间可见实例，再交给产品附图选择",
@@ -1575,16 +1716,7 @@
                 "近面裁包络 → 投影 → 裁画幅 → 图像区域回投射线，画边局部不靠3D角点判断",
                 "门外邻室同样参与；记录visiblePlacementIds，有限采样不冒称逐像素证明"
               ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "framePlacementSamples：实际相机、射线、可见表面"
-                },
-                {
-                  "path": "scripts/engine/python/render.py",
-                  "purpose": "保存采样结果，组织本镜头产品；旧捕获兼容不冒称新证据"
-                }
-              ],
+              "files": [],
               "bodySize": 22
             }
           ],
@@ -1595,11 +1727,11 @@
               "points": [
                 [
                   638,
-                  310
+                  360
                 ],
                 [
                   825,
-                  310
+                  360
                 ]
               ],
               "label": "逐项"
@@ -1610,11 +1742,11 @@
               "points": [
                 [
                   1547,
-                  330
+                  380
                 ],
                 [
                   1683,
-                  330
+                  380
                 ]
               ],
               "label": "是"
@@ -1625,11 +1757,11 @@
               "points": [
                 [
                   1186,
-                  500
+                  550
                 ],
                 [
                   1186,
-                  700
+                  750
                 ]
               ],
               "label": "否"
@@ -1640,11 +1772,11 @@
               "points": [
                 [
                   1959,
-                  470
+                  520
                 ],
                 [
                   1959,
-                  700
+                  750
                 ]
               ],
               "label": "捕获"
@@ -1655,11 +1787,11 @@
               "points": [
                 [
                   1462,
-                  840
+                  890
                 ],
                 [
                   1683,
-                  840
+                  890
                 ]
               ],
               "label": "捕获"
@@ -1685,6 +1817,8 @@
     "manual/skill-manual.json": "同源说明书内容与图形",
     "manual/skill-manual.md": "同源说明书内容与图形",
     "playbook.md": "编辑职责、家具和动线知识",
+    "playbook/space-connections.md": "空间身份、连接、开合、视野交接及默认值唯一合同",
+    "playbook/timing.md": "六项共用的逐步骤时间、异步等待和历史未知口径",
     "scripts/engine/LICENSE-Three.js.txt": "原第三方运行库许可",
     "scripts/engine/STYLE-GUIDE.md": "风格扩展与 CMF 约束",
     "scripts/engine/assets/library/PROVENANCE.md": "样本来源说明",
@@ -1717,8 +1851,10 @@
     "scripts/engine/python/model.py": "编译更新后模型",
     "scripts/engine/python/native.py": "import_html 提取当前布局",
     "scripts/engine/python/native_image.py": "实现 native_image 的确定性行为",
+    "scripts/engine/python/openings.py": "门型与开合一次编译；输出共享墙局部门扇姿态",
     "scripts/engine/python/render.py": "同机位截图；粗模定位/精细参考锁款的实际请求、系列策略与画幅记录",
     "scripts/engine/python/styles.py": "证据记录和 style-add",
+    "scripts/engine/python/timing.py": "命令/嵌套步骤计时及Agent动作start/finish",
     "scripts/engine/python/validate.py": "技术输入和业务观察",
     "scripts/engine/runtime/app.js": "importProject/exportProject",
     "scripts/engine/runtime/architecture-kit.js": "门窗和墙构造",
@@ -1746,9 +1882,8 @@
     "scripts/engine/styles/modern-minimal/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
     "scripts/engine/styles/new-chinese/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
     "scripts/engine/styles/wabi-sabi/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
+    "scripts/engine/tests/test_space_connections.py": "门扇/移门/玻璃与主图构造的11项回归",
     "scripts/requirements.txt": "编译/截图 Python 依赖版本",
-    "scripts/run.py": "模型/风格/资产命令入口",
-    "playbook/timing.md": "六项共用的逐步骤时间、异步等待和历史未知口径",
-    "scripts/engine/python/timing.py": "命令/嵌套步骤计时及Agent动作start/finish"
+    "scripts/run.py": "模型/风格/资产命令入口"
   }
 }

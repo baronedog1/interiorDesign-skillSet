@@ -1,7 +1,7 @@
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.1.10", category: interior-design}
+metadata: {version: "3.2.0", category: interior-design}
 ---
 # HTML 室内共建
 
@@ -22,3 +22,5 @@ metadata: {version: "3.1.10", category: interior-design}
 人读 [PDF](SKILL_MANUAL.pdf)。
 
 每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
+
+门窗按源事实统一编译；空间两端、门型、开合、填充与外部目标随截图交接。读 [空间连接合同](playbook/space-connections.md)。不再写死半扇玻璃或截图时统一开门。

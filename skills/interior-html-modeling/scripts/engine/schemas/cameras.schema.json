@@ -75,7 +75,9 @@
             "minimum": 20,
             "maximum": 100
           },
-          "verticalShift": {"type": "number"},
+          "verticalShift": {
+            "type": "number"
+          },
           "projection": {
             "enum": [
               "perspective",
@@ -144,12 +146,14 @@
               },
               "cutaway": {
                 "type": "boolean"
+              },
+              "doorStateMode": {
+                "const": "source"
               }
             },
             "required": [
               "walls",
               "ceiling",
-              "doorsOpen",
               "cutaway"
             ]
           }

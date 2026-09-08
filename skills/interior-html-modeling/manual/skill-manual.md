@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：3.1.10
+版本：3.2.0
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.1.10", category: interior-design}
+metadata: {version: "3.2.0", category: interior-design}
 ---
 ~~~
 
@@ -35,15 +35,38 @@ metadata: {version: "3.1.10", category: interior-design}
 - asset：家具库 → 实例与材质槽；真实 GLB 同类替换；指定资产按比例与尺寸（详见 library）
   - scripts/engine/runtime/workspace.js：目录选择、资产替换和材质编辑
 - edit：结构、量尺与完整保存；墙门窗显式编辑；地面拉尺/面积；完整 HTML 往返后再生成同版 scene（详见 editing）
-  - scripts/engine/runtime/app.js：结构、测量、灯光、相机与导出
 - capture-clay：白模截图保持玻璃透明；去材质风格，不将透光面变成实板（详见 clay-visibility）
-  - scripts/engine/runtime/app.js：捕获与恢复原材质
 - in → build：当前数据
 - build → intent：已打开
 - intent → cmf：风格
 - intent → asset：家具
 - intent → edit：结构/测量/保存
 - edit → capture-clay：截图
+
+### 一个门窗编译结果，驱动模型与相机
+
+把空间身份和构图放到生成源头；看图后修源规则，不增加事后阻断器。
+
+输入：本轮源事实与用户完整空间表达要求
+输出：可运行规则、可追溯镜头与空间关系
+
+#### 一个门窗编译结果，驱动模型与相机
+- input：同版布局中的门型、两端与状态；有墙/无墙；平开/移门/敞口；透明/遮视；关闭、部分开、最大开必须与资料来源分开
+  - scripts/engine/schemas/layout.schema.json：唯一源字段
+- compile：resolve_openings：计算墙局部门扇；平开按合页与方向转动；双轨移门最大净开半幅；缺开合只采用注明未确认的关闭预览默认；禁止写死所有门同角度或固定半扇玻璃
+  - scripts/engine/python/openings.py：门型与开合一次编译；输出共享墙局部门扇姿态
+  - scripts/engine/python/model.py：内嵌OPENING_STATES
+- html：HTML装配真实状态；洞口墙体、扇的中心/尺度/角度、填充材料；旧全局开门不再覆盖；结构改变后重编译
+  - scripts/engine/runtime/architecture-kit.js：门窗装配
+  - scripts/engine/runtime/scene.js：空间/表面标签
+  - scripts/engine/runtime/studio.html：状态说明与编译数据入口
+- camera：机位计算使用同一个门扇姿态；实板遮挡、透明可透视、磨砂遮视；不另猜门状态，不把窗当通道
+  - scripts/engine/python/cameras.py：Occluders消费同一编译函数
+  - scripts/engine/python/validate.py：视觉与通行连接分开
+  - scripts/engine/tests/test_space_connections.py：门扇/移门/玻璃与主图构造的11项回归
+- input → compile
+- compile → html：同一份
+- compile → camera：同一份
 
 ## 完整文件地图
 - MANIFEST.json：发布版本与完整文件清单
@@ -55,6 +78,7 @@ metadata: {version: "3.1.10", category: interior-design}
 - manual/skill-manual.json：同源说明书内容与图形
 - manual/skill-manual.md：同源说明书内容与图形
 - playbook.md：编辑职责、家具和动线知识
+- playbook/space-connections.md：空间身份、连接、开合、视野交接及默认值唯一合同
 - playbook/timing.md：六项共用的逐步骤时间、异步等待和历史未知口径
 - scripts/engine/LICENSE-Three.js.txt：原第三方运行库许可
 - scripts/engine/STYLE-GUIDE.md：风格扩展与 CMF 约束
@@ -88,6 +112,7 @@ metadata: {version: "3.1.10", category: interior-design}
 - scripts/engine/python/model.py：编译更新后模型
 - scripts/engine/python/native.py：import_html 提取当前布局
 - scripts/engine/python/native_image.py：实现 native_image 的确定性行为
+- scripts/engine/python/openings.py：门型与开合一次编译；输出共享墙局部门扇姿态
 - scripts/engine/python/render.py：同机位截图；粗模定位/精细参考锁款的实际请求、系列策略与画幅记录
 - scripts/engine/python/styles.py：证据记录和 style-add
 - scripts/engine/python/timing.py：命令/嵌套步骤计时及Agent动作start/finish
@@ -118,6 +143,7 @@ metadata: {version: "3.1.10", category: interior-design}
 - scripts/engine/styles/modern-minimal/PLAYBOOK.md：配方、资源与实现说明：PLAYBOOK.md
 - scripts/engine/styles/new-chinese/PLAYBOOK.md：配方、资源与实现说明：PLAYBOOK.md
 - scripts/engine/styles/wabi-sabi/PLAYBOOK.md：配方、资源与实现说明：PLAYBOOK.md
+- scripts/engine/tests/test_space_connections.py：门扇/移门/玻璃与主图构造的11项回归
 - scripts/requirements.txt：编译/截图 Python 依赖版本
 - scripts/run.py：模型/风格/资产命令入口
 
@@ -176,7 +202,6 @@ metadata: {version: "3.1.10", category: interior-design}
 - q：已有同名/id 配方？；按中文名、英文名及 id 匹配
   - scripts/engine/python/styles.py：resolve_style 匹配/生成研究请求
 - web：未知：宿主联网研究后整理配方；检索颜色、材料、家具/灯光及细节；记录 URL、日期和支持结论；不冒充已检索
-  - scripts/engine/python/styles.py：证据记录和 style-add
   - scripts/engine/schemas/style.schema.json：可用配方字段
   - scripts/engine/catalog/styles.json：保存新配方
 - apply：CMF 更新材质，不重建形体；HTML按钮只改CMF，保留编辑几何；不是最终设计只能改色；原生渲染另读取完整设计意图
@@ -214,7 +239,6 @@ metadata: {version: "3.1.10", category: interior-design}
 - bad：不支持：预转换或更换正确资产；明确问题文件；不拿矩形占位冒充原模型；尺寸不合适回选型/布局，不压扁指定资产
   - scripts/engine/catalog/components.json：组件类别和尺寸语义
 - ok：替换后保留实例位置与身份，再保存完整 HTML；materialOverrides 按材质名；uniform 保持比例；问题报告与模型同时保留
-  - scripts/engine/runtime/workspace.js：选定实例替换与材质编辑
   - scripts/engine/runtime/spatial.js：使用区/边界观察
   - scripts/engine/runtime/app.js：状态保存、恢复和撤销
 - a → b：索引
@@ -240,9 +264,7 @@ metadata: {version: "3.1.10", category: interior-design}
   - scripts/engine/runtime/workspace.js：saveHTML 与导入
   - scripts/engine/runtime/native-assets.js：内嵌模型保留
 - q：重开与原状态一致？；布局、材质、相机、灯光及量尺逐项查看；不靠重置作品掩盖状态丢失
-  - scripts/engine/runtime/app.js：importProject/exportProject
 - fix：否：修对应序列化源函数；保留用户当前作品，再回保存步骤
-  - scripts/engine/runtime/workspace.js：完整状态恢复负责人
 - out：是：新布局重编译后交接；sceneKey/htmlSha256/cameraDigest 同版；机位、渲染、平台读取这份结果
   - scripts/engine/python/native.py：import_html 提取当前布局
   - scripts/engine/python/model.py：编译更新后模型
@@ -268,8 +290,6 @@ metadata: {version: "3.1.10", category: interior-design}
   - scripts/engine/python/render.py：正式入口捕获结构主图和同机位布局辅助图
   - scripts/engine/python/model.py：新运行时编译更新模型摘要，不覆盖旧冻结输入
 - visible：同机位记录跨房间可见实例，再交给产品附图选择；近面裁包络 → 投影 → 裁画幅 → 图像区域回投射线，画边局部不靠3D角点判断；门外邻室同样参与；记录visiblePlacementIds，有限采样不冒称逐像素证明
-  - scripts/engine/runtime/app.js：framePlacementSamples：实际相机、射线、可见表面
-  - scripts/engine/python/render.py：保存采样结果，组织本镜头产品；旧捕获兼容不冒称新证据
 - snapshot → transparent：逐项
 - transparent → retain：是
 - transparent → neutral：否

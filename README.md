@@ -1,19 +1,19 @@
 # Interior Design Skill Set
 
-室内设计 Skill 的版本化备份与分发仓库。2026-09-08 更新渲染参考策略及 HTML 交接说明；六项之外的十项旧 Skill 保留原文件，不代表它们已经完成 GPT-6／Windows 适配。
+室内设计 Skill 的版本化备份与分发仓库。2026-09-08 更新完整主机位、门窗源状态与跨空间事实交接；六项之外的十项旧 Skill 保留原文件，不代表它们已经完成 GPT-6／Windows 适配。
 
 ## 当前六项设计 Skill
 
 | Skill | 版本 | 职责 |
 |---|---|---|
-| [interior-floorplan-planning](skills/interior-floorplan-planning/SKILL.md) | 3.2.1 | 需求到功能/结构家族选型、尺度/拓扑/动线与真实家具锚点 |
-| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.1.9 | 代码粗模、透明白模、画边及跨房间可见产品、CMF与设计意图交接 |
-| [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.1.1 | 功能正视/床头构图、真实连通域与按用途选图 |
-| [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.2.6 | 固定建筑与布局、全屋选品按镜头附图、参考板适配容量、同空间原生绘图 |
+| [interior-floorplan-planning](skills/interior-floorplan-planning/SKILL.md) | 3.3.0 | 需求到功能/结构家族选型、尺度/拓扑/动线与真实家具锚点 |
+| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.2.0 | 代码粗模、透明白模、画边及跨房间可见产品、CMF与设计意图交接 |
+| [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.2.0 | 主体正视、地面天花共同构图、真实可见空间与按用途选图 |
+| [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.3.0 | 固定建筑与布局、全屋选品按镜头附图、参考板适配容量、同空间原生绘图 |
 | [idk-canvas-ingest-agent](skills/idk-canvas-ingest-agent/SKILL.md) | 3.1.0 | 百恩得资产检索／下载与私有平台交付 |
 | [booklet-production](skills/booklet-production/SKILL.md) | 4.1.1 Windows | 杂志式 HTML／PDF 方案册，含模板和样册 |
 
-六项共128个分发文件，保留各项完整的代码、模板、说明书 JSON／Markdown／SVG／PDF 及自带资产。每项根目录 `SKILL_MANUAL.pdf` 是对应的流程说明；[设计编排与方案册说明](skills/booklet-production/SKILL_MANUAL.pdf)、[杂志式样册](skills/booklet-production/expected_outcome/demo.pdf) 可直接查看。样册使用公开参考图，不是客户户型或本轮原生绘图成果。
+六项共131个分发文件，保留各项完整的代码、模板、说明书 JSON／Markdown／SVG／PDF 及自带资产。每项根目录 `SKILL_MANUAL.pdf` 是对应的流程说明；[设计编排与方案册说明](skills/booklet-production/SKILL_MANUAL.pdf)、[杂志式样册](skills/booklet-production/expected_outcome/demo.pdf) 可直接查看。样册使用公开参考图，不是客户户型或本轮原生绘图成果。
 
 ## 完整设计编排
 
@@ -23,6 +23,14 @@
 - 初始截图不能直接配更新后的模型；保存风格版本后刷新正式截图。结构或家具包络变化时重新求解受影响机位。
 - 平台资产和上传按需调用，已有同版成果复用，不强制重跑。
 - 渲染默认带完整家具与细节。只有用户明确要求“白模／空白槽位”才切换空槽模式；两种模式都锁结构与机位，指定资产不变形。
+
+### 建模到渲染的共同事实
+
+- 规划记录空间身份、连接端点、隔断类型、门扇状态和玻璃属性；未知信息标为待确认，不猜成房间或户外。
+- HTML 与机位共用 openings.py 编译的真实门窗组件，不在截图时统一开门。
+- 主图默认同时带到地面和天花，地毯、灯具、餐桌按表达目的调整比例；特写是补充，不替代主图。
+- 截图附当前空间、实际抽样可见的相邻空间及门窗状态，渲染保持连接关系和机位，可深化饰面与光影。
+- 可见性与画面比例是有限射线抽样，不是逐像素保证；窄卧室可能只露侧边地面。未确认的开合状态使用显式标注的关闭预览，不代表现场事实。
 
 ## 安装与就绪边界
 

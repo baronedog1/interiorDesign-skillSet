@@ -168,6 +168,23 @@
           "frontWallId": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$"
+          },
+          "cameraComposition": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "emphasis": {
+                "enum": [
+                  "balanced",
+                  "floor",
+                  "ceiling",
+                  "table"
+                ]
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
           }
         },
         "required": [
@@ -291,6 +308,59 @@
             },
             "minItems": 2,
             "maxItems": 2
+          },
+          "openFraction": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "hingeSide": {
+            "enum": [
+              "left",
+              "right"
+            ]
+          },
+          "swingSign": {
+            "enum": [
+              -1,
+              1
+            ]
+          },
+          "slideTo": {
+            "enum": [
+              "left",
+              "right"
+            ]
+          },
+          "infill": {
+            "enum": [
+              "solid",
+              "clear-glass",
+              "frosted-glass"
+            ]
+          },
+          "exteriorView": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "outdoors",
+                  "building-common-area",
+                  "unknown"
+                ]
+              },
+              "description": {
+                "type": "string"
+              },
+              "basis": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "description"
+            ]
           }
         },
         "required": [

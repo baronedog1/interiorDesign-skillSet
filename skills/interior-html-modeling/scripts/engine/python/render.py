@@ -8,7 +8,7 @@ from cameras import validate_plan
 from common import read,write,atomic_bytes,digest,file_sha,SHARED,require_schema
 from timing import traced,span,now
 
-REFERENCE_POLICY='shell-layout-design-v3'
+REFERENCE_POLICY='shell-layout-design-space-v4'
 
 def image_slot_anchors(placements,shot):
     """Project placement boxes through the actual frozen camera; no layout edits.
@@ -76,7 +76,7 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
     for s in shots:
         # Capture every selected, technically valid candidate. Quality is an observation,
         # not a reason to suppress an image that the Agent needs to inspect.
-        key=digest({'sceneKey':scene['sceneKey'],'camera':s,'mode':mode,'referenceMode':reference_mode,'layoutReferenceVersion':2});old=saved.get(s['id']);file=out/(s['id']+'.png')
+        key=digest({'sceneKey':scene['sceneKey'],'camera':s,'mode':mode,'referenceMode':reference_mode,'layoutReferenceVersion':3});old=saved.get(s['id']);file=out/(s['id']+'.png')
         pair=(old or {}).get('layoutReference',{});pair_file=out/(s['id']+'.layout.png')
         pair_current=reference_mode!='empty-slots' or (pair.get('image')==pair_file.name and pair_file.is_file() and file_sha(pair_file)==pair.get('sha256'))
         if not overwrite and old and pair_current and old.get('inputKey')==key and old.get('status') in ['rendered','needs-review'] and file.exists() and file_sha(file)==old.get('sha256'):continue
@@ -104,6 +104,7 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
                         row.update({'sha256':file_sha(file),'width':data['width'],'height':data['height'],'status':'needs-review' if low or shot['status']=='review' else 'rendered','visibilitySamples':review,'note':'27点射线抽检是遮挡预警，不是逐像素视觉验收。'})
                         row.update(referenceMode=reference_mode,hiddenPlacementIds=data.get('hiddenPlacementIds',[]),whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False)
                         row['visiblePlacementIds']=data.get('visiblePlacementIds')
+                        row['spaceContext']=data.get('spaceContext')
                         if reference_mode=='empty-slots':
                             # The empty frame describes architecture, not furniture geometry.
                             # Capture a separate same-camera spatial reference in the same
@@ -115,6 +116,7 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
                             atomic_bytes(layout_file,base64.b64decode(layout['dataUrl'].split(',',1)[1]))
                             row['layoutReference']={'image':layout_file.name,'sha256':file_sha(layout_file),'cameraDigest':digest(shot),'sceneKey':scene['sceneKey'],'role':'same-camera-layout-only'}
                             row['visiblePlacementIds']=layout.get('visiblePlacementIds')
+                            row['spaceContext']=layout.get('spaceContext')
                         row['visibilityMethod']='in-frame-surface-ray-samples-not-pixel-proof' if isinstance(row.get('visiblePlacementIds'),list) else 'legacy-room-group'
                     except Exception as exc:row.update(status='failed',error=str(exc))
                     row['timing']={'startedAt':started,'finishedAt':now(),'elapsedMs':round((time.perf_counter()-clock)*1000,3),'kind':'code','scope':'capture-and-save-one-shot'}
@@ -214,6 +216,13 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
     request['referenceGuide']=[{'imageIndex':i+1,'role':r['role'],'placementIds':r.get('placementIds',[])} for i,r in enumerate(attached)]
     text+='\n实际附图顺序与职责（图片编号从1起）：\n'+json.dumps(request['referenceGuide'],ensure_ascii=False)
     request['requiredReview']+=['crossViewConsistency']
+    context=row.get('spaceContext')
+    if context:
+        request['spaceContext']=context
+        text+='\n空间与连接事实（来自同一模型及本机位射线，不从粗模外观猜房间）：'+json.dumps(context,ensure_ascii=False)
+        text+='\n当前空间、可见邻接空间及门后的目标必须与上述身份一致；阳台不是卧室，厨房不是普通房间。可见门洞不等于门后整间都入画。保持墙洞和隔断类别、门扇开合、玻璃透明/磨砂/实板性质；款式细节可精细化，但不得把关闭实门画成敞口、玻璃移门画成实墙。向外的目标为unknown时不擅自认定直通户外或另一间房；户外景观只能按已知朝向和设计意图演绎并标明非现场实景。主图保留当前截图已有天花与地面，不裁掉吊灯、吊顶或地面，不为精细家具改镜头。'
+    else:
+        request['spaceContextStatus']='legacy-capture-missing; recapture-for-current-task'
     request['prompt']=text.strip()
     write(out_file,request);atomic_bytes(Path(out_file).with_suffix('.prompt.txt'),text.strip().encode('utf-8'));return request
 

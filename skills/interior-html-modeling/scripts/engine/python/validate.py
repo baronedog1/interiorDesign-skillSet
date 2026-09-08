@@ -68,14 +68,15 @@ def validate_layout(data,strict=False):
         if any(min(b,end)-max(a,start)>.001 and id0!=o['id'] for a,b,id0,_,_ in host_intervals[w['id']]):issue('error','stacked-openings-unsupported','同一横向区间有叠层开口；请合并开口或拆分墙段',[o['id']])
         conn=o.get('connects')
         if conn:
-            if o['type'] in ['window','fixed-glazing']:issue('error','window-is-not-door','窗/固定玻璃不能声明通行连接',[o['id']])
-            elif any(x is not None and x not in rooms for x in conn):issue('error','unknown-connection-room','门连接的房间不存在',[o['id']])
+            if any(x is not None and x not in rooms for x in conn):issue('error','unknown-connection-room','门连接的房间不存在',[o['id']])
             elif conn[0]==conn[1]:issue('error','same-room-door','门两侧不能是同一房间',[o['id']])
             else:
                 for x in conn:
                     if x is not None and rooms[x].boundary.distance(line.interpolate(start+o['width']/2))>w['thickness']+.05:issue('error','wrong-door-connection','门不在声明房间的边界上',[o['id'],x])
-                graph[conn[0]].add(conn[1]);graph[conn[1]].add(conn[0]);doors.append((o,line))
-        if o['type'] in ['door','sliding-door','passage'] and not conn:issue('warning','missing-connection','通行开口未声明两侧空间',[o['id']])
+                if o['type'] in ['door','sliding-door','passage']:
+                    graph[conn[0]].add(conn[1]);graph[conn[1]].add(conn[0]);doors.append((o,line))
+        if not conn:issue('warning','missing-connection','开口未声明两侧空间；不从外观猜测目标',[o['id']])
+        if o['type'] in ['door','sliding-door'] and 'openFraction' not in o:issue('warning','opening-state-unspecified','开合未确认；仅采用明确标注的关闭预览默认值',[o['id']])
     for c in data['openConnections']:
         a,b=c['rooms'];line=LineString(c['span'])
         if a not in rooms or b not in rooms:issue('error','unknown-open-connection','开放连接引用未知房间',c['rooms']);continue

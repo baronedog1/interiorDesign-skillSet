@@ -97,7 +97,7 @@
  function output(id,value){const out=$('#'+id)?.parentElement.querySelector('output');if(out)out.textContent=value;}
  function setTab(id){if(!['style','walls','furniture','lights','sun','camera','render'].includes(id)||state.busy)return;cancelGesture();select(null);lightRig.select(null);state.tab=id;C.workspace?.cancel();state.tool=id==='furniture'?'move':'browse';state.auto=false;lightRig.show(id==='lights');$$('.pro-tab').forEach(b=>b.classList.toggle('selected',b.dataset.tab===id));$$('.pro-panel').forEach(p=>p.classList.toggle('active',p.dataset.panel===id));updateLightUI();syncUI();invalidate();}
  function setTool(tool){cancelGesture();state.tool=state.tab==='furniture'?tool:'browse';state.auto=false;syncUI();invalidate();}
- function applyBuilding(){walls.visible=state.wallVisible;C.ceiling.visible=state.roof;R.localClippingEnabled=state.cut;furnitureGroups.forEach(g=>g.visible=state.furnitureVisible);C.doors.forEach(d=>d.rotation.y=state.doors?1.3:0);invalidate(true);}
+ function applyBuilding(){walls.visible=state.wallVisible;C.ceiling.visible=state.roof;R.localClippingEnabled=state.cut;furnitureGroups.forEach(g=>g.visible=state.furnitureVisible);invalidate(true);}
  function setView(id){if(state.busy)return;const p=C.presets[id];if(!p)return;cancelGesture();state.auto=false;state.view=id;const outside=['overview','plan'].includes(id);state.cut=false;state.roof=!outside;state.labels=id==='plan';ground.visible=outside;
   active=id==='plan'?ortho:cam;controls.camera=active;controls.mode=outside?'orbit':'look';controls.twoPoint=false;
   cam.clearViewOffset();active.position.fromArray(p.pos);controls.target.fromArray(p.target);if(active.isPerspectiveCamera){const fit=Math.max(1,(outside?1.10:.96)/Math.max(.35,cam.aspect));active.fov=Math.min(108,T.MathUtils.radToDeg(2*Math.atan(Math.tan(T.MathUtils.degToRad(p.fov/2))*fit)));}active.zoom=1;if(active.isPerspectiveCamera)cam.setViewOffset(cam.aspect,1,0,-(p.verticalShift||0)/2,cam.aspect,1);active.updateProjectionMatrix();controls.lookAt();applyBuilding();syncUI();invalidate(true);
@@ -285,13 +285,38 @@
   }
   return ids;
  };
+ C.frameSpaceContext=function(camera,shot){
+  root.updateMatrixWorld(true);camera.updateMatrixWorld(true);
+  const P=window.PROJECT,rooms=new Map(P.rooms.map(r=>[r.id,{id:r.id,name:r.name,type:r.type}])),ray=new T.Raycaster(),seen=new Set(),portals=[];let floor=0,ceiling=0,total=0;
+  const ancestors=(o,key)=>{while(o&&o!==root){if(o.userData[key]!==undefined)return o.userData[key];o=o.parent;}return null;};
+  const opaque=h=>isVisible(h.object)&&!h.object.userData.noExport&&!((Array.isArray(h.object.material)?h.object.material:[h.object.material]).every(m=>m.transparent||m.transmission>0));
+  for(let y=0;y<19;y++)for(let x=0;x<25;x++){
+   ray.setFromCamera(new T.Vector2(-1+2*(x+.5)/25,1-2*(y+.5)/19),camera);ray.far=Infinity;
+   const hit=ray.intersectObject(root,true).find(opaque);total++;if(!hit)continue;
+   const id=ancestors(hit.object,'roomId'),surface=ancestors(hit.object,'surfaceType');if(id&&rooms.has(id))seen.add(id);if(surface==='floor')floor++;if(surface==='ceiling')ceiling++;
+  }
+  const candidates=P.openings.map(o=>{const w=P.walls.find(w=>w.id===o.wallId),len=Math.hypot(w.b[0]-w.a[0],w.b[1]-w.a[1]),u=[(w.b[0]-w.a[0])/len,(w.b[1]-w.a[1])/len];return {id:o.id,a:[w.a[0]+u[0]*o.offset,w.a[1]+u[1]*o.offset],b:[w.a[0]+u[0]*(o.offset+o.width),w.a[1]+u[1]*(o.offset+o.width)],bottom:o.sill,height:o.height,facts:window.OPENING_STATES[o.id]};});
+  P.openConnections.forEach((c,i)=>candidates.push({id:'open-zone-'+i,a:c.span[0],b:c.span[1],bottom:0,height:P.floor.height,facts:{type:'open-zone',connects:c.rooms,state:'open',seeThrough:true,sourceStatus:'explicit',infill:'none'}}));
+  for(const c of candidates){let visible=0;const projected=[];
+   for(let j=0;j<5;j++)for(let i=0;i<5;i++){
+    const u=(i+.5)/5,v=(j+.5)/5,p=new T.Vector3(c.a[0]+(c.b[0]-c.a[0])*u,c.bottom+c.height*v,c.a[1]+(c.b[1]-c.a[1])*u),ndc=p.clone().project(camera);
+    if(ndc.z< -1||ndc.z>1||Math.abs(ndc.x)>1||Math.abs(ndc.y)>1)continue;
+    const d=p.clone().sub(camera.position),distance=d.length();ray.set(camera.position,d.normalize());ray.far=Math.max(0,distance-.035);
+    const blocked=ray.intersectObject(root,true).find(h=>opaque(h)&&ancestors(h.object,'openingId')!==c.id);if(blocked)continue;
+    visible++;projected.push([(ndc.x+1)/2,(1-ndc.y)/2]);
+   }
+   if(!visible)continue;const f=c.facts,ends=(f.connects||[]).map(id=>id===null?{id:null,type:f.exteriorView?.kind||'unknown',description:f.exteriorView?.description||'外部目标未确认'}:rooms.get(id)||{id,type:'unknown'});
+   portals.push({id:c.id,type:f.type,state:f.state,openFraction:f.openFraction??1,infill:f.infill,seeThrough:f.seeThrough,sourceStatus:f.sourceStatus,endpoints:ends,externalView:f.exteriorView||null,visibleApertureSamples:visible,imageSampleBounds01:[[Math.min(...projected.map(p=>p[0])),Math.min(...projected.map(p=>p[1]))],[Math.max(...projected.map(p=>p[0])),Math.max(...projected.map(p=>p[1]))]],connectionKnown:ends.length===2});
+  }
+  return {schema:'interior.frame-space/1',currentRoom:rooms.get(shot.roomId)||null,observedRooms:[...seen].map(id=>rooms.get(id)),portals,surfaceSamples:{total,floor,ceiling,floorFraction:floor/total,ceilingFraction:ceiling/total},method:'actual-camera-portal-and-surface-rays; sampled-evidence-not-pixel-proof',doorStateMode:'source'};
+ };
  C.captureFrame=async function(shot,mode='pbr',options={}){if(state.busy)throw Error('另一个截图任务尚未结束');const referenceMode=options.referenceMode||'furnished';if(!['furnished','empty-slots'].includes(referenceMode))throw Error('未知参考模式');if(referenceMode==='empty-slots'&&options.whiteModelRequested!==true)throw Error('空白槽位模式须由用户明确要求');const hiddenPlacementIds=[];const snap=cameraSnapshot(),before={roof:state.roof,cut:state.cut,wallVisible:state.wallVisible,furnitureVisible:state.furnitureVisible,doors:state.doors},ratio=R.getPixelRatio(),selection=helper?.visible,auto=state.auto;const originalVisible=new Map(entries.map(e=>[e.object,e.object.visible]));let savedMaterials;
- try{cancelGesture();state.auto=false;busy('正在按冻结机位出图…');state.wallVisible=state.furnitureVisible=true;state.roof=shot.visibility.ceiling;state.cut=shot.visibility.cutaway;state.doors=shot.visibility.doorsOpen;entries.forEach(e=>e.object.visible=true);applyBuilding();ground.visible=shot.kind==='overview';
+ try{cancelGesture();state.auto=false;busy('正在按冻结机位出图…');state.wallVisible=state.furnitureVisible=true;state.roof=shot.visibility.ceiling;state.cut=shot.visibility.cutaway;entries.forEach(e=>e.object.visible=true);applyBuilding();ground.visible=shot.kind==='overview';
  active=shot.projection==='orthographic'?ortho:cam;controls.camera=active;active.position.fromArray(shot.position);active.up.fromArray(shot.up);controls.target.fromArray(shot.target);controls.lookAt();
  const w=shot.frame.width,h=shot.frame.height;R.setPixelRatio(1);R.setSize(w,h,false);rt.setSize(w,h);postMat.uniforms.resolution.value.set(w,h);if(active.isPerspectiveCamera){active.fov=shot.fov;active.aspect=w/h;active.zoom=1;active.setViewOffset(w,h,0,-(shot.verticalShift||0)*h/2,w,h);}else{const span=shot.orthographicSpan||12;active.top=span/2;active.bottom=-span/2;active.left=-span*w/h/2;active.right=span*w/h/2;active.zoom=1;}active.updateProjectionMatrix();if(helper)helper.visible=false;
  if(mode==='clay'){savedMaterials=new Map();const bySide=new Map();const neutral=original=>{if(original.transparent||original.transmission>0||original.alphaTest>0)return original;let m=bySide.get(original.side);if(!m){m=new T.MeshStandardMaterial({color:'#cbc6bc',roughness:.9,side:original.side});bySide.set(original.side,m);}return m;};root.traverse(o=>{if(o.isMesh&&!o.userData.noExport){savedMaterials.set(o,o.material);o.material=Array.isArray(o.material)?o.material.map(neutral):neutral(o.material);}});}
  if(referenceMode==='empty-slots'){for(const p of window.PROJECT.placements){const e=entityMap.get(p.id);if(!e||e.type!=='furniture')throw Error('槽位缺少对应可见家具：'+p.id);e.object.visible=false;hiddenPlacementIds.push(p.id);}}
- invalidate(true);draw();const dataUrl=canvas.toDataURL('image/png');const visiblePlacementIds=referenceMode==='furnished'?C.framePlacementSamples(active):null;return{dataUrl,width:w,height:h,sceneKey:window.SCENE_KEY,shotId:shot.id,referenceMode,hiddenPlacementIds,visiblePlacementIds,review:C.reviewShot(shot)};
+ invalidate(true);draw();const dataUrl=canvas.toDataURL('image/png');const visiblePlacementIds=referenceMode==='furnished'?C.framePlacementSamples(active):null;return{dataUrl,width:w,height:h,sceneKey:window.SCENE_KEY,shotId:shot.id,referenceMode,hiddenPlacementIds,visiblePlacementIds,spaceContext:C.frameSpaceContext(active,shot),review:C.reviewShot(shot)};
  }finally{cam.clearViewOffset();if(savedMaterials)for(const[o,m]of savedMaterials)o.material=m;Object.assign(state,before);for(const[o,v]of originalVisible)o.visible=v;if(helper)helper.visible=selection;busy(null);restoreCamera(snap);layout(ratio);state.auto=auto;invalidate(true);}}
  try{const data=JSON.parse(localStorage.getItem('interior-cameras-'+window.PROJECT.id)||'[]');if(Array.isArray(data))savedCameras=data.filter(x=>typeof x.name==='string'&&validateCamera(x.camera)).slice(-20);}catch{}
  const observer=new ResizeObserver(()=>{if(!state.busy)layout();});observer.observe(stage);

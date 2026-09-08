@@ -1,16 +1,16 @@
 {
-  "version": "3.2.1",
+  "version": "3.3.0",
   "file_count": 10,
   "files": [
-    "local_runtime.md",
     "MANIFEST.json",
+    "SKILL.md",
+    "SKILL_MANUAL.pdf",
+    "local_runtime.md",
     "manual/skill-flowchart.svg",
     "manual/skill-manual.json",
     "manual/skill-manual.md",
-    "playbook/requirements-interview.md",
     "playbook.md",
-    "scripts/run.py",
-    "SKILL_MANUAL.pdf",
-    "SKILL.md"
+    "playbook/requirements-interview.md",
+    "scripts/run.py"
   ]
 }

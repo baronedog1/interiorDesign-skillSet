@@ -6,6 +6,7 @@ from common import SHARED,read,write,digest,file_sha,canonical,runtime_identity,
 from validate import validate_layout
 from cameras import generic_presets,corners
 from timing import traced
+from openings import resolve_openings
 SCRIPTS=['three-r164.js','materials.js','styles.js','geometry.js','architecture-kit.js','components-base.js','style-components.js','components.js','scene.js','exporter.js','optimization.js','controls.js','lights.js','spatial.js','native-assets.js','workspace.js','app.js']
 def js_json(value):return json.dumps(value,ensure_ascii=False,separators=(',',':'),allow_nan=False).replace('<','\\u003c').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
 def shell():
@@ -45,7 +46,7 @@ def build_model(layout_path,out_dir,presets_path=None,style_id=None):
     editor_path=Path(layout_path).with_suffix('.editor.json')
     editor=read(editor_path) if editor_path.exists() else None
     runtime_hash=runtime_identity();key=digest({'layout':digest(layout),'runtime':runtime_hash,'presets':presets,'editorState':editor})
-    html=shell().replace('__PROJECT_JSON__',js_json(layout)).replace('__PRESETS_JSON__',js_json(presets)).replace('__SCENE_KEY_JSON__',js_json(key)).replace('__STRUCTURE_KEY_JSON__',js_json(digest({k:layout[k] for k in ['floor','walls','openings','rooms','openConnections']})))
+    html=shell().replace('__OPENING_STATES__',js_json(resolve_openings(layout))).replace('__PROJECT_JSON__',js_json(layout)).replace('__PRESETS_JSON__',js_json(presets)).replace('__SCENE_KEY_JSON__',js_json(key)).replace('__STRUCTURE_KEY_JSON__',js_json(digest({k:layout[k] for k in ['floor','walls','openings','rooms','openConnections']})))
     if editor:
         # Existing editor import owns camera, view and display restoration. Store data, never execute source HTML.
         editor['layout']=layout;editor['styleRecipe']=style

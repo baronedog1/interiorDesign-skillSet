@@ -1,7 +1,7 @@
 ---
 name: interior-floorplan-planning
 description: 通过分轮需求访谈了解居住、功能、布局和风格偏好，将客户户型图与确认需求整理为米制布局JSON；规划墙门窗、家具锚点和动线，可用原生绘图探索方案。不交付平面HTML。
-metadata: {version: "3.2.1", category: interior-design}
+metadata: {version: "3.3.0", category: interior-design}
 ---
 # 平面布局规划
 
@@ -22,3 +22,5 @@ metadata: {version: "3.2.1", category: interior-design}
 每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](../interior-html-modeling/playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
 
 规划大件时先建立“需求→功能→组件→真实位置”的理由；开放功能区不自动生成书架/屏风隔断。详见playbook的功能选型方法，交接前看全屋顶视和开放区关系。
+
+本轮统一规则见 [空间连接与完整构图](../interior-html-modeling/playbook/space-connections.md)：规划先确认空间连接；HTML按真实门型/状态装配；正视主图带到天花与地面；渲染保留本机位可见空间身份，不把阳台画成房间。
