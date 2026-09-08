@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "原生绘图 · 粗模定位，参考图锁款",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "overview": {
     "title": "粗模定位 → 参考图片锁款 → 真实光影",
     "nodes": [
@@ -876,23 +876,24 @@
             },
             {
               "id": "out",
-              "type": "store",
+              "type": "process",
               "x": 70,
               "y": 1390,
               "w": 2240,
-              "h": 220,
-              "title": "交付给提示词的是明确模式、同版图片和完整槽位",
+              "h": 290,
+              "title": "旋转包络 → 近面裁切 → 同相机投影 → 图像槽位",
               "lines": [
-                "默认不带空槽开关；空槽请求与普通截图不匹配则重拍同版参照"
+                "世界槽位与冻结相机保留；投影范围为左上原点 0–1",
+                "只作位置/尺度参考，不是可见遮罩；不拉伸产品填框"
               ],
               "files": [
                 {
-                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
-                  "purpose": "文件摘要与原子保存"
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "image_slot_anchors/ai_request：裁切、投影与实际提示词"
                 },
                 {
-                  "path": "../interior-html-modeling/scripts/engine/python/cli.py",
-                  "purpose": "请求参数显式选择"
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "corners/basis：同一旋转包络和相机基底"
                 }
               ],
               "bodySize": 22
@@ -2178,6 +2179,10 @@
     {
       "path": "../interior-html-modeling/scripts/engine/python/timing.py",
       "purpose": "逐步骤计时共享依赖"
+    },
+    {
+      "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+      "purpose": "corners/basis：旋转包络和同一相机基底"
     }
   ],
   "fileDescriptions": {

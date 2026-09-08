@@ -1,12 +1,12 @@
 # 原生绘图 · 粗模定位，参考图锁款 说明书
 
-版本：3.2.1
+版本：3.2.2
 
 ~~~yaml
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.2.1", category: interior-design}
+metadata: {version: "3.2.2", category: interior-design}
 ---
 ~~~
 
@@ -100,9 +100,9 @@ HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参�
   - ../interior-camera-capture/scripts/run.py：--reference-mode/--white-model-requested
   - ../interior-html-modeling/scripts/engine/runtime/app.js：临时隐藏/恢复及返回模式
   - ../interior-html-modeling/scripts/engine/python/render.py：截图摘要、hiddenPlacementIds 和请求槽位
-- out：交付给提示词的是明确模式、同版图片和完整槽位；默认不带空槽开关；空槽请求与普通截图不匹配则重拍同版参照
-  - ../interior-html-modeling/scripts/engine/python/common.py：文件摘要与原子保存
-  - ../interior-html-modeling/scripts/engine/python/cli.py：请求参数显式选择
+- out：旋转包络 → 近面裁切 → 同相机投影 → 图像槽位；世界槽位与冻结相机保留；投影范围为左上原点 0–1；只作位置/尺度参考，不是可见遮罩；不拉伸产品填框
+  - ../interior-html-modeling/scripts/engine/python/render.py：image_slot_anchors/ai_request：裁切、投影与实际提示词
+  - ../interior-html-modeling/scripts/engine/python/cameras.py：corners/basis：同一旋转包络和相机基底
 - source → default：原数据不变
 - default → empty：临时显示层
 - empty → explicit：捕获后或异常

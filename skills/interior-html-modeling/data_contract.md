@@ -27,3 +27,7 @@ sourceFrame记录源宽/高/比例，ai-result保存outputFrame与frameObservati
 ai-request可通过--design-brief读取{common:{},spaces:{roomId:{}},styleReferences:[{path,assetId?,notes?}]}。common与当前空间条目合并为designIntent，真实图转为styleReferences并参与附图顺序及seriesKey。顺序为当前结构截图、同系列精细定样、placement绑定产品图、风格设计图；最后一种不提供户型或产品身份。metrics.deliveryRole为primary/supplement/layout-reference，只表达用途，不作为阻断生成的门禁。
 
 productReferences保留逐placement绑定；native_image.references按(role,sha256)合并实际附件，每张图的placementIds列出全部绑定，referenceGuide与job顺序同源。不删除绑定，不设置虚构的统一图数上限。同开放空间各机位使用相同完整产品清单；清单变化代表选型变化，应重新建立定样。床头正视metrics.framing=bed-head-and-upper-bed，fullSubjectProjection始终单独记录全床，构图完整不等于全床入画。组件catalog的shape区分直排/贵妃位与座数，风格不会覆盖该结构。
+
+## 图像内槽位交接
+
+`placementSlots` 保留完整世界坐标；`cameraFrame` 保留实际冻结相机。`imageSlotAnchors` 只列当前连通空间中投影与画面相交的实例，以同一相机把旋转包络投影为左上原点的 0–1 范围；先裁近裁面，再执行透视或正交投影及镜头偏移。它是位置/约略尺度参考，不是可见遮罩、产品轮廓或缩放目标；不可将画外物体搬进画面或拉伸产品填框。

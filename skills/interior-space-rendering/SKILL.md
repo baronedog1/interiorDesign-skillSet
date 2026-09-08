@@ -1,7 +1,7 @@
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.2.1", category: interior-design}
+metadata: {version: "3.2.2", category: interior-design}
 ---
 # 原生绘图效果图
 

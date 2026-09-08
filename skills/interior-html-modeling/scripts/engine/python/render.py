@@ -10,6 +10,31 @@ from timing import traced,span,now
 
 REFERENCE_POLICY='shell-layout-design-v2'
 
+def image_slot_anchors(placements,shot):
+    """Project placement boxes through the actual frozen camera; no layout edits.
+    Rectangles are approximate projections, not visible masks or product outlines.
+    Clip crossing box edges against the near plane before perspective division.
+    """
+    import math,numpy as np
+    from cameras import basis,corners
+    f,r,u=basis(shot['position'],shot['target'],shot['up']);aspect=shot['frame']['width']/shot['frame']['height'];out=[]
+    for p in placements:
+        delta=np.asarray(corners(p))-np.asarray(shot['position']);v=np.column_stack((delta@r,delta@u,delta@f));points=[q for q in v if q[2]>=.04]
+        for i in range(8):
+            for bit in [1,2,4]:
+                j=i^bit
+                if j>i and (v[i,2]-.04)*(v[j,2]-.04)<0:
+                    points.append(v[i]+(v[j]-v[i])*(.04-v[i,2])/(v[j,2]-v[i,2]))
+        if not points:continue
+        a=np.asarray(points)
+        if shot['projection']=='orthographic':xy=a[:,:2]/np.asarray([shot['orthographicSpan']*aspect/2,shot['orthographicSpan']/2])
+        else:
+            t=math.tan(math.radians(shot['fov'])/2);xy=a[:,:2]/(a[:,2,None]*np.asarray([t*aspect,t]));xy[:,1]-=shot.get('verticalShift',0)
+        xy=np.column_stack(((xy[:,0]+1)/2,(1-xy[:,1])/2));lo=xy.min(axis=0);hi=xy.max(axis=0)
+        if np.any(hi<0) or np.any(lo>1):continue
+        out.append({**{k:p[k]for k in ['id','componentId','roomId','position','size','rotationY']},'imageBounds01':[np.clip(lo,0,1).round(5).tolist(),np.clip(hi,0,1).round(5).tolist()],'partlyOutsideFrame':bool(np.any(lo<0)or np.any(hi>1)),'projectionOnlyNotVisibility':True})
+    return out
+
 def open_browser(playwright):
     executable=os.environ.get('INTERIOR_CHROMIUM') or shutil.which('chromium') or shutil.which('google-chrome') or shutil.which('msedge')
     args=[]
@@ -96,13 +121,21 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
     presets=read(SHARED/'catalog/styles.json');style_record=scene['layout'].get('customStyle') or next(x for x in presets['styles'] if x['id']==scene['layout']['styleId']);style_text=style or style_record['renderBrief']
     subjects=[{'id':p['id'],'name':p['name'],'componentId':p['componentId'],'sizeMetres':p['size'],'rotationDegrees':p['rotationY']} for p in scene['layout']['placements'] if p['id'] in shot['subjectIds']]
     slots=[{k:p[k] for k in ['id','componentId','roomId','position','size','rotationY']} for p in scene['layout']['placements']]
+    group={shot['roomId']} if shot['roomId'] else set()
+    while True:
+        expanded=set(group)
+        for connection in scene['layout'].get('openConnections',[]):
+            if group.intersection(connection['rooms']):expanded.update(connection['rooms'])
+        if expanded==group:break
+        group=expanded
+    image_slots=image_slot_anchors([p for p in scene['layout']['placements']if p['roomId']in group],shot)
     if reference_mode=='empty-slots' and set(row.get('hiddenPlacementIds',[]))!=set(p['id'] for p in slots):raise ValueError('Empty reference must preserve all placement slots while hiding their visual instances')
     text='保持截图的房型、结构、墙体、门窗位置、空间尺度完全不变；相机位置、朝向、透视/正交方式、视野和裁切与截图一致，不扩房、不移墙、不增减门窗。\n'
     text+='默认完整粗模截图：图中普通家具是占位示意，不是款式、细部比例、工艺或光照的参考；不要复制其方块、厚底座、膨胀软包或低模轮廓。\n' if reference_mode=='furnished' else '用户明确选择空白槽位/白模模式：仅隐藏家具与柜体可见实例，建筑及原 JSON 槽位不变；仍按槽位放置精细家具，不任意重新布局。\n'
     text+='粗模只约束建筑、机位以及家具功能、数量、位置、朝向、约略尺度和通行关系。精细家具应按绑定参考图片的款式重建，再放入相应槽位；锁款锁参考图，不锁粗模造型。普通占位尺寸不是产品实测，更不是要求把参考家具非均匀拉伸到粗模外包盒。\n'
     text+='有产品/精细家具参考图时，保留图中该产品的造型、部件、材质及比例；不保留参考照片的房间、背景或镜头。按真实尺寸适配，尺寸未知时只作有说明的比例意向；尺寸冲突回到选型/布局处理，不变形硬塞。\n'
     text+='没有绑定款式参考且没有该家具的精细定样时，按用户风格设计可信家具工艺，不锁粗模身份；标为概念选型，不声称采购型号。固定的是建筑壳、墙门窗洞口位置尺寸、机位和主要家具功能布局，不是粗模里所有可见细节。门扇、窗框、分格、五金、玻璃与帘可按风格重新设计，但不移动/扩开洞口，不妨碍开合。\n'
-    text+='按下述同空间设计意图完成墙面、天花吊顶/收口、吊灯及辅助灯、挂画、器物、织物、绿植与生活布景，围绕主体有层次地选择，不要求每空间都加齐，不增设无需求的隔断柜或大件家具。吊顶在原建筑层高以内形成饰面，不凭空造承重梁；设计灯位不冒称现状电气点位。自然光、灯光、反射及接触阴影重新计算，不照抄粗模照明。窗外可形成符合楼层视线与日光方向的意向景观，不冒称现场实景，不改变窗洞。\n风格：'+style_text+'\n原 JSON 槽位（主要家具布局与约略尺度，不是款式；画外对象不要插入画面），米制，position=[x,y,z]，size=[宽,高,深]，rotationY=度：\n'+json.dumps(slots,ensure_ascii=False)
+    text+='按下述同空间设计意图完成墙面、天花吊顶/收口、吊灯及辅助灯、挂画、器物、织物、绿植与生活布景，围绕主体有层次地选择，不要求每空间都加齐，不增设无需求的隔断柜或大件家具。吊顶在原建筑层高以内形成饰面，不凭空造承重梁；设计灯位不冒称现状电气点位。自然光、灯光、反射及接触阴影重新计算，不照抄粗模照明。窗外可形成符合楼层视线与日光方向的意向景观，不冒称现场实景，不改变窗洞。\n风格：'+style_text+'\n本连通空间且投影与画面相交的原JSON家具槽位：position=[x,y,z]米，size=[宽,高,深]米，rotationY=度。imageBounds01由当前真实相机计算，左上角为[0,0]、右下角为[1,1]，依次为包络左上/右下位置。按该位置与约略尺度放置产品，不能拉伸产品填满包络；框不是产品轮廓。partlyOutsideFrame表示允许被镜头自然裁切。投影不是可见性证明，墙后或被其它对象遮住的部分保持遮挡，不把画外/别房对象搬进画面。空槽模式下也不得丢掉这些位置关系：\n'+json.dumps(image_slots,ensure_ascii=False)
     refs=[]
     for binding in product_refs or []:
         path=Path(binding['path']).resolve();id=binding['placementId']
@@ -116,7 +149,7 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
         refs.append({'placementId':id,'path':str(path),'sha256':file_sha(path),'sizeMetres':size,'sizeSource':'specified-asset' if size else 'unknown-do-not-invent','preserveIdentity':True,'role':'furniture-identity-reference','identitySource':'reference-image-not-proxy'})
     text+='\n指定资产绑定及真实尺寸（null 表示未知，不得把槽位尺寸冒称产品实测；应读取资产元数据或请用户补充）：\n'+json.dumps([{k:v for k,v in r.items() if k not in ['path','sha256']} for r in refs],ensure_ascii=False)
     request={'schema':'interior.ai-request/1','status':'prepared-not-generated','sceneKey':scene['sceneKey'],'shotId':shot_id,'cameraDigest':digest(shot),'source':{'path':str(image),'sha256':row['sha256'],'role':'complete-model-frame'},'prompt':text.strip(),'subjects':subjects,'productReferences':refs,'requiredReview':['structure','openings','furnitureLayout','camera'],'generation':None,'note':'此文件是实际调用图像工具的输入，不是生成完成回执。风格参考不能覆盖结构。'}
-    request.update(referenceMode=reference_mode,whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False,placementSlots=slots,referencePolicy=REFERENCE_POLICY)
+    request.update(referenceMode=reference_mode,whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False,placementSlots=slots,imageSlotAnchors=image_slots,cameraFrame={k:shot[k]for k in ['position','target','up','fov','frame','projection','verticalShift','orthographicSpan']if k in shot},referencePolicy=REFERENCE_POLICY)
     design=design_brief or {}
     if not isinstance(design,dict):raise ValueError('Design brief must be an object')
     room_design={**design.get('common',{}),**design.get('spaces',{}).get(shot.get('roomId'),{})}
@@ -133,13 +166,6 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
     request['source']['role']='complete-model-frame' if reference_mode=='furnished' else 'empty-slot-architecture-frame'
     request['requiredReview']+=['furnitureDetail','assetIdentity','assetScale']
     # Connected open rooms share furniture/CMF identity, but never share camera geometry.
-    group={shot['roomId']} if shot['roomId'] else set()
-    changed=True
-    while changed:
-        changed=False
-        for connection in scene['layout'].get('openConnections',[]):
-            pair=set(connection['rooms'])
-            if pair&group and not pair<=group:group|=pair;changed=True
     series_key=digest({'layoutHash':scene['layoutHash'],'style':style_text,'rooms':sorted(group),'mode':reference_mode,'products':[{k:v for k,v in r.items() if k!='path'} for r in refs],'design':{k:v for k,v in design.items() if k!='styleReferences'},'styleReferences':[{k:v for k,v in r.items() if k!='path'} for r in style_refs],'referencePolicy':REFERENCE_POLICY})
     series_path=Path(out_file).resolve().parent/'render-series.json'
     registry=read(series_path) if series_path.exists() else {}
