@@ -1,7 +1,7 @@
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.0.1", category: interior-design}
+metadata: {version: "3.0.2", category: interior-design}
 ---
 # HTML 室内共建
 
@@ -16,6 +16,8 @@ metadata: {version: "3.0.1", category: interior-design}
 切换风格只改 CMF，保留家具形体、位置、灯光、机位、撤销历史。换家具是另一个明确动作。不要删除床靠墙、正面朝向、门窗真实宿主与动线等设计知识；也不要加审美分数门禁。
 
 实际截图交给 `interior-camera-capture`；效果图交给 `interior-space-rendering`；查询资产、上传 HTML/图片调用 `idk-canvas-ingest-agent`。
+
+效果图链将HTML称为粗模：提供准确结构、布局、机位与约略家具尺度，不作为精细款式或照明参考。渲染按绑定的家具图片/精细定样锁款并重建光影，不锁粗模造型；这不改变HTML内CMF按钮的既有行为，也不表示二维家具图已转成3D资产。规则详见[渲染方法](../interior-space-rendering/playbook.md)。
 
 人读 [PDF](SKILL_MANUAL.pdf)。
 

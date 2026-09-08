@@ -1,36 +1,36 @@
-# 原生绘图 · 完整场景与空白槽位 说明书
+# 原生绘图 · 粗模定位，参考图锁款 说明书
 
-版本：3.0.0
+版本：3.1.0
 
 ~~~yaml
 ---
 name: interior-space-rendering
-description: 将同机位完整模型截图通过宿主原生绘图生成室内效果图，保留结构、家具、机位与材质意图，登记实际调用和逐图复核；不把 WebGL 截图当最终渲染。
-metadata: {version: "3.0.0", category: interior-design}
+description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
+metadata: {version: "3.1.0", category: interior-design}
 ---
 ~~~
 
 ## 调用场景
 
-### 原生绘图：默认完整模型，白模仅明确要求时使用
+### 粗模定位 → 参考图片锁款 → 真实光影
 
-本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。
+HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参考图，二维生成不回写3D网格。
 
-输入：模型图、CMF、产品参考、实际工具
+输入：同版HTML粗模截图、场景/机位/槽位、精细家具参考图片及用户意图
 输出：原生图片、调用回执、逐图问题
 
-#### 原生绘图：默认完整模型，白模仅明确要求时使用
+#### 粗模定位 → 参考图片锁款 → 真实光影
 - a：同版模型图、JSON、机位与指定资产；先看图和用户要求；不把配置当工具可用证明
   - scripts/run.py：ai-request/native-prepare/native-result 入口
 - q：用户明确要求白模／空白槽位？；默认 furnished；不因效果差自动切模式（详见 modes）
   - playbook.md：两模式、锁结构机位、家具细化与资产不变形
-- full：否：完整家具与细节截图；普通简化家具精细化，类别/数量/尺寸范围不变；随步骤记录开始、完成、耗时；代码与绘图等待分开。；同空间先定样，再准备其它机位；见SERIES。（详见 consistency）
+- full：默认：完整粗模截图，只管布局；不照抄粗模造型和照明；按精细参考重建家具（详见 consistency）
   - playbook.md：两模式、锁结构机位、家具细化与资产不变形
   - ../interior-html-modeling/playbook/timing.md：计时口径
   - ../interior-html-modeling/scripts/engine/python/timing.py：正式命令自动计时
 - empty：是：建筑截图＋原 JSON 槽位；家具/柜体暂隐；位置、尺寸、朝向仍固定
   - playbook.md：两模式、锁结构机位、家具细化与资产不变形
-- prompt：生成真实提示词与资产约束；锁房型、墙门窗和同机位；指定资产不变形（详见 assets）
+- prompt：粗模定位＋精细参考图锁款；产品图优先；精细定样其次；不锁粗模身份（详见 assets）
   - ../interior-html-modeling/scripts/engine/python/render.py：两种模式、槽位、产品尺寸进入 prompt
 - call：真实宿主调用 → 看图 → 交付；没有工具或图片就如实报告；不拿截图冒充（详见 native）
   - ../interior-html-modeling/scripts/engine/python/native_image.py：工具准备、实际调用回执和结果绑定
@@ -80,28 +80,63 @@ metadata: {version: "3.0.0", category: interior-design}
 - empty → explicit：捕获后或异常
 - explicit → out：恢复后保留真实记录
 
-### 结构锁定与资产尺度
+### 谁决定家具款式与尺寸
 
-按实际输入、计算、分支和文件消费者展开。
+粗模不拥有精细款式解释权；产品图优先，定样只管已出现的家具。
 
-#### 精细家具与指定资产：细化普通件，锁定指定件
-- a：提示词的结构底线始终不变；不改房型、墙门窗、空间尺度；机位位置、朝向、投影、FOV和裁切同图；普通家具细化细节，不重布局；指定资产身份优先于风格变化
-  - playbook.md：两模式、锁结构机位、家具细化与资产不变形
-  - ../interior-html-modeling/scripts/engine/python/render.py：实际拼装不可变约束与 slots
-- q：用户提供指定产品参考？；产品图与 placementId 一一对应
-  - ../interior-html-modeling/scripts/engine/python/render.py：读取 products 文件与绑定校验
-- normal：否：细化现有简化家具；保持类别、数量、位置、朝向、宽高深范围；提高材质、纹理尺度、接触阴影和细节
-  - ../interior-html-modeling/scripts/engine/catalog/styles.json：当前风格/渲染意图
-- asset：是：读取真实产品尺寸并保留身份；sizeMetres=[宽,高,深]；未知标 null，补查；不将槽位尺寸当产品实测，不拉伸或压扁；部件、颜色纹理、形体和比例不被风格改写
-  - ../interior-html-modeling/scripts/engine/python/render.py：真实尺寸检查、来源与 prompt
-  - ../interior-html-modeling/scripts/engine/python/common.py：参考图 SHA 与 JSON读取
-  - ../idk-canvas-ingest-agent/SKILL.md：需要平台资产时调用独立平台能力
-- conflict：尺寸冲突：回布局／选型或请用户确定；不靠扭曲资产塞进槽位；记录未确定尺寸；结果复核必须看资产身份、比例与尺度
-  - playbook.md：两模式、锁结构机位、家具细化与资产不变形
-- a → q：资产条件
-- q → normal：否
-- q → asset：是
-- asset → conflict：比较产品与槽位
+#### 款式来源：参考图锁款，不锁粗模
+- source：当前粗模与参考图片；粗模：建筑/机位/位置/约略尺度；参考图片：精细产品的造型与比例
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+  - playbook.md：按参考图锁款、重建光影、尺寸与质量处理
+- product：该家具绑定了精细产品图？；--products：placementId/path；真实尺寸可未知，不要求品牌SKU
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+- locked：是：按图锁定该款家具；保留参考图款式、部件、比例与CMF；丢弃粗模不同的扶手、底座和软包；产品图不改变房间、镜头与摆放
+  - playbook.md：按参考图锁款、重建光影、尺寸与质量处理
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+- anchor：已有可见该家具的精细定样？；同系列/同策略，参考身份真实；不能从旧粗模图继承款式
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+  - playbook.md：按参考图锁款、重建光影、尺寸与质量处理
+- reuse：是：沿用精细定样款式；当前粗模仍锁建筑与机位；按新视角重算反射、阴影
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：真实附图顺序、原生调用与回收计时
+- concept：否：获取参考或建立概念首图；按需求选精细参考，平台取图走平台Skill；无参考时原生设计可信精细家具；明确概念选型，不假称已锁用户产品
+  - playbook.md：按参考图锁款、重建光影、尺寸与质量处理
+  - ../idk-canvas-ingest-agent/SKILL.md：按需获取平台家具图片
+- out：按对应位置与合理大小放入；重新计算真实光影；尺寸不符回选型/布局，不拉伸产品；不新增结构；首张定样后再扩展同空间，不复制粗模廉价几何
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+- source → product
+- product → locked：是
+- product → anchor：否
+- anchor → reuse：是
+- anchor → concept：否
+- locked → out：具体产品优先
+- reuse → out
+- concept → out
+
+#### 图片与尺寸交接：技术条件不等于审美门禁
+- input：逐条读取产品参考绑定；placementId、path、sizeMetres?；size=[宽,高,深]米；未知为null
+  - ../interior-html-modeling/scripts/engine/python/cli.py：--products读取JSON列表
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+- binding：实例存在且图片文件可读？；placementId必须来自原布局；文件不能缺失
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+- same：是否拿同内容粗模冒充产品图？；图片摘要与粗模截图相同？
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+  - ../interior-html-modeling/scripts/engine/python/common.py：文件SHA与读取
+- err：报告具体输入错误，修正该参考后重新准备；不伪造产品身份；不改客户布局绕过问题
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+- size：已给尺寸是否合法？；null合法；已给则为3个正有限数值；未知不代填粗模数值
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+- emit：真实绑定进入prompt与原生附图；尺寸来自参考元数据/用户，未知明确标记；referenceGuide顺序：粗模→精细定样→产品图；实际比例/空间冲突由Agent识图与选型判断；源/输出画幅记录为提示，不拉伸图像修补
+  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：真实附图顺序、原生调用与回收计时
+  - ../interior-html-modeling/data_contract.md：参考角色、sourceFrame/outputFrame合同
+- input → binding
+- binding → same：是
+- binding → err：否
+- same → err：是：输入误绑
+- same → size：否
+- size → err：否
+- size → emit：是
 
 ### 真实原生调用与识图
 
@@ -119,9 +154,9 @@ metadata: {version: "3.0.0", category: interior-design}
   - playbook.md：两模式、锁结构机位、家具细化与资产不变形
 - call：是：附完整/空槽图及产品图调用；宿主原生工具实际返回后保存图片；不伪造 providerRequestId 或调用成功
   - ../interior-html-modeling/scripts/engine/python/native_image.py：实际 invocation 与 jobDigest/outputSHA 关联
-- review：图像与结构、机位、资产相符？；structure/openings/layout/camera；furnitureDetail/assetIdentity/assetScale
+- review：图像与结构、机位、资产相符？；结构/开口/布局/机位＋参考款式和真实比例；furnitureDetail/assetIdentity/assetScale
   - playbook.md：两模式、锁结构机位、家具细化与资产不变形
-- out：保留真实图片并如实交付；是：记录符合；否：指出位置并修源再生成；不能以提示词/检测通过保证绝无变形
+- out：保留真实图片并如实交付；真实图片＋画幅差异提示；不拉伸、不藏问题；记录调用返回时间，不冒充供应商纯计算
   - ../interior-html-modeling/scripts/engine/python/render.py：ai_result 校验图片与复核字段
   - ../interior-html-modeling/scripts/engine/python/common.py：摘要与原子保存
   - ../idk-canvas-ingest-agent/SKILL.md：需要私有上传时交给平台 Skill
@@ -137,13 +172,13 @@ metadata: {version: "3.0.0", category: interior-design}
 结构只由当前机位截图控制；首张图控制家具与CMF，不复制首张镜头。
 
 #### 同空间多机位的真实参考链与计时
-- input：当前机位截图与空间系列；同布局、风格、模式、开放连接分组；先生成正视主图，不同系列可独立执行
+- input：当前机位截图与空间系列；同布局/风格/模式/参考策略，开放空间同组；旧策略首图不自动沿用，不能篡改系列摘要
   - scripts/run.py：ai-request/native-*入口
   - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
   - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记
 - has：已有本系列识图确认的首图？；读取 render-series.json；是：附定样；否：先做首图
   - ../interior-html-modeling/scripts/engine/python/render.py：系列索引查找
-- first：首张：当前截图＋精确产品参考；粗模型只约束位置尺寸朝向；原生绘图精细化；墙门窗镜头不变
+- first：首张：当前截图＋精确产品参考；产品参考决定精细款式；粗模只管建筑/位置；无参考时建概念定样，不冒称用户指定产品
   - scripts/run.py：ai-request/native-*入口
   - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
   - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记
@@ -151,7 +186,7 @@ metadata: {version: "3.0.0", category: interior-design}
   - scripts/run.py：ai-request/native-*入口
   - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
   - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记
-- next：后续：新截图＋首张定样＋指定产品；新截图锁当前镜头，定样锁家具CMF；校核所有附图摘要，保留每次实际提示词
+- next：后续：新截图＋首张定样＋指定产品；粗模锁镜头与位置，精细图锁款式和CMF；referencePolicy隔离旧定样；原顺序附全部图片
   - scripts/run.py：ai-request/native-*入口
   - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
   - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记

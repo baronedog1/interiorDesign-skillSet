@@ -8,6 +8,8 @@ from cameras import validate_plan
 from common import read,write,atomic_bytes,digest,file_sha,SHARED,require_schema
 from timing import traced,span,now
 
+REFERENCE_POLICY='reference-furniture-v1'
+
 def open_browser(playwright):
     executable=os.environ.get('INTERIOR_CHROMIUM') or shutil.which('chromium') or shutil.which('google-chrome') or shutil.which('msedge')
     args=[]
@@ -96,21 +98,27 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
     slots=[{k:p[k] for k in ['id','componentId','roomId','position','size','rotationY']} for p in scene['layout']['placements']]
     if reference_mode=='empty-slots' and set(row.get('hiddenPlacementIds',[]))!=set(p['id'] for p in slots):raise ValueError('Empty reference must preserve all placement slots while hiding their visual instances')
     text='保持截图的房型、结构、墙体、门窗位置、空间尺度完全不变；相机位置、朝向、透视/正交方式、视野和裁切与截图一致，不扩房、不移墙、不增减门窗。\n'
-    text+='默认完整场景模式：截图包含全部活动家具、柜体及已有细节。把未指定品牌资产的简化家具细化为精细家具，保持类别、数量、位置、朝向及尺寸包络。\n' if reference_mode=='furnished' else '用户明确选择空白槽位/白模模式：截图只隐藏 placements 中家具与柜体的可见实例，建筑结构不变。依据原 JSON 槽位逐一放入精细家具，不能自行重做布局，不能将空房理解为任意摆放。\n'
-    text+='指定资产优先于风格自由发挥：保留其外形、结构、部件数量、颜色纹理和长宽高比例，不拉伸、不压扁、不变形；按真实尺寸及槽位大小匹配。尺寸冲突应说明并回源调整，不能扭曲指定资产塞入。提升材质、纹理尺度、光线与接触阴影，不改变机位。\n风格：'+style_text+'\n槽位来自当前原 JSON，米制，position=[x,y,z]，size=[宽,高,深]，rotationY=度：\n'+json.dumps(slots,ensure_ascii=False)
+    text+='默认完整粗模截图：图中普通家具是占位示意，不是款式、细部比例、工艺或光照的参考；不要复制其方块、厚底座、膨胀软包或低模轮廓。\n' if reference_mode=='furnished' else '用户明确选择空白槽位/白模模式：仅隐藏家具与柜体可见实例，建筑及原 JSON 槽位不变；仍按槽位放置精细家具，不任意重新布局。\n'
+    text+='粗模只约束建筑、机位以及家具功能、数量、位置、朝向、约略尺度和通行关系。精细家具应按绑定参考图片的款式重建，再放入相应槽位；锁款锁参考图，不锁粗模造型。普通占位尺寸不是产品实测，更不是要求把参考家具非均匀拉伸到粗模外包盒。\n'
+    text+='有产品/精细家具参考图时，保留图中该产品的造型、部件、材质及比例；不保留参考照片的房间、背景或镜头。按真实尺寸适配，尺寸未知时只作有说明的比例意向；尺寸冲突回到选型/布局处理，不变形硬塞。\n'
+    text+='没有绑定款式参考且没有该家具的精细定样时，按用户风格重新设计可信的家具造型与工艺，不将粗模身份当作锁款；此时是概念选型，不声称参考图锁款或采购型号。重新计算来自现有窗户/已确认灯位的自然光、间接反射、接触阴影与真实材质，不复制模型的烘焙阴影和死板照明，不新增墙窗、梁、灯槽或无依据灯位。\n风格：'+style_text+'\n原 JSON 槽位（仅作为布局与约略尺度资料，不是精细产品造型；非本镜头可见对象不要插入画面），米制，position=[x,y,z]，size=[宽,高,深]，rotationY=度：\n'+json.dumps(slots,ensure_ascii=False)
     refs=[]
     for binding in product_refs or []:
         path=Path(binding['path']).resolve();id=binding['placementId']
         if id not in [p['id'] for p in scene['layout']['placements']]:raise ValueError('产品参考未绑定到现有 placementId')
         if not path.is_file():raise ValueError('产品参考不存在')
+        if file_sha(path)==row['sha256']:raise ValueError('粗模截图不能同时冒充精细家具款式参考')
         size=binding.get('sizeMetres')
         if size is not None:
             import math
             if not isinstance(size,list) or len(size)!=3 or not all(isinstance(v,(int,float)) and not isinstance(v,bool) and math.isfinite(v) and v>0 for v in size):raise ValueError('Asset sizeMetres must be three positive finite dimensions in metres')
-        refs.append({'placementId':id,'path':str(path),'sha256':file_sha(path),'sizeMetres':size,'sizeSource':'specified-asset' if size else 'unknown-do-not-invent','preserveIdentity':True})
+        refs.append({'placementId':id,'path':str(path),'sha256':file_sha(path),'sizeMetres':size,'sizeSource':'specified-asset' if size else 'unknown-do-not-invent','preserveIdentity':True,'role':'furniture-identity-reference','identitySource':'reference-image-not-proxy'})
     text+='\n指定资产绑定及真实尺寸（null 表示未知，不得把槽位尺寸冒称产品实测；应读取资产元数据或请用户补充）：\n'+json.dumps([{k:v for k,v in r.items() if k not in ['path','sha256']} for r in refs],ensure_ascii=False)
     request={'schema':'interior.ai-request/1','status':'prepared-not-generated','sceneKey':scene['sceneKey'],'shotId':shot_id,'cameraDigest':digest(shot),'source':{'path':str(image),'sha256':row['sha256'],'role':'complete-model-frame'},'prompt':text.strip(),'subjects':subjects,'productReferences':refs,'requiredReview':['structure','openings','furnitureLayout','camera'],'generation':None,'note':'此文件是实际调用图像工具的输入，不是生成完成回执。风格参考不能覆盖结构。'}
-    request.update(referenceMode=reference_mode,whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False,placementSlots=slots)
+    request.update(referenceMode=reference_mode,whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False,placementSlots=slots,referencePolicy=REFERENCE_POLICY)
+    from PIL import Image
+    with Image.open(image) as im:request['sourceFrame']={'width':im.width,'height':im.height,'aspectRatio':im.width/im.height}
+    text+=f"\n源画幅 {request['sourceFrame']['width']}×{request['sourceFrame']['height']}，输出保持相同宽高比与裁切，不用拉伸图片冒充同机位。"
     request['source']['role']='complete-model-frame' if reference_mode=='furnished' else 'empty-slot-architecture-frame'
     request['requiredReview']+=['furnitureDetail','assetIdentity','assetScale']
     # Connected open rooms share furniture/CMF identity, but never share camera geometry.
@@ -121,7 +129,7 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
         for connection in scene['layout'].get('openConnections',[]):
             pair=set(connection['rooms'])
             if pair&group and not pair<=group:group|=pair;changed=True
-    series_key=digest({'layoutHash':scene['layoutHash'],'style':style_text,'rooms':sorted(group),'mode':reference_mode,'products':[{k:v for k,v in r.items() if k!='path'} for r in refs]})
+    series_key=digest({'layoutHash':scene['layoutHash'],'style':style_text,'rooms':sorted(group),'mode':reference_mode,'products':[{k:v for k,v in r.items() if k!='path'} for r in refs],'referencePolicy':REFERENCE_POLICY})
     series_path=Path(out_file).resolve().parent/'render-series.json'
     registry=read(series_path) if series_path.exists() else {}
     prior=anchor_result or registry.get(series_key,{}).get('resultPath')
@@ -131,9 +139,12 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
         if previous.get('seriesKey')!=series_key or previous.get('status')!='accepted':raise ValueError('Anchor must be a visually reviewed result from this same space/style series')
         if file_sha(previous['image'])!=previous['sha256']:raise ValueError('Anchor image changed; use its actual current result')
         request['consistencyReferences']=[{'path':previous['image'],'sha256':previous['sha256'],'role':'same-space-appearance-only','shotId':previous['shotId']}]
-        text+='\n同空间定样图已经提供：只沿用其中家具身份、形体、颜色材质、纹理与灯光气氛；本次镜头、墙门窗和透视以第一张当前模型截图为准，不能复制定样图的镜头。指定产品仍优先，不在不同机位重新设计家具。'
+        text+='\n同空间精细定样图已经提供：只沿用其中可见家具的精细款式、形体与CMF，不回退粗模造型；本次建筑与镜头以第一张粗模截图为准。绑定产品参考优先于定样；定样中不可见的家具不能声称已锁款。同一日景系列的光源保持物理一致，但按当前视角重新计算光影，不复制上一张的阴影图案。'
     else:
-        text+='\n这是该空间/风格的首张定样图。普通模型是位置、大小、朝向和大致样式参考，不是最终家具细节品质；将其升级成精细真实家具，不能保留粗糙块体当成效果图。'
+        text+='\n这是该空间/风格的首张精细定样。绑定参考图决定对应家具款式；其余家具重新设计为真实精细产品，不照抄粗模。后续同空间机位再以本张精细图统一外观。'
+    attached=[request['source'],*request['consistencyReferences'],*refs]
+    request['referenceGuide']=[{'imageIndex':i+1,'role':r['role'],'placementId':r.get('placementId')} for i,r in enumerate(attached)]
+    text+='\n实际附图顺序与职责（图片编号从1起）：\n'+json.dumps(request['referenceGuide'],ensure_ascii=False)
     request['requiredReview']+=['crossViewConsistency']
     request['prompt']=text.strip()
     write(out_file,request);atomic_bytes(Path(out_file).with_suffix('.prompt.txt'),text.strip().encode('utf-8'));return request
@@ -146,7 +157,11 @@ def ai_result(request_path,image_path,review_path,out_file):
     for key in request['requiredReview']:
         if review.get(key) not in ['pass','fail']:raise ValueError('Review missing pass/fail field: '+key)
     from PIL import Image
-    with Image.open(image) as im:im.verify()
+    with Image.open(image) as im:
+        output_frame={'width':im.width,'height':im.height,'aspectRatio':im.width/im.height};im.verify()
     artifact={'schema':'interior.ai-result/1','sourceType':'ai-generated','sceneKey':request['sceneKey'],'shotId':request['shotId'],'status':'accepted' if all(review[k]=='pass' for k in request['requiredReview']) else 'delivered-with-observations','requestDigest':digest(request),'image':str(image.resolve()),'sha256':file_sha(image),'review':review,'providerRequestId':review.get('providerRequestId'),'note':'结果由外部图像工具生成；此命令只核对文件与登记真实人工/视觉复核。'}
     artifact.update(seriesKey=request.get('seriesKey'),consistencyGroup=request.get('consistencyGroup'),consistencyReferences=request.get('consistencyReferences',[]),recordedAt=now())
+    artifact.update(referencePolicy=request.get('referencePolicy'),sourceFrame=request.get('sourceFrame'),outputFrame=output_frame)
+    if request.get('sourceFrame'):
+        source=request['sourceFrame'];artifact['frameObservation']={'sameAspectRatio':source['width']*output_frame['height']==source['height']*output_frame['width'],'note':'画幅差异仅记录提示；不拉伸输出、不自动修图，也不以比例相同代替结构与机位识图。'}
     write(out_file,artifact);return artifact

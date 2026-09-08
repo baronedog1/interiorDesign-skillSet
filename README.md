@@ -1,19 +1,19 @@
 # Interior Design Skill Set
 
-室内设计 Skill 的版本化备份与分发仓库。2026-09-07 的 `main` 更新以下六项为小酷 Windows 实际安装版；六项之外的十项旧 Skill 保留原文件，不代表它们已经完成 GPT-6／Windows 适配。
+室内设计 Skill 的版本化备份与分发仓库。2026-09-08 更新渲染参考策略及 HTML 交接说明；六项之外的十项旧 Skill 保留原文件，不代表它们已经完成 GPT-6／Windows 适配。
 
 ## 当前六项设计 Skill
 
 | Skill | 版本 | 职责 |
 |---|---|---|
 | [interior-floorplan-planning](skills/interior-floorplan-planning/SKILL.md) | 3.1.0 | 分轮需求访谈、尺度/拓扑/动线与家具锚点，交付布局及需求JSON |
-| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.0.1 | 代码生成离线 HTML 模型、CMF 风格、家具替换、量尺与保存 |
+| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.0.2 | 代码生成离线 HTML 粗模、CMF 风格、家具替换、量尺与保存 |
 | [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.0.0 | 从真实模型求机位并截图，默认完整场景 |
-| [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.0.0 | 同机位参照、原生绘图与指定资产约束 |
+| [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.1.0 | 粗模定位、参考图锁精细家具、同空间定样与原生绘图 |
 | [idk-canvas-ingest-agent](skills/idk-canvas-ingest-agent/SKILL.md) | 3.1.0 | 百恩得资产检索／下载与私有平台交付 |
 | [booklet-production](skills/booklet-production/SKILL.md) | 4.1.0 Windows | 杂志式 HTML／PDF 方案册，含模板和样册 |
 
-六项共125个分发文件，保留各项完整的代码、模板、说明书 JSON／Markdown／SVG／PDF 及自带资产。每项根目录 `SKILL_MANUAL.pdf` 是对应的流程说明；[设计编排与方案册说明](skills/booklet-production/SKILL_MANUAL.pdf)、[杂志式样册](skills/booklet-production/expected_outcome/demo.pdf) 可直接查看。样册使用公开参考图，不是客户户型或本轮原生绘图成果。
+六项共128个分发文件，保留各项完整的代码、模板、说明书 JSON／Markdown／SVG／PDF 及自带资产。每项根目录 `SKILL_MANUAL.pdf` 是对应的流程说明；[设计编排与方案册说明](skills/booklet-production/SKILL_MANUAL.pdf)、[杂志式样册](skills/booklet-production/expected_outcome/demo.pdf) 可直接查看。样册使用公开参考图，不是客户户型或本轮原生绘图成果。
 
 ## 完整设计编排
 
@@ -29,7 +29,8 @@
 每项安装单元是 `skills/<skill-id>/`，将需要的六项目录安装到目标设备私有 `$CODEX_HOME/skills`；不要把历史 CAD／Blender 等目录一并当成新版安装。代码和模板可复制，但 Python、Chrome、字体、原生绘图工具及平台授权必须按各项 `local_runtime.md` 在目标设备配置。
 
 - Git 中不含 API Key、`.runtime`、登录态、客户文件、软件程序或设备缓存。平台 Key 仅在已授权设备本地配置；不能把 Key 放入 HTML、PDF 或 Git。
-- 本次发布没有改动小酷运行中的六项，也没有安装到其它设备。小酷原平台 Key 保留不变。
+- 本轮仅对小酷 HTML／渲染 Skill 的变更文件定向更新，平台 Key 与其它设备不在变更范围。小酷本地 cameras.py 有客户任务修改，保留该差异，不能用本仓库整目录覆盖或宣称全量文件与设备一致。
+- 粗模截图仅提供布局与机位；参考图提供精细家具身份，真实附图绑定实例，光影重新生成。二维终图不代表精细家具已写回 HTML 三维资产。
 - Windows 建模／机位回归及方案册 PDF 已有目标设备测试记录；原生绘图真实生成能力不因推送 Git 就视为已验证。
 - 新安装后旧 TUI 可能尚未发现新增 Skill；按实际情况读取明确入口或在同一工作区新开会话，不中断运行中任务。
 - 旧 `scripts/audit-runtime-prerequisites.mjs` 仅保留为历史 Ubuntu 辅助工具，不适用于新版六项的精简目录合同。

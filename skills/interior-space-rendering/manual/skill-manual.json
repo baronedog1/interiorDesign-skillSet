@@ -1,9 +1,9 @@
 {
   "schemaVersion": 4,
-  "displayName": "原生绘图 · 完整场景与空白槽位",
-  "version": "3.0.0",
+  "displayName": "原生绘图 · 粗模定位，参考图锁款",
+  "version": "3.1.0",
   "overview": {
-    "title": "原生绘图：默认完整模型，白模仅明确要求时使用",
+    "title": "粗模定位 → 参考图片锁款 → 真实光影",
     "nodes": [
       {
         "id": "a",
@@ -52,9 +52,9 @@
         "y": 810,
         "w": 1020,
         "h": 290,
-        "title": "否：完整家具与细节截图",
+        "title": "默认：完整粗模截图，只管布局",
         "lines": [
-          "普通简化家具精细化，类别/数量/尺寸范围不变"
+          "不照抄粗模造型和照明；按精细参考重建家具"
         ],
         "files": [
           {
@@ -90,9 +90,9 @@
         "y": 1280,
         "w": 1020,
         "h": 300,
-        "title": "生成真实提示词与资产约束",
+        "title": "粗模定位＋精细参考图锁款",
         "lines": [
-          "锁房型、墙门窗和同机位；指定资产不变形"
+          "产品图优先；精细定样其次；不锁粗模身份"
         ],
         "files": [
           {
@@ -240,13 +240,13 @@
   "scenarios": [
     {
       "id": "workflow",
-      "title": "原生绘图：默认完整模型，白模仅明确要求时使用",
-      "input": "模型图、CMF、产品参考、实际工具",
+      "title": "粗模定位 → 参考图片锁款 → 真实光影",
+      "input": "同版HTML粗模截图、场景/机位/槽位、精细家具参考图片及用户意图",
       "output": "原生图片、调用回执、逐图问题",
-      "explanation": "本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。",
+      "explanation": "HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参考图，二维生成不回写3D网格。",
       "diagrams": [
         {
-          "title": "原生绘图：默认完整模型，白模仅明确要求时使用",
+          "title": "粗模定位 → 参考图片锁款 → 真实光影",
           "nodes": [
             {
               "id": "a",
@@ -295,11 +295,9 @@
               "y": 810,
               "w": 1020,
               "h": 290,
-              "title": "否：完整家具与细节截图",
+              "title": "默认：完整粗模截图，只管布局",
               "lines": [
-                "普通简化家具精细化，类别/数量/尺寸范围不变",
-                "随步骤记录开始、完成、耗时；代码与绘图等待分开。",
-                "同空间先定样，再准备其它机位；见SERIES。"
+                "不照抄粗模造型和照明；按精细参考重建家具"
               ],
               "files": [
                 {
@@ -344,9 +342,9 @@
               "y": 1280,
               "w": 1020,
               "h": 300,
-              "title": "生成真实提示词与资产约束",
+              "title": "粗模定位＋精细参考图锁款",
               "lines": [
-                "锁房型、墙门窗和同机位；指定资产不变形"
+                "产品图优先；精细定样其次；不锁粗模身份"
               ],
               "files": [
                 {
@@ -699,123 +697,174 @@
     {
       "id": "assets",
       "code": "ASSETS",
-      "title": "结构锁定与资产尺度",
+      "title": "谁决定家具款式与尺寸",
       "color": "#21658e",
       "algorithm": true,
-      "explanation": "按实际输入、计算、分支和文件消费者展开。",
+      "explanation": "粗模不拥有精细款式解释权；产品图优先，定样只管已出现的家具。",
       "diagrams": [
         {
-          "title": "精细家具与指定资产：细化普通件，锁定指定件",
+          "title": "款式来源：参考图锁款，不锁粗模",
           "nodes": [
             {
-              "id": "a",
-              "type": "process",
+              "id": "source",
+              "type": "io",
               "x": 70,
-              "y": 200,
-              "w": 2250,
-              "h": 250,
-              "title": "提示词的结构底线始终不变",
+              "y": 220,
+              "w": 650,
+              "h": 340,
+              "title": "当前粗模与参考图片",
               "lines": [
-                "不改房型、墙门窗、空间尺度；机位位置、朝向、投影、FOV和裁切同图",
-                "普通家具细化细节，不重布局；指定资产身份优先于风格变化"
+                "粗模：建筑/机位/位置/约略尺度",
+                "参考图片：精细产品的造型与比例"
               ],
               "files": [
                 {
-                  "path": "playbook.md",
-                  "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
                 },
                 {
-                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
-                  "purpose": "实际拼装不可变约束与 slots"
+                  "path": "playbook.md",
+                  "purpose": "按参考图锁款、重建光影、尺寸与质量处理"
                 }
               ],
               "bodySize": 22
             },
             {
-              "id": "q",
+              "id": "product",
               "type": "decision",
-              "x": 70,
-              "y": 710,
-              "w": 1060,
-              "h": 370,
-              "title": "用户提供指定产品参考？",
+              "x": 865,
+              "y": 190,
+              "w": 650,
+              "h": 410,
+              "title": "该家具绑定了精细产品图？",
               "lines": [
-                "产品图与 placementId 一一对应"
+                "--products：placementId/path",
+                "真实尺寸可未知，不要求品牌SKU"
               ],
               "files": [
                 {
                   "path": "../interior-html-modeling/scripts/engine/python/render.py",
-                  "purpose": "读取 products 文件与绑定校验"
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
                 }
               ],
               "bodySize": 22,
               "check": true
             },
             {
-              "id": "normal",
+              "id": "locked",
               "type": "process",
-              "x": 70,
-              "y": 1250,
-              "w": 1060,
-              "h": 320,
-              "title": "否：细化现有简化家具",
+              "x": 1670,
+              "y": 220,
+              "w": 650,
+              "h": 380,
+              "title": "是：按图锁定该款家具",
               "lines": [
-                "保持类别、数量、位置、朝向、宽高深范围",
-                "提高材质、纹理尺度、接触阴影和细节"
-              ],
-              "files": [
-                {
-                  "path": "../interior-html-modeling/scripts/engine/catalog/styles.json",
-                  "purpose": "当前风格/渲染意图"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "asset",
-              "type": "process",
-              "x": 1300,
-              "y": 660,
-              "w": 1020,
-              "h": 450,
-              "title": "是：读取真实产品尺寸并保留身份",
-              "lines": [
-                "sizeMetres=[宽,高,深]；未知标 null，补查",
-                "不将槽位尺寸当产品实测，不拉伸或压扁",
-                "部件、颜色纹理、形体和比例不被风格改写"
-              ],
-              "files": [
-                {
-                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
-                  "purpose": "真实尺寸检查、来源与 prompt"
-                },
-                {
-                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
-                  "purpose": "参考图 SHA 与 JSON读取"
-                },
-                {
-                  "path": "../idk-canvas-ingest-agent/SKILL.md",
-                  "purpose": "需要平台资产时调用独立平台能力"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "conflict",
-              "type": "process",
-              "x": 1300,
-              "y": 1270,
-              "w": 1020,
-              "h": 300,
-              "title": "尺寸冲突：回布局／选型或请用户确定",
-              "lines": [
-                "不靠扭曲资产塞进槽位；记录未确定尺寸",
-                "结果复核必须看资产身份、比例与尺度"
+                "保留参考图款式、部件、比例与CMF",
+                "丢弃粗模不同的扶手、底座和软包",
+                "产品图不改变房间、镜头与摆放"
               ],
               "files": [
                 {
                   "path": "playbook.md",
-                  "purpose": "两模式、锁结构机位、家具细化与资产不变形"
+                  "purpose": "按参考图锁款、重建光影、尺寸与质量处理"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "anchor",
+              "type": "decision",
+              "x": 865,
+              "y": 820,
+              "w": 650,
+              "h": 400,
+              "title": "已有可见该家具的精细定样？",
+              "lines": [
+                "同系列/同策略，参考身份真实",
+                "不能从旧粗模图继承款式"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
+                },
+                {
+                  "path": "playbook.md",
+                  "purpose": "按参考图锁款、重建光影、尺寸与质量处理"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "reuse",
+              "type": "process",
+              "x": 70,
+              "y": 830,
+              "w": 650,
+              "h": 370,
+              "title": "是：沿用精细定样款式",
+              "lines": [
+                "当前粗模仍锁建筑与机位",
+                "按新视角重算反射、阴影"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "真实附图顺序、原生调用与回收计时"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "concept",
+              "type": "process",
+              "x": 1670,
+              "y": 830,
+              "w": 650,
+              "h": 370,
+              "title": "否：获取参考或建立概念首图",
+              "lines": [
+                "按需求选精细参考，平台取图走平台Skill",
+                "无参考时原生设计可信精细家具",
+                "明确概念选型，不假称已锁用户产品"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "按参考图锁款、重建光影、尺寸与质量处理"
+                },
+                {
+                  "path": "../idk-canvas-ingest-agent/SKILL.md",
+                  "purpose": "按需获取平台家具图片"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "out",
+              "type": "output",
+              "x": 600,
+              "y": 1430,
+              "w": 1200,
+              "h": 220,
+              "title": "按对应位置与合理大小放入；重新计算真实光影",
+              "lines": [
+                "尺寸不符回选型/布局，不拉伸产品；不新增结构",
+                "首张定样后再扩展同空间，不复制粗模廉价几何"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
                 }
               ],
               "bodySize": 22
@@ -823,64 +872,439 @@
           ],
           "edges": [
             {
-              "from": "a",
-              "to": "q",
+              "from": "source",
+              "to": "product",
               "points": [
                 [
-                  600,
-                  450
+                  720,
+                  390
                 ],
                 [
-                  600,
-                  710
+                  865,
+                  390
                 ]
-              ],
-              "label": "资产条件"
+              ]
             },
             {
-              "from": "q",
-              "to": "normal",
+              "from": "product",
+              "to": "locked",
               "points": [
                 [
-                  600,
-                  1080
+                  1515,
+                  395
                 ],
                 [
-                  600,
-                  1250
-                ]
-              ],
-              "label": "否"
-            },
-            {
-              "from": "q",
-              "to": "asset",
-              "points": [
-                [
-                  1130,
-                  895
-                ],
-                [
-                  1300,
-                  885
+                  1670,
+                  410
                 ]
               ],
               "label": "是"
             },
             {
-              "from": "asset",
-              "to": "conflict",
+              "from": "product",
+              "to": "anchor",
               "points": [
                 [
-                  1810,
-                  1110
+                  1190,
+                  600
                 ],
                 [
-                  1810,
-                  1270
+                  1190,
+                  820
                 ]
               ],
-              "label": "比较产品与槽位"
+              "label": "否"
+            },
+            {
+              "from": "anchor",
+              "to": "reuse",
+              "points": [
+                [
+                  865,
+                  1020
+                ],
+                [
+                  720,
+                  1015
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "anchor",
+              "to": "concept",
+              "points": [
+                [
+                  1515,
+                  1020
+                ],
+                [
+                  1670,
+                  1015
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "locked",
+              "to": "out",
+              "points": [
+                [
+                  2320,
+                  410
+                ],
+                [
+                  2370,
+                  410
+                ],
+                [
+                  2370,
+                  1540
+                ],
+                [
+                  1800,
+                  1540
+                ]
+              ],
+              "label": "具体产品优先"
+            },
+            {
+              "from": "reuse",
+              "to": "out",
+              "points": [
+                [
+                  395,
+                  1200
+                ],
+                [
+                  395,
+                  1330
+                ],
+                [
+                  900,
+                  1330
+                ],
+                [
+                  900,
+                  1430
+                ]
+              ]
+            },
+            {
+              "from": "concept",
+              "to": "out",
+              "points": [
+                [
+                  1995,
+                  1200
+                ],
+                [
+                  1995,
+                  1340
+                ],
+                [
+                  1550,
+                  1340
+                ],
+                [
+                  1550,
+                  1430
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "title": "图片与尺寸交接：技术条件不等于审美门禁",
+          "nodes": [
+            {
+              "id": "input",
+              "type": "io",
+              "x": 70,
+              "y": 200,
+              "w": 750,
+              "h": 270,
+              "title": "逐条读取产品参考绑定",
+              "lines": [
+                "placementId、path、sizeMetres?",
+                "size=[宽,高,深]米；未知为null"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cli.py",
+                  "purpose": "--products读取JSON列表"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "binding",
+              "type": "decision",
+              "x": 70,
+              "y": 670,
+              "w": 750,
+              "h": 360,
+              "title": "实例存在且图片文件可读？",
+              "lines": [
+                "placementId必须来自原布局",
+                "文件不能缺失"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "same",
+              "type": "decision",
+              "x": 70,
+              "y": 1220,
+              "w": 750,
+              "h": 360,
+              "title": "是否拿同内容粗模冒充产品图？",
+              "lines": [
+                "图片摘要与粗模截图相同？"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/common.py",
+                  "purpose": "文件SHA与读取"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "err",
+              "type": "output",
+              "x": 1030,
+              "y": 200,
+              "w": 1250,
+              "h": 270,
+              "title": "报告具体输入错误，修正该参考后重新准备",
+              "lines": [
+                "不伪造产品身份；不改客户布局绕过问题"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "size",
+              "type": "decision",
+              "x": 1100,
+              "y": 670,
+              "w": 1100,
+              "h": 360,
+              "title": "已给尺寸是否合法？",
+              "lines": [
+                "null合法；已给则为3个正有限数值",
+                "未知不代填粗模数值"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
+                }
+              ],
+              "bodySize": 22,
+              "check": true
+            },
+            {
+              "id": "emit",
+              "type": "process",
+              "x": 1100,
+              "y": 1220,
+              "w": 1100,
+              "h": 400,
+              "title": "真实绑定进入prompt与原生附图",
+              "lines": [
+                "尺寸来自参考元数据/用户，未知明确标记",
+                "referenceGuide顺序：粗模→精细定样→产品图",
+                "实际比例/空间冲突由Agent识图与选型判断",
+                "源/输出画幅记录为提示，不拉伸图像修补"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "粗模/参考图片分权、尺寸来源、附图编号与系列策略"
+                },
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "真实附图顺序、原生调用与回收计时"
+                },
+                {
+                  "path": "../interior-html-modeling/data_contract.md",
+                  "purpose": "参考角色、sourceFrame/outputFrame合同"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "input",
+              "to": "binding",
+              "points": [
+                [
+                  445,
+                  470
+                ],
+                [
+                  445,
+                  670
+                ]
+              ]
+            },
+            {
+              "from": "binding",
+              "to": "same",
+              "points": [
+                [
+                  445,
+                  1030
+                ],
+                [
+                  445,
+                  1220
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "binding",
+              "to": "err",
+              "points": [
+                [
+                  820,
+                  850
+                ],
+                [
+                  925,
+                  850
+                ],
+                [
+                  925,
+                  335
+                ],
+                [
+                  1030,
+                  335
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "same",
+              "to": "err",
+              "points": [
+                [
+                  445,
+                  1580
+                ],
+                [
+                  445,
+                  1670
+                ],
+                [
+                  2380,
+                  1670
+                ],
+                [
+                  2380,
+                  335
+                ],
+                [
+                  2280,
+                  335
+                ]
+              ],
+              "label": "是：输入误绑"
+            },
+            {
+              "from": "same",
+              "to": "size",
+              "points": [
+                [
+                  820,
+                  1400
+                ],
+                [
+                  995,
+                  1400
+                ],
+                [
+                  995,
+                  1120
+                ],
+                [
+                  1650,
+                  1120
+                ],
+                [
+                  1650,
+                  1030
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "size",
+              "to": "err",
+              "points": [
+                [
+                  1650,
+                  670
+                ],
+                [
+                  1650,
+                  470
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "size",
+              "to": "emit",
+              "points": [
+                [
+                  2200,
+                  850
+                ],
+                [
+                  2280,
+                  850
+                ],
+                [
+                  2280,
+                  1150
+                ],
+                [
+                  1650,
+                  1150
+                ],
+                [
+                  1650,
+                  1220
+                ]
+              ],
+              "label": "是"
             }
           ]
         }
@@ -997,7 +1421,7 @@
               "h": 350,
               "title": "图像与结构、机位、资产相符？",
               "lines": [
-                "structure/openings/layout/camera",
+                "结构/开口/布局/机位＋参考款式和真实比例",
                 "furnitureDetail/assetIdentity/assetScale"
               ],
               "files": [
@@ -1018,8 +1442,8 @@
               "h": 300,
               "title": "保留真实图片并如实交付",
               "lines": [
-                "是：记录符合；否：指出位置并修源再生成",
-                "不能以提示词/检测通过保证绝无变形"
+                "真实图片＋画幅差异提示；不拉伸、不藏问题",
+                "记录调用返回时间，不冒充供应商纯计算"
               ],
               "files": [
                 {
@@ -1181,8 +1605,8 @@
               "h": 330,
               "title": "当前机位截图与空间系列",
               "lines": [
-                "同布局、风格、模式、开放连接分组",
-                "先生成正视主图，不同系列可独立执行"
+                "同布局/风格/模式/参考策略，开放空间同组",
+                "旧策略首图不自动沿用，不能篡改系列摘要"
               ],
               "files": [
                 {
@@ -1229,8 +1653,8 @@
               "h": 330,
               "title": "首张：当前截图＋精确产品参考",
               "lines": [
-                "粗模型只约束位置尺寸朝向",
-                "原生绘图精细化；墙门窗镜头不变"
+                "产品参考决定精细款式；粗模只管建筑/位置",
+                "无参考时建概念定样，不冒称用户指定产品"
               ],
               "files": [
                 {
@@ -1285,8 +1709,8 @@
               "h": 360,
               "title": "后续：新截图＋首张定样＋指定产品",
               "lines": [
-                "新截图锁当前镜头，定样锁家具CMF",
-                "校核所有附图摘要，保留每次实际提示词"
+                "粗模锁镜头与位置，精细图锁款式和CMF",
+                "referencePolicy隔离旧定样；原顺序附全部图片"
               ],
               "files": [
                 {
