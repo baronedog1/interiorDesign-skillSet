@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "原生绘图 · 粗模定位，参考图锁款",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "overview": {
     "title": "粗模定位 → 参考图片锁款 → 真实光影",
     "nodes": [
@@ -486,6 +486,275 @@
                 ]
               ],
               "label": "附图调用"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design-language",
+      "title": "建筑不变，设计内容不再锁死",
+      "input": "当前源事实与用户需求",
+      "output": "可追溯的设计决定及实际交接",
+      "explanation": "风格图提供设计语言，产品图提供款式，当前机位图才提供结构。",
+      "diagrams": [
+        {
+          "title": "建筑不变，设计内容不再锁死",
+          "nodes": [
+            {
+              "id": "style",
+              "title": "实际查看平台风格模板与产品图",
+              "lines": [
+                "提炼墙/顶/灯/窗、材料、陈设密度",
+                "按本空间用途组织，不只提取木色"
+              ],
+              "x": 70,
+              "y": 270,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "设计意图与参考职责"
+                }
+              ]
+            },
+            {
+              "id": "brief",
+              "title": "design-brief.json → --design-brief",
+              "lines": [
+                "common：全屋共用；spaces：按roomId差异",
+                "styleReferences：真实path、assetId及说明",
+                "实际图片加入job，不只写风格名称"
+              ],
+              "x": 1300,
+              "y": 270,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "ai_request合并意图与真实附图"
+                }
+              ]
+            },
+            {
+              "id": "shell",
+              "title": "不可变事实",
+              "lines": [
+                "建筑壳与洞口位置尺寸、机位",
+                "主要家具功能、位置与通行关系",
+                "产品身份来自绑定参考图"
+              ],
+              "x": 70,
+              "y": 800,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "../interior-html-modeling/data_contract.md",
+                  "purpose": "壳体与设计提案的边界"
+                }
+              ]
+            },
+            {
+              "id": "design",
+              "title": "可设计内容",
+              "lines": [
+                "原层高内天花饰面、灯具与光影",
+                "洞口内门窗框扇/五金、帘、玻璃",
+                "挂画、器物、绿植及意向窗外景观"
+              ],
+              "x": 1300,
+              "y": 800,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "结构图/定样/产品/风格图完整传入"
+                }
+              ]
+            },
+            {
+              "id": "review",
+              "title": "是否改变了不可变事实？",
+              "lines": [
+                "改墙/开口/主布局：回对应源头",
+                "新增合理陈设不是结构错误"
+              ],
+              "x": 650,
+              "y": 1240,
+              "w": 1100,
+              "h": 350,
+              "type": "decision",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "分开审查事实与设计完成度"
+                }
+              ],
+              "check": true
+            },
+            {
+              "id": "yes",
+              "title": "是：修源头",
+              "lines": [
+                "保留实际图与问题"
+              ],
+              "x": 60,
+              "y": 1280,
+              "w": 460,
+              "h": 220,
+              "type": "process",
+              "bodySize": 23,
+              "files": []
+            },
+            {
+              "id": "no",
+              "title": "否：审视设计品质",
+              "lines": [
+                "看光影、材质、构图与一致性"
+              ],
+              "x": 1880,
+              "y": 1280,
+              "w": 460,
+              "h": 220,
+              "type": "process",
+              "bodySize": 23,
+              "files": []
+            }
+          ],
+          "edges": [
+            {
+              "from": "style",
+              "to": "brief",
+              "points": [
+                [
+                  1050,
+                  405
+                ],
+                [
+                  1300,
+                  405
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "style",
+              "to": "shell",
+              "points": [
+                [
+                  560,
+                  540
+                ],
+                [
+                  560,
+                  800
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "brief",
+              "to": "design",
+              "points": [
+                [
+                  1790,
+                  540
+                ],
+                [
+                  1790,
+                  800
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "shell",
+              "to": "review",
+              "points": [
+                [
+                  560,
+                  1070
+                ],
+                [
+                  560,
+                  1170
+                ],
+                [
+                  1200,
+                  1170
+                ],
+                [
+                  1200,
+                  1240
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "design",
+              "to": "review",
+              "points": [
+                [
+                  1790,
+                  1070
+                ],
+                [
+                  1790,
+                  1170
+                ],
+                [
+                  1200,
+                  1170
+                ],
+                [
+                  1200,
+                  1240
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "review",
+              "to": "yes",
+              "points": [
+                [
+                  650,
+                  1415
+                ],
+                [
+                  520,
+                  1415
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "review",
+              "to": "no",
+              "points": [
+                [
+                  1750,
+                  1415
+                ],
+                [
+                  1880,
+                  1415
+                ]
+              ],
+              "label": "否"
             }
           ]
         }

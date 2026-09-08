@@ -1,12 +1,12 @@
 # 平面规划 · 尺度、拓扑与锚点 说明书
 
-版本：3.1.0
+版本：3.2.0
 
 ~~~yaml
 ---
 name: interior-floorplan-planning
 description: 通过分轮需求访谈了解居住、功能、布局和风格偏好，将客户户型图与确认需求整理为米制布局JSON；规划墙门窗、家具锚点和动线，可用原生绘图探索方案。不交付平面HTML。
-metadata: {version: "3.1.0", category: interior-design}
+metadata: {version: "3.2.0", category: interior-design}
 ---
 ~~~
 
@@ -66,6 +66,30 @@ metadata: {version: "3.1.0", category: interior-design}
 - uncertain → topology：保留估算后
 - topology → anchor：本房与宿主
 - anchor → out：生成，不补丁摆放
+
+### 先决定为什么需要，再决定摆什么
+
+功能区域不自动产生隔断；从需求与真实可用位置形成组件选择。
+
+输入：当前源事实与用户需求
+输出：可追溯的设计决定及实际交接
+
+#### 先决定为什么需要，再决定摆什么
+- need：需求：工作 / 收纳 / 就餐；区分客户已确认与设计假设；开放书房不是新增房间
+  - playbook.md：功能→组件→位置规则
+- q：这件大件有独立必要功能？；已有物件能承担？是否只是为了画区域边界？
+  - playbook/requirements-interview.md：读取需求与授权状态
+- revise：否：回需求解释与选型；不沿开放区边界自动排书架；不等渲染再隐藏问题家具
+  - playbook.md：源头取舍与全屋识图
+- place：是：选择真实可用位置；沿墙或围绕功能中心；先考虑开合与通路；再选类别、尺寸、正面和风格
+  - scripts/run.py：明确宿主的anchor/handoff入口
+- out：全屋顶视 / 开放区轴测 → 解释大件位置；不合理回原需求或选型；合理则交接布局与需求；不新增一个事后移动家具的修补器
+  - ../interior-html-modeling/data_contract.md：沿用布局与需求侧车
+- need → q
+- q → revise：否
+- q → place：是
+- revise → out
+- place → out
 
 ## 完整文件地图
 - MANIFEST.json：发布版本与完整文件清单

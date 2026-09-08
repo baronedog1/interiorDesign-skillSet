@@ -1,7 +1,7 @@
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.1.0", category: interior-design}
+metadata: {version: "3.2.0", category: interior-design}
 ---
 # 原生绘图效果图
 
@@ -22,3 +22,5 @@ metadata: {version: "3.1.0", category: interior-design}
 同空间/连通客餐厅、同风格：先生成并识图确认首张定样，再准备后续机位请求；后续附当前机位截图＋定样图＋指定产品图，不能各机位独立批量首发。ai-request 自动读取同输出目录 render-series.json，可用 --anchor-result 显式指定同系列结果。
 
 调用链：native-prepare → native-start JOB --out invocation.json → 实际调用 job 的原生工具并原样附图/提示词 → native-complete invocation.json 工具输出图片 --out invocation-completed.json → 识图 → native-result。这些登记脚本不是绘图工具，不能自行生成成功回执或调用ID。
+
+完整设计先查看平台风格模板，提炼设计意图并写design-brief.json；ai-request加--design-brief，实际附入风格图。锁建筑壳与洞口位置尺寸，不锁粗模门窗构件、天花饰面或灯光；按同一设计意图完善硬装与陈设，不无依据加大件隔断。详见playbook。

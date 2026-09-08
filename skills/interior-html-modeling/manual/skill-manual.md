@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：3.0.2
+版本：3.1.0
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.0.2", category: interior-design}
+metadata: {version: "3.1.0", category: interior-design}
 ---
 ~~~
 
@@ -125,7 +125,7 @@ metadata: {version: "3.0.2", category: interior-design}
 按实际输入、计算、分支和文件消费者展开。
 
 #### 编译链：输入到离线页面的全部代码文件
-- a：读取、校验、生成模型标识；JSON 单位与实体引用有效；已编辑 HTML 先导出布局
+- a：读取、校验、生成模型标识；读当前布局与需求；不凭空补大件；按源布局编译，粗模不是精细款式依据
   - scripts/run.py：模型/风格/资产命令入口
   - scripts/engine/python/bootstrap.py：切换 Windows 专用 Python
   - scripts/engine/python/cli.py：分派 build/import-html
@@ -176,7 +176,7 @@ metadata: {version: "3.0.2", category: interior-design}
   - scripts/engine/python/styles.py：证据记录和 style-add
   - scripts/engine/schemas/style.schema.json：可用配方字段
   - scripts/engine/catalog/styles.json：保存新配方
-- apply：CMF 更新材质，不重建形体；沿用当前 forms；不 rebuild、不改光/机位；配方 id/角色有效；错误回配方，不清空作品；CLI与UI都保留forms/lighting；克隆墙地顶材质同步。
+- apply：CMF 更新材质，不重建形体；HTML按钮只改CMF，保留编辑几何；不是最终设计只能改色；原生渲染另读取完整设计意图
   - scripts/engine/runtime/app.js：applyStyle/restoreCMF/撤销重做
   - scripts/engine/runtime/styles.js：配方角色映射
   - scripts/engine/runtime/materials.js：真实材质参数

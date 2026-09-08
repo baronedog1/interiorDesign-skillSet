@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "机位截图 · 七类空间与真实成像",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "overview": {
     "title": "机位：空间语义先行，候选求解后看真实图片",
     "nodes": [
@@ -388,6 +388,193 @@
                 ]
               ],
               "label": "本房约束"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "frontal-projection",
+      "title": "正面不等于主体清楚：摄影式镜头偏移",
+      "input": "当前源事实与用户需求",
+      "output": "可追溯的设计决定及实际交接",
+      "explanation": "正视保持垂直线；投影端与浏览器用同一个偏移量，截图后恢复。",
+      "diagrams": [
+        {
+          "title": "正面不等于主体清楚：摄影式镜头偏移",
+          "nodes": [
+            {
+              "id": "group",
+              "title": "明确本空间主要功能组",
+              "lines": [
+                "餐桌含最外侧椅背；书房是工作面",
+                "开放区提供站位，不提供额外主体"
+              ],
+              "x": 70,
+              "y": 270,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "_subjects / front_view"
+                }
+              ]
+            },
+            {
+              "id": "project",
+              "title": "求完整主体包络与水平投影",
+              "lines": [
+                "不强制把地板到天花加入主体",
+                "按投影上下范围求verticalShift",
+                "保留背景余量，不俯拍或退到门外"
+              ],
+              "x": 1300,
+              "y": 270,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "_evaluate / projected / foreground_ratio"
+                }
+              ]
+            },
+            {
+              "id": "rank",
+              "title": "按主体占幅与可见性选候选",
+              "lines": [
+                "正视目标宽度占比约0.68，只是排序参考",
+                "惩罚遮挡、过宽视角与离本功能区太远",
+                "实际图仍由Agent判断"
+              ],
+              "x": 1300,
+              "y": 780,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
+                  "purpose": "前景射线也采用相同偏移"
+                }
+              ]
+            },
+            {
+              "id": "capture",
+              "title": "真实截图并恢复原相机",
+              "lines": [
+                "setViewOffset应用同一verticalShift",
+                "finally清除偏移，恢复原视图",
+                "不改变建筑或家具"
+              ],
+              "x": 70,
+              "y": 780,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+                  "purpose": "captureFrame：偏移/成像/恢复"
+                }
+              ]
+            },
+            {
+              "id": "select",
+              "title": "交付选择：正视主图先行",
+              "lines": [
+                "primary先选；supplement按表达需要",
+                "layout-reference是平面/鸟瞰，不全量送原生渲染"
+              ],
+              "x": 550,
+              "y": 1270,
+              "w": 1320,
+              "h": 250,
+              "type": "io",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "逐空间选图与识图"
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "group",
+              "to": "project",
+              "points": [
+                [
+                  1050,
+                  405
+                ],
+                [
+                  1300,
+                  405
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "project",
+              "to": "rank",
+              "points": [
+                [
+                  1790,
+                  540
+                ],
+                [
+                  1790,
+                  780
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "rank",
+              "to": "capture",
+              "points": [
+                [
+                  1300,
+                  915
+                ],
+                [
+                  1050,
+                  915
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "capture",
+              "to": "select",
+              "points": [
+                [
+                  560,
+                  1050
+                ],
+                [
+                  560,
+                  1160
+                ],
+                [
+                  1210,
+                  1160
+                ],
+                [
+                  1210,
+                  1270
+                ]
+              ],
+              "label": ""
             }
           ]
         }
@@ -1424,7 +1611,8 @@
               "h": 290,
               "title": "本房书桌、座椅、收纳",
               "lines": [
-                "房间类型不明时按原图确认"
+                "以书桌工作面和座椅为主体",
+                "收纳只作有需求的背景，不并入整片客餐厅"
               ],
               "files": [
                 {
@@ -1443,8 +1631,9 @@
               "h": 290,
               "title": "取工作面正向与斜向候选",
               "lines": [
-                "不从桌背板后拍；包含座椅与出入口",
-                "共用采样与投影参数，不另设虚构求解器"
+                "首图沿书桌+Z正面；镜头水平",
+                "就近站位、主体占幅与镜头偏移",
+                "斜向只是补充；不从远处门洞后拍"
               ],
               "files": [
                 {
@@ -1829,7 +2018,7 @@
               "y": 800,
               "w": 1070,
               "h": 390,
-              "title": "站位在本房且不在实体内？",
+              "title": "站位在真实连通域且不在实体内？",
               "lines": [
                 "距主体≥.45m；房间多边形及有向包围盒"
               ],
@@ -1870,9 +2059,9 @@
               "h": 400,
               "title": "投影并排序有效候选",
               "lines": [
-                "score=max(0,FOV需−90)×50+(1−可见比)×160",
-                "+前景比例×140+FOV需+|眼高−1.4|×3",
-                "正视另加 |横移|×5；无主体缺失单独记录"
+                "正视：主体占幅、遮挡、就近站位排序",
+                "补充图沿用视角/可见性排序；不混成一个公式",
+                "verticalShift完成水平正视的上下构图；仍输出review"
               ],
               "files": [
                 {

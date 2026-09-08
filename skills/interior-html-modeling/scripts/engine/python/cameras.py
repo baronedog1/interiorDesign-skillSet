@@ -33,6 +33,7 @@ def projected(shot,points):
     if depth.min()<=.04: return {'complete':False,'minDepth':float(depth.min()),'maxAbsNDC':1e9}
     t=math.tan(math.radians(shot['fov'])/2); aspect=shot['frame']['width']/shot['frame']['height']
     ndc=np.column_stack(((delta@r)/(depth*t*aspect),(delta@u)/(depth*t)))
+    ndc[:,1]-=shot.get('verticalShift',0.)
     return {'complete':bool(np.abs(ndc).max()<=.965),'minDepth':float(depth.min()),'maxAbsNDC':float(np.abs(ndc).max()),'ndcBounds':[ndc.min(axis=0).tolist(),ndc.max(axis=0).tolist()]}
 
 
@@ -109,7 +110,7 @@ class Occluders:
     def foreground_ratio(self,shot,subject_distance):
         f,r,u=basis(shot['position'],shot['target']);t=math.tan(math.radians(shot['fov'])/2)
         aspect=shot['frame']['width']/shot['frame']['height']
-        ds=vec([f+r*x*t*aspect+u*y*t for x in np.linspace(-.8,.8,5) for y in [-.65,0,.65]])
+        ds=vec([f+r*x*t*aspect+u*(y+shot.get('verticalShift',0.))*t for x in np.linspace(-.8,.8,5) for y in [-.65,0,.65]])
         ds/=np.linalg.norm(ds,axis=1)[:,None]
         distance=self.rays(shot['position'],ds,shot['subjectIds'])
         return float(np.mean(distance<min(2.2,subject_distance*.80)))
@@ -144,27 +145,51 @@ def _points(subjects,height,detail=False):
 
 
 def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=False):
-    points,center=_points(subjects,layout['floor']['height'],detail)
+    # Primary photographs frame the furniture ensemble, not a compulsory floor-to-ceiling box.
+    points,center=_points(subjects,layout['floor']['height'],detail or kind=='front')
     f,r,u=basis(position,target);delta=vec(points)-vec(position);depth=delta@f
     if depth.min()<=.06:return None
-    aspect=frame['width']/frame['height'];need=max(float(np.abs(delta@r/depth).max()/aspect),float(np.abs(delta@u/depth).max()))/.94
+    aspect=frame['width']/frame['height'];vertical=delta@u/depth
+    shift=(float(vertical.min()+vertical.max())/2+float(vertical.max()-vertical.min())*.20) if kind=='front' else 0.
+    need=max(float(np.abs(delta@r/depth).max()/aspect),float(np.abs(vertical-shift).max()))/.94
     required=max(38. if kind=='front' else 44.,math.degrees(2*math.atan(need)))
     shot=base_shot(room['id']+('-front' if kind=='front' else ''),room['name']+(' · 正视' if kind=='front' else ' · 局部' if detail else ''),room['id'],position,target,min(90.,required),frame,'detail' if detail else kind)
+    if kind=='front':shot['verticalShift']=shift/math.tan(math.radians(shot['fov'])/2)
     shot['subjectIds']=[p['id'] for p in subjects]
     clear=occluders.clear_ratio(position,subjects);foreground=occluders.foreground_ratio(shot,float(np.linalg.norm(center-vec(position))))
-    shot['metrics']={**projected(shot,points),'requiredFov':round(required,3),'insideRoom':True,'cameraHeight':float(position[1]),'ceilingAndFloorAnchors':not detail,'purpose':'detail' if detail else 'room','clearSampleRatio':round(clear,3),'foregroundCoverRatio':round(foreground,3)}
+    projection=projected(shot,points)
+    bounds=projection.get('ndcBounds',[[-1,-1],[1,1]])
+    width=(bounds[1][0]-bounds[0][0])/2
+    shot['metrics']={**projection,'subjectWidthFraction':round(width,3),'requiredFov':round(required,3),'insideRoom':Polygon(room['polygon']).covers(Point(position[0],position[2])),'cameraHeight':float(position[1]),'ceilingAndFloorAnchors':not(detail or kind=='front'),'purpose':'detail' if detail else 'room','clearSampleRatio':round(clear,3),'foregroundCoverRatio':round(foreground,3)}
     if not shot['metrics']['complete'] or clear<.55 or foreground>.35:
         shot['status']='review';shot['reviewNotes']=['完整包络、遮挡抽样或近景占幅存在风险；保留候选，实际截图复核。不隐藏实体。']
     else:shot['reviewNotes']=['几何检查可用；实际截图仍需逐图视觉复核。']
     penalty=max(0,required-90)*50+(1-clear)*160+foreground*140+required+abs(float(position[1])-1.4)*3
+    if kind=='front':
+        # Do not reward a tiny distant subject simply because it allows a narrow lens.
+        penalty=max(0,required-75)*8+(1-clear)*160+foreground*140+abs(width-.68)*90+abs(position[1]-1.35)*8
+        penalty+=Polygon(room['polygon']).distance(Point(position[0],position[2]))*18
     return penalty,shot
+
+
+def _camera_domain(layout,room):
+    """Physical standing domain; adjoining functional zones do not become shot subjects."""
+    from shapely.ops import unary_union
+    group={room['id']}
+    while True:
+        expanded=set(group)
+        for connection in layout.get('openConnections',[]):
+            if group.intersection(connection['rooms']):expanded.update(connection['rooms'])
+        if expanded==group:break
+        group=expanded
+    return unary_union([Polygon(r['polygon']) for r in layout['rooms'] if r['id'] in group])
 
 
 def _preview(layout,room,frame,occluders,subjects=None,detail=False):
     subjects=_subjects(layout,room) if subjects is None else subjects
     points,centre=_points(subjects,layout['floor']['height'],detail)
     if centre is None:return None
-    poly=Polygon(room['polygon']).buffer(-.14);x0,z0,x1,z1=Polygon(room['polygon']).bounds
+    domain=_camera_domain(layout,room);poly=domain.buffer(-.14);x0,z0,x1,z1=domain.bounds
     choices=[];count=0
     for x in np.linspace(x0+.18,x1-.18,7):
         for z in np.linspace(z0+.18,z1-.18,7):
@@ -206,7 +231,7 @@ def generic_presets(layout):
 
 def front_view(layout,room,frame,max_fov=90,occluders=None,subjects=None,label='front'):
     subjects=_subjects(layout,room) if subjects is None else subjects
-    occluders=occluders or Occluders(layout);poly=Polygon(room['polygon']);safe=poly.buffer(-.14)
+    occluders=occluders or Occluders(layout);poly=Polygon(room['polygon']);domain=_camera_domain(layout,room);safe=domain.buffer(-.14)
     empty=not subjects
     if empty:
         c=poly.representative_point()
@@ -228,7 +253,7 @@ def front_view(layout,room,frame,max_fov=90,occluders=None,subjects=None,label='
         if (vec([p.x,p.y])-vec(wall['a']))@normal<0:normal=-normal
     else:
         yaw=math.radians(subjects[0]['rotationY']);normal=vec([math.sin(yaw),math.cos(yaw)]);tangent=vec([normal[1],-normal[0]])
-    if not empty and any(k in subjects[0].get('componentId','') for k in ['sofa.','bed.','tv.','vanity','cabinet','kitchen','washer','bench.']):
+    if not empty and any(k in subjects[0].get('componentId','') for k in ['sofa.','bed.','tv.','vanity','cabinet','kitchen','washer','bench.','desk']):
         # Furniture front is local +Z; never choose the reverse wall merely because it is closer.
         yaw=math.radians(subjects[0]['rotationY']);front=vec([math.sin(yaw),math.cos(yaw)])
         if not room.get('frontWallId') or abs(float(normal@front))>.99:normal=front;tangent=vec([normal[1],-normal[0]])
@@ -237,13 +262,13 @@ def front_view(layout,room,frame,max_fov=90,occluders=None,subjects=None,label='
         edges=[vec(b)-vec(a) for a,b in zip(room['polygon'],room['polygon'][1:]+room['polygon'][:1])]
         longest=max(edges,key=lambda e:np.linalg.norm(e));normal=longest/np.linalg.norm(longest);tangent=vec([normal[1],-normal[0]])
     for direction in ([1,-1] if empty else [1]):
-        distance=math.hypot(poly.bounds[2]-poly.bounds[0],poly.bounds[3]-poly.bounds[1])+.5
+        distance=math.hypot(domain.bounds[2]-domain.bounds[0],domain.bounds[3]-domain.bounds[1])+.5
         for offset in [0,-.18,.18]:
             aim=center[[0,2]]+tangent*offset
             for d in np.linspace(distance,.5,35):
                 xz=aim+normal*d*direction
                 if not safe.covers(Point(*xz)):continue
-                for h in [1.4,1.25,1.55]:
+                for h in [1.35,1.2,1.5]:
                     pos=[xz[0],h,xz[1]]
                     if not occluders.standing(pos):continue
                     result=_evaluate(layout,room,pos,[aim[0],h,aim[1]],subjects,frame,'front',occluders)
@@ -286,6 +311,7 @@ def compile_cameras(scene,frame,add_front=True):
         rid=id if id in rooms else ('living' if id=='tv' and 'living' in rooms else None)
         detail=p.get('previewMetrics',{}).get('purpose')=='detail'
         s=base_shot(id,p['title'],rid,p['pos'],p['target'],p['fov'],frame,'overview' if id in ['overview','plan'] else 'detail' if detail else 'preset')
+        if 'verticalShift' in p:s['verticalShift']=p['verticalShift']
         if id in ['overview','plan']:s['visibility']['ceiling']=False
         if id=='plan':
             s['projection']='orthographic';s['up']=[0,0,-1];b=Polygon(layout['floor']['outline']).bounds;s['orthographicSpan']=max((b[3]-b[1])*1.1,(b[2]-b[0])*frame['height']/frame['width']*1.1)
@@ -315,6 +341,7 @@ def compile_cameras(scene,frame,add_front=True):
     for index,item in enumerate(scene.get('editorState',{}).get('cameras',[])):
         camera=item['camera'];rid=camera.get('view') if camera.get('view') in rooms else None
         s=base_shot('saved-'+str(index+1),item.get('name','用户保存机位'),rid,camera['position'],camera['target'],camera['fov'],frame)
+        if 'verticalShift' in camera:s['verticalShift']=camera['verticalShift']
         s['metrics']['source']='user-saved-editor-camera'
         s['subjectIds']=[p['id'] for p in _subjects(layout,rooms[rid])] if rid else []
         if camera.get('type')=='orthographic':
@@ -323,5 +350,7 @@ def compile_cameras(scene,frame,add_front=True):
         else:s['fov']=math.degrees(2*math.atan(math.tan(math.radians(s['fov'])/2)/max(camera.get('zoom',1),.01)))
         s['visibility'].update(ceiling=bool(camera.get('roof')),cutaway=bool(camera.get('cut')))
         shots.append(s)
+    for shot in shots:
+        shot['metrics']['deliveryRole']='primary' if shot['kind']=='front' else 'layout-reference' if shot['kind']=='overview' else 'supplement'
     result={'schema':'interior.cameras/1','sceneKey':scene['sceneKey'],'layoutHash':scene['layoutHash'],'shots':shots}
     validate_plan(result,scene);return result

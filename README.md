@@ -6,10 +6,10 @@
 
 | Skill | 版本 | 职责 |
 |---|---|---|
-| [interior-floorplan-planning](skills/interior-floorplan-planning/SKILL.md) | 3.1.0 | 分轮需求访谈、尺度/拓扑/动线与家具锚点，交付布局及需求JSON |
-| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.0.2 | 代码生成离线 HTML 粗模、CMF 风格、家具替换、量尺与保存 |
-| [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.0.0 | 从真实模型求机位并截图，默认完整场景 |
-| [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.1.0 | 粗模定位、参考图锁精细家具、同空间定样与原生绘图 |
+| [interior-floorplan-planning](skills/interior-floorplan-planning/SKILL.md) | 3.2.0 | 需求到功能选型、尺度/拓扑/动线与真实家具锚点 |
+| [interior-html-modeling](skills/interior-html-modeling/SKILL.md) | 3.1.0 | 代码粗模、镜头偏移截图、CMF与设计意图交接 |
+| [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.1.0 | 主体正视构图、真实连通域与按用途选图 |
+| [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.2.0 | 固定建筑壳与布局、参考锁款、完整风格设计和同空间原生绘图 |
 | [idk-canvas-ingest-agent](skills/idk-canvas-ingest-agent/SKILL.md) | 3.1.0 | 百恩得资产检索／下载与私有平台交付 |
 | [booklet-production](skills/booklet-production/SKILL.md) | 4.1.0 Windows | 杂志式 HTML／PDF 方案册，含模板和样册 |
 
@@ -29,8 +29,9 @@
 每项安装单元是 `skills/<skill-id>/`，将需要的六项目录安装到目标设备私有 `$CODEX_HOME/skills`；不要把历史 CAD／Blender 等目录一并当成新版安装。代码和模板可复制，但 Python、Chrome、字体、原生绘图工具及平台授权必须按各项 `local_runtime.md` 在目标设备配置。
 
 - Git 中不含 API Key、`.runtime`、登录态、客户文件、软件程序或设备缓存。平台 Key 仅在已授权设备本地配置；不能把 Key 放入 HTML、PDF 或 Git。
-- 本轮仅对小酷 HTML／渲染 Skill 的变更文件定向更新，平台 Key 与其它设备不在变更范围。小酷本地 cameras.py 有客户任务修改，保留该差异，不能用本仓库整目录覆盖或宣称全量文件与设备一致。
+- 本轮定向更新规划、HTML、机位与渲染四项；平台 Key 与其它设备不在变更范围。已把小酷 cameras.py 的开放连通站位域纳入共同源，再改主体构图；部署仍逐文件检查，不覆盖其它本地差异。
 - 粗模截图仅提供布局与机位；参考图提供精细家具身份，真实附图绑定实例，光影重新生成。二维终图不代表精细家具已写回 HTML 三维资产。
+- 完整设计用design-brief的common/spaces统一墙顶灯窗和陈设，并真实附入styleReferences。门窗洞口固定，框扇外观、天花饰面和设计照明不锁粗模；风格图不提供建筑或产品身份。HTML按钮只换CMF，不等于原生设计只能换色。
 - Windows 建模／机位回归及方案册 PDF 已有目标设备测试记录；原生绘图真实生成能力不因推送 Git 就视为已验证。
 - 新安装后旧 TUI 可能尚未发现新增 Skill；按实际情况读取明确入口或在同一工作区新开会话，不中断运行中任务。
 - 旧 `scripts/audit-runtime-prerequisites.mjs` 仅保留为历史 Ubuntu 辅助工具，不适用于新版六项的精简目录合同。

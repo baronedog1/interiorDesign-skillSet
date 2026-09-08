@@ -1,12 +1,12 @@
 # 原生绘图 · 粗模定位，参考图锁款 说明书
 
-版本：3.1.0
+版本：3.2.0
 
 ~~~yaml
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.1.0", category: interior-design}
+metadata: {version: "3.2.0", category: interior-design}
 ---
 ~~~
 
@@ -40,6 +40,34 @@ HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参�
 - full → prompt：完整图
 - empty → prompt：空槽图与 JSON
 - prompt → call：附图调用
+
+### 建筑不变，设计内容不再锁死
+
+风格图提供设计语言，产品图提供款式，当前机位图才提供结构。
+
+输入：当前源事实与用户需求
+输出：可追溯的设计决定及实际交接
+
+#### 建筑不变，设计内容不再锁死
+- style：实际查看平台风格模板与产品图；提炼墙/顶/灯/窗、材料、陈设密度；按本空间用途组织，不只提取木色
+  - playbook.md：设计意图与参考职责
+- brief：design-brief.json → --design-brief；common：全屋共用；spaces：按roomId差异；styleReferences：真实path、assetId及说明；实际图片加入job，不只写风格名称
+  - ../interior-html-modeling/scripts/engine/python/render.py：ai_request合并意图与真实附图
+- shell：不可变事实；建筑壳与洞口位置尺寸、机位；主要家具功能、位置与通行关系；产品身份来自绑定参考图
+  - ../interior-html-modeling/data_contract.md：壳体与设计提案的边界
+- design：可设计内容；原层高内天花饰面、灯具与光影；洞口内门窗框扇/五金、帘、玻璃；挂画、器物、绿植及意向窗外景观
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：结构图/定样/产品/风格图完整传入
+- review：是否改变了不可变事实？；改墙/开口/主布局：回对应源头；新增合理陈设不是结构错误
+  - playbook.md：分开审查事实与设计完成度
+- yes：是：修源头；保留实际图与问题
+- no：否：审视设计品质；看光影、材质、构图与一致性
+- style → brief
+- style → shell
+- brief → design
+- shell → review
+- design → review
+- review → yes：是
+- review → no：否
 
 ## 完整文件地图
 - MANIFEST.json：发布版本与完整文件清单

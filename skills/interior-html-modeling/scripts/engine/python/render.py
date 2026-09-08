@@ -8,7 +8,7 @@ from cameras import validate_plan
 from common import read,write,atomic_bytes,digest,file_sha,SHARED,require_schema
 from timing import traced,span,now
 
-REFERENCE_POLICY='reference-furniture-v1'
+REFERENCE_POLICY='shell-layout-design-v2'
 
 def open_browser(playwright):
     executable=os.environ.get('INTERIOR_CHROMIUM') or shutil.which('chromium') or shutil.which('google-chrome') or shutil.which('msedge')
@@ -81,7 +81,7 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
     manifest['results']=list(saved.values());manifest['skipped']=skipped;manifest['executedThisRun']=len(work);manifest['complete']=all(x['status']!='failed' for x in manifest['results']) and not skipped;write(manifest_path,manifest);return manifest
 
 @traced('render.prepare-request')
-def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,product_refs=None,reference_mode='furnished',white_model_requested=False,anchor_result=None):
+def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,product_refs=None,reference_mode='furnished',white_model_requested=False,anchor_result=None,design_brief=None):
     scene,_=load_scene(scene_path);plan=read(cameras_path);validate_plan(plan,scene);renders=read(renders_path)
     if plan['sceneKey']!=scene['sceneKey'] or renders.get('sceneKey')!=scene['sceneKey']:raise ValueError('场景/相机/截图不是同一版本')
     shot=next((s for s in plan['shots'] if s['id']==shot_id),None);row=next((x for x in renders.get('results',[]) if x['shotId']==shot_id),None)
@@ -101,7 +101,8 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
     text+='默认完整粗模截图：图中普通家具是占位示意，不是款式、细部比例、工艺或光照的参考；不要复制其方块、厚底座、膨胀软包或低模轮廓。\n' if reference_mode=='furnished' else '用户明确选择空白槽位/白模模式：仅隐藏家具与柜体可见实例，建筑及原 JSON 槽位不变；仍按槽位放置精细家具，不任意重新布局。\n'
     text+='粗模只约束建筑、机位以及家具功能、数量、位置、朝向、约略尺度和通行关系。精细家具应按绑定参考图片的款式重建，再放入相应槽位；锁款锁参考图，不锁粗模造型。普通占位尺寸不是产品实测，更不是要求把参考家具非均匀拉伸到粗模外包盒。\n'
     text+='有产品/精细家具参考图时，保留图中该产品的造型、部件、材质及比例；不保留参考照片的房间、背景或镜头。按真实尺寸适配，尺寸未知时只作有说明的比例意向；尺寸冲突回到选型/布局处理，不变形硬塞。\n'
-    text+='没有绑定款式参考且没有该家具的精细定样时，按用户风格重新设计可信的家具造型与工艺，不将粗模身份当作锁款；此时是概念选型，不声称参考图锁款或采购型号。重新计算来自现有窗户/已确认灯位的自然光、间接反射、接触阴影与真实材质，不复制模型的烘焙阴影和死板照明，不新增墙窗、梁、灯槽或无依据灯位。\n风格：'+style_text+'\n原 JSON 槽位（仅作为布局与约略尺度资料，不是精细产品造型；非本镜头可见对象不要插入画面），米制，position=[x,y,z]，size=[宽,高,深]，rotationY=度：\n'+json.dumps(slots,ensure_ascii=False)
+    text+='没有绑定款式参考且没有该家具的精细定样时，按用户风格设计可信家具工艺，不锁粗模身份；标为概念选型，不声称采购型号。固定的是建筑壳、墙门窗洞口位置尺寸、机位和主要家具功能布局，不是粗模里所有可见细节。门扇、窗框、分格、五金、玻璃与帘可按风格重新设计，但不移动/扩开洞口，不妨碍开合。\n'
+    text+='按下述同空间设计意图完成墙面、天花吊顶/收口、吊灯及辅助灯、挂画、器物、织物、绿植与生活布景，围绕主体有层次地选择，不要求每空间都加齐，不增设无需求的隔断柜或大件家具。吊顶在原建筑层高以内形成饰面，不凭空造承重梁；设计灯位不冒称现状电气点位。自然光、灯光、反射及接触阴影重新计算，不照抄粗模照明。窗外可形成符合楼层视线与日光方向的意向景观，不冒称现场实景，不改变窗洞。\n风格：'+style_text+'\n原 JSON 槽位（主要家具布局与约略尺度，不是款式；画外对象不要插入画面），米制，position=[x,y,z]，size=[宽,高,深]，rotationY=度：\n'+json.dumps(slots,ensure_ascii=False)
     refs=[]
     for binding in product_refs or []:
         path=Path(binding['path']).resolve();id=binding['placementId']
@@ -116,6 +117,16 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
     text+='\n指定资产绑定及真实尺寸（null 表示未知，不得把槽位尺寸冒称产品实测；应读取资产元数据或请用户补充）：\n'+json.dumps([{k:v for k,v in r.items() if k not in ['path','sha256']} for r in refs],ensure_ascii=False)
     request={'schema':'interior.ai-request/1','status':'prepared-not-generated','sceneKey':scene['sceneKey'],'shotId':shot_id,'cameraDigest':digest(shot),'source':{'path':str(image),'sha256':row['sha256'],'role':'complete-model-frame'},'prompt':text.strip(),'subjects':subjects,'productReferences':refs,'requiredReview':['structure','openings','furnitureLayout','camera'],'generation':None,'note':'此文件是实际调用图像工具的输入，不是生成完成回执。风格参考不能覆盖结构。'}
     request.update(referenceMode=reference_mode,whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False,placementSlots=slots,referencePolicy=REFERENCE_POLICY)
+    design=design_brief or {}
+    if not isinstance(design,dict):raise ValueError('Design brief must be an object')
+    room_design={**design.get('common',{}),**design.get('spaces',{}).get(shot.get('roomId'),{})}
+    style_refs=[]
+    for ref in design.get('styleReferences',[]):
+        p=Path(ref['path']).resolve()
+        style_refs.append({'path':str(p),'sha256':file_sha(p),'role':'style-design-reference-not-layout','assetId':ref.get('assetId'),'notes':ref.get('notes','')})
+    request.update(designIntent=room_design,styleReferences=style_refs)
+    text+='\n全屋共用与本空间设计意图（设计提案，不是现状建筑事实）：\n'+json.dumps(room_design,ensure_ascii=False)
+    text+='\n风格参考图只解释配色、硬装语言、家具搭配、布景密度、灯光与摄影品质；不可照搬它的房型、镜头或无需求的屏风/书架。产品参考图仍决定对应产品身份。'
     from PIL import Image
     with Image.open(image) as im:request['sourceFrame']={'width':im.width,'height':im.height,'aspectRatio':im.width/im.height}
     text+=f"\n源画幅 {request['sourceFrame']['width']}×{request['sourceFrame']['height']}，输出保持相同宽高比与裁切，不用拉伸图片冒充同机位。"
@@ -129,7 +140,7 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
         for connection in scene['layout'].get('openConnections',[]):
             pair=set(connection['rooms'])
             if pair&group and not pair<=group:group|=pair;changed=True
-    series_key=digest({'layoutHash':scene['layoutHash'],'style':style_text,'rooms':sorted(group),'mode':reference_mode,'products':[{k:v for k,v in r.items() if k!='path'} for r in refs],'referencePolicy':REFERENCE_POLICY})
+    series_key=digest({'layoutHash':scene['layoutHash'],'style':style_text,'rooms':sorted(group),'mode':reference_mode,'products':[{k:v for k,v in r.items() if k!='path'} for r in refs],'design':{k:v for k,v in design.items() if k!='styleReferences'},'styleReferences':[{k:v for k,v in r.items() if k!='path'} for r in style_refs],'referencePolicy':REFERENCE_POLICY})
     series_path=Path(out_file).resolve().parent/'render-series.json'
     registry=read(series_path) if series_path.exists() else {}
     prior=anchor_result or registry.get(series_key,{}).get('resultPath')
@@ -142,7 +153,7 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
         text+='\n同空间精细定样图已经提供：只沿用其中可见家具的精细款式、形体与CMF，不回退粗模造型；本次建筑与镜头以第一张粗模截图为准。绑定产品参考优先于定样；定样中不可见的家具不能声称已锁款。同一日景系列的光源保持物理一致，但按当前视角重新计算光影，不复制上一张的阴影图案。'
     else:
         text+='\n这是该空间/风格的首张精细定样。绑定参考图决定对应家具款式；其余家具重新设计为真实精细产品，不照抄粗模。后续同空间机位再以本张精细图统一外观。'
-    attached=[request['source'],*request['consistencyReferences'],*refs]
+    attached=[request['source'],*request['consistencyReferences'],*refs,*style_refs]
     request['referenceGuide']=[{'imageIndex':i+1,'role':r['role'],'placementId':r.get('placementId')} for i,r in enumerate(attached)]
     text+='\n实际附图顺序与职责（图片编号从1起）：\n'+json.dumps(request['referenceGuide'],ensure_ascii=False)
     request['requiredReview']+=['crossViewConsistency']

@@ -21,7 +21,7 @@ def complete(invocation_path,image_path,out):
     write(out,actual);return actual
 
 def references(request):
-    refs=[request['source'],*request.get('consistencyReferences',[]),*request.get('productReferences',[])]
+    refs=[request['source'],*request.get('consistencyReferences',[]),*request.get('productReferences',[]),*request.get('styleReferences',[])]
     for ref in refs:
         if file_sha(ref['path'])!=ref['sha256']:raise ValueError('Attached reference changed: regenerate the request')
     return refs

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "平面规划 · 尺度、拓扑与锚点",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "overview": {
     "title": "从客户原图生成可追溯的布局 JSON",
     "nodes": [
@@ -813,6 +813,229 @@
                 ]
               ],
               "label": "生成，不补丁摆放"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "functional-selection",
+      "title": "先决定为什么需要，再决定摆什么",
+      "input": "当前源事实与用户需求",
+      "output": "可追溯的设计决定及实际交接",
+      "explanation": "功能区域不自动产生隔断；从需求与真实可用位置形成组件选择。",
+      "diagrams": [
+        {
+          "title": "先决定为什么需要，再决定摆什么",
+          "nodes": [
+            {
+              "id": "need",
+              "title": "需求：工作 / 收纳 / 就餐",
+              "lines": [
+                "区分客户已确认与设计假设",
+                "开放书房不是新增房间"
+              ],
+              "x": 80,
+              "y": 260,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "功能→组件→位置规则"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "title": "这件大件有独立必要功能？",
+              "lines": [
+                "已有物件能承担？是否只是为了画区域边界？"
+              ],
+              "x": 1290,
+              "y": 230,
+              "w": 1000,
+              "h": 390,
+              "type": "decision",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "playbook/requirements-interview.md",
+                  "purpose": "读取需求与授权状态"
+                }
+              ],
+              "check": true
+            },
+            {
+              "id": "revise",
+              "title": "否：回需求解释与选型",
+              "lines": [
+                "不沿开放区边界自动排书架",
+                "不等渲染再隐藏问题家具"
+              ],
+              "x": 80,
+              "y": 800,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "源头取舍与全屋识图"
+                }
+              ]
+            },
+            {
+              "id": "place",
+              "title": "是：选择真实可用位置",
+              "lines": [
+                "沿墙或围绕功能中心；先考虑开合与通路",
+                "再选类别、尺寸、正面和风格"
+              ],
+              "x": 1290,
+              "y": 800,
+              "w": 980,
+              "h": 270,
+              "type": "process",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "明确宿主的anchor/handoff入口"
+                }
+              ]
+            },
+            {
+              "id": "out",
+              "title": "全屋顶视 / 开放区轴测 → 解释大件位置",
+              "lines": [
+                "不合理回原需求或选型；合理则交接布局与需求",
+                "不新增一个事后移动家具的修补器"
+              ],
+              "x": 500,
+              "y": 1260,
+              "w": 1400,
+              "h": 250,
+              "type": "io",
+              "bodySize": 23,
+              "files": [
+                {
+                  "path": "../interior-html-modeling/data_contract.md",
+                  "purpose": "沿用布局与需求侧车"
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "need",
+              "to": "q",
+              "points": [
+                [
+                  1060,
+                  395
+                ],
+                [
+                  1290,
+                  395
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "q",
+              "to": "revise",
+              "points": [
+                [
+                  1790,
+                  620
+                ],
+                [
+                  1790,
+                  690
+                ],
+                [
+                  570,
+                  690
+                ],
+                [
+                  570,
+                  800
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "q",
+              "to": "place",
+              "points": [
+                [
+                  2290,
+                  425
+                ],
+                [
+                  2340,
+                  425
+                ],
+                [
+                  2340,
+                  935
+                ],
+                [
+                  2270,
+                  935
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "revise",
+              "to": "out",
+              "points": [
+                [
+                  570,
+                  1070
+                ],
+                [
+                  570,
+                  1160
+                ],
+                [
+                  900,
+                  1160
+                ],
+                [
+                  900,
+                  1260
+                ]
+              ],
+              "label": ""
+            },
+            {
+              "from": "place",
+              "to": "out",
+              "points": [
+                [
+                  1780,
+                  1070
+                ],
+                [
+                  1780,
+                  1160
+                ],
+                [
+                  1500,
+                  1160
+                ],
+                [
+                  1500,
+                  1260
+                ]
+              ],
+              "label": ""
             }
           ]
         }
@@ -1973,6 +2196,10 @@
     {
       "path": "../interior-html-modeling/scripts/engine/python/timing.py",
       "purpose": "逐步骤计时共享依赖"
+    },
+    {
+      "path": "../interior-html-modeling/data_contract.md",
+      "purpose": "共用布局与需求合同"
     }
   ],
   "fileDescriptions": {

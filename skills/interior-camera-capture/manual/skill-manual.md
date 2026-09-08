@@ -1,12 +1,12 @@
 # 机位截图 · 七类空间与真实成像 说明书
 
-版本：3.0.0
+版本：3.1.0
 
 ~~~yaml
 ---
 name: interior-camera-capture
 description: 从当前完整 HTML 的真实模型寻找全屋及各空间机位，冻结相机并输出原生 WebGL 参考截图；逐图识图，不改家具或冒充效果图。
-metadata: {version: "3.0.0", category: interior-design}
+metadata: {version: "3.1.0", category: interior-design}
 ---
 ~~~
 
@@ -39,6 +39,29 @@ metadata: {version: "3.0.0", category: interior-design}
 - q → fix：否
 - q → room：是
 - room → search：本房约束
+
+### 正面不等于主体清楚：摄影式镜头偏移
+
+正视保持垂直线；投影端与浏览器用同一个偏移量，截图后恢复。
+
+输入：当前源事实与用户需求
+输出：可追溯的设计决定及实际交接
+
+#### 正面不等于主体清楚：摄影式镜头偏移
+- group：明确本空间主要功能组；餐桌含最外侧椅背；书房是工作面；开放区提供站位，不提供额外主体
+  - ../interior-html-modeling/scripts/engine/python/cameras.py：_subjects / front_view
+- project：求完整主体包络与水平投影；不强制把地板到天花加入主体；按投影上下范围求verticalShift；保留背景余量，不俯拍或退到门外
+  - ../interior-html-modeling/scripts/engine/python/cameras.py：_evaluate / projected / foreground_ratio
+- rank：按主体占幅与可见性选候选；正视目标宽度占比约0.68，只是排序参考；惩罚遮挡、过宽视角与离本功能区太远；实际图仍由Agent判断
+  - ../interior-html-modeling/scripts/engine/python/cameras.py：前景射线也采用相同偏移
+- capture：真实截图并恢复原相机；setViewOffset应用同一verticalShift；finally清除偏移，恢复原视图；不改变建筑或家具
+  - ../interior-html-modeling/scripts/engine/runtime/app.js：captureFrame：偏移/成像/恢复
+- select：交付选择：正视主图先行；primary先选；supplement按表达需要；layout-reference是平面/鸟瞰，不全量送原生渲染
+  - playbook.md：逐空间选图与识图
+- group → project
+- project → rank
+- rank → capture
+- capture → select
 
 ## 完整文件地图
 - MANIFEST.json：发布版本与完整文件清单
@@ -153,9 +176,9 @@ metadata: {version: "3.0.0", category: interior-design}
 - q → bad：否
 
 #### 书房：主体工作面与座椅、收纳共同入镜
-- a：本房书桌、座椅、收纳；房间类型不明时按原图确认
+- a：本房书桌、座椅、收纳；以书桌工作面和座椅为主体；收纳只作有需求的背景，不并入整片客餐厅
   - playbook.md：主体、空间差异及识图方法
-- b：取工作面正向与斜向候选；不从桌背板后拍；包含座椅与出入口；共用采样与投影参数，不另设虚构求解器
+- b：取工作面正向与斜向候选；首图沿书桌+Z正面；镜头水平；就近站位、主体占幅与镜头偏移；斜向只是补充；不从远处门洞后拍
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
 - q：工作面与通行关系可理解？；逐图看桌前/椅后使用空间和门遮挡
   - playbook.md：主体、空间差异及识图方法
@@ -195,11 +218,11 @@ metadata: {version: "3.0.0", category: interior-design}
   - ../interior-html-modeling/scripts/engine/schemas/layout.schema.json：房间、墙门窗、placements 数据
 - b：普通与正视两类站位；普通 7×7×高1.40/1.25/1.55m；正视沿宿主墙内法向35档、横移0/±.18m
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- q：站位在本房且不在实体内？；距主体≥.45m；房间多边形及有向包围盒
+- q：站位在真实连通域且不在实体内？；距主体≥.45m；房间多边形及有向包围盒
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
 - next：舍弃该站位，继续剩余候选；这是生成算法选位，不是事后移动家具
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- score：投影并排序有效候选；score=max(0,FOV需−90)×50+(1−可见比)×160；+前景比例×140+FOV需+|眼高−1.4|×3；正视另加 |横移|×5；无主体缺失单独记录
+- score：投影并排序有效候选；正视：主体占幅、遮挡、就近站位排序；补充图沿用视角/可见性排序；不混成一个公式；verticalShift完成水平正视的上下构图；仍输出review
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
 - out：冻结 cameras.json；包括 review 候选；可见比<.55、前景>.35 标风险，不冒充像素验收；没有站位则保留带原因候选，明确不是自然全景
   - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
