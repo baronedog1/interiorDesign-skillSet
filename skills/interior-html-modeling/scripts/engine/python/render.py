@@ -76,7 +76,7 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
     for s in shots:
         # Capture every selected, technically valid candidate. Quality is an observation,
         # not a reason to suppress an image that the Agent needs to inspect.
-        key=digest({'sceneKey':scene['sceneKey'],'camera':s,'mode':mode,'referenceMode':reference_mode,'layoutReferenceVersion':1});old=saved.get(s['id']);file=out/(s['id']+'.png')
+        key=digest({'sceneKey':scene['sceneKey'],'camera':s,'mode':mode,'referenceMode':reference_mode,'layoutReferenceVersion':2});old=saved.get(s['id']);file=out/(s['id']+'.png')
         pair=(old or {}).get('layoutReference',{});pair_file=out/(s['id']+'.layout.png')
         pair_current=reference_mode!='empty-slots' or (pair.get('image')==pair_file.name and pair_file.is_file() and file_sha(pair_file)==pair.get('sha256'))
         if not overwrite and old and pair_current and old.get('inputKey')==key and old.get('status') in ['rendered','needs-review'] and file.exists() and file_sha(file)==old.get('sha256'):continue
@@ -103,6 +103,7 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
                         review=data['review'];low=any(x['sampledClearRatio']<.5 for x in review)
                         row.update({'sha256':file_sha(file),'width':data['width'],'height':data['height'],'status':'needs-review' if low or shot['status']=='review' else 'rendered','visibilitySamples':review,'note':'27点射线抽检是遮挡预警，不是逐像素视觉验收。'})
                         row.update(referenceMode=reference_mode,hiddenPlacementIds=data.get('hiddenPlacementIds',[]),whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False)
+                        row['visiblePlacementIds']=data.get('visiblePlacementIds')
                         if reference_mode=='empty-slots':
                             # The empty frame describes architecture, not furniture geometry.
                             # Capture a separate same-camera spatial reference in the same
@@ -113,6 +114,8 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
                             layout_file=out/(shot['id']+'.layout.png')
                             atomic_bytes(layout_file,base64.b64decode(layout['dataUrl'].split(',',1)[1]))
                             row['layoutReference']={'image':layout_file.name,'sha256':file_sha(layout_file),'cameraDigest':digest(shot),'sceneKey':scene['sceneKey'],'role':'same-camera-layout-only'}
+                            row['visiblePlacementIds']=layout.get('visiblePlacementIds')
+                        row['visibilityMethod']='in-frame-surface-ray-samples-not-pixel-proof' if isinstance(row.get('visiblePlacementIds'),list) else 'legacy-room-group'
                     except Exception as exc:row.update(status='failed',error=str(exc))
                     row['timing']={'startedAt':started,'finishedAt':now(),'elapsedMs':round((time.perf_counter()-clock)*1000,3),'kind':'code','scope':'capture-and-save-one-shot'}
                     saved[shot['id']]=row;manifest['results']=list(saved.values());manifest['skipped']=skipped;write(manifest_path,manifest)
@@ -142,7 +145,9 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
             if group.intersection(connection['rooms']):expanded.update(connection['rooms'])
         if expanded==group:break
         group=expanded
-    image_slots=image_slot_anchors([p for p in scene['layout']['placements']if p['roomId']in group],shot)
+    visible_ids=row.get('visiblePlacementIds')
+    candidates=[p for p in scene['layout']['placements']if p['id']in visible_ids] if isinstance(visible_ids,list) else [p for p in scene['layout']['placements']if p['roomId']in group]
+    image_slots=image_slot_anchors(candidates,shot)
     prompt_slots=[{k:v for k,v in p.items()if k not in ['position','rotationY','roomId']}for p in image_slots]
     if reference_mode=='empty-slots' and set(row.get('hiddenPlacementIds',[]))!=set(p['id'] for p in slots):raise ValueError('Empty reference must preserve all placement slots while hiding their visual instances')
     text='保持截图的房型、结构、墙体、门窗位置、空间尺度完全不变；相机位置、朝向、透视/正交方式、视野和裁切与截图一致，不扩房、不移墙、不增减门窗。\n'

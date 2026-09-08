@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：3.1.7
+版本：3.1.8
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.1.7", category: interior-design}
+metadata: {version: "3.1.8", category: interior-design}
 ---
 ~~~
 
@@ -267,6 +267,9 @@ metadata: {version: "3.1.7", category: interior-design}
 - capture：完成捕获后恢复原引用；原相机、原材质与可见性复原；异常退出同样执行 finally
   - scripts/engine/python/render.py：正式入口捕获结构主图和同机位布局辅助图
   - scripts/engine/python/model.py：新运行时编译更新模型摘要，不覆盖旧冻结输入
+- visible：同机位记录跨房间可见实例，再交给产品附图选择；家具布局图上采样画内可见表面，门外邻室也参与；不是房间标签过滤；记录 visiblePlacementIds；采样不是逐像素证明，不作为审美或碰撞门禁
+  - scripts/engine/runtime/app.js：framePlacementSamples：实际相机、射线、可见表面
+  - scripts/engine/python/render.py：保存采样结果，组织本镜头产品；旧捕获兼容不冒称新证据
 - snapshot → transparent：逐项
 - transparent → retain：是
 - transparent → neutral：否

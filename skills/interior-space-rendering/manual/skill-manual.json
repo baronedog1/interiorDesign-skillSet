@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "原生绘图 · 粗模定位，参考图锁款",
-  "version": "3.2.5",
+  "version": "3.2.6",
   "overview": {
     "title": "粗模定位 → 参考图片锁款 → 真实光影",
     "nodes": [
@@ -1576,6 +1576,149 @@
               "label": "是"
             }
           ]
+        },
+        {
+          "title": "当前镜头可见产品，不等于当前房间产品",
+          "nodes": [
+            {
+              "id": "in",
+              "type": "io",
+              "x": 70,
+              "y": 180,
+              "w": 900,
+              "h": 300,
+              "title": "全屋产品绑定＋冻结机位布局捕获",
+              "lines": [
+                "保留所有已选产品 placementId",
+                "客户脚本不预先按 roomId 删减"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "接收全屋绑定，读取真实捕获记录"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 1200,
+              "y": 180,
+              "w": 1100,
+              "h": 360,
+              "title": "画内采样射线首个可见实体是该家具？",
+              "lines": [
+                "忽略透明面，保留实体墙遮挡",
+                "遍历所有房间，不改变模型"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/runtime/app.js",
+                  "purpose": "framePlacementSamples"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "keep",
+              "type": "process",
+              "x": 1250,
+              "y": 830,
+              "w": 1050,
+              "h": 300,
+              "title": "是：加入本镜头候选",
+              "lines": [
+                "门外可见沙发/床带入真实款式图",
+                "再按图像包络投影与原图摘要组织绑定"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/render.py",
+                  "purpose": "visiblePlacementIds → frameProductReferences"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "no",
+              "type": "process",
+              "x": 70,
+              "y": 830,
+              "w": 900,
+              "h": 300,
+              "title": "否：本次采样未见，继续遍历",
+              "lines": [
+                "不是移除全屋选型；不附画外产品",
+                "极小局部可能漏采，仍需实际识图"
+              ],
+              "files": [],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "in",
+              "to": "q",
+              "points": [
+                [
+                  970,
+                  330
+                ],
+                [
+                  1100,
+                  330
+                ],
+                [
+                  1100,
+                  360
+                ],
+                [
+                  1200,
+                  360
+                ]
+              ],
+              "label": "逐实例"
+            },
+            {
+              "from": "q",
+              "to": "keep",
+              "points": [
+                [
+                  1750,
+                  540
+                ],
+                [
+                  1750,
+                  830
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "no",
+              "points": [
+                [
+                  1475,
+                  450
+                ],
+                [
+                  1475,
+                  700
+                ],
+                [
+                  520,
+                  700
+                ],
+                [
+                  520,
+                  830
+                ]
+              ],
+              "label": "否"
+            }
+          ]
         }
       ]
     },
@@ -1853,6 +1996,231 @@
                 ]
               ],
               "label": "否：带观察交付"
+            }
+          ]
+        },
+        {
+          "title": "宿主5张输入：不丢产品，编排同职责原图",
+          "nodes": [
+            {
+              "id": "in",
+              "type": "io",
+              "x": 70,
+              "y": 180,
+              "w": 720,
+              "h": 300,
+              "title": "核对原图与产品绑定",
+              "lines": [
+                "先按原SHA和职责去重",
+                "原图保留，客户分别交付"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "references"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "q",
+              "type": "decision",
+              "x": 990,
+              "y": 150,
+              "w": 1270,
+              "h": 350,
+              "title": "附图数量不超过宿主上限？",
+              "lines": [
+                "读取 maxReferenceImages；来酷默认5"
+              ],
+              "files": [],
+              "bodySize": 22
+            },
+            {
+              "id": "pack",
+              "type": "process",
+              "x": 70,
+              "y": 720,
+              "w": 980,
+              "h": 350,
+              "title": "否：同职责照片排成参考板",
+              "lines": [
+                "产品图等比、白底、P编号；需要时合并风格图",
+                "保留原SHA及每格placementId；建筑/布局/定样独立"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "compact_references；不调用绘图、不改原文件"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "call",
+              "type": "process",
+              "x": 1290,
+              "y": 720,
+              "w": 970,
+              "h": 350,
+              "title": "是：更新实际附图顺序后调用",
+              "lines": [
+                "不超限时附图保持原样",
+                "超限编排后由job明确P编号和绑定",
+                "登记真实调用和返回，准备文件不算出图"
+              ],
+              "files": [
+                {
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "prepare / start / complete / finish"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "limit",
+              "type": "decision",
+              "x": 100,
+              "y": 1260,
+              "w": 950,
+              "h": 300,
+              "title": "编排后仍超出宿主容量？",
+              "lines": [
+                "实际接口容量，非审美门禁"
+              ],
+              "files": [],
+              "bodySize": 22
+            },
+            {
+              "id": "error",
+              "type": "process",
+              "x": 1300,
+              "y": 1270,
+              "w": 960,
+              "h": 280,
+              "title": "是：保留完整输入，报告能力不匹配",
+              "lines": [
+                "不静默丢图，不伪报已生成",
+                "普通五类职责可编排到5张"
+              ],
+              "files": [],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "in",
+              "to": "q",
+              "points": [
+                [
+                  790,
+                  330
+                ],
+                [
+                  990,
+                  330
+                ]
+              ],
+              "label": "核对数量"
+            },
+            {
+              "from": "q",
+              "to": "call",
+              "points": [
+                [
+                  1625,
+                  500
+                ],
+                [
+                  1625,
+                  580
+                ],
+                [
+                  1775,
+                  580
+                ],
+                [
+                  1775,
+                  720
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "q",
+              "to": "pack",
+              "points": [
+                [
+                  1308,
+                  413
+                ],
+                [
+                  1308,
+                  620
+                ],
+                [
+                  560,
+                  620
+                ],
+                [
+                  560,
+                  720
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "pack",
+              "to": "limit",
+              "points": [
+                [
+                  560,
+                  1070
+                ],
+                [
+                  560,
+                  1260
+                ]
+              ],
+              "label": "编排结果"
+            },
+            {
+              "from": "limit",
+              "to": "error",
+              "points": [
+                [
+                  1050,
+                  1410
+                ],
+                [
+                  1300,
+                  1410
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "limit",
+              "to": "call",
+              "points": [
+                [
+                  813,
+                  1335
+                ],
+                [
+                  1170,
+                  1335
+                ],
+                [
+                  1170,
+                  970
+                ],
+                [
+                  1290,
+                  970
+                ]
+              ],
+              "label": "否"
             }
           ]
         }

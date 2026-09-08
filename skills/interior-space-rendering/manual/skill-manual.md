@@ -1,12 +1,12 @@
 # 原生绘图 · 粗模定位，参考图锁款 说明书
 
-版本：3.2.5
+版本：3.2.6
 
 ~~~yaml
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.2.5", category: interior-design}
+metadata: {version: "3.2.6", category: interior-design}
 ---
 ~~~
 
@@ -166,6 +166,18 @@ HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参�
 - size → err：否
 - size → emit：是
 
+#### 当前镜头可见产品，不等于当前房间产品
+- in：全屋产品绑定＋冻结机位布局捕获；保留所有已选产品 placementId；客户脚本不预先按 roomId 删减
+  - ../interior-html-modeling/scripts/engine/python/render.py：接收全屋绑定，读取真实捕获记录
+- q：画内采样射线首个可见实体是该家具？；忽略透明面，保留实体墙遮挡；遍历所有房间，不改变模型
+  - ../interior-html-modeling/scripts/engine/runtime/app.js：framePlacementSamples
+- keep：是：加入本镜头候选；门外可见沙发/床带入真实款式图；再按图像包络投影与原图摘要组织绑定
+  - ../interior-html-modeling/scripts/engine/python/render.py：visiblePlacementIds → frameProductReferences
+- no：否：本次采样未见，继续遍历；不是移除全屋选型；不附画外产品；极小局部可能漏采，仍需实际识图
+- in → q：逐实例
+- q → keep：是
+- q → no：否
+
 ### 真实原生调用与识图
 
 按实际输入、计算、分支和文件消费者展开。
@@ -195,6 +207,23 @@ HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参�
 - call → review：自己看输出
 - review → out：是
 - review → out：否：带观察交付
+
+#### 宿主5张输入：不丢产品，编排同职责原图
+- in：核对原图与产品绑定；先按原SHA和职责去重；原图保留，客户分别交付
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：references
+- q：附图数量不超过宿主上限？；读取 maxReferenceImages；来酷默认5
+- pack：否：同职责照片排成参考板；产品图等比、白底、P编号；需要时合并风格图；保留原SHA及每格placementId；建筑/布局/定样独立
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：compact_references；不调用绘图、不改原文件
+- call：是：更新实际附图顺序后调用；不超限时附图保持原样；超限编排后由job明确P编号和绑定；登记真实调用和返回，准备文件不算出图
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：prepare / start / complete / finish
+- limit：编排后仍超出宿主容量？；实际接口容量，非审美门禁
+- error：是：保留完整输入，报告能力不匹配；不静默丢图，不伪报已生成；普通五类职责可编排到5张
+- in → q：核对数量
+- q → call：是
+- q → pack：否
+- pack → limit：编排结果
+- limit → error：是
+- limit → call：否
 
 ### 先定样，再衍生同空间机位
 
