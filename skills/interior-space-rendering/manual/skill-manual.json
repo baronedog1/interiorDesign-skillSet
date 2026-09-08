@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "原生绘图 · 粗模定位，参考图锁款",
-  "version": "3.2.4",
+  "version": "3.2.5",
   "overview": {
     "title": "粗模定位 → 参考图片锁款 → 真实光影",
     "nodes": [
@@ -852,11 +852,11 @@
               "y": 810,
               "w": 1020,
               "h": 470,
-              "title": "空槽帧：仅隐藏家具和柜体实例",
+              "title": "一次截图任务：空房主图＋布局辅助图",
               "lines": [
-                "冻结机位 → 保存可见性 → 隐藏 placements",
-                "绘制 PNG → 记录全部隐藏ID → finally 恢复",
-                "建筑不删；JSON 槽位列表仍交给生成工具"
+                "同一冻结相机分别捕获empty与furnished，各自恢复场景",
+                "主图隐藏家具；辅助图直观表达槽位，不锁粗模款式",
+                "保存两图摘要、同版sceneKey/cameraDigest和每步耗时"
               ],
               "files": [
                 {
@@ -881,19 +881,19 @@
               "y": 1390,
               "w": 2240,
               "h": 290,
-              "title": "世界包络/正面轴 → 相机基底 → 图像位置/相对朝向",
+              "title": "同相机：建筑主图＋布局参考，职责分离",
               "lines": [
-                "近面裁切后投影；保留未裁切范围，画外部分自然出画",
-                "提示词只给相机相对角：0正面／90侧面；不混世界rotationY"
+                "空房主图管墙洞镜头；额外布局图管位置、方向、遮挡和裁切",
+                "产品图管精细款式；数字槽位保留，不让粗模身份进入锁款"
               ],
               "files": [
                 {
                   "path": "../interior-html-modeling/scripts/engine/python/render.py",
-                  "purpose": "image_slot_anchors/ai_request：裁切、投影与实际提示词"
+                  "purpose": "配对截图、image_slot_anchors及ai_request职责交接"
                 },
                 {
-                  "path": "../interior-html-modeling/scripts/engine/python/cameras.py",
-                  "purpose": "corners/basis：同一旋转包络和相机基底"
+                  "path": "../interior-html-modeling/scripts/engine/python/native_image.py",
+                  "purpose": "layoutReferences实际附图，不只写入提示词"
                 }
               ],
               "bodySize": 22

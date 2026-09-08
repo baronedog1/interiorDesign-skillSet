@@ -1,12 +1,12 @@
 # 原生绘图 · 粗模定位，参考图锁款 说明书
 
-版本：3.2.4
+版本：3.2.5
 
 ~~~yaml
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.2.4", category: interior-design}
+metadata: {version: "3.2.5", category: interior-design}
 ---
 ~~~
 
@@ -96,13 +96,13 @@ HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参�
   - ../interior-html-modeling/scripts/engine/runtime/app.js：captureFrame 保存当前状态
 - explicit：finally：恢复捕获前场景；成功或异常都恢复材质、可见性和机位；显示暂变；JSON、家具尺寸和布局不改
   - ../interior-html-modeling/scripts/engine/runtime/app.js：finally 恢复原场景状态
-- empty：空槽帧：仅隐藏家具和柜体实例；冻结机位 → 保存可见性 → 隐藏 placements；绘制 PNG → 记录全部隐藏ID → finally 恢复；建筑不删；JSON 槽位列表仍交给生成工具
+- empty：一次截图任务：空房主图＋布局辅助图；同一冻结相机分别捕获empty与furnished，各自恢复场景；主图隐藏家具；辅助图直观表达槽位，不锁粗模款式；保存两图摘要、同版sceneKey/cameraDigest和每步耗时
   - ../interior-camera-capture/scripts/run.py：--reference-mode/--white-model-requested
   - ../interior-html-modeling/scripts/engine/runtime/app.js：临时隐藏/恢复及返回模式
   - ../interior-html-modeling/scripts/engine/python/render.py：截图摘要、hiddenPlacementIds 和请求槽位
-- out：世界包络/正面轴 → 相机基底 → 图像位置/相对朝向；近面裁切后投影；保留未裁切范围，画外部分自然出画；提示词只给相机相对角：0正面／90侧面；不混世界rotationY
-  - ../interior-html-modeling/scripts/engine/python/render.py：image_slot_anchors/ai_request：裁切、投影与实际提示词
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：corners/basis：同一旋转包络和相机基底
+- out：同相机：建筑主图＋布局参考，职责分离；空房主图管墙洞镜头；额外布局图管位置、方向、遮挡和裁切；产品图管精细款式；数字槽位保留，不让粗模身份进入锁款
+  - ../interior-html-modeling/scripts/engine/python/render.py：配对截图、image_slot_anchors及ai_request职责交接
+  - ../interior-html-modeling/scripts/engine/python/native_image.py：layoutReferences实际附图，不只写入提示词
 - source → default：原数据不变
 - default → empty：临时显示层
 - empty → explicit：捕获后或异常

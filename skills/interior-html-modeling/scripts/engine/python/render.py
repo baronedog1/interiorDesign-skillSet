@@ -8,7 +8,7 @@ from cameras import validate_plan
 from common import read,write,atomic_bytes,digest,file_sha,SHARED,require_schema
 from timing import traced,span,now
 
-REFERENCE_POLICY='shell-layout-design-v2'
+REFERENCE_POLICY='shell-layout-design-v3'
 
 def image_slot_anchors(placements,shot):
     """Project placement boxes through the actual frozen camera; no layout edits.
@@ -76,8 +76,10 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
     for s in shots:
         # Capture every selected, technically valid candidate. Quality is an observation,
         # not a reason to suppress an image that the Agent needs to inspect.
-        key=digest({'sceneKey':scene['sceneKey'],'camera':s,'mode':mode,'referenceMode':reference_mode});old=saved.get(s['id']);file=out/(s['id']+'.png')
-        if not overwrite and old and old.get('inputKey')==key and old.get('status') in ['rendered','needs-review'] and file.exists() and file_sha(file)==old.get('sha256'):continue
+        key=digest({'sceneKey':scene['sceneKey'],'camera':s,'mode':mode,'referenceMode':reference_mode,'layoutReferenceVersion':1});old=saved.get(s['id']);file=out/(s['id']+'.png')
+        pair=(old or {}).get('layoutReference',{});pair_file=out/(s['id']+'.layout.png')
+        pair_current=reference_mode!='empty-slots' or (pair.get('image')==pair_file.name and pair_file.is_file() and file_sha(pair_file)==pair.get('sha256'))
+        if not overwrite and old and pair_current and old.get('inputKey')==key and old.get('status') in ['rendered','needs-review'] and file.exists() and file_sha(file)==old.get('sha256'):continue
         work.append((s,key,file))
     if work:
         with sync_playwright() as p:
@@ -101,7 +103,17 @@ def render_shots(scene_path,cameras_path,out_dir,ids=None,include_review=False,m
                         review=data['review'];low=any(x['sampledClearRatio']<.5 for x in review)
                         row.update({'sha256':file_sha(file),'width':data['width'],'height':data['height'],'status':'needs-review' if low or shot['status']=='review' else 'rendered','visibilitySamples':review,'note':'27点射线抽检是遮挡预警，不是逐像素视觉验收。'})
                         row.update(referenceMode=reference_mode,hiddenPlacementIds=data.get('hiddenPlacementIds',[]),whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False)
-                    except Exception as exc:row['error']=str(exc)
+                        if reference_mode=='empty-slots':
+                            # The empty frame describes architecture, not furniture geometry.
+                            # Capture a separate same-camera spatial reference in the same
+                            # browser. It is never a furniture-identity or lighting source.
+                            layout=page.evaluate('(x)=>CREAM.captureFrame(x.shot,x.mode,{referenceMode:"furnished"})',{'shot':shot,'mode':mode})
+                            if errors:raise RuntimeError('; '.join(errors))
+                            if layout['sceneKey']!=scene['sceneKey'] or (layout['width'],layout['height'])!=(data['width'],data['height']):raise ValueError('Paired capture scene/frame mismatch')
+                            layout_file=out/(shot['id']+'.layout.png')
+                            atomic_bytes(layout_file,base64.b64decode(layout['dataUrl'].split(',',1)[1]))
+                            row['layoutReference']={'image':layout_file.name,'sha256':file_sha(layout_file),'cameraDigest':digest(shot),'sceneKey':scene['sceneKey'],'role':'same-camera-layout-only'}
+                    except Exception as exc:row.update(status='failed',error=str(exc))
                     row['timing']={'startedAt':started,'finishedAt':now(),'elapsedMs':round((time.perf_counter()-clock)*1000,3),'kind':'code','scope':'capture-and-save-one-shot'}
                     saved[shot['id']]=row;manifest['results']=list(saved.values());manifest['skipped']=skipped;write(manifest_path,manifest)
             finally:browser.close()
@@ -155,6 +167,14 @@ def ai_request(scene_path,cameras_path,renders_path,shot_id,out_file,style=None,
     text+='\n当前画面产品绑定及真实尺寸（null 表示未知，不得把槽位尺寸冒称产品实测；应读取资产元数据或请用户补充）：\n'+json.dumps([{k:v for k,v in r.items() if k not in ['path','sha256']} for r in frame_refs],ensure_ascii=False)
     request={'schema':'interior.ai-request/1','status':'prepared-not-generated','sceneKey':scene['sceneKey'],'shotId':shot_id,'cameraDigest':digest(shot),'source':{'path':str(image),'sha256':row['sha256'],'role':'complete-model-frame'},'prompt':text.strip(),'subjects':subjects,'productReferences':refs,'requiredReview':['structure','openings','furnitureLayout','camera'],'generation':None,'note':'此文件是实际调用图像工具的输入，不是生成完成回执。风格参考不能覆盖结构。'}
     request.update(referenceMode=reference_mode,whiteModelRequested=white_model_requested if reference_mode=='empty-slots' else False,placementSlots=slots,imageSlotAnchors=image_slots,frameProductReferences=frame_refs,cameraFrame={k:shot[k]for k in ['position','target','up','fov','frame','projection','verticalShift','orthographicSpan']if k in shot},referencePolicy=REFERENCE_POLICY)
+    request['layoutReferences']=[]
+    if reference_mode=='empty-slots' and row.get('layoutReference'):
+        lr=row['layoutReference'];lp=(Path(renders_path).resolve().parent/lr['image']).resolve()
+        if not lp.is_relative_to(Path(renders_path).resolve().parent) or lr.get('cameraDigest')!=digest(shot) or lr.get('sceneKey')!=scene['sceneKey'] or file_sha(lp)!=lr['sha256']:raise ValueError('Paired layout reference no longer matches this capture')
+        request['layoutReferences']=[{'path':str(lp),'sha256':lr['sha256'],'role':'same-camera-layout-only'}]
+        text+='\n附加同机位家具布局示意图只负责家具数量、方向、位置、前后遮挡与自然裁切，不负责款式、工艺、材质和光影。建筑仍以空房主图为准；精细家具身份仍以绑定产品图为准，不照搬产品照片镜头，也不继承布局示意图的粗模造型。它直观表达同一JSON槽位，不是另一套布局。'
+    elif reference_mode=='empty-slots':
+        request['layoutReferenceObservation']='Historical empty capture has no paired layout image; recapture this frozen camera for the current paired-input method.'
     design=design_brief or {}
     if not isinstance(design,dict):raise ValueError('Design brief must be an object')
     room_design={**design.get('common',{}),**design.get('spaces',{}).get(shot.get('roomId'),{})}

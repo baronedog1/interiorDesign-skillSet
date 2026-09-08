@@ -1,13 +1,13 @@
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.2.4", category: interior-design}
+metadata: {version: "3.2.5", category: interior-design}
 ---
 # 原生绘图效果图
 
 输入同版 scene.json、cameras.json、renders.json、粗模截图及精细家具参考图；输出原生效果图、调用回执与问题说明。粗模只管建筑、机位、家具功能/位置/朝向/约略尺度，绝不把粗模的块体或软包轮廓当锁款。锁款依据绑定的产品图片，后续同空间沿用精细定样；按参考款式放入粗模对应位置，保留产品比例，不非均匀拉伸。没有参考时可按已知需求建立概念定样，但不能声称已锁定用户产品。光影重新计算，不复制粗模照明。
 
-默认仍传带家具的完整粗模截图；仅用户明确要求白模/空白槽位时隐藏家具，原JSON保留。此Skill生成二维效果图，不会把参考照片自动变成可编辑3D家具或回写HTML。读 [执行方法](playbook.md)，字段见 [共用合同](../interior-html-modeling/data_contract.md)。
+默认仍传带家具的完整粗模截图；仅用户明确要求白模/空白槽位时，主图隐藏家具、原JSON保留；截图命令同时生成同机位布局参考图，它只解释摆放，不锁粗模款式。此Skill生成二维效果图，不会把参考照片自动变成可编辑3D家具或回写HTML。读 [执行方法](playbook.md)，字段见 [共用合同](../interior-html-modeling/data_contract.md)。
 
 入口 `python scripts/run.py ai-request SCENE CAMERAS RENDERS --shot ID --out request.json`；`native-prepare request.json capabilities.json --out job.json` 只准备任务，随后必须由 Agent 实际调用可用的原生图像生成工具并附完整参考图。完成后 `native-result job.json image.png invocation.json review.json --out result.json`。
 

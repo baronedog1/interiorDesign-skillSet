@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "HTML 建模 · 编译、编辑与状态交接",
-  "version": "3.1.5",
+  "version": "3.1.6",
   "overview": {
     "title": "HTML 编辑：不同意图进入不同状态域",
     "nodes": [

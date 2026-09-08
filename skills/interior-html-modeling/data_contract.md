@@ -35,3 +35,5 @@ productReferences保留逐placement绑定；native_image.references按(role,sha2
 `productReferences` 是连通空间完整产品绑定，参与同系列身份计算；`frameProductReferences` 是投影与当前画面相交的绑定，仅后者进入当前提示词与实际附图。缺省该字段才兼容旧请求，显式空列表不能回退整套产品。产品未入本镜头不等于系列换款；投影不证明墙后可见性。
 
 绘图提示词不混入世界 `position/rotationY`。由组件正面轴和当前相机基底计算 `cameraRelativeYawDegrees`：0为正面、±90侧面、180背面；床的正面是床尾看床头。世界字段仍完整保存在JSON。`imageBoundsUnclipped01` 传递裁切前范围，避免将被裁切家具重新收进画面；它依然只是包络，不是产品比例目标。
+
+空槽截图现在同次生成主图与 `shotId.layout.png`。renders行的 `layoutReference` 保存同一sceneKey、cameraDigest、图片摘要和 `same-camera-layout-only` 职责；ai-request/native-prepare原样交接到 `layoutReferences`。这张辅助图只直观表达JSON中的家具数量、方向、前后遮挡和裁切，绝非款式/材质/光照来源。默认furnished仍单图；历史冻结请求不修改，后续空槽任务重新截图取得配对输入。复用截图时检查配对文件仍在且摘要一致，缺失则按同相机重截，不猜布局。
