@@ -1,6 +1,6 @@
 {
   "name": "booklet-production",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "platform": "windows",
   "upstream": "Ubuntu booklet-production 3.3.0 (read-only reference)",
   "privateCredentialsIncluded": false,
@@ -9,15 +9,33 @@
     "data_contract.md": "2046d60cabd25459a890a6a5499b28541309be1dac46fa0f9bacdcebc93caf1c",
     "expected_outcome/demo.pdf": "aac4601bd96a916f79a783cd461acab730c9e4c044ad7296984d6c5866e6b031",
     "expected_outcome/expected_outcome.md": "2d7c1861bc28a32897bee8d3601a28426274448e6ebb18d7317481ead5f75f1e",
-    "local_runtime.md": "19edae25b1a23ffed4a97bc60cc0be9bbc6099544faf900bed01869eeef2fc9a",
-    "manual/skill-flowchart.svg": "ba44fe4becc36e566a71a1fc05778f40740c48da7cd8ff3f86e9687c1a5a1ce9",
-    "manual/skill-manual.json": "153a06e440b8f00a682d61597323813a0cc1ffa9e9cbcdb16f2de85d7e0de40f",
-    "manual/skill-manual.md": "0bd19d8a41300150a0cf44d041bcb2ef0181a5b7bb9fd5ad88fd5263fbfe4b6f",
+    "local_runtime.md": "94d424c80d3cc77c1c99eb8202137073f9d5ad3e27d8f683a6738ceb6dc187a7",
+    "manual/skill-flowchart.svg": "e7085e820b3131c4c65004d19463a2e33d5b672c6f93e3bacc914b47f2ed2b05",
+    "manual/skill-manual.json": "ccdd3854b05783fdf8810c896de1e92207ffaf43fee4744b8b26384b618fd081",
+    "manual/skill-manual.md": "b60819d80894a21cd26ba749774818fcd9625c51520c6b364c99a71a6e8e3c88",
     "playbook/example-brief.json": "752ee3e0c0e365302bbe0c9656fe538872efbe1778faedc3d877623b7d3c9bf8",
-    "playbook.md": "de4e801000c293c6f3ba96a41f2c1ff1d370d67ad26523e6d3b6a6a128715929",
-    "scripts/run.py": "ff5334ad4d51b56d42c6b532605e09a7bd75cb2cf11bf086a4f5c6c177f11ec0",
-    "scripts/scripts.md": "ac9e75328c388071636ce88d1b4eb3188a1d02deed82ccfabee271a560d1c031",
-    "SKILL_MANUAL.pdf": "917da7c305b8a35c62a1d4638bbe6418bc672286991f5e1576d42aeb4f262f41",
-    "SKILL.md": "f36141908f40e60623d7380fb0b75b2a94eebffd4b0130ce7168018d90f1c5ea"
-  }
+    "playbook.md": "54d5bf9fcd608567b0a60b769acc4f6511c12fb92e29962f7ede5b4b7cc6e9f8",
+    "scripts/run.py": "bae87e11c12dac2bc5735bf450a13a39bb0d5b60983e8e5741e47cf9616aa5e4",
+    "scripts/scripts.md": "f524bd6dfcef66340ffc565c3339d179e67274c894212cea3ccdfcc74fc53c79",
+    "SKILL_MANUAL.pdf": "38d785c090975b79b92398ebbda8e58ae2fcd08cf437fba52db6eff905db89e0",
+    "SKILL.md": "edf39fe5669ea3bf417ac35bdde0d571aa5ab0a1d954baead5565b0583824bb8"
+  },
+  "file_count": 15,
+  "files": [
+    "MANIFEST.json",
+    "SKILL.md",
+    "SKILL_MANUAL.pdf",
+    "assets/magazine.css",
+    "data_contract.md",
+    "expected_outcome/demo.pdf",
+    "expected_outcome/expected_outcome.md",
+    "local_runtime.md",
+    "manual/skill-flowchart.svg",
+    "manual/skill-manual.json",
+    "manual/skill-manual.md",
+    "playbook.md",
+    "playbook/example-brief.json",
+    "scripts/run.py",
+    "scripts/scripts.md"
+  ]
 }

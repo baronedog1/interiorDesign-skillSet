@@ -11,7 +11,7 @@
 | [interior-camera-capture](skills/interior-camera-capture/SKILL.md) | 3.1.1 | 功能正视/床头构图、真实连通域与按用途选图 |
 | [interior-space-rendering](skills/interior-space-rendering/SKILL.md) | 3.2.5 | 固定建筑壳与布局、完整产品绑定和去重附图、同空间原生绘图 |
 | [idk-canvas-ingest-agent](skills/idk-canvas-ingest-agent/SKILL.md) | 3.1.0 | 百恩得资产检索／下载与私有平台交付 |
-| [booklet-production](skills/booklet-production/SKILL.md) | 4.1.0 Windows | 杂志式 HTML／PDF 方案册，含模板和样册 |
+| [booklet-production](skills/booklet-production/SKILL.md) | 4.1.1 Windows | 杂志式 HTML／PDF 方案册，含模板和样册 |
 
 六项共128个分发文件，保留各项完整的代码、模板、说明书 JSON／Markdown／SVG／PDF 及自带资产。每项根目录 `SKILL_MANUAL.pdf` 是对应的流程说明；[设计编排与方案册说明](skills/booklet-production/SKILL_MANUAL.pdf)、[杂志式样册](skills/booklet-production/expected_outcome/demo.pdf) 可直接查看。样册使用公开参考图，不是客户户型或本轮原生绘图成果。
 

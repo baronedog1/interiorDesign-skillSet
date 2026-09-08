@@ -1,12 +1,12 @@
 # 小酷设计编排与杂志式方案册 说明书
 
-版本：4.1.0
+版本：4.1.1
 
 ~~~yaml
 ---
 name: booklet-production
 description: 将同一室内设计方案的布局、空间图片、材料与用户产品整理成杂志式 HTML 和 PDF 方案册；用户只要图片时不调用。不负责重新建模或生成效果图。
-metadata: {"version":"4.1.0","source_authority":"lecoo-windows-device","category":"interior-design"}
+metadata: {"version":"4.1.1","source_authority":"lecoo-windows-device","category":"interior-design"}
 ---
 ~~~
 
@@ -100,7 +100,7 @@ metadata: {"version":"4.1.0","source_authority":"lecoo-windows-device","category
 排版规则作用于页面，不改变空间和家具。技术检查与逐页识图共同定位源头，不能以报告替代看图。
 
 #### 文字分页与独立 PDF 回读：真实算法
-- a：读取本地资料并安全生成 HTML；转义标题、正文与图片说明；拒绝无效颜色。；保持源图不变，单独生成内嵌显示副本。
+- a：读取本地资料并安全生成 HTML；转义标题、正文与图片说明；无效输入报真实技术错误。；透明资产先合成白底再转RGB；EXIF方向校正，原文件不改。
   - scripts/run.py：document / picture
   - data_contract.md：brief 的字段
 - b：等待字体与图片加载 → 测量末段；按 A4 打印尺寸测量正文末段与页脚。；不是凭字数猜页数，也不把文字截掉。

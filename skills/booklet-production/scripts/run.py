@@ -17,7 +17,10 @@ with command('booklet-production'):
   p=(base/image['path']).resolve()
   if not p.is_file():raise ValueError('Missing image: '+str(p))
   with Image.open(p) as src:
-   im=ImageOps.exif_transpose(src).convert('RGB');width,height=im.size
+   rgba=ImageOps.exif_transpose(src).convert('RGBA');width,height=rgba.size
+   # JPEG has no alpha: compose on paper before dropping alpha, never turn
+   # transparent product cutouts into opaque black rectangles.
+   im=Image.new('RGB',rgba.size,'white');im.paste(rgba,mask=rgba.getchannel('A'))
    if min(width,height)<700:observations.append({'image':p.name,'issue':'Low source resolution; inspect at print size'})
    im.thumbnail((1600,2000) if sendable else (3000,4000))
    buf=io.BytesIO();im.save(buf,format='JPEG',quality=82 if sendable else 95,optimize=True)

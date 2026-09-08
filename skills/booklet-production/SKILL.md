@@ -1,7 +1,7 @@
 ---
 name: booklet-production
 description: 将同一室内设计方案的布局、空间图片、材料与用户产品整理成杂志式 HTML 和 PDF 方案册；用户只要图片时不调用。不负责重新建模或生成效果图。
-metadata: {"version":"4.1.0","source_authority":"lecoo-windows-device","category":"interior-design"}
+metadata: {"version":"4.1.1","source_authority":"lecoo-windows-device","category":"interior-design"}
 ---
 
 # 室内设计方案册
