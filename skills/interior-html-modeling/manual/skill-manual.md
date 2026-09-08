@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：3.1.9
+版本：3.1.10
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.1.9", category: interior-design}
+metadata: {version: "3.1.10", category: interior-design}
 ---
 ~~~
 
@@ -255,7 +255,7 @@ metadata: {version: "3.1.9", category: interior-design}
 
 ### 白模去材质，不改变可见结构
 
-第四轮卫浴输入将透明玻璃变成实板。改截图材质转换，不新增后置门禁；逐材质判断，混合数组亦适用。
+白模曾把玻璃变实板、把背面顶板改为正面剔除。材质转换保留透明与原side，仅中和色彩；不新增后置门禁。
 
 #### 同机位白模：透光与遮罩关系必须保留
 - snapshot：保存原状态，遍历可导出网格；冻结相机、原材质引用和可见性；混合材质按数组逐项处理
@@ -263,7 +263,7 @@ metadata: {version: "3.1.9", category: interior-design}
 - transparent：材质透明、透射或使用遮罩？；transparent / transmission / alphaTest
 - retain：保留原材质；玻璃、薄纱和镂空不变实板
   - scripts/engine/runtime/materials.js：玻璃与薄纱材质定义
-- neutral：替换为中性不透明材质；只消除颜色纹理风格；不修改几何、位置或开口
+- neutral：替换为中性不透明材质；中和颜色纹理，按原side复用材质；保留正/背/双面可见性；不全局双面化
 - capture：完成捕获后恢复原引用；原相机、原材质与可见性复原；异常退出同样执行 finally
   - scripts/engine/python/render.py：正式入口捕获结构主图和同机位布局辅助图
   - scripts/engine/python/model.py：新运行时编译更新模型摘要，不覆盖旧冻结输入
