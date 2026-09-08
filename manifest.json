@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-08T09:59:43.492Z",
+  "snapshotAt": "2026-09-08T10:19:16.191Z",
   "source": {
     "type": "mixed-device-snapshot",
     "currentDesignRelease": {
@@ -154,11 +154,11 @@
     {
       "id": "interior-html-modeling",
       "path": "skills/interior-html-modeling",
-      "version": "3.1.8",
+      "version": "3.1.9",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 74,
-      "bytes": 28181635,
-      "sha256": "f91d6329e77eaddd27347e9617dca7c4bb75f7d8601420228af9ecdf6052b961"
+      "bytes": 28183110,
+      "sha256": "af51ec747b0e11712292ce48dd815bee64958705f09f9abe0a5a01905f78d2d5"
     },
     {
       "id": "interior-space-rendering",

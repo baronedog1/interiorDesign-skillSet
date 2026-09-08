@@ -259,7 +259,32 @@
  const ray=new T.Raycaster(),results=[];for(const id of shot.subjectIds){const e=entityMap.get(id);if(!e)continue;const b=C.localBounds(e.object),points=[];for(const x of[b.min.x,(b.min.x+b.max.x)/2,b.max.x])for(const y of[b.min.y,(b.min.y+b.max.y)/2,b.max.y])for(const z of[b.min.z,(b.min.z+b.max.z)/2,b.max.z])points.push(new T.Vector3(x,y,z));let tested=0,clear=0;
  for(const point of points){const delta=point.clone().sub(camera.position),len=delta.length();ray.set(camera.position,delta.normalize());ray.far=len+.005;const hit=ray.intersectObject(root,true).find(h=>isVisible(h.object)&&!h.object.userData.noExport&&!h.object.material?.transparent);if(!hit){clear++;tested++;continue;}let o=hit.object;while(o&&o!==root&&!o.userData.entityId)o=o.parent;if(o?.userData.entityId===id)clear++;tested++;}
  results.push({id,sampledClearRatio:clear/Math.max(tested,1),samples:tested});}return results;};
- C.framePlacementSamples=function(camera){root.updateMatrixWorld(true);camera.updateMatrixWorld(true);const ray=new T.Raycaster(),ids=[];for(const p of window.PROJECT.placements){const e=entityMap.get(p.id);if(!e||!isVisible(e.object))continue;const b=new T.Box3().setFromObject(e.object);let seen=false;for(const fx of[0,.5,1])for(const fy of[0,.5,1])for(const fz of[0,.5,1]){if(seen)continue;const q=new T.Vector3(T.MathUtils.lerp(b.min.x,b.max.x,fx),T.MathUtils.lerp(b.min.y,b.max.y,fy),T.MathUtils.lerp(b.min.z,b.max.z,fz)).project(camera);if(Math.abs(q.x)>1||Math.abs(q.y)>1||Math.abs(q.z)>1)continue;ray.setFromCamera(new T.Vector2(q.x,q.y),camera);const hit=ray.intersectObject(root,true).find(h=>{if(!isVisible(h.object)||h.object.userData.noExport)return false;const m=Array.isArray(h.object.material)?h.object.material[h.face?.materialIndex||0]:h.object.material;return m&&!m.transparent&&!(m.transmission>0);});let o=hit?.object;while(o&&o!==root&&!o.userData.entityId)o=o.parent;if(o?.userData.entityId===p.id)seen=true;}if(seen)ids.push(p.id);}return ids;};
+ C.framePlacementSamples=function(camera){
+  root.updateMatrixWorld(true);camera.updateMatrixWorld(true);
+  const ray=new T.Raycaster(),ids=[];
+  for(const p of window.PROJECT.placements){
+   const e=entityMap.get(p.id);if(!e||!isVisible(e.object))continue;
+   const b=new T.Box3().setFromObject(e.object),corners=[];
+   for(const x of[b.min.x,b.max.x])for(const y of[b.min.y,b.max.y])for(const z of[b.min.z,b.max.z])corners.push(new T.Vector3(x,y,z).applyMatrix4(camera.matrixWorldInverse));
+   const near=-camera.near,clipped=corners.filter(q=>q.z<=near).map(q=>q.clone());
+   for(let i=0;i<8;i++)for(const bit of[1,2,4]){const k=i^bit;if(k<=i)continue;const a=corners[i],c=corners[k];if((a.z<=near)!==(c.z<=near))clipped.push(a.clone().lerp(c,(near-a.z)/(c.z-a.z)));}
+   if(!clipped.length)continue;
+   const projected=clipped.map(q=>q.applyMatrix4(camera.projectionMatrix));
+   const xmin=Math.max(-1,Math.min(...projected.map(q=>q.x))),xmax=Math.min(1,Math.max(...projected.map(q=>q.x))),ymin=Math.max(-1,Math.min(...projected.map(q=>q.y))),ymax=Math.min(1,Math.max(...projected.map(q=>q.y)));
+   if(xmax<=xmin||ymax<=ymin)continue;
+   let seen=false;
+   // Sample the clipped image rectangle, not 3D box corners. A foreground
+   // sliver can be visible even when every 3D sample falls outside the frame.
+   for(const fx of[.08,.25,.5,.75,.92])for(const fy of[.08,.25,.5,.75,.92]){
+    if(seen)continue;
+    ray.setFromCamera(new T.Vector2(T.MathUtils.lerp(xmin,xmax,fx),T.MathUtils.lerp(ymin,ymax,fy)),camera);
+    const hit=ray.intersectObject(root,true).find(h=>{if(!isVisible(h.object)||h.object.userData.noExport)return false;const m=Array.isArray(h.object.material)?h.object.material[h.face?.materialIndex||0]:h.object.material;return m&&!m.transparent&&!(m.transmission>0);});
+    let o=hit?.object;while(o&&o!==root&&!o.userData.entityId)o=o.parent;if(o?.userData.entityId===p.id)seen=true;
+   }
+   if(seen)ids.push(p.id);
+  }
+  return ids;
+ };
  C.captureFrame=async function(shot,mode='pbr',options={}){if(state.busy)throw Error('另一个截图任务尚未结束');const referenceMode=options.referenceMode||'furnished';if(!['furnished','empty-slots'].includes(referenceMode))throw Error('未知参考模式');if(referenceMode==='empty-slots'&&options.whiteModelRequested!==true)throw Error('空白槽位模式须由用户明确要求');const hiddenPlacementIds=[];const snap=cameraSnapshot(),before={roof:state.roof,cut:state.cut,wallVisible:state.wallVisible,furnitureVisible:state.furnitureVisible,doors:state.doors},ratio=R.getPixelRatio(),selection=helper?.visible,auto=state.auto;const originalVisible=new Map(entries.map(e=>[e.object,e.object.visible]));let savedMaterials;
  try{cancelGesture();state.auto=false;busy('正在按冻结机位出图…');state.wallVisible=state.furnitureVisible=true;state.roof=shot.visibility.ceiling;state.cut=shot.visibility.cutaway;state.doors=shot.visibility.doorsOpen;entries.forEach(e=>e.object.visible=true);applyBuilding();ground.visible=shot.kind==='overview';
  active=shot.projection==='orthographic'?ortho:cam;controls.camera=active;active.position.fromArray(shot.position);active.up.fromArray(shot.up);controls.target.fromArray(shot.target);controls.lookAt();
