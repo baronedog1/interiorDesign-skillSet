@@ -1,12 +1,12 @@
 # HTML 建模 · 编译、编辑与状态交接 说明书
 
-版本：3.1.6
+版本：3.1.7
 
 ~~~yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.1.6", category: interior-design}
+metadata: {version: "3.1.7", category: interior-design}
 ---
 ~~~
 
@@ -36,11 +36,14 @@ metadata: {version: "3.1.6", category: interior-design}
   - scripts/engine/runtime/workspace.js：目录选择、资产替换和材质编辑
 - edit：结构、量尺与完整保存；墙门窗显式编辑；地面拉尺/面积；完整 HTML 往返后再生成同版 scene（详见 editing）
   - scripts/engine/runtime/app.js：结构、测量、灯光、相机与导出
+- capture-clay：白模截图保持玻璃透明；去材质风格，不将透光面变成实板（详见 clay-visibility）
+  - scripts/engine/runtime/app.js：捕获与恢复原材质
 - in → build：当前数据
 - build → intent：已打开
 - intent → cmf：风格
 - intent → asset：家具
 - intent → edit：结构/测量/保存
+- edit → capture-clay：截图
 
 ## 完整文件地图
 - MANIFEST.json：发布版本与完整文件清单
@@ -249,3 +252,23 @@ metadata: {version: "3.1.6", category: interior-design}
 - c → q：实际重开
 - q → fix：否
 - q → out：是
+
+### 白模去材质，不改变可见结构
+
+第四轮卫浴输入将透明玻璃变成实板。改截图材质转换，不新增后置门禁；逐材质判断，混合数组亦适用。
+
+#### 同机位白模：透光与遮罩关系必须保留
+- snapshot：保存原状态，遍历可导出网格；冻结相机、原材质引用和可见性；混合材质按数组逐项处理
+  - scripts/engine/runtime/app.js：captureFrame 状态快照与材质转换
+- transparent：材质透明、透射或使用遮罩？；transparent / transmission / alphaTest
+- retain：保留原材质；玻璃、薄纱和镂空不变实板
+  - scripts/engine/runtime/materials.js：玻璃与薄纱材质定义
+- neutral：替换为中性不透明材质；只消除颜色纹理风格；不修改几何、位置或开口
+- capture：完成捕获后恢复原引用；原相机、原材质与可见性复原；异常退出同样执行 finally
+  - scripts/engine/python/render.py：正式入口捕获结构主图和同机位布局辅助图
+  - scripts/engine/python/model.py：新运行时编译更新模型摘要，不覆盖旧冻结输入
+- snapshot → transparent：逐项
+- transparent → retain：是
+- transparent → neutral：否
+- retain → capture：捕获
+- neutral → capture：捕获

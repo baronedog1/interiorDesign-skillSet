@@ -1,7 +1,7 @@
 {
   "schemaVersion": 4,
   "displayName": "HTML 建模 · 编译、编辑与状态交接",
-  "version": "3.1.6",
+  "version": "3.1.7",
   "overview": {
     "title": "HTML 编辑：不同意图进入不同状态域",
     "nodes": [
@@ -374,6 +374,26 @@
               ],
               "bodySize": 22,
               "detailRef": "editing"
+            },
+            {
+              "id": "capture-clay",
+              "type": "process",
+              "x": 1220,
+              "y": 1290,
+              "w": 1090,
+              "h": 250,
+              "title": "白模截图保持玻璃透明",
+              "lines": [
+                "去材质风格，不将透光面变成实板"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/runtime/app.js",
+                  "purpose": "捕获与恢复原材质"
+                }
+              ],
+              "bodySize": 22,
+              "detailRef": "clay-visibility"
             }
           ],
           "edges": [
@@ -467,6 +487,21 @@
                 ]
               ],
               "label": "结构/测量/保存"
+            },
+            {
+              "from": "edit",
+              "to": "capture-clay",
+              "points": [
+                [
+                  950,
+                  1390
+                ],
+                [
+                  1220,
+                  1390
+                ]
+              ],
+              "label": "截图"
             }
           ]
         }
@@ -1420,6 +1455,190 @@
                 ]
               ],
               "label": "是"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clay-visibility",
+      "code": "CAPTURE",
+      "title": "白模去材质，不改变可见结构",
+      "color": "#21658e",
+      "algorithm": true,
+      "explanation": "第四轮卫浴输入将透明玻璃变成实板。改截图材质转换，不新增后置门禁；逐材质判断，混合数组亦适用。",
+      "diagrams": [
+        {
+          "title": "同机位白模：透光与遮罩关系必须保留",
+          "nodes": [
+            {
+              "id": "snapshot",
+              "type": "process",
+              "x": 80,
+              "y": 170,
+              "w": 670,
+              "h": 280,
+              "title": "保存原状态，遍历可导出网格",
+              "lines": [
+                "冻结相机、原材质引用和可见性",
+                "混合材质按数组逐项处理"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/runtime/app.js",
+                  "purpose": "captureFrame 状态快照与材质转换"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "transparent",
+              "type": "decision",
+              "x": 970,
+              "y": 160,
+              "w": 850,
+              "h": 340,
+              "title": "材质透明、透射或使用遮罩？",
+              "lines": [
+                "transparent / transmission / alphaTest"
+              ],
+              "files": [],
+              "bodySize": 22
+            },
+            {
+              "id": "retain",
+              "type": "process",
+              "x": 1980,
+              "y": 190,
+              "w": 650,
+              "h": 280,
+              "title": "保留原材质",
+              "lines": [
+                "玻璃、薄纱和镂空不变实板"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/runtime/materials.js",
+                  "purpose": "玻璃与薄纱材质定义"
+                }
+              ],
+              "bodySize": 22
+            },
+            {
+              "id": "neutral",
+              "type": "process",
+              "x": 1070,
+              "y": 700,
+              "w": 650,
+              "h": 280,
+              "title": "替换为中性不透明材质",
+              "lines": [
+                "只消除颜色纹理风格",
+                "不修改几何、位置或开口"
+              ],
+              "files": [],
+              "bodySize": 22
+            },
+            {
+              "id": "capture",
+              "type": "process",
+              "x": 1980,
+              "y": 700,
+              "w": 650,
+              "h": 340,
+              "title": "完成捕获后恢复原引用",
+              "lines": [
+                "原相机、原材质与可见性复原",
+                "异常退出同样执行 finally"
+              ],
+              "files": [
+                {
+                  "path": "scripts/engine/python/render.py",
+                  "purpose": "正式入口捕获结构主图和同机位布局辅助图"
+                },
+                {
+                  "path": "scripts/engine/python/model.py",
+                  "purpose": "新运行时编译更新模型摘要，不覆盖旧冻结输入"
+                }
+              ],
+              "bodySize": 22
+            }
+          ],
+          "edges": [
+            {
+              "from": "snapshot",
+              "to": "transparent",
+              "points": [
+                [
+                  750,
+                  310
+                ],
+                [
+                  970,
+                  310
+                ]
+              ],
+              "label": "逐项"
+            },
+            {
+              "from": "transparent",
+              "to": "retain",
+              "points": [
+                [
+                  1820,
+                  330
+                ],
+                [
+                  1980,
+                  330
+                ]
+              ],
+              "label": "是"
+            },
+            {
+              "from": "transparent",
+              "to": "neutral",
+              "points": [
+                [
+                  1395,
+                  500
+                ],
+                [
+                  1395,
+                  700
+                ]
+              ],
+              "label": "否"
+            },
+            {
+              "from": "retain",
+              "to": "capture",
+              "points": [
+                [
+                  2305,
+                  470
+                ],
+                [
+                  2305,
+                  700
+                ]
+              ],
+              "label": "捕获"
+            },
+            {
+              "from": "neutral",
+              "to": "capture",
+              "points": [
+                [
+                  1720,
+                  840
+                ],
+                [
+                  1980,
+                  840
+                ]
+              ],
+              "label": "捕获"
             }
           ]
         }
