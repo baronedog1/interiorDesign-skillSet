@@ -334,7 +334,7 @@ def front_view(layout,room,frame,max_fov=100,occluders=None,subjects=None,label=
     if not empty and any(k in subjects[0].get('componentId','') for k in ['sofa.','bed.','tv.','vanity','cabinet','kitchen','washer','bench.','desk']):
         # Furniture front is local +Z; never choose the reverse wall merely because it is closer.
         yaw=math.radians(subjects[0]['rotationY']);front=vec([math.sin(yaw),math.cos(yaw)])
-        if not room.get('frontWallId') or abs(float(normal@front))>.99:normal=front;tangent=vec([normal[1],-normal[0]])
+        if not room.get('frontWallId'):normal=front;tangent=vec([normal[1],-normal[0]])
     if empty:
         # Only an empty architectural view uses the long axis; fixtures retain their true front.
         edges=[vec(b)-vec(a) for a,b in zip(room['polygon'],room['polygon'][1:]+room['polygon'][:1])]
@@ -366,7 +366,7 @@ def front_view(layout,room,frame,max_fov=100,occluders=None,subjects=None,label=
                         shot['metrics'].update({'frontAxis':list(map(float,normal*direction)),'referenceWallId':wall['id'] if wall else None,'horizontal':abs(pitch)<1e-9,'pitchDegrees':round(math.degrees(pitch),3),'frontAngleDegrees':round(angle,6)});choices.append((score+abs(offset)*5,shot))
     # Narrow-room subject views: room-first, then explicit virtual axial retreat.
     # A camera near plane clips the foreground partition for this view only.
-    natural=[s for _,s in choices if s['metrics'].get('fullSubjectProjection',{}).get('complete') and s['fov']<=100 and s['metrics']['cameraHeight']>=1.0]
+    natural=[s for _,s in choices if s['metrics'].get('fullSubjectProjection',{}).get('complete') and s['fov']<=100 and s['metrics']['cameraHeight']>=1.0 and s['metrics'].get('clearSampleRatio',0)>=.9]
     if not natural and not empty and any(p.get('componentId','').startswith('bed.') for p in subjects):
         aim=center[[0,2]]
         axis=poly.intersection(LineString([aim,aim+normal*30]))
@@ -393,6 +393,9 @@ def front_view(layout,room,frame,max_fov=100,occluders=None,subjects=None,label=
         if math.dist(pos,target)<.05:target[2]-=.5
         shot=base_shot(room['id']+'-front',room['name']+' · 正视待调整',room['id'],pos,target,80,frame,'front')
         shot['id']=room['id']+'-'+label;shot['status']='review';shot['subjectIds']=[] if empty else [p['id'] for p in subjects];shot['metrics']['frontSolved']=False;shot['reviewNotes']=['正视站位尚无可用解；这是诊断图，不是假称正视合格。回查主体/宿主墙/房间输入，不隐藏实体。'];return shot
+    if any(p.get('componentId','').startswith('bed.') for p in subjects):
+        complete_choices=[(score,s) for score,s in choices if s['metrics'].get('fullSubjectProjection',{}).get('complete') and s['metrics'].get('cameraHeight',0)>=1.0 and s['metrics'].get('clearSampleRatio',0)>=.9]
+        if complete_choices:choices=complete_choices
     shot=min(choices,key=lambda x:x[0])[1];shot['metrics']['candidateCount']=len(choices)
     shot['id']=room['id']+'-'+label;shot['name']=room['name']+' · '+label+' 正视';shot['metrics']['frontSolved']=True
     if empty:shot['subjectIds']=[];shot['metrics']['architecturalSubject']=True

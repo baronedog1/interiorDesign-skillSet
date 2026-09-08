@@ -1,6 +1,6 @@
 # Interior Design Skill Set
 
-室内设计 Skill 的版本化备份与分发仓库。2026-09-08 更新完整主机位、门窗源状态与跨空间事实交接；六项之外的十项旧 Skill 保留原文件，不代表它们已经完成 GPT-6／Windows 适配。
+当前唯一基准：2026-09-08 来酷设备六项设计 Skill。main 仅发布这六项，不混入旧 CAD、Blender、独立动线或旧家具建模 Skill；历史内容可从历史分支及 Git 提交回溯。
 
 ## 当前六项设计 Skill
 
@@ -36,22 +36,22 @@
 
 ## 安装与就绪边界
 
-每项安装单元是 `skills/<skill-id>/`，将需要的六项目录安装到目标设备私有 `$CODEX_HOME/skills`；不要把历史 CAD／Blender 等目录一并当成新版安装。代码和模板可复制，但 Python、Chrome、字体、原生绘图工具及平台授权必须按各项 `local_runtime.md` 在目标设备配置。
+每项安装单元是 `skills/<skill-id>/`，将需要的六项目录安装到目标设备私有 `$CODEX_HOME/skills`；历史 CAD／Blender 等目录已从 main 移出。代码和模板可复制，但 Python、Chrome、字体、原生绘图工具及平台授权必须按各项 `local_runtime.md` 在目标设备配置。
 
 - Git 中不含 API Key、`.runtime`、登录态、客户文件、软件程序或设备缓存。平台 Key 仅在已授权设备本地配置；不能把 Key 放入 HTML、PDF 或 Git。
-- 本轮定向更新规划、HTML、机位与渲染四项；平台 Key 与其它设备不在变更范围。已把小酷 cameras.py 的开放连通站位域纳入共同源，再改主体构图；部署仍逐文件检查，不覆盖其它本地差异。
+- 本次以设备当前六项完整去敏快照作为基准；不改业务逻辑，不修改设备安装、平台 Key 或其他设备。
 - 粗模截图仅提供布局与机位；参考图提供精细家具身份，真实附图绑定实例，光影重新生成。二维终图不代表精细家具已写回 HTML 三维资产。
 - 完整设计用design-brief的common/spaces统一墙顶灯窗和陈设，并真实附入styleReferences。门窗洞口固定，框扇外观、天花饰面和设计照明不锁粗模；风格图不提供建筑或产品身份。HTML按钮只换CMF，不等于原生设计只能换色。
 - Windows 建模／机位回归及方案册 PDF 已有目标设备测试记录；原生绘图真实生成能力不因推送 Git 就视为已验证。
 - 新安装后旧 TUI 可能尚未发现新增 Skill；按实际情况读取明确入口或在同一工作区新开会话，不中断运行中任务。
-- 旧 `scripts/audit-runtime-prerequisites.mjs` 仅保留为历史 Ubuntu 辅助工具，不适用于新版六项的精简目录合同。
+- 旧 Ubuntu runtime audit 已从 main 移出；历史提交可回溯，不作为新版安装入口。
 
 ## 历史与完整性
 
 - `20260808-历史备份`：旧 main 完整备份。
 - `20260907-gpt5.6`：Ubuntu 16项设计 Skill 历史快照。
 - 这两个历史分支不因本次 main 更新而改动，也不改写 main 历史。
-- `manifest.json` 区分当前来酷六项和保留的旧快照来源。
+- `manifest.json` 只登记当前来酷六项基准，旧快照不混入当前清单。
 - `FILES.sha256` 记录 `skills/` 全部文件；运行 `node scripts/build-manifest.mjs --snapshot <ISO-8601>` 重建清单。
 
 第三方代码和素材的许可、来源、署名以各自文件为准，不以仓库说明覆盖。

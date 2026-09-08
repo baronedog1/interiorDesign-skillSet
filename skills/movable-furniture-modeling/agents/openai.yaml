@@ -1,4 +1,0 @@
-interface:
-  display_name: "活动家具多视图区域雕刻"
-  short_description: "逐组件分割视图区域并用零异或投影验收家具模型"
-  default_prompt: "当用户要求根据单图、多视图或尺寸图对单个活动家具、定制柜、设备或异形产品建模时使用 $movable-furniture-modeling。以源分辨率逐组件可见区域为唯一二维事实，通过多视图体积求交生成同一三维状态，并用逐组件零异或投影验收。每次交付项目级 self-contained 单产品 HTML 和 custom-component-package.v3；同一 state 必须同时提供默认 white-model 与 source-color，切换材质不能切换几何。不得用类别模板或方盒替代图中异形轮廓，也不得自动写入通用组件库；用户明确要求入库时，只把 accepted 包交给 interior-html-modeling 的唯一准入流程。"

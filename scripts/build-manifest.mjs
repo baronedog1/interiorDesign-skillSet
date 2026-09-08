@@ -95,9 +95,8 @@ const manifest = {
   schemaVersion: 1,
   snapshotAt,
   source: {
-    type: 'mixed-device-snapshot',
+    type: 'lecoo-current-design-baseline',
     currentDesignRelease: { deviceId: 'lecoo-windows-codex', skillRoot: 'C:\\Users\\agentops\\.codex\\skills', skillIds: [...lecooSkills] },
-    retainedLegacySnapshot: { deviceId: 'ubuntu-01-codex', commit: '66f4815edb16db5b19e88aa262283e8075633490' },
     excluded: ['credentials', 'auth', 'sessions', 'history', 'tasks', 'logs', 'customer-data', 'node_modules', 'runtime-cache'],
   },
   skillCount: skills.length,

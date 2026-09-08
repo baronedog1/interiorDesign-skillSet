@@ -1,4 +1,0 @@
-interface:
-  display_name: "CAD 物品建模"
-  short_description: "从产品图、三视图和尺寸生成可审计 STEP/GLB CAD 模型"
-  default_prompt: "使用 $cad-object-modeling 根据这些产品视图和尺寸生成经过验证的 STEP 优先 CAD 物品模型。"

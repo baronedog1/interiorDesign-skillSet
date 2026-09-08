@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-08T13:51:18.544Z",
+  "snapshotAt": "2026-09-08T15:38:51.287Z",
   "source": {
-    "type": "mixed-device-snapshot",
+    "type": "lecoo-current-design-baseline",
     "currentDesignRelease": {
       "deviceId": "lecoo-windows-codex",
       "skillRoot": "C:\\Users\\agentops\\.codex\\skills",
@@ -14,10 +14,6 @@
         "idk-canvas-ingest-agent",
         "booklet-production"
       ]
-    },
-    "retainedLegacySnapshot": {
-      "deviceId": "ubuntu-01-codex",
-      "commit": "66f4815edb16db5b19e88aa262283e8075633490"
     },
     "excluded": [
       "credentials",
@@ -31,8 +27,8 @@
       "runtime-cache"
     ]
   },
-  "skillCount": 16,
-  "fileCount": 629,
+  "skillCount": 6,
+  "fileCount": 131,
   "skills": [
     {
       "id": "booklet-production",
@@ -44,42 +40,6 @@
       "sha256": "e5a6c76ec2f3c32430465259f5db5fd2d3752b1189a133ee38e7ab4c7d42ee8b"
     },
     {
-      "id": "cad",
-      "path": "skills/cad",
-      "version": "unversioned",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 68,
-      "bytes": 1708337,
-      "sha256": "71b7fa2573dc46122468a9f1a70d1bfa9b57f0a02b46dc4e8edc6154a8a3e3b6"
-    },
-    {
-      "id": "cad-object-modeling",
-      "path": "skills/cad-object-modeling",
-      "version": "1.0.0",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 33,
-      "bytes": 170148,
-      "sha256": "0860f75c1f03d632de7e73eb42f49e01fa4fd619909f54cf230b9378d4af2cdc"
-    },
-    {
-      "id": "cad-viewer",
-      "path": "skills/cad-viewer",
-      "version": "unversioned",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 211,
-      "bytes": 18404231,
-      "sha256": "99d5fc8ee52a426808b0ea8ca9a3d205f16fde65f05ec98d251850f01de4e936"
-    },
-    {
-      "id": "cad-zh",
-      "path": "skills/cad-zh",
-      "version": "unversioned",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 62,
-      "bytes": 1694377,
-      "sha256": "12fa5c9083e18b1a3672601f320b8eb97d7ecfabcc73311bb0654da44097dc1d"
-    },
-    {
       "id": "idk-canvas-ingest-agent",
       "path": "skills/idk-canvas-ingest-agent",
       "version": "3.1.0",
@@ -89,33 +49,6 @@
       "sha256": "f82876d62177412d8073ba78c31160cefa5c1d9274e45f7a9a0de676bc696b2c"
     },
     {
-      "id": "imagegen-batch-orchestrator",
-      "path": "skills/imagegen-batch-orchestrator",
-      "version": "1.1.0",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 8,
-      "bytes": 33347,
-      "sha256": "e7e04cacb30436113b05988d1055336cd27ac9d2f9d569b49f3a16fa030cb7eb"
-    },
-    {
-      "id": "interior-blender-modeling",
-      "path": "skills/interior-blender-modeling",
-      "version": "1.5.0",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 27,
-      "bytes": 148110,
-      "sha256": "fbabad6686310689caaf12c3ed423d2bea55889c59c0fc63ac488d757c2f1869"
-    },
-    {
-      "id": "interior-cad-modeling",
-      "path": "skills/interior-cad-modeling",
-      "version": "1.5.0",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 24,
-      "bytes": 421764,
-      "sha256": "5794ebfb95806c6d97c9f38578db06c144595f8c0a17cad0e06462c6de9236cb"
-    },
-    {
       "id": "interior-camera-capture",
       "path": "skills/interior-camera-capture",
       "version": "3.2.1",
@@ -123,24 +56,6 @@
       "fileCount": 9,
       "bytes": 1852477,
       "sha256": "bcfa54e594fc5e852d99a605c5a1cb399c481d6c0a2ada8630b2d50d8b1341b6"
-    },
-    {
-      "id": "interior-circulation-planning",
-      "path": "skills/interior-circulation-planning",
-      "version": "3.1.0",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 17,
-      "bytes": 165877,
-      "sha256": "24b704469225fc81e40a730de3a7bd62db373075977c307ba0f53853e8223fcb"
-    },
-    {
-      "id": "interior-design-video-production",
-      "path": "skills/interior-design-video-production",
-      "version": "1.1.0",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 22,
-      "bytes": 101289,
-      "sha256": "e4d745f2a4f36296fa57eb1531808b4e3cf4a197378ad214d7e0b7750d7e0f50"
     },
     {
       "id": "interior-floorplan-planning",
@@ -157,8 +72,8 @@
       "version": "3.2.2",
       "sourceDevice": "lecoo-windows-codex",
       "fileCount": 77,
-      "bytes": 20821602,
-      "sha256": "e0e6668f501c1985424737ba70debe06af0f91f069f20b3df8c1c9b16be619a9"
+      "bytes": 20821959,
+      "sha256": "7d7138456c3e5ceccf102698c2c3f43193410dd47f4495717e1e61fc9660e2db"
     },
     {
       "id": "interior-space-rendering",
@@ -168,15 +83,6 @@
       "fileCount": 9,
       "bytes": 1755398,
       "sha256": "ce80b1419e21b74a48ccaf1d4804d8fbcccece3614facd7bbb3ac69dbfe526a7"
-    },
-    {
-      "id": "movable-furniture-modeling",
-      "path": "skills/movable-furniture-modeling",
-      "version": "10.2.0",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 26,
-      "bytes": 1418217,
-      "sha256": "91a7738484007480c86f8b3d409d597d88f94cf91ab8eee57692209a4635c026"
     }
   ]
 }

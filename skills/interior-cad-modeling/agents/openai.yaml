@@ -1,4 +1,0 @@
-interface:
-  display_name: "室内户型 CAD 建模"
-  short_description: "从同一户型 handoff 生成原生 STEP/B-rep 模型"
-  default_prompt: "使用 $interior-cad-modeling 将本轮 accepted floorplan-handoff.v3 直接编译成独立 CAD/STEP 户型，只从 CAD 专属目录选择同 functionalClass 的可编辑 STEP，禁止跨类、临时重模或 primitive fallback。native manifest 后交 $interior-circulation-planning；其 adjustment-plan.v2 唯一可逆修正经摘要验证写入 override ledger 并自动重建 STEP，不重复向用户确认。动线 accepted 后才进入原生机位截图。"
