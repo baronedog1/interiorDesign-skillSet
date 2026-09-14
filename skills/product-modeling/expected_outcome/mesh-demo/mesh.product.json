@@ -1,0 +1,29 @@
+{
+  "format": "product-modeling",
+  "schemaVersion": 1,
+  "id": "mesh-demo",
+  "name": "合成部件演示",
+  "revision": "1",
+  "mode": "mesh",
+  "model": "mesh.glb",
+  "source": {
+    "reference": "本次由trimesh生成三块测试几何",
+    "status": "synthetic-test-only",
+    "notes": [
+      "测试装配联动，不是产品还原质量示例。"
+    ]
+  },
+  "assemblies": [
+    {
+      "id": "group-a",
+      "label": "联动组"
+    },
+    {
+      "id": "group-b",
+      "label": "独立组"
+    }
+  ],
+  "parameters": {},
+  "parts": [],
+  "materials": {}
+}

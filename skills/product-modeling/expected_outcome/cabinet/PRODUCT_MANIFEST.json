@@ -1,0 +1,28 @@
+{
+  "id": "cabinet-32-system",
+  "revision": "1.0.1",
+  "files": {
+    "evaluated.json": {
+      "bytes": 19351,
+      "sha256": "13b00b991f8148dfbefb7ffc32789081e22723c2a088f2f8b7b12f05f08a24e2"
+    },
+    "preview.png": {
+      "bytes": 27367,
+      "sha256": "c110aba5ee43da6ba4f64339e057481f49b9295bb0e0ca37e5ddca1672d4b349"
+    },
+    "cabinet.product.json": {
+      "bytes": 37518,
+      "sha256": "f2b9f0ba3a8cc7f2d544483a73eae3595eeeb09d54e9d409b094087adfe2ad5a"
+    },
+    "PRODUCT_MANUAL.pdf": {
+      "bytes": 45901,
+      "sha256": "65d195cd5e868239de073aecb232406712c9e7d6a8826e83afe3366d121e90f8"
+    },
+    "model.glb": {
+      "bytes": 11092,
+      "sha256": "603d1aa77aaa89c8c8b19456ed0a7f77bf90a3a9542010c2bc3af273c8077620"
+    }
+  },
+  "manufacturing_verified": false,
+  "blender_tested": false
+}

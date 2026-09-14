@@ -1,0 +1,7 @@
+numpy
+trimesh
+Pillow
+reportlab
+
+opencv-python-headless
+jsonschema

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-08T15:38:51.287Z",
+  "snapshotAt": "2026-09-14T04:17:36.622Z",
   "source": {
     "type": "lecoo-current-design-baseline",
     "currentDesignRelease": {
@@ -27,8 +27,8 @@
       "runtime-cache"
     ]
   },
-  "skillCount": 6,
-  "fileCount": 131,
+  "skillCount": 7,
+  "fileCount": 199,
   "skills": [
     {
       "id": "booklet-production",
@@ -83,6 +83,15 @@
       "fileCount": 9,
       "bytes": 1755398,
       "sha256": "ce80b1419e21b74a48ccaf1d4804d8fbcccece3614facd7bbb3ac69dbfe526a7"
+    },
+    {
+      "id": "product-modeling",
+      "path": "skills/product-modeling",
+      "version": "2.0.0。",
+      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
+      "fileCount": 68,
+      "bytes": 7319685,
+      "sha256": "1ed2f90320dcdcbfb62b3323bf6b22a4ff595804a7107a3577eae02cfc0211fd"
     }
   ]
 }

@@ -1,0 +1,1149 @@
+{
+  "id": "cabinet-32-system",
+  "name": "32mm系统示例柜",
+  "revision": "1.0.1",
+  "mode": "parametric",
+  "values": {
+    "width": 800,
+    "side_height": 654,
+    "depth": 394,
+    "thickness": 18,
+    "base_height": 80,
+    "variant": "doors",
+    "finish": "#bda684",
+    "roughness": 0.48
+  },
+  "derived": {
+    "width": 800,
+    "side_height": 654,
+    "depth": 394,
+    "thickness": 18,
+    "base_height": 80,
+    "variant": "doors",
+    "finish": "#bda684",
+    "roughness": 0.48,
+    "inner": 764,
+    "body_center": 407,
+    "shelf_width": 763,
+    "door_width": 397,
+    "drawer_inner_width": 738
+  },
+  "parts": [
+    {
+      "id": "side-left",
+      "label": "左旁板",
+      "assembly": "carcass",
+      "primitive": "box",
+      "size": [
+        [
+          "ref",
+          "thickness"
+        ],
+        [
+          "ref",
+          "side_height"
+        ],
+        [
+          "ref",
+          "depth"
+        ]
+      ],
+      "position": [
+        [
+          "*",
+          -1,
+          [
+            "/",
+            [
+              "-",
+              [
+                "ref",
+                "width"
+              ],
+              [
+                "ref",
+                "thickness"
+              ]
+            ],
+            2
+          ]
+        ],
+        [
+          "ref",
+          "body_center"
+        ],
+        [
+          "*",
+          -1,
+          0
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        18,
+        654,
+        394
+      ],
+      "position_mm": [
+        -391,
+        407,
+        0
+      ]
+    },
+    {
+      "id": "side-right",
+      "label": "右旁板",
+      "assembly": "carcass",
+      "primitive": "box",
+      "size": [
+        [
+          "ref",
+          "thickness"
+        ],
+        [
+          "ref",
+          "side_height"
+        ],
+        [
+          "ref",
+          "depth"
+        ]
+      ],
+      "position": [
+        [
+          "*",
+          1,
+          [
+            "/",
+            [
+              "-",
+              [
+                "ref",
+                "width"
+              ],
+              [
+                "ref",
+                "thickness"
+              ]
+            ],
+            2
+          ]
+        ],
+        [
+          "ref",
+          "body_center"
+        ],
+        [
+          "*",
+          -1,
+          0
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        18,
+        654,
+        394
+      ],
+      "position_mm": [
+        391,
+        407,
+        0
+      ]
+    },
+    {
+      "id": "bottom",
+      "label": "底板",
+      "assembly": "carcass",
+      "primitive": "box",
+      "size": [
+        [
+          "ref",
+          "inner"
+        ],
+        [
+          "ref",
+          "thickness"
+        ],
+        [
+          "ref",
+          "depth"
+        ]
+      ],
+      "position": [
+        0,
+        [
+          "+",
+          [
+            "ref",
+            "base_height"
+          ],
+          [
+            "/",
+            [
+              "ref",
+              "thickness"
+            ],
+            2
+          ]
+        ],
+        [
+          "*",
+          -1,
+          0
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        764,
+        18,
+        394
+      ],
+      "position_mm": [
+        0,
+        89,
+        0
+      ]
+    },
+    {
+      "id": "top-panel",
+      "label": "顶板",
+      "assembly": "carcass",
+      "primitive": "box",
+      "size": [
+        [
+          "ref",
+          "inner"
+        ],
+        [
+          "ref",
+          "thickness"
+        ],
+        [
+          "ref",
+          "depth"
+        ]
+      ],
+      "position": [
+        0,
+        [
+          "-",
+          [
+            "+",
+            [
+              "ref",
+              "base_height"
+            ],
+            [
+              "ref",
+              "side_height"
+            ]
+          ],
+          [
+            "/",
+            [
+              "ref",
+              "thickness"
+            ],
+            2
+          ]
+        ],
+        [
+          "*",
+          -1,
+          0
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        764,
+        18,
+        394
+      ],
+      "position_mm": [
+        0,
+        725,
+        0
+      ]
+    },
+    {
+      "id": "back",
+      "label": "背板",
+      "assembly": "carcass",
+      "primitive": "box",
+      "size": [
+        [
+          "+",
+          [
+            "ref",
+            "inner"
+          ],
+          10
+        ],
+        [
+          "-",
+          [
+            "ref",
+            "side_height"
+          ],
+          22
+        ],
+        3
+      ],
+      "position": [
+        0,
+        [
+          "ref",
+          "body_center"
+        ],
+        [
+          "*",
+          -1,
+          [
+            "-",
+            [
+              "/",
+              [
+                "ref",
+                "depth"
+              ],
+              2
+            ],
+            9
+          ]
+        ]
+      ],
+      "material": "back",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        774,
+        632,
+        3
+      ],
+      "position_mm": [
+        0,
+        407,
+        -188
+      ]
+    },
+    {
+      "id": "worktop",
+      "label": "后加面板",
+      "assembly": "top",
+      "primitive": "box",
+      "size": [
+        [
+          "+",
+          [
+            "ref",
+            "width"
+          ],
+          20
+        ],
+        25,
+        [
+          "+",
+          [
+            "ref",
+            "depth"
+          ],
+          18
+        ]
+      ],
+      "position": [
+        0,
+        [
+          "+",
+          [
+            "ref",
+            "base_height"
+          ],
+          [
+            "ref",
+            "side_height"
+          ],
+          12.5
+        ],
+        [
+          "*",
+          -1,
+          -3
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        820,
+        25,
+        412
+      ],
+      "position_mm": [
+        0,
+        746.5,
+        3
+      ]
+    },
+    {
+      "id": "shelf",
+      "label": "可调搁板",
+      "assembly": "shelf",
+      "primitive": "box",
+      "size": [
+        [
+          "ref",
+          "shelf_width"
+        ],
+        [
+          "ref",
+          "thickness"
+        ],
+        [
+          "-",
+          [
+            "ref",
+            "depth"
+          ],
+          19
+        ]
+      ],
+      "position": [
+        0,
+        [
+          "ref",
+          "body_center"
+        ],
+        [
+          "*",
+          -1,
+          -3
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "variants": [
+        "open",
+        "doors"
+      ],
+      "size_mm": [
+        763,
+        18,
+        375
+      ],
+      "position_mm": [
+        0,
+        407,
+        3
+      ]
+    },
+    {
+      "id": "base-front",
+      "label": "前望板",
+      "assembly": "base",
+      "primitive": "box",
+      "size": [
+        [
+          "ref",
+          "inner"
+        ],
+        [
+          "ref",
+          "base_height"
+        ],
+        16
+      ],
+      "position": [
+        0,
+        [
+          "/",
+          [
+            "ref",
+            "base_height"
+          ],
+          2
+        ],
+        [
+          "*",
+          -1,
+          [
+            "*",
+            -1,
+            [
+              "-",
+              [
+                "/",
+                [
+                  "ref",
+                  "depth"
+                ],
+                2
+              ],
+              8
+            ]
+          ]
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        764,
+        80,
+        16
+      ],
+      "position_mm": [
+        0,
+        40,
+        189
+      ]
+    },
+    {
+      "id": "base-rear",
+      "label": "后望板",
+      "assembly": "base",
+      "primitive": "box",
+      "size": [
+        [
+          "ref",
+          "inner"
+        ],
+        [
+          "ref",
+          "base_height"
+        ],
+        16
+      ],
+      "position": [
+        0,
+        [
+          "/",
+          [
+            "ref",
+            "base_height"
+          ],
+          2
+        ],
+        [
+          "*",
+          -1,
+          [
+            "*",
+            1,
+            [
+              "-",
+              [
+                "/",
+                [
+                  "ref",
+                  "depth"
+                ],
+                2
+              ],
+              8
+            ]
+          ]
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        764,
+        80,
+        16
+      ],
+      "position_mm": [
+        0,
+        40,
+        -189
+      ]
+    },
+    {
+      "id": "base-left",
+      "label": "左侧望板",
+      "assembly": "base",
+      "primitive": "box",
+      "size": [
+        18,
+        [
+          "ref",
+          "base_height"
+        ],
+        [
+          "ref",
+          "depth"
+        ]
+      ],
+      "position": [
+        [
+          "*",
+          -1,
+          [
+            "-",
+            [
+              "/",
+              [
+                "ref",
+                "width"
+              ],
+              2
+            ],
+            9
+          ]
+        ],
+        [
+          "/",
+          [
+            "ref",
+            "base_height"
+          ],
+          2
+        ],
+        [
+          "*",
+          -1,
+          0
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        18,
+        80,
+        394
+      ],
+      "position_mm": [
+        -391,
+        40,
+        0
+      ]
+    },
+    {
+      "id": "base-brace-left",
+      "label": "底架拉档",
+      "assembly": "base",
+      "primitive": "box",
+      "size": [
+        126,
+        18,
+        [
+          "-",
+          [
+            "ref",
+            "depth"
+          ],
+          32
+        ]
+      ],
+      "position": [
+        [
+          "*",
+          -1,
+          [
+            "/",
+            [
+              "ref",
+              "width"
+            ],
+            4
+          ]
+        ],
+        [
+          "-",
+          [
+            "ref",
+            "base_height"
+          ],
+          9
+        ],
+        [
+          "*",
+          -1,
+          0
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        126,
+        18,
+        362
+      ],
+      "position_mm": [
+        -200,
+        71,
+        0
+      ]
+    },
+    {
+      "id": "base-right",
+      "label": "右侧望板",
+      "assembly": "base",
+      "primitive": "box",
+      "size": [
+        18,
+        [
+          "ref",
+          "base_height"
+        ],
+        [
+          "ref",
+          "depth"
+        ]
+      ],
+      "position": [
+        [
+          "*",
+          1,
+          [
+            "-",
+            [
+              "/",
+              [
+                "ref",
+                "width"
+              ],
+              2
+            ],
+            9
+          ]
+        ],
+        [
+          "/",
+          [
+            "ref",
+            "base_height"
+          ],
+          2
+        ],
+        [
+          "*",
+          -1,
+          0
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        18,
+        80,
+        394
+      ],
+      "position_mm": [
+        391,
+        40,
+        0
+      ]
+    },
+    {
+      "id": "base-brace-right",
+      "label": "底架拉档",
+      "assembly": "base",
+      "primitive": "box",
+      "size": [
+        126,
+        18,
+        [
+          "-",
+          [
+            "ref",
+            "depth"
+          ],
+          32
+        ]
+      ],
+      "position": [
+        [
+          "*",
+          1,
+          [
+            "/",
+            [
+              "ref",
+              "width"
+            ],
+            4
+          ]
+        ],
+        [
+          "-",
+          [
+            "ref",
+            "base_height"
+          ],
+          9
+        ],
+        [
+          "*",
+          -1,
+          0
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "size_mm": [
+        126,
+        18,
+        362
+      ],
+      "position_mm": [
+        200,
+        71,
+        0
+      ]
+    },
+    {
+      "id": "door-left",
+      "label": "左门",
+      "assembly": "door-left",
+      "primitive": "box",
+      "size": [
+        [
+          "ref",
+          "door_width"
+        ],
+        [
+          "-",
+          [
+            "ref",
+            "side_height"
+          ],
+          4
+        ],
+        18
+      ],
+      "position": [
+        [
+          "*",
+          -1,
+          [
+            "/",
+            [
+              "+",
+              [
+                "ref",
+                "door_width"
+              ],
+              2
+            ],
+            2
+          ]
+        ],
+        [
+          "ref",
+          "body_center"
+        ],
+        [
+          "*",
+          -1,
+          [
+            "-",
+            -11,
+            [
+              "/",
+              [
+                "ref",
+                "depth"
+              ],
+              2
+            ]
+          ]
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "variants": [
+        "doors"
+      ],
+      "size_mm": [
+        397,
+        650,
+        18
+      ],
+      "position_mm": [
+        -199.5,
+        407,
+        208
+      ]
+    },
+    {
+      "id": "handle-left",
+      "label": "门拉手",
+      "assembly": "door-left",
+      "primitive": "box",
+      "size": [
+        96,
+        9,
+        15
+      ],
+      "position": [
+        [
+          "*",
+          -1,
+          64
+        ],
+        [
+          "-",
+          [
+            "+",
+            [
+              "ref",
+              "base_height"
+            ],
+            [
+              "ref",
+              "side_height"
+            ]
+          ],
+          55
+        ],
+        [
+          "*",
+          -1,
+          [
+            "-",
+            -28,
+            [
+              "/",
+              [
+                "ref",
+                "depth"
+              ],
+              2
+            ]
+          ]
+        ]
+      ],
+      "material": "metal",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "variants": [
+        "doors"
+      ],
+      "size_mm": [
+        96,
+        9,
+        15
+      ],
+      "position_mm": [
+        -64,
+        679,
+        225
+      ]
+    },
+    {
+      "id": "door-right",
+      "label": "右门",
+      "assembly": "door-right",
+      "primitive": "box",
+      "size": [
+        [
+          "ref",
+          "door_width"
+        ],
+        [
+          "-",
+          [
+            "ref",
+            "side_height"
+          ],
+          4
+        ],
+        18
+      ],
+      "position": [
+        [
+          "*",
+          1,
+          [
+            "/",
+            [
+              "+",
+              [
+                "ref",
+                "door_width"
+              ],
+              2
+            ],
+            2
+          ]
+        ],
+        [
+          "ref",
+          "body_center"
+        ],
+        [
+          "*",
+          -1,
+          [
+            "-",
+            -11,
+            [
+              "/",
+              [
+                "ref",
+                "depth"
+              ],
+              2
+            ]
+          ]
+        ]
+      ],
+      "material": "panel",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "variants": [
+        "doors"
+      ],
+      "size_mm": [
+        397,
+        650,
+        18
+      ],
+      "position_mm": [
+        199.5,
+        407,
+        208
+      ]
+    },
+    {
+      "id": "handle-right",
+      "label": "门拉手",
+      "assembly": "door-right",
+      "primitive": "box",
+      "size": [
+        96,
+        9,
+        15
+      ],
+      "position": [
+        [
+          "*",
+          1,
+          64
+        ],
+        [
+          "-",
+          [
+            "+",
+            [
+              "ref",
+              "base_height"
+            ],
+            [
+              "ref",
+              "side_height"
+            ]
+          ],
+          55
+        ],
+        [
+          "*",
+          -1,
+          [
+            "-",
+            -28,
+            [
+              "/",
+              [
+                "ref",
+                "depth"
+              ],
+              2
+            ]
+          ]
+        ]
+      ],
+      "material": "metal",
+      "evidence": "示例参数/构造推定",
+      "finish": "已饰面人造板；可见边缘封边须工程确认",
+      "variants": [
+        "doors"
+      ],
+      "size_mm": [
+        96,
+        9,
+        15
+      ],
+      "position_mm": [
+        64,
+        679,
+        225
+      ]
+    }
+  ],
+  "assemblies": [
+    {
+      "id": "carcass",
+      "label": "柜体"
+    },
+    {
+      "id": "base",
+      "label": "独立底架"
+    },
+    {
+      "id": "top",
+      "label": "独立面板"
+    },
+    {
+      "id": "shelf",
+      "label": "搁板"
+    },
+    {
+      "id": "door-left",
+      "label": "左门组件"
+    },
+    {
+      "id": "door-right",
+      "label": "右门组件"
+    },
+    {
+      "id": "drawer-top",
+      "label": "上抽屉组件"
+    },
+    {
+      "id": "drawer-bottom",
+      "label": "下抽屉组件"
+    }
+  ],
+  "materials": {
+    "panel": {
+      "colorParameter": "finish",
+      "roughnessParameter": "roughness",
+      "metalness": 0,
+      "label": "饰面人造板"
+    },
+    "back": {
+      "color": "#a28e74",
+      "roughness": 0.65,
+      "metalness": 0,
+      "label": "背板/抽底板"
+    },
+    "metal": {
+      "color": "#454442",
+      "roughness": 0.3,
+      "metalness": 0.8,
+      "label": "金属拉手"
+    }
+  },
+  "bounds_mm": [
+    820.0,
+    759.0,
+    435.5
+  ]
+}

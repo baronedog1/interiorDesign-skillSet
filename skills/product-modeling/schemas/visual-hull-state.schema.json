@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://interior.local/schemas/product-visual-hull-state-v1.json",
+  "title": "Product visual hull state v1",
+  "type": "object",
+  "required": ["schema", "planId", "planSha256", "axes", "components", "status", "stateSha256"],
+  "properties": {
+    "schema": {"const": "interior.product-visual-hull-state.v1"},
+    "planId": {"type": "string"},
+    "planSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "axes": {
+      "type": "object",
+      "required": ["x", "y", "z"],
+      "properties": {
+        "x": {"$ref": "#/$defs/axis"},
+        "y": {"$ref": "#/$defs/axis"},
+        "z": {"$ref": "#/$defs/axis"}
+      },
+      "additionalProperties": false
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["componentId", "label", "voxelRuns", "voxelCount", "mesh", "material", "inferenceFlags"],
+        "properties": {
+          "componentId": {"type": "string"},
+          "label": {"type": "string"},
+          "voxelRuns": {"type": "array"},
+          "voxelCount": {"type": "integer", "minimum": 1},
+          "mesh": {
+            "type": "object",
+            "required": ["positions", "indices"],
+            "properties": {
+              "positions": {"type": "array", "items": {"type": "number"}},
+              "indices": {"type": "array", "items": {"type": "integer", "minimum": 0}}
+            }
+          },
+          "material": {"type": "object"},
+          "inferenceFlags": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "status": {"enum": ["candidate", "provisional", "rejected"]},
+    "stateSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "axis": {
+      "type": "array",
+      "minItems": 2,
+      "items": {"type": "number"}
+    }
+  },
+  "additionalProperties": true
+}

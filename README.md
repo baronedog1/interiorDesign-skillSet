@@ -55,3 +55,7 @@
 - `FILES.sha256` 记录 `skills/` 全部文件；运行 `node scripts/build-manifest.mjs --snapshot <ISO-8601>` 重建清单。
 
 第三方代码和素材的许可、来源、署名以各自文件为准，不以仓库说明覆盖。
+
+## 2026-09-14 单产品建模
+
+新增 `skills/product-modeling` 2.0.0：参数化结构、已有网格、多视图区域雕刻、原图摘要绑定、投影验收、共用离线工作台、组件包与产品 PDF。Ubuntu 原 movable-furniture-modeling 已由此替换。公开样例只保留参数柜和明确标识的合成几何；客户原图与私有作品不随包分发。根目录 SKILL_MANUAL.pdf 是流程入口。
