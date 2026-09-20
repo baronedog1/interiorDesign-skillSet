@@ -1,2114 +1,657 @@
 {
-  "schemaVersion": 4,
-  "displayName": "HTML 建模 · 编译、编辑与状态交接",
-  "version": "3.2.2",
-  "overview": {
-    "title": "HTML 编辑：不同意图进入不同状态域",
-    "nodes": [
-      {
-        "id": "in",
-        "type": "io",
-        "x": 70,
-        "y": 200,
-        "w": 770,
-        "h": 260,
-        "title": "当前 JSON 或用户编辑后的完整 HTML",
-        "lines": [
-          "最新编辑是事实源，不拿旧模型覆盖"
-        ],
-        "files": [
-          {
-            "path": "scripts/run.py",
-            "purpose": "模型/风格/资产命令入口"
-          }
-        ],
-        "bodySize": 22
-      },
-      {
-        "id": "build",
-        "type": "process",
-        "x": 1100,
-        "y": 200,
-        "w": 1210,
-        "h": 280,
-        "title": "编译一次完整编辑器",
-        "lines": [
-          "建筑、组件、CMF、光源、相机和编辑数据同源"
-        ],
-        "files": [
-          {
-            "path": "scripts/engine/python/model.py",
-            "purpose": "生成单文件 HTML 和 scene.json"
-          }
-        ],
-        "bodySize": 22,
-        "detailRef": "compile"
-      },
-      {
-        "id": "intent",
-        "type": "decision",
-        "x": 70,
-        "y": 660,
-        "w": 880,
-        "h": 380,
-        "title": "用户要改什么？",
-        "lines": [
-          "风格、家具、结构/测量、保存不是同一动作"
-        ],
-        "files": [
-          {
-            "path": "playbook.md",
-            "purpose": "编辑职责、家具和动线知识"
-          },
-          {
-            "path": "data_contract.md",
-            "purpose": "布局、完整 HTML、材质与机位状态"
-          }
-        ],
-        "bodySize": 22,
-        "check": true
-      },
-      {
-        "id": "cmf",
-        "type": "process",
-        "x": 1220,
-        "y": 650,
-        "w": 1090,
-        "h": 230,
-        "title": "只换风格 → CMF 域",
-        "lines": [
-          "保持 forms、位置、灯光、相机；保留撤销"
-        ],
-        "files": [
-          {
-            "path": "scripts/engine/runtime/app.js",
-            "purpose": "applyStyle/restoreCMF 与历史"
-          }
-        ],
-        "bodySize": 22,
-        "detailRef": "cmf"
-      },
-      {
-        "id": "asset",
-        "type": "process",
-        "x": 1220,
-        "y": 970,
-        "w": 1090,
-        "h": 230,
-        "title": "家具库 → 实例与材质槽",
-        "lines": [
-          "真实 GLB 同类替换；指定资产按比例与尺寸"
-        ],
-        "files": [
-          {
-            "path": "scripts/engine/runtime/workspace.js",
-            "purpose": "目录选择、资产替换和材质编辑"
-          }
-        ],
-        "bodySize": 22,
-        "detailRef": "library"
-      },
-      {
-        "id": "edit",
-        "type": "process",
-        "x": 70,
-        "y": 1240,
-        "w": 880,
-        "h": 300,
-        "title": "结构、量尺与完整保存",
-        "lines": [
-          "墙门窗显式编辑；地面拉尺/面积",
-          "完整 HTML 往返后再生成同版 scene"
-        ],
-        "files": [],
-        "bodySize": 22,
-        "detailRef": "editing"
-      }
-    ],
-    "edges": [
-      {
-        "from": "in",
-        "to": "build",
-        "points": [
-          [
-            840,
-            330
-          ],
-          [
-            1100,
-            340
-          ]
-        ],
-        "label": "当前数据"
-      },
-      {
-        "from": "build",
-        "to": "intent",
-        "points": [
-          [
-            1705,
-            480
-          ],
-          [
-            1705,
-            550
-          ],
-          [
-            510,
-            550
-          ],
-          [
-            510,
-            660
-          ]
-        ],
-        "label": "已打开"
-      },
-      {
-        "from": "intent",
-        "to": "cmf",
-        "points": [
-          [
-            844.4,
-            804.4
-          ],
-          [
-            1220,
-            765
-          ]
-        ],
-        "label": "风格"
-      },
-      {
-        "from": "intent",
-        "to": "asset",
-        "points": [
-          [
-            844.4,
-            895.6
-          ],
-          [
-            1080,
-            910
-          ],
-          [
-            1080,
-            1085
-          ],
-          [
-            1220,
-            1085
-          ]
-        ],
-        "label": "家具"
-      },
-      {
-        "from": "intent",
-        "to": "edit",
-        "points": [
-          [
-            510,
-            1040
-          ],
-          [
-            510,
-            1240
-          ]
-        ],
-        "label": "结构/测量/保存"
-      }
-    ]
-  },
+  "schemaVersion": 5,
+  "displayName": "可编辑模型与定制节点",
+  "version": "5.0.0",
   "scenarios": [
     {
-      "id": "workflow",
-      "title": "HTML 编辑：不同意图进入不同状态域",
-      "input": "布局 JSON / 当前完整 HTML",
-      "output": "可离线编辑 HTML + 场景合同",
-      "explanation": "本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。 效果图链把HTML作为粗模位置/结构参考；按精细家具图片锁款，二维生成不会回写3D网格。",
+      "id": "main",
+      "trigger": "按SKILL入口的任务范围调用",
+      "input": "用户给布局或最新完整模型",
+      "output": "用户获得完整模型与场景数据",
+      "explanation": "按方法完成任务；不新增强校验、门禁或审批。",
       "diagrams": [
         {
-          "title": "HTML 编辑：不同意图进入不同状态域",
+          "id": "main",
+          "title": "可编辑模型与定制节点",
+          "startNode": "n0",
+          "endNodes": [
+            "n5"
+          ],
           "nodes": [
             {
-              "id": "in",
+              "id": "n0",
               "type": "io",
-              "x": 70,
-              "y": 200,
-              "w": 770,
-              "h": 370,
-              "title": "当前 JSON 或用户编辑后的完整 HTML",
-              "lines": [
-                "最新编辑是事实源，不拿旧模型覆盖",
-                "先读同名需求侧车，已确认功能/习惯/风格落实到布局与CMF",
-                "未知或授权推荐不冒称确认；向下游携带同一revision"
-              ],
+              "title": "用户给布局或最新完整模型",
+              "lines": [],
               "files": [
                 {
-                  "path": "scripts/run.py",
-                  "purpose": "模型/风格/资产命令入口"
-                },
-                {
-                  "path": "../interior-floorplan-planning/playbook/requirements-interview.md",
-                  "purpose": "Agent需求读取与缺口回问"
+                  "path": "SKILL.md",
+                  "role": "入口",
+                  "purpose": "用户给布局或最新完整模型"
                 }
-              ],
-              "bodySize": 22,
-              "detailRef": "whole-bed"
+              ]
             },
             {
-              "id": "build",
+              "id": "n1",
               "type": "process",
-              "x": 1100,
-              "y": 200,
-              "w": 1210,
-              "h": 280,
-              "title": "编译一次完整编辑器",
-              "lines": [
-                "建筑、组件、CMF、光源、相机和编辑数据同源",
-                "随步骤记录开始、完成、耗时；代码与绘图等待分开。"
-              ],
+              "title": "选择对象方法与用户参数",
+              "lines": [],
               "files": [
                 {
-                  "path": "scripts/engine/python/model.py",
-                  "purpose": "生成单文件 HTML 和 scene.json"
+                  "path": "playbook/rule-selection.md",
+                  "role": "方法",
+                  "purpose": "选择对象方法与用户参数"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "选择方法及本机运行条件",
+                  "role": "方法"
+                }
+              ]
+            },
+            {
+              "id": "n2",
+              "type": "process",
+              "title": "按真实尺寸构造板件和节点",
+              "lines": [],
+              "files": [
+                {
+                  "path": "playbook/joinery.md",
+                  "role": "方法",
+                  "purpose": "按真实尺寸构造板件和节点"
+                },
+                {
+                  "path": "playbook.md",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "方法"
+                },
+                {
+                  "path": "playbook/editor-model.md",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "方法"
+                },
+                {
+                  "path": "playbook/examples/cabinet-run.json",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "playbook/examples/joinery-layout.json",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "playbook/space-connections.md",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "方法"
+                },
+                {
+                  "path": "playbook/subagents.md",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "方法"
                 },
                 {
                   "path": "playbook/timing.md",
-                  "purpose": "计时口径"
-                },
-                {
-                  "path": "scripts/engine/python/timing.py",
-                  "purpose": "正式命令自动计时"
-                }
-              ],
-              "bodySize": 22,
-              "detailRef": "compile"
-            },
-            {
-              "id": "intent",
-              "type": "decision",
-              "x": 70,
-              "y": 660,
-              "w": 880,
-              "h": 380,
-              "title": "用户要改什么？",
-              "lines": [
-                "风格、家具、结构/测量、保存不是同一动作"
-              ],
-              "files": [
-                {
-                  "path": "playbook.md",
-                  "purpose": "编辑职责、家具和动线知识"
-                },
-                {
-                  "path": "data_contract.md",
-                  "purpose": "布局、完整 HTML、材质与机位状态"
-                }
-              ],
-              "bodySize": 22,
-              "check": true
-            },
-            {
-              "id": "cmf",
-              "type": "process",
-              "x": 1220,
-              "y": 650,
-              "w": 1090,
-              "h": 230,
-              "title": "只换风格 → CMF 域",
-              "lines": [
-                "保持 forms、位置、灯光、相机；保留撤销",
-                "CLI与UI都保留forms/lighting；克隆墙地顶材质同步。"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "applyStyle/restoreCMF 与历史"
-                }
-              ],
-              "bodySize": 22,
-              "detailRef": "cmf"
-            },
-            {
-              "id": "asset",
-              "type": "process",
-              "x": 1220,
-              "y": 970,
-              "w": 1090,
-              "h": 230,
-              "title": "家具库 → 实例与材质槽",
-              "lines": [
-                "真实 GLB 同类替换；指定资产按比例与尺寸"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/workspace.js",
-                  "purpose": "目录选择、资产替换和材质编辑"
-                }
-              ],
-              "bodySize": 22,
-              "detailRef": "library"
-            },
-            {
-              "id": "edit",
-              "type": "process",
-              "x": 70,
-              "y": 1240,
-              "w": 880,
-              "h": 300,
-              "title": "结构、量尺与完整保存",
-              "lines": [
-                "墙门窗显式编辑；地面拉尺/面积",
-                "完整 HTML 往返后再生成同版 scene"
-              ],
-              "files": [],
-              "bodySize": 22,
-              "detailRef": "editing"
-            },
-            {
-              "id": "capture-clay",
-              "type": "process",
-              "x": 1220,
-              "y": 1290,
-              "w": 1090,
-              "h": 250,
-              "title": "白模截图保持玻璃透明",
-              "lines": [
-                "去材质风格，不将透光面变成实板"
-              ],
-              "files": [],
-              "bodySize": 22,
-              "detailRef": "clay-visibility"
-            }
-          ],
-          "edges": [
-            {
-              "from": "in",
-              "to": "build",
-              "points": [
-                [
-                  840,
-                  330
-                ],
-                [
-                  1100,
-                  340
-                ]
-              ],
-              "label": "当前数据"
-            },
-            {
-              "from": "build",
-              "to": "intent",
-              "points": [
-                [
-                  1705,
-                  480
-                ],
-                [
-                  1705,
-                  620
-                ],
-                [
-                  510,
-                  620
-                ],
-                [
-                  510,
-                  660
-                ]
-              ],
-              "label": "已打开"
-            },
-            {
-              "from": "intent",
-              "to": "cmf",
-              "points": [
-                [
-                  844.4,
-                  804.4
-                ],
-                [
-                  1220,
-                  765
-                ]
-              ],
-              "label": "风格"
-            },
-            {
-              "from": "intent",
-              "to": "asset",
-              "points": [
-                [
-                  844.4,
-                  895.6
-                ],
-                [
-                  1080,
-                  910
-                ],
-                [
-                  1080,
-                  1085
-                ],
-                [
-                  1220,
-                  1085
-                ]
-              ],
-              "label": "家具"
-            },
-            {
-              "from": "intent",
-              "to": "edit",
-              "points": [
-                [
-                  510,
-                  1040
-                ],
-                [
-                  510,
-                  1240
-                ]
-              ],
-              "label": "结构/测量/保存"
-            },
-            {
-              "from": "edit",
-              "to": "capture-clay",
-              "points": [
-                [
-                  950,
-                  1390
-                ],
-                [
-                  1220,
-                  1390
-                ]
-              ],
-              "label": "截图"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "room-frame-connections",
-      "title": "一个门窗编译结果，驱动模型与相机",
-      "input": "本轮源事实与用户完整空间表达要求",
-      "output": "可运行规则、可追溯镜头与空间关系",
-      "explanation": "把空间身份和构图放到生成源头；看图后修源规则，不增加事后阻断器。",
-      "diagrams": [
-        {
-          "title": "一个门窗编译结果，驱动模型与相机",
-          "nodes": [
-            {
-              "id": "input",
-              "type": "io",
-              "x": 650,
-              "y": 240,
-              "w": 1100,
-              "h": 240,
-              "title": "同版布局中的门型、两端与状态",
-              "lines": [
-                "有墙/无墙；平开/移门/敞口；透明/遮视",
-                "关闭、部分开、最大开必须与资料来源分开"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/schemas/layout.schema.json",
-                  "purpose": "唯一源字段"
-                }
-              ],
-              "bodySize": 23
-            },
-            {
-              "id": "compile",
-              "type": "process",
-              "x": 650,
-              "y": 630,
-              "w": 1100,
-              "h": 320,
-              "title": "resolve_openings：计算墙局部门扇",
-              "lines": [
-                "平开按合页与方向转动；双轨移门最大净开半幅",
-                "缺开合只采用注明未确认的关闭预览默认",
-                "禁止写死所有门同角度或固定半扇玻璃"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/python/openings.py",
-                  "purpose": "门型与开合一次编译；输出共享墙局部门扇姿态"
-                },
-                {
-                  "path": "scripts/engine/python/model.py",
-                  "purpose": "内嵌OPENING_STATES"
-                }
-              ],
-              "bodySize": 23
-            },
-            {
-              "id": "html",
-              "type": "process",
-              "x": 80,
-              "y": 1190,
-              "w": 1050,
-              "h": 330,
-              "title": "HTML装配真实状态",
-              "lines": [
-                "洞口墙体、扇的中心/尺度/角度、填充材料",
-                "旧全局开门不再覆盖；结构改变后重编译"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/architecture-kit.js",
-                  "purpose": "门窗装配"
-                },
-                {
-                  "path": "scripts/engine/runtime/scene.js",
-                  "purpose": "空间/表面标签"
-                },
-                {
-                  "path": "scripts/engine/runtime/studio.html",
-                  "purpose": "状态说明与编译数据入口"
-                }
-              ],
-              "bodySize": 23
-            },
-            {
-              "id": "camera",
-              "type": "process",
-              "x": 1260,
-              "y": 1190,
-              "w": 1050,
-              "h": 330,
-              "title": "机位计算使用同一个门扇姿态",
-              "lines": [
-                "实板遮挡、透明可透视、磨砂遮视",
-                "不另猜门状态，不把窗当通道"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/python/cameras.py",
-                  "purpose": "Occluders消费同一编译函数"
-                },
-                {
-                  "path": "scripts/engine/python/validate.py",
-                  "purpose": "视觉与通行连接分开"
-                },
-                {
-                  "path": "scripts/engine/tests/test_space_connections.py",
-                  "purpose": "门扇/移门/玻璃与主图构造的11项回归"
-                }
-              ],
-              "bodySize": 23
-            }
-          ],
-          "edges": [
-            {
-              "from": "input",
-              "to": "compile",
-              "points": [
-                [
-                  1200,
-                  480
-                ],
-                [
-                  1200,
-                  630
-                ]
-              ],
-              "label": ""
-            },
-            {
-              "from": "compile",
-              "to": "html",
-              "points": [
-                [
-                  1200,
-                  950
-                ],
-                [
-                  1200,
-                  1070
-                ],
-                [
-                  605,
-                  1070
-                ],
-                [
-                  605,
-                  1190
-                ]
-              ],
-              "label": "同一份"
-            },
-            {
-              "from": "compile",
-              "to": "camera",
-              "points": [
-                [
-                  1200,
-                  1070
-                ],
-                [
-                  1785,
-                  1070
-                ],
-                [
-                  1785,
-                  1190
-                ]
-              ],
-              "label": "同一份"
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  "logicDetails": [
-    {
-      "id": "compile",
-      "code": "COMPILE",
-      "title": "离线编译完整依赖链",
-      "color": "#21658e",
-      "algorithm": true,
-      "explanation": "按实际输入、计算、分支和文件消费者展开。",
-      "diagrams": [
-        {
-          "title": "编译链：输入到离线页面的全部代码文件",
-          "nodes": [
-            {
-              "id": "a",
-              "type": "process",
-              "x": 70,
-              "y": 200,
-              "w": 1040,
-              "h": 410,
-              "title": "读取、校验、生成模型标识",
-              "lines": [
-                "需求→类别→结构家族→目录componentId",
-                "直排/贵妃位由组件选型，不由风格强加",
-                "产品改变家族时回布局再编译"
-              ],
-              "files": [
-                {
-                  "path": "scripts/run.py",
-                  "purpose": "模型/风格/资产命令入口"
-                },
-                {
-                  "path": "scripts/engine/python/bootstrap.py",
-                  "purpose": "切换 Windows 专用 Python"
-                },
-                {
-                  "path": "scripts/engine/python/cli.py",
-                  "purpose": "分派 build/import-html"
-                },
-                {
-                  "path": "scripts/engine/python/model.py",
-                  "purpose": "布局与运行时编译"
-                },
-                {
-                  "path": "scripts/engine/python/common.py",
-                  "purpose": "JSON、文件摘要、运行时摘要"
-                },
-                {
-                  "path": "scripts/engine/python/validate.py",
-                  "purpose": "技术输入和业务观察"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "b",
-              "type": "process",
-              "x": 1260,
-              "y": 200,
-              "w": 1060,
-              "h": 410,
-              "title": "结构与风格输入依赖",
-              "lines": [
-                "校验只针对实际字段；初始机位由本布局计算"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/python/styles.py",
-                  "purpose": "风格配方有效性"
-                },
-                {
-                  "path": "scripts/engine/python/cameras.py",
-                  "purpose": "初始预设和实体角点"
-                },
-                {
-                  "path": "scripts/engine/schemas/layout.schema.json",
-                  "purpose": "布局机器结构"
-                },
-                {
-                  "path": "scripts/engine/schemas/style.schema.json",
-                  "purpose": "风格机器结构"
-                },
-                {
-                  "path": "scripts/engine/catalog/components.json",
-                  "purpose": "29 类组件元数据"
-                },
-                {
-                  "path": "scripts/engine/catalog/styles.json",
-                  "purpose": "当前风格配方"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "c",
-              "type": "process",
-              "x": 1260,
-              "y": 780,
-              "w": 1060,
-              "h": 710,
-              "title": "按依赖顺序内嵌运行时 · 后半段",
-              "lines": [
-                "编辑器在浏览器执行，数据仍保留在完整 HTML"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/exporter.js",
-                  "purpose": "GLB 导出"
-                },
-                {
-                  "path": "scripts/engine/runtime/optimization.js",
-                  "purpose": "场景优化"
-                },
-                {
-                  "path": "scripts/engine/runtime/controls.js",
-                  "purpose": "机位控制数学"
-                },
-                {
-                  "path": "scripts/engine/runtime/lights.js",
-                  "purpose": "光源状态"
-                },
-                {
-                  "path": "scripts/engine/runtime/spatial.js",
-                  "purpose": "空间观察"
-                },
-                {
-                  "path": "scripts/engine/runtime/native-assets.js",
-                  "purpose": "内嵌 GLB 实例"
-                },
-                {
-                  "path": "scripts/engine/runtime/workspace.js",
-                  "purpose": "文件选择与整体保存"
-                },
-                {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "启动、交互、实际截图"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "d",
-              "type": "process",
-              "x": 70,
-              "y": 780,
-              "w": 1040,
-              "h": 710,
-              "title": "单文件页面与运行时 · 前半段",
-              "lines": [
-                "每个文件真实参与离线编译，不虚构文件覆盖",
-                "水槽：柜体壳板＋独立盆腔，实心柜块会遮盆"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/studio.html",
-                  "purpose": "完整编辑器模板"
-                },
-                {
-                  "path": "scripts/engine/runtime/three-r164.js",
-                  "purpose": "Three.js 渲染器"
-                },
-                {
-                  "path": "scripts/engine/runtime/materials.js",
-                  "purpose": "材质构造"
-                },
-                {
-                  "path": "scripts/engine/runtime/styles.js",
-                  "purpose": "CMF 应用"
-                },
-                {
-                  "path": "scripts/engine/runtime/geometry.js",
-                  "purpose": "几何基元"
-                },
-                {
-                  "path": "scripts/engine/runtime/architecture-kit.js",
-                  "purpose": "墙门窗/楼板"
-                },
-                {
-                  "path": "scripts/engine/runtime/components-base.js",
-                  "purpose": "家具基元"
-                },
-                {
-                  "path": "scripts/engine/runtime/style-components.js",
-                  "purpose": "风格形体"
-                },
-                {
-                  "path": "scripts/engine/runtime/components.js",
-                  "purpose": "组件实例化"
-                },
-                {
-                  "path": "scripts/engine/runtime/scene.js",
-                  "purpose": "组装建筑与家具"
-                }
-              ],
-              "bodySize": 22
-            }
-          ],
-          "edges": [
-            {
-              "from": "a",
-              "to": "b",
-              "points": [
-                [
-                  1110,
-                  405
-                ],
-                [
-                  1260,
-                  405
-                ]
-              ],
-              "label": "依赖"
-            },
-            {
-              "from": "b",
-              "to": "d",
-              "points": [
-                [
-                  1790,
-                  610
-                ],
-                [
-                  1790,
-                  690
-                ],
-                [
-                  590,
-                  690
-                ],
-                [
-                  590,
-                  780
-                ]
-              ],
-              "label": "页面编译"
-            },
-            {
-              "from": "d",
-              "to": "c",
-              "points": [
-                [
-                  1110,
-                  1100
-                ],
-                [
-                  1260,
-                  1100
-                ]
-              ],
-              "label": "继续内嵌"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "cmf",
-      "code": "CMF",
-      "title": "CMF 与智能风格",
-      "color": "#21658e",
-      "algorithm": true,
-      "explanation": "按实际输入、计算、分支和文件消费者展开。",
-      "diagrams": [
-        {
-          "title": "风格：已知配方直接用，未知风格先真实检索",
-          "nodes": [
-            {
-              "id": "a",
-              "type": "io",
-              "x": 70,
-              "y": 250,
-              "w": 670,
-              "h": 240,
-              "title": "用户偏好 / 风格名称",
-              "lines": [
-                "五种预设只是起点"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/STYLE-GUIDE.md",
-                  "purpose": "风格扩展与 CMF 约束"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "q",
-              "type": "decision",
-              "x": 910,
-              "y": 210,
-              "w": 880,
-              "h": 350,
-              "title": "已有同名/id 配方？",
-              "lines": [
-                "按中文名、英文名及 id 匹配"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/python/styles.py",
-                  "purpose": "resolve_style 匹配/生成研究请求"
-                }
-              ],
-              "bodySize": 22,
-              "check": true
-            },
-            {
-              "id": "web",
-              "type": "process",
-              "x": 910,
-              "y": 740,
-              "w": 880,
-              "h": 360,
-              "title": "未知：宿主联网研究后整理配方",
-              "lines": [
-                "检索颜色、材料、家具/灯光及细节",
-                "记录 URL、日期和支持结论；不冒充已检索"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/schemas/style.schema.json",
-                  "purpose": "可用配方字段"
-                },
-                {
-                  "path": "scripts/engine/catalog/styles.json",
-                  "purpose": "保存新配方"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "apply",
-              "type": "process",
-              "x": 70,
-              "y": 1210,
-              "w": 1080,
-              "h": 370,
-              "title": "CMF 更新材质，不重建形体",
-              "lines": [
-                "HTML按钮只改CMF，保留编辑几何",
-                "不是最终设计只能改色",
-                "原生渲染另读取完整设计意图"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "applyStyle/restoreCMF/撤销重做"
-                },
-                {
-                  "path": "scripts/engine/runtime/styles.js",
-                  "purpose": "配方角色映射"
-                },
-                {
-                  "path": "scripts/engine/runtime/materials.js",
-                  "purpose": "真实材质参数"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "save",
-              "type": "store",
-              "x": 1350,
-              "y": 1240,
-              "w": 950,
-              "h": 330,
-              "title": "当前状态连同配方完整保存",
-              "lines": [
-                "已有独立 GLB 不整件强制刷色",
-                "指定资产身份由材质槽编辑保留"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/workspace.js",
-                  "purpose": "完整 HTML 保存"
-                },
-                {
-                  "path": "scripts/engine/python/native.py",
-                  "purpose": "导回最新 HTML 数据"
-                }
-              ],
-              "bodySize": 22
-            }
-          ],
-          "edges": [
-            {
-              "from": "a",
-              "to": "q",
-              "points": [
-                [
-                  740,
-                  370
-                ],
-                [
-                  910,
-                  385
-                ]
-              ],
-              "label": "查询"
-            },
-            {
-              "from": "q",
-              "to": "apply",
-              "points": [
-                [
-                  1350,
-                  210
-                ],
-                [
-                  1350,
-                  195
-                ],
-                [
-                  48,
-                  195
-                ],
-                [
-                  48,
-                  1395
-                ],
-                [
-                  70,
-                  1395
-                ]
-              ],
-              "label": "是：直接应用"
-            },
-            {
-              "from": "q",
-              "to": "web",
-              "points": [
-                [
-                  1350,
-                  560
-                ],
-                [
-                  1350,
-                  740
-                ]
-              ],
-              "label": "否"
-            },
-            {
-              "from": "web",
-              "to": "apply",
-              "points": [
-                [
-                  1350,
-                  1100
-                ],
-                [
-                  1350,
-                  1150
-                ],
-                [
-                  610,
-                  1150
-                ],
-                [
-                  610,
-                  1210
-                ]
-              ],
-              "label": "配方"
-            },
-            {
-              "from": "apply",
-              "to": "save",
-              "points": [
-                [
-                  1150,
-                  1395
-                ],
-                [
-                  1350,
-                  1405
-                ]
-              ],
-              "label": "更新后"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "library",
-      "code": "LIBRARY",
-      "title": "真实家具库",
-      "color": "#21658e",
-      "algorithm": true,
-      "explanation": "按实际输入、计算、分支和文件消费者展开。",
-      "diagrams": [
-        {
-          "title": "家具库：读索引 → 解析真实资产 → 放入明确实例",
-          "nodes": [
-            {
-              "id": "a",
-              "type": "io",
-              "x": 70,
-              "y": 220,
-              "w": 900,
-              "h": 340,
-              "title": "用户选定本地目录",
-              "lines": [
-                "不扫描整机；索引相对路径必须留在库内"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/assets/library/library.json",
-                  "purpose": "三份示例的目录索引"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "方法"
                 },
                 {
                   "path": "scripts/engine/assets/library/PROVENANCE.md",
-                  "purpose": "样本来源说明"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "方法"
                 },
                 {
-                  "path": "scripts/engine/runtime/workspace.js",
-                  "purpose": "目录选择与筛选"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "b",
-              "type": "process",
-              "x": 1200,
-              "y": 220,
-              "w": 1120,
-              "h": 360,
-              "title": "读取样本或实际用户资产",
-              "lines": [
-                "GLB 与缩略图逐项对应；不是全部模型库"
-              ],
-              "files": [
-                {
                   "path": "scripts/engine/assets/library/dining-chair.glb",
-                  "purpose": "餐椅样本"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
                 },
                 {
                   "path": "scripts/engine/assets/library/dining-chair.png",
-                  "purpose": "餐椅缩略图"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/library/library.json",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
                 },
                 {
                   "path": "scripts/engine/assets/library/lounge-chair.glb",
-                  "purpose": "单椅样本"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
                 },
                 {
                   "path": "scripts/engine/assets/library/lounge-chair.png",
-                  "purpose": "单椅缩略图"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
                 },
                 {
                   "path": "scripts/engine/assets/library/sideboard.glb",
-                  "purpose": "柜体样本"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
                 },
                 {
                   "path": "scripts/engine/assets/library/sideboard.png",
-                  "purpose": "柜体缩略图"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "q",
-              "type": "decision",
-              "x": 1190,
-              "y": 840,
-              "w": 1120,
-              "h": 410,
-              "title": "格式与目标实例匹配？",
-              "lines": [
-                "GLB2 静态三角网格、自包含；不是压缩/骨骼",
-                "同类组件；+Z 正面；尺寸和材质槽来自资产"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/python/native.py",
-                  "purpose": "bundle_library 解析与路径检查"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
                 },
                 {
-                  "path": "scripts/engine/runtime/native-assets.js",
-                  "purpose": "GLB 读取与实例化"
-                }
-              ],
-              "bodySize": 22,
-              "check": true
-            },
-            {
-              "id": "bad",
-              "type": "process",
-              "x": 70,
-              "y": 860,
-              "w": 900,
-              "h": 320,
-              "title": "不支持：预转换或更换正确资产",
-              "lines": [
-                "明确问题文件；不拿矩形占位冒充原模型",
-                "尺寸不合适回选型/布局，不压扁指定资产"
-              ],
-              "files": [
+                  "path": "scripts/engine/assets/textures/fabric-color.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/fabric-normal.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/leather-color.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/leather-normal.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/manifest.json",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/plaster-color.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/plaster-normal.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/stone-color.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/stone-normal.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/wood-color.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/wood-normal.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/woven-color.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/assets/textures/woven-normal.png",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
                 {
                   "path": "scripts/engine/catalog/components.json",
-                  "purpose": "组件类别和尺寸语义"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "ok",
-              "type": "store",
-              "x": 70,
-              "y": 1330,
-              "w": 2240,
-              "h": 270,
-              "title": "替换后保留实例位置与身份，再保存完整 HTML",
-              "lines": [
-                "materialOverrides 按材质名；uniform 保持比例；问题报告与模型同时保留"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/spatial.js",
-                  "purpose": "使用区/边界观察"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
                 },
                 {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "状态保存、恢复和撤销"
-                }
-              ],
-              "bodySize": 22
-            }
-          ],
-          "edges": [
-            {
-              "from": "a",
-              "to": "b",
-              "points": [
-                [
-                  970,
-                  390
-                ],
-                [
-                  1200,
-                  400
-                ]
-              ],
-              "label": "索引"
-            },
-            {
-              "from": "b",
-              "to": "q",
-              "points": [
-                [
-                  1760,
-                  580
-                ],
-                [
-                  1750,
-                  840
-                ]
-              ],
-              "label": "实际文件"
-            },
-            {
-              "from": "q",
-              "to": "bad",
-              "points": [
-                [
-                  1190,
-                  1045
-                ],
-                [
-                  970,
-                  1020
-                ]
-              ],
-              "label": "否"
-            },
-            {
-              "from": "q",
-              "to": "ok",
-              "points": [
-                [
-                  1750,
-                  1250
-                ],
-                [
-                  1750,
-                  1330
-                ]
-              ],
-              "label": "是"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "editing",
-      "code": "EDITING",
-      "title": "结构、测量和保存",
-      "color": "#21658e",
-      "algorithm": true,
-      "explanation": "按实际输入、计算、分支和文件消费者展开。",
-      "diagrams": [
-        {
-          "title": "编辑与往返：修改域、量尺、保存、下游更新",
-          "nodes": [
-            {
-              "id": "a",
-              "type": "process",
-              "x": 70,
-              "y": 220,
-              "w": 1040,
-              "h": 350,
-              "title": "结构与使用尺寸",
-              "lines": [
-                "墙门窗引用真实宿主；不得将餐桌认作客厅",
-                "床头靠墙、开门/柜门/拉椅与通道按规划事实"
-              ],
-              "files": [
-                {
-                  "path": "playbook.md",
-                  "purpose": "编辑职责、家具和动线知识"
+                  "path": "scripts/engine/catalog/styles.json",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
                 },
-                {
-                  "path": "data_contract.md",
-                  "purpose": "布局、完整 HTML、材质与机位状态"
-                },
-                {
-                  "path": "scripts/engine/runtime/architecture-kit.js",
-                  "purpose": "门窗和墙构造"
-                },
-                {
-                  "path": "scripts/engine/runtime/spatial.js",
-                  "purpose": "实体使用区观察"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "b",
-              "type": "process",
-              "x": 1260,
-              "y": 220,
-              "w": 1050,
-              "h": 350,
-              "title": "量尺 / 面积 / 灯光 / 相机",
-              "lines": [
-                "地面两点距离；m/mm；房间多边形面积",
-                "24 光源，3 投影射灯；相机由当前用户操作"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "尺、结构/相机交互、项目导出"
-                },
-                {
-                  "path": "scripts/engine/runtime/lights.js",
-                  "purpose": "光源序列化"
-                },
-                {
-                  "path": "scripts/engine/runtime/controls.js",
-                  "purpose": "相机移动和投影"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "c",
-              "type": "store",
-              "x": 1260,
-              "y": 790,
-              "w": 1050,
-              "h": 350,
-              "title": "保存完整 HTML 或项目 JSON",
-              "lines": [
-                "包含布局、GLB、材质、配方、测量、光源、相机"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/workspace.js",
-                  "purpose": "saveHTML 与导入"
-                },
-                {
-                  "path": "scripts/engine/runtime/native-assets.js",
-                  "purpose": "内嵌模型保留"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "q",
-              "type": "decision",
-              "x": 70,
-              "y": 750,
-              "w": 1040,
-              "h": 430,
-              "title": "重开与原状态一致？",
-              "lines": [
-                "布局、材质、相机、灯光及量尺逐项查看",
-                "不靠重置作品掩盖状态丢失"
-              ],
-              "files": [],
-              "bodySize": 22,
-              "check": true
-            },
-            {
-              "id": "fix",
-              "type": "process",
-              "x": 70,
-              "y": 1350,
-              "w": 1040,
-              "h": 220,
-              "title": "否：修对应序列化源函数",
-              "lines": [
-                "保留用户当前作品，再回保存步骤"
-              ],
-              "files": [],
-              "bodySize": 22
-            },
-            {
-              "id": "out",
-              "type": "store",
-              "x": 1260,
-              "y": 1320,
-              "w": 1050,
-              "h": 260,
-              "title": "是：新布局重编译后交接",
-              "lines": [
-                "sceneKey/htmlSha256/cameraDigest 同版",
-                "机位、渲染、平台读取这份结果"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/python/native.py",
-                  "purpose": "import_html 提取当前布局"
-                },
-                {
-                  "path": "scripts/engine/python/model.py",
-                  "purpose": "编译更新后模型"
-                },
-                {
-                  "path": "scripts/engine/python/common.py",
-                  "purpose": "生成摘要与文件"
-                }
-              ],
-              "bodySize": 22
-            }
-          ],
-          "edges": [
-            {
-              "from": "a",
-              "to": "b",
-              "points": [
-                [
-                  1110,
-                  395
-                ],
-                [
-                  1260,
-                  395
-                ]
-              ],
-              "label": "当前编辑"
-            },
-            {
-              "from": "b",
-              "to": "c",
-              "points": [
-                [
-                  1785,
-                  570
-                ],
-                [
-                  1785,
-                  790
-                ]
-              ],
-              "label": "保存"
-            },
-            {
-              "from": "c",
-              "to": "q",
-              "points": [
-                [
-                  1260,
-                  965
-                ],
-                [
-                  1110,
-                  965
-                ]
-              ],
-              "label": "实际重开"
-            },
-            {
-              "from": "q",
-              "to": "fix",
-              "points": [
-                [
-                  590,
-                  1180
-                ],
-                [
-                  590,
-                  1350
-                ]
-              ],
-              "label": "否"
-            },
-            {
-              "from": "q",
-              "to": "out",
-              "points": [
-                [
-                  928.7878787878788,
-                  1039.9242424242425
-                ],
-                [
-                  1190,
-                  1080
-                ],
-                [
-                  1190,
-                  1450
-                ],
-                [
-                  1260,
-                  1450
-                ]
-              ],
-              "label": "是"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "clay-visibility",
-      "code": "CAPTURE",
-      "title": "白模去材质，不改变可见结构",
-      "color": "#21658e",
-      "algorithm": true,
-      "explanation": "白模曾把玻璃变实板、把背面顶板改为正面剔除。材质转换保留透明与原side，仅中和色彩；不新增后置门禁。",
-      "diagrams": [
-        {
-          "title": "同机位白模：透光与遮罩关系必须保留",
-          "nodes": [
-            {
-              "id": "snapshot",
-              "type": "process",
-              "x": 68,
-              "y": 220,
-              "w": 570,
-              "h": 280,
-              "title": "保存原状态，遍历可导出网格",
-              "lines": [
-                "冻结相机、原材质引用和可见性",
-                "混合材质按数组逐项处理"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/app.js",
-                  "purpose": "captureFrame 状态快照与材质转换"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "transparent",
-              "type": "decision",
-              "x": 825,
-              "y": 210,
-              "w": 723,
-              "h": 340,
-              "title": "材质透明、透射或使用遮罩？",
-              "lines": [
-                "transparent / transmission / alphaTest"
-              ],
-              "files": [],
-              "bodySize": 22
-            },
-            {
-              "id": "retain",
-              "type": "process",
-              "x": 1683,
-              "y": 240,
-              "w": 553,
-              "h": 280,
-              "title": "保留原材质",
-              "lines": [
-                "玻璃、薄纱和镂空不变实板"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/runtime/materials.js",
-                  "purpose": "玻璃与薄纱材质定义"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "neutral",
-              "type": "process",
-              "x": 910,
-              "y": 750,
-              "w": 553,
-              "h": 280,
-              "title": "替换为中性不透明材质",
-              "lines": [
-                "中和颜色纹理，按原side复用材质",
-                "保留正/背/双面可见性；不全局双面化"
-              ],
-              "files": [],
-              "bodySize": 22
-            },
-            {
-              "id": "capture",
-              "type": "process",
-              "x": 1683,
-              "y": 750,
-              "w": 553,
-              "h": 340,
-              "title": "完成捕获后恢复原引用",
-              "lines": [
-                "原相机、原材质与可见性复原",
-                "异常退出同样执行 finally"
-              ],
-              "files": [
-                {
-                  "path": "scripts/engine/python/render.py",
-                  "purpose": "正式入口捕获结构主图和同机位布局辅助图"
-                },
-                {
-                  "path": "scripts/engine/python/model.py",
-                  "purpose": "新运行时编译更新模型摘要，不覆盖旧冻结输入"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "visible",
-              "type": "process",
-              "x": 80,
-              "y": 1270,
-              "w": 2160,
-              "h": 300,
-              "title": "同机位记录跨房间可见实例，再交给产品附图选择",
-              "lines": [
-                "近面裁包络 → 投影 → 裁画幅 → 图像区域回投射线，画边局部不靠3D角点判断",
-                "门外邻室同样参与；记录visiblePlacementIds，有限采样不冒称逐像素证明"
-              ],
-              "files": [],
-              "bodySize": 22
-            }
-          ],
-          "edges": [
-            {
-              "from": "snapshot",
-              "to": "transparent",
-              "points": [
-                [
-                  638,
-                  360
-                ],
-                [
-                  825,
-                  360
-                ]
-              ],
-              "label": "逐项"
-            },
-            {
-              "from": "transparent",
-              "to": "retain",
-              "points": [
-                [
-                  1547,
-                  380
-                ],
-                [
-                  1683,
-                  380
-                ]
-              ],
-              "label": "是"
-            },
-            {
-              "from": "transparent",
-              "to": "neutral",
-              "points": [
-                [
-                  1186,
-                  550
-                ],
-                [
-                  1186,
-                  750
-                ]
-              ],
-              "label": "否"
-            },
-            {
-              "from": "retain",
-              "to": "capture",
-              "points": [
-                [
-                  1959,
-                  520
-                ],
-                [
-                  1959,
-                  750
-                ]
-              ],
-              "label": "捕获"
-            },
-            {
-              "from": "neutral",
-              "to": "capture",
-              "points": [
-                [
-                  1462,
-                  890
-                ],
-                [
-                  1683,
-                  890
-                ]
-              ],
-              "label": "捕获"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "whole-bed",
-      "code": "BED",
-      "title": "近裁切与状态恢复",
-      "color": "#21658e",
-      "algorithm": true,
-      "explanation": "由已实现代码展开，真实模型不变；虚拟取景须明示。",
-      "diagrams": [
-        {
-          "title": "完整主体优先：同源取景与交接",
-          "nodes": [
-            {
-              "id": "a",
-              "type": "process",
-              "x": 70,
-              "y": 210,
-              "w": 1030,
-              "h": 350,
-              "title": "读取同版冻结机位",
-              "lines": [
-                "普通镜头默认near=0.04m",
-                "窄卧室虚拟机位带near及virtualRetreat"
-              ],
-              "files": [
                 {
                   "path": "scripts/engine/schemas/cameras.schema.json",
-                  "purpose": "机位参数"
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/schemas/layout.schema.json",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/schemas/style.schema.json",
+                  "purpose": "提供构造、图文或数据依据",
+                  "role": "数据"
+                }
+              ]
+            },
+            {
+              "id": "n3",
+              "type": "process",
+              "title": "生成当前离线编辑模板",
+              "lines": [],
+              "files": [
+                {
+                  "path": "scripts/engine/python/model.py",
+                  "role": "执行",
+                  "purpose": "生成当前离线编辑模板"
+                },
+                {
+                  "path": "scripts/engine/python/bootstrap.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/cameras.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
                 },
                 {
                   "path": "scripts/engine/python/cli.py",
-                  "purpose": "apply将near写入HTML机位审阅副本"
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/common.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/joinery.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/kernel.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/native.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/native_image.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/openings.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/render.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/styles.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/timing.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/python/validate.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/architecture-kit.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/components-base.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/components.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/controls.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/exporter.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/geometry.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/joinery-kernel.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/joinery.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/lights.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/materials.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/model-kernel.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/native-assets.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/optimization.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/scene.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/spatial.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/studio.html",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/runtime/style-components.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/styles.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/three-r164.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/engine/runtime/workspace.js",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/run.py",
+                  "purpose": "实现本阶段生成与交互",
+                  "role": "模块"
                 }
-              ],
-              "bodySize": 22
+              ]
             },
             {
-              "id": "b",
+              "id": "n4",
               "type": "process",
-              "x": 1300,
-              "y": 210,
-              "w": 1030,
-              "h": 300,
-              "title": "保存原相机和显示状态",
-              "lines": [
-                "cameraSnapshot记录原near与镜头",
-                "输入墙体/家具保持原值，不删除实例"
-              ],
+              "title": "编辑关联、保存并交接同版",
+              "lines": [],
               "files": [
                 {
                   "path": "scripts/engine/runtime/app.js",
-                  "purpose": "快照、captureFrame与restoreCamera"
+                  "role": "执行",
+                  "purpose": "编辑关联、保存并交接同版"
+                },
+                {
+                  "path": "MANIFEST.json",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/LICENSE-Three.js.txt",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/engine/STYLE-GUIDE.md",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "方法"
+                },
+                {
+                  "path": "scripts/engine/styles/cream/PLAYBOOK.md",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "方法"
+                },
+                {
+                  "path": "scripts/engine/styles/mid-century/PLAYBOOK.md",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "方法"
+                },
+                {
+                  "path": "scripts/engine/styles/modern-minimal/PLAYBOOK.md",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "方法"
+                },
+                {
+                  "path": "scripts/engine/styles/new-chinese/PLAYBOOK.md",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "方法"
+                },
+                {
+                  "path": "scripts/engine/styles/wabi-sabi/PLAYBOOK.md",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "方法"
+                },
+                {
+                  "path": "scripts/engine/tests/test_space_connections.py",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/requirements.txt",
+                  "purpose": "维护交接合同、依赖与改版证据",
+                  "role": "数据"
                 }
-              ],
-              "bodySize": 22
+              ]
             },
             {
-              "id": "q",
-              "type": "decision",
-              "x": 1260,
-              "y": 650,
-              "w": 1080,
-              "h": 440,
-              "title": "本镜头有虚拟近裁切？",
-              "lines": [
-                "有near：相机从房外沿正面轴拍摄",
-                "无near：沿用普通房内机位"
-              ],
-              "files": [],
-              "bodySize": 22,
-              "check": true
-            },
-            {
-              "id": "normal",
-              "type": "process",
-              "x": 70,
-              "y": 690,
-              "w": 1030,
-              "h": 280,
-              "title": "普通近裁切",
-              "lines": [
-                "相机near=0.04m；不继承上一张虚拟镜头",
-                "机位变化不残留裁切状态"
-              ],
-              "files": [],
-              "bodySize": 22
-            },
-            {
-              "id": "retreat",
-              "type": "process",
-              "x": 1300,
-              "y": 1200,
-              "w": 1030,
-              "h": 350,
-              "title": "同一near用于真实图与射线",
-              "lines": [
-                "只取相机空间z≤−near的实际交点",
-                "前方隔断只在本机位不可见，远处墙仍保留",
-                "观察房间和产品不能读到被裁掉的前景"
-              ],
+              "id": "n5",
+              "type": "io",
+              "title": "用户获得完整模型与场景数据",
+              "lines": [],
               "files": [
                 {
-                  "path": "scripts/engine/python/cameras.py",
-                  "purpose": "同源近裁切遮挡计算"
-                }
-              ],
-              "bodySize": 22
-            },
-            {
-              "id": "out",
-              "type": "store",
-              "x": 70,
-              "y": 1200,
-              "w": 1030,
-              "h": 350,
-              "title": "截图与空间事实交接后恢复",
-              "lines": [
-                "spaceContext标明虚拟取景与geometryUnchanged",
-                "finally恢复原near、显示、材质和相机",
-                "保存/导入机位沿用near，不改变户型"
-              ],
-              "files": [
+                  "path": "data_contract.md",
+                  "role": "方法",
+                  "purpose": "用户获得完整模型与场景数据"
+                },
                 {
-                  "path": "scripts/engine/python/render.py",
-                  "purpose": "保存PNG、请求与实际提示词"
+                  "path": "SKILL_MANUAL.pdf",
+                  "purpose": "提供同源使用说明",
+                  "role": "数据"
+                },
+                {
+                  "path": "manual/skill-flowchart.svg",
+                  "purpose": "提供同源使用说明",
+                  "role": "数据"
+                },
+                {
+                  "path": "manual/skill-manual.html",
+                  "purpose": "提供同源使用说明",
+                  "role": "数据"
+                },
+                {
+                  "path": "manual/skill-manual.json",
+                  "purpose": "提供同源使用说明",
+                  "role": "数据"
+                },
+                {
+                  "path": "manual/skill-manual.md",
+                  "purpose": "提供同源使用说明",
+                  "role": "方法"
                 }
-              ],
-              "bodySize": 22
+              ]
             }
           ],
           "edges": [
             {
-              "from": "a",
-              "to": "b",
-              "points": [
-                [
-                  1100,
-                  345
-                ],
-                [
-                  1300,
-                  345
-                ]
-              ],
-              "label": "同版输入"
+              "from": "n0",
+              "to": "n1"
             },
             {
-              "from": "b",
-              "to": "q",
-              "points": [
-                [
-                  1815,
-                  510
-                ],
-                [
-                  1815,
-                  650
-                ]
-              ],
-              "label": "判断"
+              "from": "n1",
+              "to": "n2"
             },
             {
-              "from": "q",
-              "to": "normal",
-              "points": [
-                [
-                  1260,
-                  870
-                ],
-                [
-                  1100,
-                  830
-                ]
-              ],
-              "label": "否：普通"
+              "from": "n2",
+              "to": "n3"
             },
             {
-              "from": "normal",
-              "to": "out",
-              "points": [
-                [
-                  585,
-                  970
-                ],
-                [
-                  585,
-                  1200
-                ]
-              ],
-              "label": "继续"
+              "from": "n3",
+              "to": "n4"
             },
             {
-              "from": "q",
-              "to": "retreat",
-              "points": [
-                [
-                  1800,
-                  1090
-                ],
-                [
-                  1800,
-                  1200
-                ]
-              ],
-              "label": "是：虚拟"
-            },
-            {
-              "from": "retreat",
-              "to": "out",
-              "points": [
-                [
-                  1300,
-                  1375
-                ],
-                [
-                  1100,
-                  1375
-                ]
-              ],
-              "label": "同一交接"
+              "from": "n4",
+              "to": "n5"
             }
-          ]
+          ],
+          "layout": {
+            "kind": "vertical",
+            "rows": [
+              [
+                "n0"
+              ],
+              [
+                "n1"
+              ],
+              [
+                "n2"
+              ],
+              [
+                "n3"
+              ],
+              [
+                "n4"
+              ],
+              [
+                "n5"
+              ]
+            ],
+            "reason": "单一输入到交付路径"
+          }
         }
       ]
     }
   ],
-  "dependencyFiles": [
-    {
-      "path": "../interior-floorplan-planning/playbook/requirements-interview.md",
-      "purpose": "需求状态及规划访谈的唯一合同"
-    }
-  ],
   "fileDescriptions": {
-    "MANIFEST.json": "发布版本与完整文件清单",
-    "SKILL.md": "调用范围、输入输出与关键规则",
-    "SKILL_MANUAL.pdf": "面向人的算法说明书",
-    "data_contract.md": "布局、完整 HTML、材质与机位状态",
-    "local_runtime.md": "运行工具、路径与凭据边界",
-    "manual/skill-flowchart.svg": "同源说明书内容与图形",
-    "manual/skill-manual.json": "同源说明书内容与图形",
-    "manual/skill-manual.md": "同源说明书内容与图形",
-    "playbook.md": "编辑职责、家具和动线知识",
-    "playbook/space-connections.md": "空间身份、连接、开合、视野交接及默认值唯一合同",
-    "playbook/timing.md": "六项共用的逐步骤时间、异步等待和历史未知口径",
-    "scripts/engine/LICENSE-Three.js.txt": "原第三方运行库许可",
-    "scripts/engine/STYLE-GUIDE.md": "风格扩展与 CMF 约束",
-    "scripts/engine/assets/library/PROVENANCE.md": "样本来源说明",
-    "scripts/engine/assets/library/dining-chair.glb": "餐椅样本",
-    "scripts/engine/assets/library/dining-chair.png": "餐椅缩略图",
-    "scripts/engine/assets/library/library.json": "三份示例的目录索引",
-    "scripts/engine/assets/library/lounge-chair.glb": "单椅样本",
-    "scripts/engine/assets/library/lounge-chair.png": "单椅缩略图",
-    "scripts/engine/assets/library/sideboard.glb": "柜体样本",
-    "scripts/engine/assets/library/sideboard.png": "柜体缩略图",
-    "scripts/engine/assets/textures/fabric-color.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/fabric-normal.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/leather-color.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/leather-normal.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/manifest.json": "机器读取的 manifest.json 数据/格式",
-    "scripts/engine/assets/textures/plaster-color.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/plaster-normal.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/stone-color.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/stone-normal.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/wood-color.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/wood-normal.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/woven-color.png": "组件贴图或图像参考",
-    "scripts/engine/assets/textures/woven-normal.png": "组件贴图或图像参考",
-    "scripts/engine/catalog/components.json": "组件类别和尺寸语义",
-    "scripts/engine/catalog/styles.json": "保存新配方",
-    "scripts/engine/python/bootstrap.py": "切换 Windows 专用 Python",
-    "scripts/engine/python/cameras.py": "初始预设和实体角点",
-    "scripts/engine/python/cli.py": "分派 build/import-html",
-    "scripts/engine/python/common.py": "生成摘要与文件",
-    "scripts/engine/python/model.py": "编译更新后模型",
-    "scripts/engine/python/native.py": "import_html 提取当前布局",
-    "scripts/engine/python/native_image.py": "实现 native_image 的确定性行为",
-    "scripts/engine/python/openings.py": "门型与开合一次编译；输出共享墙局部门扇姿态",
-    "scripts/engine/python/render.py": "同机位截图；粗模定位/精细参考锁款的实际请求、系列策略与画幅记录",
-    "scripts/engine/python/styles.py": "证据记录和 style-add",
-    "scripts/engine/python/timing.py": "命令/嵌套步骤计时及Agent动作start/finish",
-    "scripts/engine/python/validate.py": "技术输入和业务观察",
-    "scripts/engine/runtime/app.js": "importProject/exportProject",
-    "scripts/engine/runtime/architecture-kit.js": "门窗和墙构造",
-    "scripts/engine/runtime/components-base.js": "家具基元",
-    "scripts/engine/runtime/components.js": "组件实例化",
-    "scripts/engine/runtime/controls.js": "相机移动和投影",
-    "scripts/engine/runtime/exporter.js": "GLB 导出",
-    "scripts/engine/runtime/geometry.js": "几何基元",
-    "scripts/engine/runtime/lights.js": "光源序列化",
-    "scripts/engine/runtime/materials.js": "真实材质参数",
-    "scripts/engine/runtime/native-assets.js": "内嵌模型保留",
-    "scripts/engine/runtime/optimization.js": "场景优化",
-    "scripts/engine/runtime/scene.js": "组装建筑与家具",
-    "scripts/engine/runtime/spatial.js": "实体使用区观察",
-    "scripts/engine/runtime/studio.html": "完整编辑器模板",
-    "scripts/engine/runtime/style-components.js": "风格形体",
-    "scripts/engine/runtime/styles.js": "配方角色映射",
-    "scripts/engine/runtime/three-r164.js": "Three.js 渲染器",
-    "scripts/engine/runtime/workspace.js": "完整状态恢复负责人",
-    "scripts/engine/schemas/cameras.schema.json": "机器读取的 cameras.schema.json 数据/格式",
-    "scripts/engine/schemas/layout.schema.json": "布局机器结构",
-    "scripts/engine/schemas/style.schema.json": "可用配方字段",
-    "scripts/engine/styles/cream/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
-    "scripts/engine/styles/mid-century/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
-    "scripts/engine/styles/modern-minimal/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
-    "scripts/engine/styles/new-chinese/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
-    "scripts/engine/styles/wabi-sabi/PLAYBOOK.md": "配方、资源与实现说明：PLAYBOOK.md",
-    "scripts/engine/tests/test_space_connections.py": "门扇/移门/玻璃与主图构造的11项回归",
-    "scripts/requirements.txt": "编译/截图 Python 依赖版本",
-    "scripts/run.py": "模型/风格/资产命令入口"
-  }
+    "MANIFEST.json": "维护交接合同、依赖与改版证据",
+    "SKILL.md": "接收本技能任务",
+    "SKILL_MANUAL.pdf": "提供同源使用说明",
+    "data_contract.md": "维护交接合同、依赖与改版证据",
+    "local_runtime.md": "选择方法及本机运行条件",
+    "manual/skill-flowchart.svg": "提供同源使用说明",
+    "manual/skill-manual.html": "提供同源使用说明",
+    "manual/skill-manual.json": "提供同源使用说明",
+    "manual/skill-manual.md": "提供同源使用说明",
+    "playbook.md": "提供构造、图文或数据依据",
+    "playbook/editor-model.md": "提供构造、图文或数据依据",
+    "playbook/examples/cabinet-run.json": "提供构造、图文或数据依据",
+    "playbook/examples/joinery-layout.json": "提供构造、图文或数据依据",
+    "playbook/joinery.md": "提供构造、图文或数据依据",
+    "playbook/rule-selection.md": "选择方法及本机运行条件",
+    "playbook/space-connections.md": "提供构造、图文或数据依据",
+    "playbook/subagents.md": "提供构造、图文或数据依据",
+    "playbook/timing.md": "提供构造、图文或数据依据",
+    "scripts/engine/LICENSE-Three.js.txt": "维护交接合同、依赖与改版证据",
+    "scripts/engine/STYLE-GUIDE.md": "维护交接合同、依赖与改版证据",
+    "scripts/engine/assets/library/PROVENANCE.md": "提供构造、图文或数据依据",
+    "scripts/engine/assets/library/dining-chair.glb": "提供构造、图文或数据依据",
+    "scripts/engine/assets/library/dining-chair.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/library/library.json": "提供构造、图文或数据依据",
+    "scripts/engine/assets/library/lounge-chair.glb": "提供构造、图文或数据依据",
+    "scripts/engine/assets/library/lounge-chair.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/library/sideboard.glb": "提供构造、图文或数据依据",
+    "scripts/engine/assets/library/sideboard.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/fabric-color.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/fabric-normal.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/leather-color.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/leather-normal.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/manifest.json": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/plaster-color.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/plaster-normal.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/stone-color.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/stone-normal.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/wood-color.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/wood-normal.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/woven-color.png": "提供构造、图文或数据依据",
+    "scripts/engine/assets/textures/woven-normal.png": "提供构造、图文或数据依据",
+    "scripts/engine/catalog/components.json": "提供构造、图文或数据依据",
+    "scripts/engine/catalog/styles.json": "提供构造、图文或数据依据",
+    "scripts/engine/python/bootstrap.py": "实现本阶段生成与交互",
+    "scripts/engine/python/cameras.py": "实现本阶段生成与交互",
+    "scripts/engine/python/cli.py": "实现本阶段生成与交互",
+    "scripts/engine/python/common.py": "实现本阶段生成与交互",
+    "scripts/engine/python/joinery.py": "实现本阶段生成与交互",
+    "scripts/engine/python/kernel.py": "实现本阶段生成与交互",
+    "scripts/engine/python/model.py": "实现本阶段生成与交互",
+    "scripts/engine/python/native.py": "实现本阶段生成与交互",
+    "scripts/engine/python/native_image.py": "实现本阶段生成与交互",
+    "scripts/engine/python/openings.py": "实现本阶段生成与交互",
+    "scripts/engine/python/render.py": "实现本阶段生成与交互",
+    "scripts/engine/python/styles.py": "实现本阶段生成与交互",
+    "scripts/engine/python/timing.py": "实现本阶段生成与交互",
+    "scripts/engine/python/validate.py": "实现本阶段生成与交互",
+    "scripts/engine/runtime/app.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/architecture-kit.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/components-base.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/components.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/controls.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/exporter.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/geometry.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/joinery-kernel.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/joinery.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/lights.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/materials.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/model-kernel.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/native-assets.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/optimization.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/scene.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/spatial.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/studio.html": "实现本阶段生成与交互",
+    "scripts/engine/runtime/style-components.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/styles.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/three-r164.js": "实现本阶段生成与交互",
+    "scripts/engine/runtime/workspace.js": "实现本阶段生成与交互",
+    "scripts/engine/schemas/cameras.schema.json": "提供构造、图文或数据依据",
+    "scripts/engine/schemas/layout.schema.json": "提供构造、图文或数据依据",
+    "scripts/engine/schemas/style.schema.json": "提供构造、图文或数据依据",
+    "scripts/engine/styles/cream/PLAYBOOK.md": "维护交接合同、依赖与改版证据",
+    "scripts/engine/styles/mid-century/PLAYBOOK.md": "维护交接合同、依赖与改版证据",
+    "scripts/engine/styles/modern-minimal/PLAYBOOK.md": "维护交接合同、依赖与改版证据",
+    "scripts/engine/styles/new-chinese/PLAYBOOK.md": "维护交接合同、依赖与改版证据",
+    "scripts/engine/styles/wabi-sabi/PLAYBOOK.md": "维护交接合同、依赖与改版证据",
+    "scripts/engine/tests/test_space_connections.py": "维护交接合同、依赖与改版证据",
+    "scripts/requirements.txt": "维护交接合同、依赖与改版证据",
+    "scripts/run.py": "实现本阶段生成与交互"
+  },
+  "logicDetails": []
 }

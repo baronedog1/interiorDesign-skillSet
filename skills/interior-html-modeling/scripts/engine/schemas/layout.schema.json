@@ -183,6 +183,14 @@
               },
               "notes": {
                 "type": "string"
+              },
+              "allowVirtualRetreat": {
+                "type": "boolean",
+                "description": "False forbids virtual wall/foreground clipping for this room."
+              },
+              "roomOnly": {
+                "type": "boolean",
+                "description": "Restrict camera standing domain to current room."
               }
             }
           }
@@ -240,6 +248,12 @@
               "wall",
               "parapet",
               "railing"
+            ]
+          },
+          "joinMode": {
+            "enum": [
+              "connected",
+              "source-gap"
             ]
           }
         },
@@ -361,6 +375,25 @@
               "kind",
               "description"
             ]
+          },
+          "passageShape": {
+            "enum": [
+              "rect",
+              "arch",
+              "rounded"
+            ]
+          },
+          "archRise": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "cornerLeft": {
+            "type": "number",
+            "minimum": 0
+          },
+          "cornerRight": {
+            "type": "number",
+            "minimum": 0
           }
         },
         "required": [
@@ -488,6 +521,16 @@
                 }
               }
             }
+          },
+          "rotationX": {
+            "type": "number"
+          },
+          "rotationZ": {
+            "type": "number"
+          },
+          "joinery": {
+            "type": "object",
+            "description": "Optional parametric construction; see playbook/joinery.md. Values are project methods, not design gates."
           }
         },
         "required": [
@@ -787,6 +830,116 @@
         "m",
         "mm"
       ]
+    },
+    "wallJoins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ends",
+          "point",
+          "source"
+        ],
+        "properties": {
+          "ends": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "wallId",
+                "end"
+              ],
+              "properties": {
+                "wallId": {
+                  "type": "string"
+                },
+                "end": {
+                  "enum": [
+                    "a",
+                    "b"
+                  ]
+                }
+              }
+            }
+          },
+          "point": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "number"
+            }
+          },
+          "source": {
+            "enum": [
+              "traced-junction",
+              "user-edit",
+              "gap"
+            ]
+          }
+        }
+      }
+    },
+    "structuralItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "position",
+          "size",
+          "rotationY",
+          "roomId"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "column",
+              "flue"
+            ]
+          },
+          "roomId": {
+            "type": "string"
+          },
+          "position": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            }
+          },
+          "size": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            }
+          },
+          "rotationY": {
+            "type": "number"
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "visible": {
+            "type": "boolean"
+          }
+        }
+      }
     }
   },
   "required": [

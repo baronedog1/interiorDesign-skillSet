@@ -1,257 +1,98 @@
-# 机位截图 · 七类空间与真实成像 说明书
+# 真实室内机位与截图
 
-版本：3.2.1
+版本：3.3.0
 
-~~~yaml
+用户给当前模型与表达目标 → 确定本空间主体与功能面 → 在真实室内组织完整构图 → 生成机位并从同版模型截图 → 组织主图、补图与空间事实 → 用户获得机位和真实截图
+
+
+## SKILL.md
+
 ---
 name: interior-camera-capture
 description: 从当前完整 HTML 的真实模型寻找全屋及各空间机位，冻结相机并输出原生 WebGL 参考截图；逐图识图，不改家具或冒充效果图。
-metadata: {version: "3.2.1", category: interior-design}
+metadata: {version: "3.3.0", category: interior-design}
 ---
-~~~
+# 机位与模型截图
 
-## 调用场景
+输入同版 scene.json/model.html 和用户主体意图；输出 cameras.json、逐张 PNG 与 renders.json。先读 [机位方法](playbook.md)，数据见 [共用合同](../interior-html-modeling/data_contract.md)。
 
-### 机位：空间语义先行，候选求解后看真实图片
+入口 `python scripts/run.py find scene.json --out cameras.json`；截图 `python scripts/run.py capture scene.json cameras.json --out shots --mode pbr`，白模参考用 clay。可 `--shots ID1,ID2`；`apply` 创建机位审阅 HTML 副本，不覆盖源模型。
 
-本页保留实际业务步骤；蓝色节点链接专题，回源节点明确返回位置。文件逐项列明用途。
+默认不移动家具、隐藏问题对象或镜像成品。唯一明确的渲染参照分支：用户要求白模/空白槽位时，capture 加 `--reference-mode empty-slots --white-model-requested`，暂时隐藏 placements 的家具/柜体图像，JSON 与机位不变，截后恢复；clay 单独使用只换灰材质，不等于空槽。空间算法先明确主体，再生成站位和朝向；几何评分只是候选排序，最终自己逐图看。搜索失败的候选也保留供识图诊断，不拿通过门禁代替实际图片。
 
-输入：当前完整模型及用户视角意图
-输出：机位 JSON、实际 PNG、观察记录
+截图交接原生绘图 Skill；查询参考或上传调用平台 Skill。浏览器依赖见 [运行说明](local_runtime.md)，人读 [PDF](SKILL_MANUAL.pdf)。
 
-#### 机位：空间语义先行，候选求解后看真实图片
-- a：当前完整 HTML / scene / 认可机位；不覆盖用户已指定的机位；保持同版文件（详见 whole-bed）
-  - scripts/run.py：find/apply/capture 入口
-- q：场景、机位引用同版？；sceneKey/layoutHash/HTML 摘要一致
-  - ../interior-html-modeling/scripts/engine/python/render.py：load_scene 与真实页面检查
-  - ../interior-html-modeling/scripts/engine/schemas/cameras.schema.json：相机数据字段
-- fix：引用错误：更新当前源模型；回本页输入，不拿旧图冒充新结果；随步骤记录开始、完成、耗时；代码与绘图等待分开。
-  - ../interior-html-modeling/scripts/engine/python/common.py：JSON 与文件摘要
-  - ../interior-html-modeling/scripts/engine/python/model.py：重新编译当前布局
-  - ../interior-html-modeling/playbook/timing.md：计时口径
-  - ../interior-html-modeling/scripts/engine/python/timing.py：正式命令自动计时
-- room：明确本房主体和表达关系；卧室/客厅/餐厅/厨房/卫浴/书房/阳台（详见 rooms）
-  - playbook.md：主体、空间差异及识图方法
-- search：求解候选 → 冻结参数 → 真实截图；候选质量为观察，不用分数拦截整套图；看图不合格，定位空间语义或机位计算的源头（详见 search）
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- a → q：文件
-- q → fix：否
-- q → room：是
-- room → search：本房约束
+每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](../interior-html-modeling/playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
 
-### 完整主图：先解可见地面与天花，再成像
+各空间第一张必须为正视主图，客厅分别正对沙发和电视；斜视、细节只作补充。用 find 正式求解，不用临时脚本覆盖自动计划。主体、朝向或构图不对，改输入或共享算法再生成；逐张看图，不能把局部图或诊断候选说成合格正视图。
 
-把空间身份和构图放到生成源头；看图后修源规则，不增加事后阻断器。
 
-输入：本轮源事实与用户完整空间表达要求
-输出：可运行规则、可追溯镜头与空间关系
+本轮统一规则见 [空间连接与完整构图](../interior-html-modeling/playbook/space-connections.md)：规划先确认空间连接；HTML按真实门型/状态装配；正视主图带到天花与地面；渲染保留本机位可见空间身份，不把阳台画成房间。
 
-#### 完整主图：先解可见地面与天花，再成像
-- intent：本房功能面 + 构图意图；balanced / floor / ceiling / table；正视是水平朝向正；餐桌可小幅俯视
-  - ../interior-html-modeling/scripts/engine/schemas/layout.schema.json：cameraComposition
-  - playbook.md：七类空间的差异
-- backdrop：投射到真实房间背景边界；以背景层高和横向范围求初始视角；不用近处床脚角点把天花挤出画面
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：_evaluate：背景平面与视角
-- solve：源头同时求站位、画幅与上下构图；有限候选中计算能看见的地面/天花；结合主体遮挡、距离及镜头自然度排序；不是生成后裁图、挪物或审美门禁
-  - ../interior-html-modeling/scripts/engine/python/openings.py：门型与开合一次编译；输出共享墙局部门扇姿态
-- capture：真实HTML按同一相机截图；同一verticalShift；保留门窗源状态；采集实际表面与开口证据，finally恢复状态
-  - ../interior-html-modeling/scripts/engine/runtime/app.js：captureFrame / frameSpaceContext
-  - ../interior-html-modeling/scripts/engine/python/render.py：逐张落盘与计时
-- review：实际构图符合本次表达？；看上下边界、主体与门后空间；不是机械判分
-- out：主图 + 空间事实交接；否：保留问题，回对应源输入/算法；是：primary先行，斜视/特写按需补
-- intent → backdrop
-- backdrop → solve
-- solve → capture
-- capture → review
-- review → out：是
-- review → intent：否：回源
 
-## 完整文件地图
-- MANIFEST.json：发布版本与完整文件清单
-- SKILL.md：调用范围、输入输出与关键规则
-- SKILL_MANUAL.pdf：面向人的算法说明书
-- local_runtime.md：Chrome 与软件 WebGL 配置
-- manual/skill-flowchart.svg：同源说明书内容与图形
-- manual/skill-manual.json：同源说明书内容与图形
-- manual/skill-manual.md：同源说明书内容与图形
-- playbook.md：主体、空间差异及识图方法
-- scripts/run.py：find/apply/capture 入口
+## 当前设计方法
 
-## 具体逻辑解释
+先按任务读取 [真实室内完整构图](playbook/interior-framing.md)。通用方法与用户参数分开，选择及覆盖见 [规则归属](../interior-html-modeling/playbook/rule-selection.md)。这些是生成方法，不新增强校验、门禁或审批。
 
-### 逐空间关系与机位
 
-按实际输入、计算、分支和文件消费者展开。
+## playbook.md
 
-#### 卧室：从床头墙确定床尾视线
-- bed：床与床头柜属于本卧室；床头为 -Z；先确认其宿主墙；wardrobe、door 是关系对象，不借邻房床
-  - playbook.md：主体、空间差异及识图方法
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- axis：以床朝向求正视方向；从床尾朝床头；frontWallId优先；斜角应同时交代床、衣柜和门
-- candidate：按本房可站区域采样并排序；共用候选算法；不从床头墙外拍；床侧门板遮挡时改候选，不缩床
-- q：图里床头、床侧及门柜关系可读？；检查靠墙、朝向、裁切和门板遮挡
-- yes：是：卧室参考图 + 冻结机位；
-  - scripts/run.py：find/apply/capture 入口
-- no：否：区分床锚点错还是镜头错；床位置错回规划；取景错回候选；交付具体问题图，不改变家具掩盖
-- bed → axis：床轴
-- axis → candidate：视线
-- candidate → q：实际截图
-- q → yes：是
-- q → no：否
+# 从完整空间求正视主图
 
-#### 客厅：会客关系和电视方向必须互补
-- a：锁定客厅自己的沙发、茶几、电视和阳台通路；洗衣机/台盆/坐凳按真实正面分别正视，长轴纵深仅作补充；各空间主图先输出，不把诊断或局部当合格主图
-  - playbook.md：主体、空间差异及识图方法
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- sofa：会客机位：朝沙发正面；第一张以沙发有符号正面轴求水平正视；电视以自身正面另求正视；斜图只是补充
-- tv：电视机位：从会客侧看电视组；目标包含电视柜和背景，保持真实比例；电视前景过大时改站位和目标，不缩电视
-- q：两张图共同说明客厅布局？；主体完整、正反方向、阳台与通路可理解
-- out：是：互补图组；
-  - scripts/run.py：find/apply/capture 入口
-- fix：否：回主体/站位；保留观察；不重摆家具
-- a → sofa：会客关系
-- a → tv：电视关系
-- sofa → q：候选A
-- tv → q：候选B
-- q → out：是
-- q → fix：否
+先读当前scene/model/layout及用户表达意图；保留已指定机位，不用自动搜索覆盖用户编辑。空间连接合同统一见 ../interior-html-modeling/playbook/space-connections.md。
 
-#### 餐厅：先包含最外椅背，再决定画幅
-- a：餐桌＋本组全部椅子；不只取桌面中心；确认属于餐厅
-  - playbook.md：主体、空间差异及识图方法
-- b：变换每个组件八角点求联合包络；size/position/rotationY → 世界坐标；最外椅背决定完整画幅；保留拉椅使用区
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- c：包络投影 → FOV → 候选排序；保持房内站位；吊灯与背景柜作空间关系；视场不足留风险，不缩小餐桌
-- q：图片读得清整桌椅与背景？；看椅背裁切、柜体夹窄、拉椅区；近大远小不能误当实际尺寸
-- out：结果与明确归因；是：交付全组图；否：裁切回相机，真实拥挤回布局；原方案与观察同时保留，不用图像变形掩盖
-  - scripts/run.py：find/apply/capture 入口
-- a → b：对象组
-- b → c：投影输入
-- c → q：真实图
-- q → out：是：交付
-- q → out：否：带问题交付
+## 主图构图源算法
 
-#### 厨房：沿操作面读懂台面、设备和通道
-- a：本厨房台柜与设备；首图：水槽工作面 / 台盆正面；不同朝向功能面不强塞同一包络；其他功能关系另作补充
-  - playbook.md：主体、空间差异及识图方法
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- b：操作面决定观看方向，通道决定站位；保持烟灶/水槽/台面关系；不借隔壁房间站位；自然站位与柜体前沿分离，柜门开合区纳入观察
-- q：房内能容纳完整自然视角？；候选投影、遮挡和使用区一起判断
-- full：能：操作面全景；镜头留出柜体高度和通路；保持相机参数截图
-  - scripts/run.py：find/apply/capture 入口
-- local：不能：明确局部／另议剖切；不从墙后拍；当前程序不自动生成剖切；保留已有图和缺口，回源选择机位
-- out：看台面、门扇与设备遮挡；位置错回布局；遮挡错回镜头；不隐掉结构冒充通透
-- a → b：功能关系
-- b → q：候选
-- q → full：是
-- q → local：否
-- full → out：实际图
+每个空间第一张是该空间主要功能面的正视图，不是家具近景。水平朝向正对主体/参考墙，默认上下保持水平透视；明确强调餐桌台面时可轻微俯视，正视指水平朝向，不等于禁止一切俯仰。主图同时带到地面与天花，照顾灯、吊顶收口和地面关系；地毯或灯为重点时按 cameraComposition.emphasis 调整，不设各房统一百分比。局部特写另列 supplement，不替代主图。
 
-#### 卫浴：先分台盆、马桶、淋浴，再求小空间视角
-- a：识别本房功能件及玻璃/门扇；首图：水槽工作面 / 台盆正面；不同朝向功能面不强塞同一包络；其他功能关系另作补充
-  - playbook.md：主体、空间差异及识图方法
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- b：以可用站位看功能关系；保持真实墙与玻璃，不为完整强行穿墙；包络抽样只是候选提示，不是透明表面视觉结论
-- q：实际图能读清目标功能区？；看台盆/镜面、门扇、玻璃和淋浴遮挡
-- good：是：交付功能区图；同房图组共同交代空间；机位摘要保留
-  - scripts/run.py：find/apply/capture 入口
-- bad：否：保留局部并说明缺失视野；回主体或站位；需要剖切时明确约定
-- a → b：功能件
-- b → q：实际截图
-- q → good：是
-- q → bad：否
+cameras.py 先从本房subjectIds取主体；缺省只按本房用途选择家具，不借邻房主体。frontWallId优先，否则取主体真实正面及相邻墙。沿法向35档距离、0/±.18/±.4米横向候选和层高中点/1.2/1.5米高度求真实站位。openConnections只扩展可站区域，不扩展本房主体。
 
-#### 书房：主体工作面与座椅、收纳共同入镜
-- a：本房书桌、座椅、收纳；以书桌工作面和座椅为主体；收纳只作有需求的背景，不并入整片客餐厅
-  - playbook.md：主体、空间差异及识图方法
-- b：取工作面正向与斜向候选；首图沿书桌+Z正面；镜头水平；就近站位、主体占幅与镜头偏移；斜向只是补充；不从远处门洞后拍
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- q：工作面与通行关系可理解？；逐图看桌前/椅后使用空间和门遮挡
-- ok：是：工作关系图；
-  - scripts/run.py：find/apply/capture 入口
-- no：否：修主体/机位，保留观察后回候选；
-- a → b：主体
-- b → q：看真实图
-- q → ok：是
-- q → no：否
+_evaluate 把主视线与房间边界相交，求功能面背后的真实建筑背景；用该背景的地面与层高、房间横向宽度计算画幅。卧室同时纳入全部床体角点与建筑上下边界，不以背景完整代替床完整。然后在有限镜头与上下偏移候选中，用 surface_shares 计算本房可见地面/天花，结合主体遮挡、前景占幅、视角与离本区距离选构图。缺少地面/天花受到连续排序惩罚，不是生成后加门禁。窄房仍可能仅有少量侧边地面，必须看图说明，不靠穿墙或家具变形伪造完整。
 
-#### 阳台：休闲主体不能遮掉出入口与栏杆关系
-- a：原图用途与本房对象；休闲座椅/绿植或无家具空间；不把相邻客厅家具当作阳台主体
-  - playbook.md：主体、空间差异及识图方法
-- q：本房有明确主体？；优先 subjectIds；缺失保持缺失，不造摆件
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-- empty：无主体：空间预设图；看栏杆、墙、门和出入口；注明无家具主体
-- subject：有主体：沿通路求朝向与站位；保留客厅/阳台连接，不让座椅挡住通行关系；同一采样与投影算法，真实截图逐图看
-- out：明确输出：本阳台图与问题说明；洗衣机/台盆/坐凳按真实正面分别正视，长轴纵深仅作补充；各空间主图先输出，不把诊断或局部当合格主图
-  - scripts/run.py：find/apply/capture 入口
-- a → q：主体事实
-- q → subject：是
-- q → empty：否
-- empty → out：空间图
-- subject → out：主体图
+当前默认 balanced 地面/天花意向留量为.12/.10；floor为.24/.07，ceiling为.07/.24，table为.17/.09且下俯4°。它们是可调整的算法意向，不是实测像素占比或必须达到的审美阈值。常规候选镜头上限90°，卧室完整床体候选上限100°；适度退位/扩画优先于鱼眼。最终 surfaceSamples 是实际表面抽样，不能用理论锚点冒充看得见。
 
-### 候选计算与实际截图
+## 各空间的差异
 
-按实际输入、计算、分支和文件消费者展开。
+卧室：正对床头，床头、床尾、两侧和床脚完整入画，同时保留天花地面。先求房内完整候选；不足时分视角表达；用户明确要求剖视示意时才使用虚拟轴向后退，不自动裁切家具。不能用低机位巨型床尾、极端广角或缩床冒充自然完整；床头特写另列补充。
 
-#### 候选求解：采样、投影、评分，最后才是截图
-- a：构造本房主体与遮挡包络；subjectIds 只取本房；否则按 room.type 推断；墙段先扣洞口，门扇/窗帘/家具参与近似遮挡
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：本房主体、候选、投影与评分
-  - ../interior-html-modeling/scripts/engine/schemas/layout.schema.json：房间、墙门窗、placements 数据
-- b：普通与正视两类站位；普通 7×7×高1.40/1.25/1.55m；正视沿宿主墙内法向35档、横移0/±.18m
-- q：站位在真实连通域且不在实体内？；距主体≥.45m；房间多边形及有向包围盒
-- next：舍弃该站位，继续剩余候选；这是生成算法选位，不是事后移动家具
-- score：投影并排序有效候选；正视：主体占幅、遮挡、就近站位排序；补充图沿用视角/可见性排序；不混成一个公式；verticalShift完成水平正视的上下构图；仍输出review
-- out：冻结 cameras.json；包括 review 候选；可见比<.55、前景>.35 标风险，不冒充像素验收；没有站位则保留带原因候选，明确不是自然全景
-  - ../interior-html-modeling/scripts/engine/python/common.py：保存机位与摘要
-- a → b：本房事实
-- b → q：候选
-- q → next：否
-- q → score：是：计算投影
-- score → out：参数与风险
+客厅：沙发正面与电视正面互补，各自是主图。两张都带天花和地面；电视一侧的阳台由真实移门与端点身份说明，不画成卧室。地毯重点用floor，灯重点用ceiling。斜视用来补会客与开放区关系。
 
-#### 真实截图与两种渲染参照：输出后恢复原模型
-- a：打开当前完整 HTML；独立 Windows Headless / SwiftShader；实际页面 ready 或明确错误，不用空白页预检阻断
-  - scripts/run.py：find/apply/capture 入口
-  - ../interior-html-modeling/scripts/engine/python/render.py：浏览器打开/截图/回执
-  - ../interior-html-modeling/scripts/engine/python/bootstrap.py：Windows Python 入口
-  - local_runtime.md：Chrome 与软件 WebGL 配置
-- q：明确要求空白槽位？；默认 furnished；不是自动切白模
-  - playbook.md：主体、空间差异及识图方法
-- full：否：带全部家具和细节；clay 仅换灰材质，不等于空房
-  - ../interior-html-modeling/scripts/engine/runtime/app.js：captureFrame 默认完整场景
-- empty：是：暂隐家具/柜体实例；仅 placements；JSON槽位和建筑不变；记录 hiddenPlacementIds；截图后恢复
-- out：PNG + renders.json + 视觉观察；同 sceneKey、cameraDigest；真实模式与摘要；按本房主体看图，错误回空间或机位源
-  - ../interior-html-modeling/scripts/engine/python/common.py：哈希与写文件
-- runtime：页面实际截图调用链；已有完整 HTML 内嵌运行时，不重新编造截图
-  - ../interior-html-modeling/scripts/engine/runtime/three-r164.js：WebGL 渲染引擎
-  - ../interior-html-modeling/scripts/engine/runtime/controls.js：投影/相机数学
-  - ../interior-html-modeling/scripts/engine/runtime/scene.js：当前建筑家具实例
-- a → q：选择
-- q → empty：是
-- q → full：否
-- full → out：全场景
-- empty → runtime：指定模式
-- runtime → out：真实帧
+餐厅：正对餐桌椅功能面，台面重点可下俯4°，仍保留天花/灯及地面。前景椅子自然裁切与整组空间表达要分别说明；不把客厅主体、旁侧柜子当餐厅中心。
 
-### 完整床体的候选求解
+书房：正对学习工作面和椅子，天花/地面同样纳入；相邻客厅仅是可见背景，不从“公共书房”自动添加隔断书架。
 
-由已实现代码展开，真实模型不变；虚拟取景须明示。
+厨房/卫生间：分别以水槽操作面、台盆正面为首图；其它工作面/淋浴另补。小空间使用真实可站位置，不在墙后拍，不默认剖切。如果主体相距太大，分别正拍，不虚称一图看全。
 
-#### 完整主体优先：同源取景与交接
-- a：完整床体与建筑共同投影；床头/床尾/两侧/床脚八角点与建筑上下边界；不是只拟合背景墙；沿床自身正面轴
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：完整床体、自然候选与虚拟后退求解
-- b：先求真实房内候选；房界精确远端与35档站位；共同算FOV/移轴；完整床FOV≤100°，不是拉长焦距
-  - ../interior-html-modeling/scripts/engine/schemas/cameras.schema.json：视角、移轴、near冻结参数
-- q：有床完整、眼高≥1米的房内候选？；投影maxAbsNDC≤0.965；FOV≤100°
-- normal：保留房内完整正视；主体完整优先，同时照顾地面天花；不缩床、不移墙、不后裁图
-- retreat：生成虚拟后退候选；退0.5/0.8/1.2/1.6m；眼高1.2/1.4/1.6m；near=退距+邻墙半厚+0.03m；不得切到床；裁切代价3000×max(0,NDC−.965)，连续排序
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：同源近裁切遮挡计算
-- out：冻结整床镜头后真实识图；记录near/退距；保持床正面；不是房内可站摄影位置；模型数据不变
-  - ../interior-html-modeling/scripts/engine/python/render.py：保存PNG、请求与实际提示词
-- a → b：同版输入
-- b → q：判断
-- q → normal：是：房内
-- normal → out：继续
-- q → retreat：否：后退
-- retreat → out：同一交接
+阳台：有洗衣机/台盆/坐凳时按其正面取景，保留上下边界、栏杆/外窗及客厅门关系；长轴图作为补充，空建筑才按长轴求视线。门后是室内还是户外取自模型，不靠视觉猜名字。
+
+## 捕获及下游交接
+
+find冻结相机，capture在同一HTML真实成像。app.js 的 setViewOffset 与Python projected/射线使用同一个verticalShift；finally还原镜头、显示和材质。门窗保持模型源状态，截图不统一开门，不把透明玻璃变实板。
+
+app.js的frameSpaceContext输出本机位当前房间、观测房间及开口关系到renders.json；render.py保存并交给原生绘图。25×19表面射线、开口5×5抽样提供证据而不是逐像素证明；小孔缝/极薄物体仍需识图。场景摘要或文件引用真的不可用时说明错误；构图观察保留候选及截图，不让评分挡住整个设计。
+
+primary先选，supplement按表达需要，layout-reference为全屋正交/鸟瞰，不默认全量渲染。逐图实际看天花与地面、主体正面、完整程度、前景遮挡及门后空间；错误回规划事实/门窗编译/机位构造，不改最终图片补救。计时遵循共享timing.md；捕获不是原生绘图最终效果。
+
+
+## playbook/interior-framing.md
+
+# 在真实空间内组织完整视角
+
+先选当前空间的使用面及主体，再以房内站位、横向移动、画幅和适度视角组织天花、地面与主体。客厅沙发墙和电视墙互补；卧室围绕床头与完整床体；厨房沿操作面/通道；卫浴按功能分视角；阳台玄关可用竖幅。参考图提供构图意图，不提供精确坐标，也不改变当前家具款式。
+
+本版find默认不启用虚拟后退。房内无法自然完整表达时分两张或增加补充视角，并说明表达范围；不通过近裁切截穿柜体、冰箱、侧板或隐藏实体凑全貌。用户明确要求建筑剖视示意时可选allowVirtualRetreat，此时如实标示示意；算法不再自动把前景家具截掉来抢救构图。
+
+先在模型处理柜顶、台面和墙角，再冻结同版机位。相机位于哪个空间、能看到哪个邻接空间与门窗状态沿用真实模型；浴室室内图与外置干区/过道图分开组织。主图和细节图各有用途，不把特写叫全貌。
+
+构图方法和实际看图共同决定调整，不新增画面评分门禁。自动候选是可用起点；本轮无需主观审核表才能继续渲染。结构/家具包络改动重求受影响机位，纯材质变化可复用机位并刷新截图。
+
+
+## local_runtime.md
+
+# 设备外置运行配置
+
+本包在 Ubuntu、Windows 来酷和 Genmachine 使用同一份业务代码。Python 3.10+、Node、Chrome/Edge、中文字体及依赖由本机设计 runtime 配置提供；优先用设备登记的 interior-python 包装入口。普通任务不临时安装软件。所有输入和交付保存在当前设备当前工作区。
+
+HTML 和截图共享 interior-html-modeling/scripts/engine。纯 HTML 离线打开不需要 Python；编译依赖 jsonschema、shapely、numpy，截图使用 Playwright 和 INTERIOR_CHROMIUM 指定的浏览器。资源盒由本机包装器沿用，任务结束只关闭本次浏览器。依赖列表见正式 scripts 中的 requirements 文件。
+
+平台凭据通过设备既有 IDK_ENV_FILE 或私有 .runtime 链接提供，分发包不包含凭据；不得跨设备复制登录态。原生绘图使用当前宿主实际提供的绘图工具，准备文件不等于生成图片。

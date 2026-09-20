@@ -21,3 +21,8 @@ metadata: {"version":"4.1.1","source_authority":"lecoo-windows-device","category
 每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](../interior-html-modeling/playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
 
 用户说“交付方案”但未明确格式，默认交付带文字说明的 booklet-highres.pdf；只有明确仅要图片才省略 PDF。每张 render 图片关联 resultPath、shotId、schemeId；同一空间多机位一起讲清布局与材料，源图低分辨率不能靠放大宣称高清。
+
+
+## 当前设计方法
+
+先按任务读取 [当前设计事实与图文表达](playbook/design-facts.md)。通用方法与用户参数分开，选择及覆盖见 [规则归属](../interior-html-modeling/playbook/rule-selection.md)。这些是生成方法，不新增强校验、门禁或审批。

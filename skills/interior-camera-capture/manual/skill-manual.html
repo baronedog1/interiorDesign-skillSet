@@ -1,0 +1,99 @@
+<!doctype html><meta charset="utf-8"><title>真实室内机位与截图</title><style>body{font:16px sans-serif;max-width:1050px;margin:30px auto;line-height:1.6}pre{white-space:pre-wrap}svg{max-width:100%;height:auto}</style><svg xmlns="http://www.w3.org/2000/svg" width="595" height="842" viewBox="0 0 595 842"><rect width="595" height="842" fill="#f4f7fa"/><text x="42" y="42" font-family="sans-serif" font-size="20">真实室内机位与截图 · 3.3.0</text><rect x="42" y="100" width="511" height="82" rx="8" fill="#eaf1f7"/><text x="58" y="128" font-family="sans-serif" font-size="16">用户给当前模型与表达目标</text><text x="58" y="152" font-family="sans-serif" font-size="10">SKILL.md</text><path d="M297 183 v28 l-4 -6 m4 6 l4 -6" fill="none" stroke="#537893"/><rect x="42" y="212" width="511" height="82" rx="8" fill="#eaf1f7"/><text x="58" y="240" font-family="sans-serif" font-size="16">确定本空间主体与功能面</text><text x="58" y="264" font-family="sans-serif" font-size="10">playbook.md</text><path d="M297 295 v28 l-4 -6 m4 6 l4 -6" fill="none" stroke="#537893"/><rect x="42" y="324" width="511" height="82" rx="8" fill="#eaf1f7"/><text x="58" y="352" font-family="sans-serif" font-size="16">在真实室内组织完整构图</text><text x="58" y="376" font-family="sans-serif" font-size="10">playbook/interior-framing.md</text><path d="M297 407 v28 l-4 -6 m4 6 l4 -6" fill="none" stroke="#537893"/><rect x="42" y="436" width="511" height="82" rx="8" fill="#eaf1f7"/><text x="58" y="464" font-family="sans-serif" font-size="16">生成机位并从同版模型截图</text><text x="58" y="488" font-family="sans-serif" font-size="10">scripts/run.py</text><path d="M297 519 v28 l-4 -6 m4 6 l4 -6" fill="none" stroke="#537893"/><rect x="42" y="548" width="511" height="82" rx="8" fill="#eaf1f7"/><text x="58" y="576" font-family="sans-serif" font-size="16">组织主图、补图与空间事实</text><text x="58" y="600" font-family="sans-serif" font-size="10">data_contract.md</text><path d="M297 631 v28 l-4 -6 m4 6 l4 -6" fill="none" stroke="#537893"/><rect x="42" y="660" width="511" height="82" rx="8" fill="#eaf1f7"/><text x="58" y="688" font-family="sans-serif" font-size="16">用户获得机位和真实截图</text><text x="58" y="712" font-family="sans-serif" font-size="10">SKILL_MANUAL.pdf</text></svg><pre># 真实室内机位与截图
+
+版本：3.3.0
+
+用户给当前模型与表达目标 → 确定本空间主体与功能面 → 在真实室内组织完整构图 → 生成机位并从同版模型截图 → 组织主图、补图与空间事实 → 用户获得机位和真实截图
+
+
+## SKILL.md
+
+---
+name: interior-camera-capture
+description: 从当前完整 HTML 的真实模型寻找全屋及各空间机位，冻结相机并输出原生 WebGL 参考截图；逐图识图，不改家具或冒充效果图。
+metadata: {version: &quot;3.3.0&quot;, category: interior-design}
+---
+# 机位与模型截图
+
+输入同版 scene.json/model.html 和用户主体意图；输出 cameras.json、逐张 PNG 与 renders.json。先读 [机位方法](playbook.md)，数据见 [共用合同](../interior-html-modeling/data_contract.md)。
+
+入口 `python scripts/run.py find scene.json --out cameras.json`；截图 `python scripts/run.py capture scene.json cameras.json --out shots --mode pbr`，白模参考用 clay。可 `--shots ID1,ID2`；`apply` 创建机位审阅 HTML 副本，不覆盖源模型。
+
+默认不移动家具、隐藏问题对象或镜像成品。唯一明确的渲染参照分支：用户要求白模/空白槽位时，capture 加 `--reference-mode empty-slots --white-model-requested`，暂时隐藏 placements 的家具/柜体图像，JSON 与机位不变，截后恢复；clay 单独使用只换灰材质，不等于空槽。空间算法先明确主体，再生成站位和朝向；几何评分只是候选排序，最终自己逐图看。搜索失败的候选也保留供识图诊断，不拿通过门禁代替实际图片。
+
+截图交接原生绘图 Skill；查询参考或上传调用平台 Skill。浏览器依赖见 [运行说明](local_runtime.md)，人读 [PDF](SKILL_MANUAL.pdf)。
+
+每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](../interior-html-modeling/playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
+
+各空间第一张必须为正视主图，客厅分别正对沙发和电视；斜视、细节只作补充。用 find 正式求解，不用临时脚本覆盖自动计划。主体、朝向或构图不对，改输入或共享算法再生成；逐张看图，不能把局部图或诊断候选说成合格正视图。
+
+
+本轮统一规则见 [空间连接与完整构图](../interior-html-modeling/playbook/space-connections.md)：规划先确认空间连接；HTML按真实门型/状态装配；正视主图带到天花与地面；渲染保留本机位可见空间身份，不把阳台画成房间。
+
+
+## 当前设计方法
+
+先按任务读取 [真实室内完整构图](playbook/interior-framing.md)。通用方法与用户参数分开，选择及覆盖见 [规则归属](../interior-html-modeling/playbook/rule-selection.md)。这些是生成方法，不新增强校验、门禁或审批。
+
+
+## playbook.md
+
+# 从完整空间求正视主图
+
+先读当前scene/model/layout及用户表达意图；保留已指定机位，不用自动搜索覆盖用户编辑。空间连接合同统一见 ../interior-html-modeling/playbook/space-connections.md。
+
+## 主图构图源算法
+
+每个空间第一张是该空间主要功能面的正视图，不是家具近景。水平朝向正对主体/参考墙，默认上下保持水平透视；明确强调餐桌台面时可轻微俯视，正视指水平朝向，不等于禁止一切俯仰。主图同时带到地面与天花，照顾灯、吊顶收口和地面关系；地毯或灯为重点时按 cameraComposition.emphasis 调整，不设各房统一百分比。局部特写另列 supplement，不替代主图。
+
+cameras.py 先从本房subjectIds取主体；缺省只按本房用途选择家具，不借邻房主体。frontWallId优先，否则取主体真实正面及相邻墙。沿法向35档距离、0/±.18/±.4米横向候选和层高中点/1.2/1.5米高度求真实站位。openConnections只扩展可站区域，不扩展本房主体。
+
+_evaluate 把主视线与房间边界相交，求功能面背后的真实建筑背景；用该背景的地面与层高、房间横向宽度计算画幅。卧室同时纳入全部床体角点与建筑上下边界，不以背景完整代替床完整。然后在有限镜头与上下偏移候选中，用 surface_shares 计算本房可见地面/天花，结合主体遮挡、前景占幅、视角与离本区距离选构图。缺少地面/天花受到连续排序惩罚，不是生成后加门禁。窄房仍可能仅有少量侧边地面，必须看图说明，不靠穿墙或家具变形伪造完整。
+
+当前默认 balanced 地面/天花意向留量为.12/.10；floor为.24/.07，ceiling为.07/.24，table为.17/.09且下俯4°。它们是可调整的算法意向，不是实测像素占比或必须达到的审美阈值。常规候选镜头上限90°，卧室完整床体候选上限100°；适度退位/扩画优先于鱼眼。最终 surfaceSamples 是实际表面抽样，不能用理论锚点冒充看得见。
+
+## 各空间的差异
+
+卧室：正对床头，床头、床尾、两侧和床脚完整入画，同时保留天花地面。先求房内完整候选；不足时分视角表达；用户明确要求剖视示意时才使用虚拟轴向后退，不自动裁切家具。不能用低机位巨型床尾、极端广角或缩床冒充自然完整；床头特写另列补充。
+
+客厅：沙发正面与电视正面互补，各自是主图。两张都带天花和地面；电视一侧的阳台由真实移门与端点身份说明，不画成卧室。地毯重点用floor，灯重点用ceiling。斜视用来补会客与开放区关系。
+
+餐厅：正对餐桌椅功能面，台面重点可下俯4°，仍保留天花/灯及地面。前景椅子自然裁切与整组空间表达要分别说明；不把客厅主体、旁侧柜子当餐厅中心。
+
+书房：正对学习工作面和椅子，天花/地面同样纳入；相邻客厅仅是可见背景，不从“公共书房”自动添加隔断书架。
+
+厨房/卫生间：分别以水槽操作面、台盆正面为首图；其它工作面/淋浴另补。小空间使用真实可站位置，不在墙后拍，不默认剖切。如果主体相距太大，分别正拍，不虚称一图看全。
+
+阳台：有洗衣机/台盆/坐凳时按其正面取景，保留上下边界、栏杆/外窗及客厅门关系；长轴图作为补充，空建筑才按长轴求视线。门后是室内还是户外取自模型，不靠视觉猜名字。
+
+## 捕获及下游交接
+
+find冻结相机，capture在同一HTML真实成像。app.js 的 setViewOffset 与Python projected/射线使用同一个verticalShift；finally还原镜头、显示和材质。门窗保持模型源状态，截图不统一开门，不把透明玻璃变实板。
+
+app.js的frameSpaceContext输出本机位当前房间、观测房间及开口关系到renders.json；render.py保存并交给原生绘图。25×19表面射线、开口5×5抽样提供证据而不是逐像素证明；小孔缝/极薄物体仍需识图。场景摘要或文件引用真的不可用时说明错误；构图观察保留候选及截图，不让评分挡住整个设计。
+
+primary先选，supplement按表达需要，layout-reference为全屋正交/鸟瞰，不默认全量渲染。逐图实际看天花与地面、主体正面、完整程度、前景遮挡及门后空间；错误回规划事实/门窗编译/机位构造，不改最终图片补救。计时遵循共享timing.md；捕获不是原生绘图最终效果。
+
+
+## playbook/interior-framing.md
+
+# 在真实空间内组织完整视角
+
+先选当前空间的使用面及主体，再以房内站位、横向移动、画幅和适度视角组织天花、地面与主体。客厅沙发墙和电视墙互补；卧室围绕床头与完整床体；厨房沿操作面/通道；卫浴按功能分视角；阳台玄关可用竖幅。参考图提供构图意图，不提供精确坐标，也不改变当前家具款式。
+
+本版find默认不启用虚拟后退。房内无法自然完整表达时分两张或增加补充视角，并说明表达范围；不通过近裁切截穿柜体、冰箱、侧板或隐藏实体凑全貌。用户明确要求建筑剖视示意时可选allowVirtualRetreat，此时如实标示示意；算法不再自动把前景家具截掉来抢救构图。
+
+先在模型处理柜顶、台面和墙角，再冻结同版机位。相机位于哪个空间、能看到哪个邻接空间与门窗状态沿用真实模型；浴室室内图与外置干区/过道图分开组织。主图和细节图各有用途，不把特写叫全貌。
+
+构图方法和实际看图共同决定调整，不新增画面评分门禁。自动候选是可用起点；本轮无需主观审核表才能继续渲染。结构/家具包络改动重求受影响机位，纯材质变化可复用机位并刷新截图。
+
+
+## local_runtime.md
+
+# 设备外置运行配置
+
+本包在 Ubuntu、Windows 来酷和 Genmachine 使用同一份业务代码。Python 3.10+、Node、Chrome/Edge、中文字体及依赖由本机设计 runtime 配置提供；优先用设备登记的 interior-python 包装入口。普通任务不临时安装软件。所有输入和交付保存在当前设备当前工作区。
+
+HTML 和截图共享 interior-html-modeling/scripts/engine。纯 HTML 离线打开不需要 Python；编译依赖 jsonschema、shapely、numpy，截图使用 Playwright 和 INTERIOR_CHROMIUM 指定的浏览器。资源盒由本机包装器沿用，任务结束只关闭本次浏览器。依赖列表见正式 scripts 中的 requirements 文件。
+
+平台凭据通过设备既有 IDK_ENV_FILE 或私有 .runtime 链接提供，分发包不包含凭据；不得跨设备复制登录态。原生绘图使用当前宿主实际提供的绘图工具，准备文件不等于生成图片。
+</pre>

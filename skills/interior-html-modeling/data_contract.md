@@ -41,3 +41,17 @@ productReferences保留逐placement绑定；native_image.references按(role,sha2
 ## 空间连接与完整主图（3.2）
 
 唯一新增源字段为rooms.cameraComposition以及openings的openFraction、hingeSide、swingSign、slideTo、infill、exteriorView；connects对门窗均表示两端空间，只有可通行开口进可达图。语义、默认值、已支持机构与坐标详见 [空间连接合同](playbook/space-connections.md)。截图新增results[].spaceContext，原生请求同时保存spaceContext并写入prompt；不是复制一套人工房间表。正式visibility.doorStateMode=source，旧doorsOpen仅兼容读取不覆盖门型/状态。
+
+## 4.0 编辑字段
+
+- `wallJoins[]`: `{ends:[{wallId,end:"a"|"b"}],point:[x,z],source:"traced-junction"|"user-edit"|"gap"}`。至少两个端点；point 需有来源依据。`walls[].joinMode="source-gap"` 保留明确源端面。
+- `structuralItems[]`: `id,name,kind(column|flue),roomId,position[x,y,z],size[w,h,d],rotationY`，可带 `visible,locked`；单位米、角度度。
+- 门洞保留原 openings 合同，新增 `passageShape(rect|arch|rounded)`、`archRise`、`cornerLeft/cornerRight`；拱高小于洞高，圆角和不超过洞宽。
+- 家具新增可选 `rotationX/rotationZ`，与 rotationY 组成 Three.js XYZ Euler，保存重开及编译保留；零值不代表字段缺失。
+- 编辑快照仍为 `interior.editor/2`，增加 `editorVersion`。查看单空间是瞬时视图，不改变 layout 与对象显隐事实。
+- 旧结构体只有可无歧义解释的数据才迁移；迁移输出正式字段后不保留双份状态。
+
+
+## 参数化构造扩展
+
+placement.joinery为可选对象。字段、单位及实际消费者唯一见playbook/joinery.md和scripts/engine/runtime/joinery-kernel.js。JSON编译、浏览器编辑、撤销及完整保存共享同一构造算法。该字段不引入设计阈值或门禁。

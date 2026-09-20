@@ -1,7 +1,7 @@
 ---
 name: idk-canvas-ingest-agent
 description: 设计链访问百恩得资产库、绑定同一私有项目、下载选定资产并上传图片或完整 HTML 时使用；独占受管 Key、API 和真实回读，不负责生成或美学验收。
-metadata: {version: "3.1.0", category: interior-design}
+metadata: {version: "3.1.1", category: interior-design}
 ---
 # 百恩得资产与私有项目交付
 

@@ -1,7 +1,7 @@
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "3.2.2", category: interior-design}
+metadata: {version: "5.0.0", category: interior-design}
 ---
 # HTML 室内共建
 
@@ -24,3 +24,16 @@ metadata: {version: "3.2.2", category: interior-design}
 每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
 
 门窗按源事实统一编译；空间两端、门型、开合、填充与外部目标随截图交接。读 [空间连接合同](playbook/space-connections.md)。不再写死半扇玻璃或截图时统一开门。
+
+统一编辑、墙角接缝与旧文件数据迁移见 [模型与编辑算法](playbook/editor-model.md)。正式 build 自动使用当前编辑器；不从项目 HTML 复制扩展脚本。
+
+## 子代理
+
+启用场景：HTML 户型的读图重建、结构/几何生成或修改；主代理委派 gpt-6-astra / low 原生子代理，不复制聊天历史。非建模阶段不自动委派；已是该专家则直接执行。输入为原始资料、已确认需求、当前模型事实和输出范围；执行与收尾详见 [子代理分工](playbook/subagents.md)。
+
+
+## 当前设计方法
+
+先按任务读取 [参数化柜体与节点](playbook/joinery.md)。通用方法与用户参数分开，选择及覆盖见 [规则归属](../interior-html-modeling/playbook/rule-selection.md)。这些是生成方法，不新增强校验、门禁或审批。
+
+正式整组生成：`python scripts/run.py cabinet-run layout.json run.json --out layout-next.json`，再build。模板支持参数化板件、独立模块、真实台面孔、柜桌/床台/吊顶以及显式关联随编辑重建；字段见joinery方法。

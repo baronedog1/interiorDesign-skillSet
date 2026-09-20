@@ -40,17 +40,21 @@ C.curtain=function(parent,width,height,x,y,z,rot=0){
  C.box(g,width+.2,.055,.035,0,height+.025,0,C.M.cream,.015,'双轨窗帘滑轨');
  return g;
 };
-function wall(parent,id,ax,az,bx,bz,t,openings=[],cut=.92,wallHeight=C.H){
+function wall(parent,id,ax,az,bx,bz,t,openings=[],cut=.92,wallHeight=C.H,footprint=null){
  const H=wallHeight;const L=Math.hypot(bx-ax,bz-az),g=C.group(parent,id,ax,0,az,-Math.atan2(bz-az,bx-ax));
  const ops=openings.sort((a,b)=>a.c-b.c);let from=0;
- const solid=(start,end,bottom,top)=>{if(end-start>.005&&top-bottom>.005)C.box(g,end-start,top-bottom,t,(start+end)/2,(top+bottom)/2,0,C.M.plaster,.009,id+' · 墙实体');};
- const skirting=(start,end)=>{if(end-start<.01)return;for(const s of [-1,1])C.box(g,end-start,.075,.018,(start+end)/2,.047,s*(t/2+.009),C.M.cream,.004,'踢脚线 / 阴影缝');};
+ const u=[(bx-ax)/L,(bz-az)/L],n=[-u[1],u[0]],poly=footprint?footprint.map(p=>[(p[0]-ax)*u[0]+(p[1]-az)*u[1],(p[0]-ax)*n[0]+(p[1]-az)*n[1]]):[[0,t/2],[L,t/2],[L,-t/2],[0,-t/2]];
+ const clip=(points,x,keep)=>{const out=[];for(let i=0;i<points.length;i++){const a=points[i],b=points[(i+1)%points.length],ia=keep*(a[0]-x)>=-1e-9,ib=keep*(b[0]-x)>=-1e-9;if(ia)out.push(a);if(ia!==ib){const f=(x-a[0])/(b[0]-a[0]);out.push([x,a[1]+(b[1]-a[1])*f]);}}return out;};
+ const solid=(start,end,bottom,top,material=C.M.plaster)=>{if(end-start<.000001||top-bottom<.000001)return;let points=poly;if(start>1e-7)points=clip(points,start,1);if(end<L-1e-7)points=clip(points,end,-1);if(points.length<3)return;const shape=new T.Shape();points.forEach((p,i)=>i?shape.lineTo(p[0],-p[1]):shape.moveTo(p[0],-p[1]));shape.closePath();const geo=new T.ExtrudeGeometry(shape,{depth:top-bottom,bevelEnabled:false,steps:1});geo.rotateX(-Math.PI/2);geo.translate(0,bottom,0);C.mesh(g,geo,material,id+' · 联接墙实体');};
+ const skirting=()=>{}; // No independent rounded strips crossing joined wall corners.
  for(const o of ops){const a=o.c-o.w/2,b=o.c+o.w/2;solid(from,a,0,H);skirting(from,a);solid(a,b,0,o.b);solid(a,b,o.b+o.h,H);if(o.b>0)skirting(a,b);
   openingAssembly(g,o,t);
+  const fact=o.assembly;if(fact.type==='passage'&&fact.passageShape&&fact.passageShape!=='rect'){const top=x=>{const h=o.h,w=o.w;if(fact.passageShape==='arch'){const rise=fact.archRise??Math.min(.6,h/2);return h-rise+rise*Math.sqrt(Math.max(0,1-((x-w/2)/(w/2))**2));}const l=fact.cornerLeft??.25,r=fact.cornerRight??.25;if(x<l)return h-l+Math.sqrt(Math.max(0,l*l-(x-l)**2));if(x>w-r)return h-r+Math.sqrt(Math.max(0,r*r-(x-(w-r))**2));return h;};const shape=new T.Shape();shape.moveTo(a,o.b+o.h);for(let i=0;i<=96;i++){const x=o.w*i/96;shape.lineTo(a+x,o.b+top(x));}shape.lineTo(b,o.b+o.h);shape.closePath();const geo=new T.ExtrudeGeometry(shape,{depth:t,bevelEnabled:false,steps:1});geo.translate(0,0,-t/2);const cap=C.mesh(g,geo,C.M.plaster,'异形洞口墙实体');cap.userData.openingId=o.id;}
+
   from=b;
  }
  solid(from,L,0,H);skirting(from,L);
- for(const s of [-1,1])C.box(g,L,.055,.035,L/2,H-.04,s*(t/2+.017),C.M.cream,.004,'顶面细收口');
+
  clipGroup(g,cut);return g;
 }
 function floorArea(parent,bounds,kind,name){

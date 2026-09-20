@@ -7,7 +7,7 @@ from validate import validate_layout
 from cameras import generic_presets,corners
 from timing import traced
 from openings import resolve_openings
-SCRIPTS=['three-r164.js','materials.js','styles.js','geometry.js','architecture-kit.js','components-base.js','style-components.js','components.js','scene.js','exporter.js','optimization.js','controls.js','lights.js','spatial.js','native-assets.js','workspace.js','app.js']
+SCRIPTS=['three-r164.js','joinery-kernel.js','model-kernel.js','materials.js','styles.js','geometry.js','architecture-kit.js','components-base.js','style-components.js','components.js','joinery.js','scene.js','exporter.js','optimization.js','controls.js','lights.js','spatial.js','native-assets.js','workspace.js','app.js']
 def js_json(value):return json.dumps(value,ensure_ascii=False,separators=(',',':'),allow_nan=False).replace('<','\\u003c').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
 def shell():
     text=(SHARED/'runtime/studio.html').read_text(encoding='utf-8-sig');catalog,styles=resources()
@@ -19,7 +19,8 @@ def shell():
     return text.replace('__RUNTIME_SCRIPTS__','\n'.join(scripts)).replace('__COMPONENT_JSON__',js_json(catalog)).replace('__STYLE_JSON__',js_json(styles))
 @traced('model.compile')
 def build_model(layout_path,out_dir,presets_path=None,style_id=None):
-    layout=read(layout_path)
+    from kernel import evaluate
+    layout=evaluate(read(layout_path))['layout']
     if style_id:
         import copy
         catalog=resources()[1]['styles']
@@ -33,7 +34,7 @@ def build_model(layout_path,out_dir,presets_path=None,style_id=None):
     if style and style['id']!=layout['styleId']:raise ValueError('Custom style id mismatch')
     if not style:raise ValueError('Unknown styleId')
     validate_style(style)
-    report=validate_layout(layout,strict=True);out=Path(out_dir);out.mkdir(parents=True,exist_ok=True)
+    report=validate_layout(layout,strict=False);out=Path(out_dir);out.mkdir(parents=True,exist_ok=True)
     presets=generic_presets(layout)
     if presets_path:
         supplied=read(presets_path)

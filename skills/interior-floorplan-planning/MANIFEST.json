@@ -1,16 +1,32 @@
 {
-  "version": "3.3.0",
-  "file_count": 10,
+  "version": "3.5.0",
+  "release": "ubuntu-design-2026.09.20",
   "files": [
     "MANIFEST.json",
     "SKILL.md",
     "SKILL_MANUAL.pdf",
     "local_runtime.md",
     "manual/skill-flowchart.svg",
+    "manual/skill-manual.html",
     "manual/skill-manual.json",
     "manual/skill-manual.md",
     "playbook.md",
+    "playbook/plan-reading.md",
     "playbook/requirements-interview.md",
     "scripts/run.py"
-  ]
+  ],
+  "file_count": 12,
+  "sha256": {
+    "SKILL.md": "61a79fd9b23fc1bfe08c0a71fad2a284c4712476a1152b4b9bee72af153493f5",
+    "SKILL_MANUAL.pdf": "f39e8bafd7f37d8024888d51087084903041c4bd47f5a3a3a10be7de4e863a2c",
+    "local_runtime.md": "92882a9eb89b78eaf3340d922e0c04fd0fd1df330e0e12a0551f0ee674fd90e7",
+    "manual/skill-flowchart.svg": "52131bc790d6631add4c3cd29b25a9ee72950d9f5902ad15e806428bf1a2f3bd",
+    "manual/skill-manual.html": "f45ab5932823b762735dc071fa92762270fe98a0d2fe19a8b77d5ee7a40d320b",
+    "manual/skill-manual.json": "d6b03d2ccae29647565e00800ca62942edda521c809a13cef81967877b1bc68e",
+    "manual/skill-manual.md": "0751f5c67ec954b58a213c3dfbe85e3b34dd0fd2440d722d16809f264af81fbc",
+    "playbook.md": "102a4579ca7fdceb934042bee160866edcfab7303a2d99630a4181bbfa1864d7",
+    "playbook/plan-reading.md": "d80c31ef04ce9fefb48c22b2f9bc7f7cf72ff9f84c6ea706d6358989a618e9d2",
+    "playbook/requirements-interview.md": "024daf1f8ef674108c714bcd52ddb9d002f1d80021c03f77d04eae903badcc05",
+    "scripts/run.py": "ea08a99713bd5193a2530bfe9ab1d02bc99812249bc67266afab19975dfbc03b"
+  }
 }

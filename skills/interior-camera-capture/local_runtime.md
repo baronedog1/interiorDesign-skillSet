@@ -1,9 +1,7 @@
-# 截图环境
+# 设备外置运行配置
 
-依赖同安装根 HTML Skill 的 scripts/engine，具体 Python、Playwright 和 Chrome 路径见 [运行说明](../interior-html-modeling/local_runtime.md)。本 Skill 的 capture 是正式模型截图入口；渲染 Skill 不重复提供截图入口。
+本包在 Ubuntu、Windows 来酷和 Genmachine 使用同一份业务代码。Python 3.10+、Node、Chrome/Edge、中文字体及依赖由本机设计 runtime 配置提供；优先用设备登记的 interior-python 包装入口。普通任务不临时安装软件。所有输入和交付保存在当前设备当前工作区。
 
-截图前确认当前 HTML 同版、Windows 原生浏览器可初始化 WebGL2；Linux 开发回归不能充当 Windows 验收。render_shots 只关闭本次创建的 browser，不重启桌面、Bridge 或其他会话。
+HTML 和截图共享 interior-html-modeling/scripts/engine。纯 HTML 离线打开不需要 Python；编译依赖 jsonschema、shapely、numpy，截图使用 Playwright 和 INTERIOR_CHROMIUM 指定的浏览器。资源盒由本机包装器沿用，任务结束只关闭本次浏览器。依赖列表见正式 scripts 中的 requirements 文件。
 
-Windows SSH/服务会话的桌面 D3D 上下文存在间歇性初始化失败。自动截图的独立离线 Chrome 默认使用 SwiftShader 软件 WebGL；不是 AI 图片、不是硬件 GPU 验收，也不改变用户桌面 Chrome 设置。明确验证后可设置 INTERIOR_HEADLESS_RENDERER=hardware。仅加载本任务生成的离线模型，不用此自动化实例浏览外站。是否可用以实际文件页面 ready/加载错误为准，不在 about:blank 先做阻断检查。
-
-输出文件在来酷项目目录；renders.json 保留 sourceType=webgl，与原生生成严格区分。几何候选状态不阻止实际截图；真实浏览器失败单独报告，不捏造 PNG。
+平台凭据通过设备既有 IDK_ENV_FILE 或私有 .runtime 链接提供，分发包不包含凭据；不得跨设备复制登录态。原生绘图使用当前宿主实际提供的绘图工具，准备文件不等于生成图片。

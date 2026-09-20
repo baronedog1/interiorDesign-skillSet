@@ -11,6 +11,8 @@ with command('interior-floorplan-planning'):
 
  def main():
   p=argparse.ArgumentParser();p.add_argument('command',choices=['handoff','observe','anchor']);p.add_argument('layout');p.add_argument('--out',required=True);p.add_argument('--requirements');p.add_argument('--id');p.add_argument('--wall-id');p.add_argument('--offset',type=float,default=0);p.add_argument('--gap',type=float,default=0);a=p.parse_args();d=read(a.layout)
+  from kernel import evaluate
+  d=evaluate(d)['layout']
   requirements=None;requirements_out=None
   if a.command!='observe':
    source=Path(a.requirements) if a.requirements else Path(a.layout).with_suffix('.requirements.json')

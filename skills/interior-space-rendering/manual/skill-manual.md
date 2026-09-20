@@ -1,265 +1,157 @@
-# 原生绘图 · 粗模定位，参考图锁款 说明书
+# 同空间原生效果图
 
-版本：3.3.1
+版本：3.4.0
 
-~~~yaml
+用户给模型截图与设计参考 → 分清结构、款式与明确节点 → 准备同版参考和设计意图 → 调用宿主原生绘图形成首张 → 后续视角沿用定样与当前事实 → 用户获得真实生成的效果图
+
+
+## SKILL.md
+
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.3.1", category: interior-design}
+metadata: {version: "3.4.0", category: interior-design}
 ---
-~~~
+# 原生绘图效果图
 
-## 调用场景
+输入同版 scene.json、cameras.json、renders.json、粗模截图及精细家具参考图；输出原生效果图、调用回执与问题说明。粗模只管建筑、机位、家具功能/位置/朝向/约略尺度，绝不把粗模的块体或软包轮廓当锁款。锁款依据绑定的产品图片，后续同空间沿用精细定样；按参考款式放入粗模对应位置，保留产品比例，不非均匀拉伸。没有参考时可按已知需求建立概念定样，但不能声称已锁定用户产品。光影重新计算，不复制粗模照明。
 
-### 粗模定位 → 参考图片锁款 → 真实光影
+默认仍传带家具的完整粗模截图；仅用户明确要求白模/空白槽位时，主图隐藏家具、原JSON保留；截图命令同时生成同机位布局参考图，它只解释摆放，不锁粗模款式。此Skill生成二维效果图，不会把参考照片自动变成可编辑3D家具或回写HTML。读 [执行方法](playbook.md)，字段见 [共用合同](../interior-html-modeling/data_contract.md)。
 
-HTML不必先变高精模；建筑与位置依据粗模，款式依据精细参考图，二维生成不回写3D网格。
+入口 `python scripts/run.py ai-request SCENE CAMERAS RENDERS --shot ID --out request.json`；`native-prepare request.json capabilities.json --out job.json` 只准备任务，随后必须由 Agent 实际调用可用的原生图像生成工具并附完整参考图。完成后 `native-result job.json image.png invocation.json review.json --out result.json`。
 
-输入：同版HTML粗模截图、场景/机位/槽位、精细家具参考图片及用户意图
-输出：原生图片、调用回执、逐图问题
+有精细家具图片时，`ai-request` 加 `--products references.json`，用 placementId 绑定图片及已知真实 sizeMetres；照片锁款不要求已有品牌SKU。实际附图顺序由job给出，必须全部附上，不能只写“参考图”却漏传。新版referencePolicy分离旧定样索引，旧粗模风格定样不自动沿用。
 
-#### 粗模定位 → 参考图片锁款 → 真实光影
-- a：同版模型图、JSON、机位与指定资产；先看图和用户要求；不把配置当工具可用证明（详见 whole-bed）
-  - scripts/run.py：ai-request/native-prepare/native-result 入口
-- q：用户明确要求白模／空白槽位？；默认 furnished；不因效果差自动切模式（详见 modes）
-  - playbook.md：两模式、锁结构机位、家具细化与资产不变形
-- full：默认：完整粗模截图，只管布局；不照抄粗模造型和照明；按精细参考重建家具（详见 consistency）
-  - ../interior-html-modeling/playbook/timing.md：计时口径
-  - ../interior-html-modeling/scripts/engine/python/timing.py：正式命令自动计时
-- empty：是：建筑截图＋原 JSON 槽位；家具/柜体暂隐；位置、尺寸、朝向仍固定
-- prompt：粗模定位＋精细参考图锁款；产品图优先；精细定样其次；不锁粗模身份（详见 assets）
-  - ../interior-html-modeling/scripts/engine/python/render.py：两种模式、槽位、产品尺寸进入 prompt
-- call：真实宿主调用 → 看图 → 交付；没有工具或图片就如实报告；不拿截图冒充（详见 native）
-  - ../interior-html-modeling/scripts/engine/python/native_image.py：工具准备、实际调用回执和结果绑定
-- a → q：模式
-- q → empty：是
-- q → full：否：默认
-- full → prompt：完整图
-- empty → prompt：空槽图与 JSON
-- prompt → call：附图调用
+不得伪造工具可用性或真实回执。无宿主原生绘图时明确报告该能力缺失，不偷偷改走 WebGL、商业 API 或截图美化冒充完成。平台资产/推送调用独立平台 Skill。
 
-### 建筑不变，设计内容不再锁死
+人读 [PDF](SKILL_MANUAL.pdf)，工具条件见 [运行说明](local_runtime.md)。
 
-风格图提供设计语言，产品图提供款式，当前机位图才提供结构。
+每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](../interior-html-modeling/playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
 
-输入：当前源事实与用户需求
-输出：可追溯的设计决定及实际交接
+同空间/连通客餐厅、同风格：先生成并识图确认首张定样，再准备后续机位请求；后续附当前机位截图＋定样图＋指定产品图，不能各机位独立批量首发。ai-request 自动读取同输出目录 render-series.json，可用 --anchor-result 显式指定同系列结果。
 
-#### 建筑不变，设计内容不再锁死
-- style：实际查看平台风格模板与产品图；提炼墙/顶/灯/窗、材料、陈设密度；按本空间用途组织，不只提取木色
-  - playbook.md：设计意图与参考职责
-- brief：design-brief.json → --design-brief；common：全屋共用；spaces：按roomId差异；styleReferences：真实path、assetId及说明；实际图片加入job，不只写风格名称
-  - ../interior-html-modeling/scripts/engine/python/render.py：ai_request合并意图与真实附图
-- shell：不可变事实；建筑壳与洞口位置尺寸、机位；主要家具功能、位置与通行关系；产品身份来自绑定参考图
-  - ../interior-html-modeling/data_contract.md：壳体与设计提案的边界
-- design：可设计内容；原层高内天花饰面、灯具与光影；洞口内门窗框扇/五金、帘、玻璃；挂画、器物、绿植及意向窗外景观
-  - ../interior-html-modeling/scripts/engine/python/native_image.py：结构图/定样/产品/风格图完整传入
-- review：是否改变了不可变事实？；改墙/开口/主布局：回对应源头；新增合理陈设不是结构错误
-- yes：是：修源头；保留实际图与问题
-- no：否：审视设计品质；看光影、材质、构图与一致性
-- style → brief
-- style → shell
-- brief → design
-- shell → review
-- design → review
-- review → yes：是
-- review → no：否
+调用链：native-prepare → native-start JOB --out invocation.json → 实际调用 job 的原生工具并原样附图/提示词 → native-complete invocation.json 工具输出图片 --out invocation-completed.json → 识图 → native-result。这些登记脚本不是绘图工具，不能自行生成成功回执或调用ID。
 
-### 这个门后是阳台，不是另一间卧室
+完整设计先查看平台风格模板，提炼设计意图并写design-brief.json；ai-request加--design-brief，实际附入风格图。锁建筑壳与洞口位置尺寸，不锁粗模门窗构件、天花饰面或灯光；按同一设计意图完善硬装与陈设，不无依据加大件隔断。详见playbook。
 
-把空间身份和构图放到生成源头；看图后修源规则，不增加事后阻断器。
+本轮统一规则见 [空间连接与完整构图](../interior-html-modeling/playbook/space-connections.md)：规划先确认空间连接；HTML按真实门型/状态装配；正视主图带到天花与地面；渲染保留本机位可见空间身份，不把阳台画成房间。
 
-输入：本轮源事实与用户完整空间表达要求
-输出：可运行规则、可追溯镜头与空间关系
 
-#### 这个门后是阳台，不是另一间卧室
-- frame：当前镜头的结构图 + spaceContext；本房身份、画内开口位置、两端空间；门型/开合/玻璃性质来自同一HTML
-  - ../interior-html-modeling/scripts/engine/runtime/app.js：实际相机空间观测
-  - ../interior-html-modeling/scripts/engine/python/render.py：保存spaceContext
-- known：目标空间/外部景观已知？；“相邻”不等于全入画；外部null不等于花园
-  - ../interior-html-modeling/playbook/space-connections.md：空间身份、连接、开合、视野交接及默认值唯一合同
-- unknown：缺什么就回对应源头；未知保持未知，不以产品/风格图补造户型；旧截图缺数据：新任务重新编译和捕获
-- design：按已知连接设计真实可见内容；关闭玻璃门仍可看见阳台；不改成实墙；保持洞位/开合/隔断类型，框扇可精细化；户外意向按已知条件设计，注明非实景
-  - playbook.md：结构与可设计范围
-- native：原生绘图：完整画幅与精细家具；天花/地面按当前主图；同空间定样与产品继续沿用
-  - ../interior-html-modeling/scripts/engine/python/native_image.py：真实工具调用与回执
-- frame → known
-- known → unknown：否
-- known → design：是
-- unknown → native：明确未知/补事实
-- design → native：设计意图
+## 当前设计方法
 
-## 完整文件地图
-- MANIFEST.json：发布版本与完整文件清单
-- SKILL.md：调用范围、输入输出与关键规则
-- SKILL_MANUAL.pdf：面向人的算法说明书
-- local_runtime.md：原生工具运行与权限边界
-- manual/skill-flowchart.svg：同源说明书内容与图形
-- manual/skill-manual.json：同源说明书内容与图形
-- manual/skill-manual.md：同源说明书内容与图形
-- playbook.md：两模式、锁结构机位、家具细化与资产不变形
-- scripts/run.py：ai-request/native-prepare/native-result 入口
+先按任务读取 [已确认节点与精细出图](playbook/confirmed-nodes.md)。通用方法与用户参数分开，选择及覆盖见 [规则归属](../interior-html-modeling/playbook/rule-selection.md)。这些是生成方法，不新增强校验、门禁或审批。
 
-## 具体逻辑解释
 
-### 两种参照模式
+## playbook.md
 
-按实际输入、计算、分支和文件消费者展开。
+# 同机位、同空间、真实生成
 
-#### 两模式的源数据：显示可变，布局和机位不变
-- source：保存原布局与相机；placements：id/roomId/position/size/rotationY；size=[宽,高,深]米；不删除 Ubuntu 原数据
-  - ../interior-html-modeling/scripts/engine/python/render.py：load_scene、模式和同版校验
-  - ../interior-html-modeling/scripts/engine/schemas/layout.schema.json：原始布局结构
-  - ../interior-html-modeling/data_contract.md：两模式与槽位数据合同
-- default：已在主图明确选择空槽模式；仅用户明确要求：empty-slots + 请求记录；固定相机，保存材质和每个实例的可见性
-  - ../interior-camera-capture/scripts/run.py：捕获参数入口
-  - ../interior-html-modeling/scripts/engine/runtime/app.js：captureFrame 保存当前状态
-- explicit：finally：恢复捕获前场景；成功或异常都恢复材质、可见性和机位；显示暂变；JSON、家具尺寸和布局不改
-- empty：一次截图任务：空房主图＋布局辅助图；同一冻结相机分别捕获empty与furnished，各自恢复场景；主图隐藏家具；辅助图直观表达槽位，不锁粗模款式；保存两图摘要、同版sceneKey/cameraDigest和每步耗时
-- out：同相机：建筑主图＋布局参考，职责分离；空房主图管墙洞镜头；额外布局图管位置、方向、遮挡和裁切；产品图管精细款式；数字槽位保留，不让粗模身份进入锁款
-  - ../interior-html-modeling/scripts/engine/python/native_image.py：layoutReferences实际附图，不只写入提示词
-- source → default：原数据不变
-- default → empty：临时显示层
-- empty → explicit：捕获后或异常
-- explicit → out：恢复后保留真实记录
+先看模型参考图，知道当前空间墙、门窗、家具数量、朝向和相机。读取同版摘要，实际缺图或旧图不能当本次输入；需要补截图调用机位 Skill。对可见的设计问题保留说明并修正源头，不用硬评分拦住全部生成。
 
-### 谁决定家具款式与尺寸
+## 两种模式与默认选择
 
-粗模不拥有精细款式解释权；产品图优先，定样只管已出现的家具。
+默认 furnished：传入带全部活动家具、柜体及现有细节的完整HTML粗模截图，不必先制作高精度3D家具，也不擅自清空家具。粗模只管建筑、机位、功能布局、占地和约略尺度；其造型、细部比例、低模网格、纹理与照明不是效果图的外观依据。不要把“保持位置和大小”写成“保留所有家具身份和严格外包盒”。
 
-#### 款式来源：参考图锁款，不锁粗模
-- source：当前粗模与参考图片；粗模：建筑/机位/位置/约略尺度；参考图片：精细产品的造型与比例
-  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
-  - playbook.md：按参考图锁款、重建光影、尺寸与质量处理
-- product：该家具绑定了精细产品图？；--products：placementId/path；真实尺寸可未知，不要求品牌SKU
-- locked：是：按图锁定该款家具；保留参考图款式、部件、比例与CMF；丢弃粗模不同的扶手、底座和软包；产品图不改变房间、镜头与摆放
-- anchor：已有可见该家具的精细定样？；同系列/同策略，参考身份真实；不能从旧粗模图继承款式
-- reuse：是：沿用精细定样款式；当前粗模仍锁建筑与机位；按新视角重算反射、阴影
-  - ../interior-html-modeling/scripts/engine/python/native_image.py：真实附图顺序、原生调用与回收计时
-- concept：否：获取参考或建立概念首图；按需求选精细参考，平台取图走平台Skill；无参考时原生设计可信精细家具；明确概念选型，不假称已锁用户产品
-  - ../idk-canvas-ingest-agent/SKILL.md：按需获取平台家具图片
-- out：按对应位置与合理大小放入；重新计算真实光影；尺寸不符回选型/布局，不拉伸产品；不新增结构；首张定样后再扩展同空间，不复制粗模廉价几何
-- source → product
-- product → locked：是
-- product → anchor：否
-- anchor → reuse：是
-- anchor → concept：否
-- locked → out：具体产品优先
-- reuse → out
-- concept → out
+只有用户明确说“白模渲染”“空白槽位渲染”或“只保留结构墙体、家具按槽位重新做”等同义要求时，使用 empty-slots。不是没说风格就自动选白模，也不是效果不好就自动切白模。无需对已明确的白模要求重复确认。
 
-#### 图片与尺寸交接：技术条件不等于审美门禁
-- input：逐条读取产品参考绑定；placementId、path、sizeMetres?；size=[宽,高,深]米；未知为null
-  - ../interior-html-modeling/scripts/engine/python/cli.py：--products读取JSON列表
-  - ../interior-html-modeling/scripts/engine/python/render.py：粗模/参考图片分权、尺寸来源、附图编号与系列策略
-- binding：实例存在且图片文件可读？；placementId必须来自原布局；文件不能缺失
-- same：是否拿同内容粗模冒充产品图？；图片摘要与粗模截图相同？
-  - ../interior-html-modeling/scripts/engine/python/common.py：文件SHA与读取
-- err：报告具体输入错误，修正该参考后重新准备；不伪造产品身份；不改客户布局绕过问题
-- size：已给尺寸是否合法？；null合法；已给则为3个正有限数值；未知不代填粗模数值
-- emit：真实绑定进入prompt与原生附图；完整绑定表跨机位复用；同图按职责+SHA合并；一张产品图可对应多个placementIds；顺序：粗模→精细定样→产品→风格；不虚构5张上限
-  - ../interior-html-modeling/scripts/engine/python/native_image.py：真实附图顺序、原生调用与回收计时
-  - ../interior-html-modeling/data_contract.md：参考角色、sourceFrame/outputFrame合同
-- input → binding
-- binding → same：是
-- binding → err：否
-- same → err：是：输入误绑
-- same → size：否
-- size → err：否
-- size → emit：是
+空白槽位保留原 JSON（包括来自 Ubuntu 的已校准数据）的墙门窗、房间拓扑和 placements。仅在同一冻结机位截图期间隐藏 placements 对应活动家具及柜体的可见实例，不删除 JSON、不重新布局、不改变建筑；完成后恢复全部可见状态。保留每件家具 id、所属房间、position、rotationY、size=[宽,高,深]（米）作为目标槽位。它不是只把有家具截图变成灰色的 clay 材质模式。
 
-#### 当前镜头可见产品，不等于当前房间产品
-- in：全屋产品绑定＋冻结机位布局捕获；保留所有已选产品 placementId；客户脚本不预先按 roomId 删减
-  - ../interior-html-modeling/scripts/engine/python/render.py：接收全屋绑定，读取真实捕获记录
-- q：画内采样射线首个可见实体是该家具？；忽略透明面，保留实体墙遮挡；遍历所有房间，不改变模型
-  - ../interior-html-modeling/scripts/engine/runtime/app.js：framePlacementSamples
-- keep：是：加入本镜头候选；门外可见沙发/床带入真实款式图；再按图像包络投影与原图摘要组织绑定
-- no：否：本次采样未见，继续遍历；不是移除全屋选型；不附画外产品；极小局部可能漏采，仍需实际识图
-- in → q：逐实例
-- q → keep：是
-- q → no：否
+机位 Skill 截空槽图时使用 `--reference-mode empty-slots --white-model-requested`，可加 `--mode clay`。ai-request 同样声明这两个选项；默认不传。记录槽位列表、隐藏 ID、原 sceneKey/cameraDigest 与模式，不能把普通图和空槽图的回执混用。
 
-### 真实原生调用与识图
+## 请求中必须明确的规则
 
-按实际输入、计算、分支和文件消费者展开。
+房型、结构、墙体、门窗位置与空间尺度不变；机位位置、朝向、透视/正交、画幅与裁切同截图。按参考图片的精细款式重建家具，再放入粗模对应位置与合理尺度；不是重新布局，也不是给粗模贴皮。
 
-#### 真实出图链：准备不是调用，提示词不是保真证明
-- a：完整系列选型 → 当前画面产品 → 按职责/SHA去重；完整清单参与系列身份；只附当前投影产品；显式空附图不回退全套；画外产品不搬入镜头
-  - scripts/run.py：ai-request/native-prepare/native-result 入口
-  - ../interior-html-modeling/scripts/engine/python/render.py：ai_request 生成完整实际 prompt
-  - ../interior-html-modeling/scripts/engine/python/cli.py：三个命令与参数分派
-  - ../interior-html-modeling/scripts/engine/python/native_image.py：references 读取 frameProductReferences 并去重
-- q：当前宿主有原生绘图工具？；实际 toolName；无工具不能假写 available
-  - local_runtime.md：原生工具运行与权限边界
-- missing：否：报告能力缺失；不能换成 WebGL 或付费 API 冒充
-  - playbook.md：两模式、锁结构机位、家具细化与资产不变形
-- call：是：附完整/空槽图及产品图调用；宿主原生工具实际返回后保存图片；不伪造 providerRequestId 或调用成功
-- review：图像与结构、机位、资产相符？；结构/开口/布局/机位＋参考款式和真实比例；furnitureDetail/assetIdentity/assetScale
-- out：保留真实图片并如实交付；真实图片＋画幅差异提示；不拉伸、不藏问题；记录调用返回时间，不冒充供应商纯计算
-  - ../interior-html-modeling/scripts/engine/python/common.py：摘要与原子保存
-  - ../idk-canvas-ingest-agent/SKILL.md：需要私有上传时交给平台 Skill
-- a → q：工具
-- q → missing：否
-- q → call：是
-- call → review：自己看输出
-- review → out：是
-- review → out：否：带观察交付
+锁款分两种有据来源：产品/精细家具图片按placementId绑定，负责对应款式；同空间已识图选定的精细定样负责其中可见家具的跨机位一致性。具体产品图优先于整室定样。用户给的非品牌图片也可锁款；整室风格图不是所有家具的产品证据，先识别要用的家具并绑定清楚，不能照搬其户型。精细定样里没出现的家具不算已经锁定。
 
-#### 宿主5张输入：不丢产品，编排同职责原图
-- in：核对原图与产品绑定；先按原SHA和职责去重；原图保留，客户分别交付
-  - ../interior-html-modeling/scripts/engine/python/native_image.py：references
-- q：附图数量不超过宿主上限？；读取 maxReferenceImages；来酷默认5
-- pack：否：同职责照片排成参考板；产品图等比、白底、P编号；需要时合并风格图；保留原SHA及每格placementId；建筑/布局/定样独立
-- call：是：更新实际附图顺序后调用；不超限时附图保持原样；超限编排后由job明确P编号和绑定；登记真实调用和返回，准备文件不算出图
-- limit：编排后仍超出宿主容量？；实际接口容量，非审美门禁
-- error：是：保留完整输入，报告能力不匹配；不静默丢图，不伪报已生成；普通五类职责可编排到5张
-- in → q：核对数量
-- q → call：是
-- q → pack：否
-- pack → limit：编排结果
-- limit → error：是
-- limit → call：否
+无参考图片时先按授权从平台/网络寻找适用参考，或按已有需求建立明确标注的概念首图；不能拿粗模本身冒充产品参考。是否需用户补充只看是否缺少影响选型的关键要求，不强制每件商品都再审批。平台取图仍调用平台Skill，不把Key写入渲染包。
 
-### 先定样，再衍生同空间机位
+锁款保留参考家具的轮廓、构造、部件、纹理、颜色和比例；粗模中不同的扶手、底座、靠背等应舍弃。指定真实尺寸优先作为产品事实，与空间冲突应说明并调整选型/布局，而不是变形硬塞。概念选型尺寸未知时可按占位比例示意，必须标未知，不能当采购或施工尺寸。
 
-结构只由当前机位截图控制；首张图控制家具与CMF，不复制首张镜头。
+指定资产的真实尺寸通过产品元数据或用户给定 sizeMetres=[宽,高,深] 读取并与槽位比较。未知时标明未知、补查或询问，不能把槽位尺寸冒称产品实测。尺寸冲突回到布局/选型或取得用户明确调整意见，不扭曲产品。请求脚本把槽位、尺寸来源和这些约束写进实际 prompt，不能只留在说明书。
 
-#### 同空间多机位的真实参考链与计时
-- input：当前机位截图与空间系列；同布局/风格/模式/参考策略，开放空间同组；旧策略首图不自动沿用，不能篡改系列摘要
-  - scripts/run.py：ai-request/native-*入口
-  - ../interior-html-modeling/scripts/engine/python/render.py：连通空间系列与定样引用
-  - ../interior-html-modeling/scripts/engine/python/native_image.py：实际调用计时与结果登记
-- has：已有本系列识图确认的首图？；读取 render-series.json；是：附定样；否：先做首图
-- first：首张：当前截图＋精确产品参考；产品参考决定精细款式；粗模只管建筑/位置；无参考时建概念定样，不冒称用户指定产品
-- save：真实返回、逐图识图、登记定样；native-start / complete记录调用跨度；native-result保留观察；accepted登记首图
-- next：后续：新截图＋首张定样＋指定产品；粗模锁镜头与位置，精细图锁款式和CMF；referencePolicy隔离旧定样；原顺序附全部图片
-- output：同空间一致的多机位图与完成时间；逐图复核结构、家具、镜头及crossViewConsistency；方案交方案册；图片任务直接交付，质量问题如实说明
-- input → has
-- has → first：否
-- has → next：是
-- first → save
-- save → next：后续机位准备时读取
-- next → output
+按用户风格先形成完整设计意图，不把风格简化为木色。实际查看平台风格模板与适配的参考图，明确墙面、天花收口、灯具层次、窗帘、艺术品、器物与布景密度。按空间用途选择，不要求每间都加齐。建筑壳、洞口位置尺寸、机位和大件功能布局固定；门窗的框扇、分格、玻璃、五金、帘与表面处理可以重新设计，不能移动或扩大洞口。可在原层高内设计吊顶/灯槽及辅助照明，不虚构承重梁或冒称现状电气点位；自然光、反射、接触阴影重新计算。窗外可做符合视线和日光的意向景观，注明不是现场实景。不改变床头/沙发方向、不堵通道、不额外塞大件隔断。
 
-### 虚拟机位的原生渲染
+这不是只给粗模贴纹理，也不是允许生成器任意装修。先由Agent写design-brief.json，ai-request通过--design-brief把全屋共用与本空间意图及真实风格参考图带进请求。图像生成执行既定设计，后续机位沿用同一套设计意图与精细定样。
 
-由已实现代码展开，真实模型不变；虚拟取景须明示。
+实际请求referenceGuide标明从1开始的附图编号：第一张粗模控制建筑/机位/布局，精细定样只管外观，后面的产品图分别按placementId锁款，风格图只管设计语言与品质，不提供建筑或产品身份。按照native-prepare输出顺序真实附图；若要改提示词，改request后重新prepare，不能在工具调用时追加“保留所有家具身份”推翻新规则。
 
-#### 完整主体优先：同源取景与交接
-- a：同版完整床截图与产品/风格参考；截图管结构、位置与画幅；产品图管款式；用户美式轻奢意图进入design-brief
-  - playbook.md：粗模/产品/风格职责
-- b：读取实际空间与相机事实；读取spaceContext.cameraRepresentation；不是从截图猜户外/相邻房间
-  - ../interior-html-modeling/scripts/engine/runtime/app.js：快照、captureFrame与restoreCamera
-- q：当前截图是虚拟后退机位？；kind=virtual-axial-retreat
-- normal：保持普通房内画面；床头/床尾/两侧完整，不再裁断；沿用当前结构、家具位置与机位
-- retreat：解释近裁切，不补回遮挡墙；虚拟镜头不表示拆墙、扩房或缩床；精细家具替换保持完整床体与地面天花；只细化款式、材质、光影和陈设
-  - ../interior-html-modeling/scripts/engine/python/cameras.py：同源近裁切遮挡计算
-- out：原生绘图与实际识图交付；真实调用后逐张看床体、风格与空间关系；同空间后续图复用精细定样，不独立猜款
-  - ../interior-html-modeling/scripts/engine/python/render.py：保存PNG、请求与实际提示词
-- a → b：同版输入
-- b → q：判断
-- q → normal：否：普通
-- normal → out：继续
-- q → retreat：是：虚拟
-- retreat → out：同一交接
+capabilities 来自当前宿主实际暴露的工具，不凭配置文件推断。native-prepare 输出 ready-for-host-call 仍不是图片。Agent 调用原生工具时附图；工具返回才登记 source=host-native-tool、实际 toolName、status、jobDigest、outputSha256；请求ID只有服务真实返回才填写。
+
+自己查看最终图并与模型图、JSON 槽位和指定资产逐项比对：structure、openings、furnitureLayout、camera、furnitureDetail、assetIdentity、assetScale 各为 pass/fail；无指定资产时身份项注明不适用。记录具体问题位置。失败项不删除结果或偷换成参考图；交付实际图片和说明，修正对应源输入/生成提示后再按用户任务继续。提示词和检查不能保证生成模型绝不变形，不能未经识图就宣称保真。一次技术失败报告真实故障，不伪造完成，不无限自动重试。
+
+平台需要的项目身份、Key、下载/上传均调用 idk-canvas-ingest-agent；本 Skill 不读凭据，不调用平台付费生成。截图和原生结果来源必须在回执中区分。
+
+## 同空间定样与多机位
+
+同一开放空间使用一份完整产品绑定清单，不按当前画面裁成不同产品子集；画外对象不强塞进图。同图可绑定多件家具，程序按图片摘要与职责去重实际附件，保留全部placementIds。原生工具输入数量依实际宿主能力，不虚构统一五张上限。以同 layoutHash、风格、参照模式、完整产品绑定和开放连接空间形成 seriesKey。先准备一个正视主图、真实绘图并识图，native-result 的 accepted 结果写入 render-series.json 首张定样索引；其余机位随后准备，自动附定样图。分目录时用 --anchor-result。客餐厅连通共享一个系列，另一风格另建系列，不从上一风格偷用定样。
+
+第一张当前机位粗模只控制建筑、开口、投影、布局与镜头；定样图控制已建立的精细款式/CMF；产品图控制指定单件资产，款式绝不回退粗模。每次都附当前结构截图，不能只编辑上一张AI图而漂移。同一日景系列的物理光源一致，但随视角重算阴影和反射；另做黄昏等灯光方案时明确为新光照方案，不暗中改变同系列气氛。
+
+seriesKey包含referencePolicy，避免新版自动继承旧粗模外观定样；显式旧anchor不匹配时应重新建立精细首图，不篡改旧结果的seriesKey假装兼容。试验图若要转为正式定样，须按当前输入重新核对并建立真实请求/回执，不能把历史试图伪造成本次生成。
+
+无新增定样前不得并发准备同一系列全部首图；不同独立空间可并行。复核 crossViewConsistency 比较定样图中可见的相同家具、材质和尺度；首张注明不适用。技术登记不代替视觉判断，存在问题的图保留并说明，回源调整后再扩展，不用低标准 pass 掩盖问题。
+
+原生调用时间使用 native-start/native-complete，准备、等待、识图分开；详见 HTML Skill playbook/timing.md。改提示词必须重新 prepare/start，记录实际传入版本。没有服务请求ID时保留 null，不伪造。
+
+结果登记保存sourceFrame/outputFrame及frameObservation；比例不一致记问题，不用拉伸输出“修正”。比例一致不等于机位完全一致，仍查看墙角、开口和主体投影。此处生成的是二维效果图，精细家具没有自动回写HTML的3D网格。
+
+## 设计意图交接与识图
+
+design-brief.json是简单对象：common为全屋共用设计，spaces按roomId记录用途相关的墙/顶/灯/窗/陈设，styleReferences为[{path,assetId?,notes?}]实际图片。各空间继承common并覆盖同名条目；path使用当前设备真实文件。参考来源、产品真实尺寸与未知项仍由平台回执记录，Key不进入此文件。
+
+识图分别看“不可变事实是否漂移”和“设计是否完成”。新增适量花器、艺术品、灯具、吊顶饰面本身不是结构错误；移动墙、改洞、改变主要家具用途位置才回源处理。观察同时看主体构图、真实材料尺度、光线层次、产品辨识与同空间一致性，不能只有碰撞/哈希pass就宣称好看。未完成项如实交付说明，回最早出错的布局、机位或设计意图，不向提示词不断叠禁止条款。
+
+### 空槽仍有图像位置依据
+
+请求编译器同时传递原 JSON 世界槽位、冻结相机和 `imageSlotAnchors`。后者由实际相机投影计算，不靠绘图工具猜世界坐标；按图像位置与约略尺度安放参考产品，允许自然裁切。包络投影不判断墙后可见性，不是产品形状，不得拉伸填框。用户未指定空槽时仍用完整粗模截图。
+
+### 系列选型与本镜头输入分开
+
+同空间完整产品清单用于锁定系列，不能把全部产品照片无差别附给每个镜头。正式请求按图像槽位选择当前镜头产品，生成 `frameProductReferences`；画外产品仍保留在系列数据中，但不作为本镜头附图。这样既不因为镜头切换丢失同款关系，也不诱导工具把画外餐桌搬入沙发图。
+
+当前镜头不等于当前房间。准备请求时传入全屋已选产品的placementId绑定索引，不在客户脚本里先按roomId删产品；由捕获记录决定当前附图。新截图按实际冻结相机、可见表面射线采样记录 `visiblePlacementIds`，包括门外可见家具；不再以房间标签排除它们。采样不是逐像素证明，极薄/极小局部可能漏见，Agent仍需看图；发现遗漏应报告输入方法问题，不凭空补造产品。旧截图没有该字段时沿历史房间范围解释，不伪造新证据，正式新任务重编译并捕获。
+
+### 宿主参考图容量
+
+来酷原生绘图已实际返回最多5张参考图。`native-prepare`按能力清单 `maxReferenceImages`（本机默认5）组织真正附图：未超限不改变；超限先将同职责产品原图做等比、白底、带P编号的参考板，必要时合并风格参考板。建筑主图、同机位布局和同空间定样保持独立，不删产品或丢掉其placementId。原图、原SHA、各格绑定都记录在job，产品原图仍分别交付客户。参考板只是输入排版，不是效果图，不改变产品造型。Agent只按最终job附图顺序调用，不能继续使用旧图片编号。
+
+### 只向绘图交接当前相机坐标
+
+户型世界旋转90°不等于画面侧视90°。正式提示词使用由相机基底计算的相对朝向，不直接传世界坐标旋转要求绘图猜测转换。世界数据保留给代码；绘图收到正面/侧面/背面角度和未裁切投影范围。尊重当前冻结主图的天花和地面范围；不能为展示完整产品擅自改镜头。主图不是默认床头特写。
+
+### 空槽输入不能丢失直观布局
+
+空房主图负责墙体、洞口与镜头，但不包含家具的视觉位置。空槽模式的正式截图现在自动成对保存：空房主图＋同一冻结相机的布局示意图。ai-request和native-prepare附入两者，不让绘图仅凭数字槽位猜桌椅的前后关系。布局示意图只供摆放、遮挡和裁切；实际款式由绑定产品参考图决定，不继承粗模轮廓/工艺/材质，不搬用产品照片镜头。风格图与精细定样各司原职责，不能覆盖建筑。
+
+本次餐厅对照实验在加入布局参考后恢复了餐桌长边与前后两排椅子的关系，同时保持精细产品表现；这只是可用性证据，不是确定性保证。继续逐图看结构与产品，不增加审美阻断门禁、自动挪动或无限重试器。旧empty捕获记录兼容读取并提示其没有配对图；新任务重截，不能给旧已执行job补图后冒称原始输入。
+
+## 同机位空间身份与完整画幅
+
+实际ai-request携带renders中spaceContext，而不是仅靠粗模外观猜门后是什么。按其门型、开合、透明/磨砂/实板、两端空间和外部目标重建精细框扇；玻璃门可看见阳台不等于门已打开，入户外部未知不等于花园。开口的画面抽样范围只定位，不是精确遮罩。当前图里的天花、吊顶空间与地面保留，吊灯/窗景按同一设计意图完成；不后裁主图。合同见 [空间连接与完整构图](../interior-html-modeling/playbook/space-connections.md)。缺事实回规划/模型；画边抽样不足回捕获方法；不得往提示词无穷堆禁止句。
+
+窄卧室虚拟取景读取共享 space-connections.md：near/虚拟后退是相机表示，不是拆墙授权。以完整床体截图为几何和画幅参照，按美学/产品图细化床品与床架，不裁床，不补回相机前的剖切墙；以实际spaceContext解释可见空间。
+
+
+## playbook/confirmed-nodes.md
+
+# 让精细出图延续已确认节点
+
+接收同版模型截图、相机、需求侧车和产品/风格参考。先区分建筑事实、已确认构造关系、概念占位与可自由深化的外观。粗模不是精细产品款式，但已经明确的门数、真实接缝、柜桌避让、固定饰板、烟道、柜上吊顶和台面设备孔要延续，不能借风格重写。
+
+柜上白色带若为建筑吊顶，表现为连续天花饰面，不加柜门竖缝或把手；实际储物顶柜则保留门格。抽面、固定挡板与设备面板分别表达，内凹扣手有空间深度，不画成凸拉手或黑线。原生绘图中发现节点错，应追溯输入中哪个身份/参考有歧义，修正模型或交接后生成，不只加禁止词。
+
+没有指定风格种子吊顶时，按房间净高、设备、光线与柜体关系设计顶面；不机械给全屋加厚回形框。明确采用复杂顶面时保留设计意图，但按实际空间适配。连通空间同一套顶面和材料贯穿不同镜头；灯槽不能由未封闭柜顶空腔冒充。
+
+同空间第一张形成精细定样，后续用最新结构截图+该定样+当前产品图保持连续。图片不截穿柜体、不露非预期邻房断面。调整机位交回机位Skill；调整结构交回模型Skill，避免两套空间事实。此方法不新增自动强校验、门禁或评分阈值。
+
+
+## local_runtime.md
+
+# 设备外置运行配置
+
+本包在 Ubuntu、Windows 来酷和 Genmachine 使用同一份业务代码。Python 3.10+、Node、Chrome/Edge、中文字体及依赖由本机设计 runtime 配置提供；优先用设备登记的 interior-python 包装入口。普通任务不临时安装软件。所有输入和交付保存在当前设备当前工作区。
+
+HTML 和截图共享 interior-html-modeling/scripts/engine。纯 HTML 离线打开不需要 Python；编译依赖 jsonschema、shapely、numpy，截图使用 Playwright 和 INTERIOR_CHROMIUM 指定的浏览器。资源盒由本机包装器沿用，任务结束只关闭本次浏览器。依赖列表见正式 scripts 中的 requirements 文件。
+
+平台凭据通过设备既有 IDK_ENV_FILE 或私有 .runtime 链接提供，分发包不包含凭据；不得跨设备复制登录态。原生绘图使用当前宿主实际提供的绘图工具，准备文件不等于生成图片。

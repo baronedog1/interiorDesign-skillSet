@@ -5,7 +5,7 @@
 (function(C,T){'use strict';
  C.optimizeLocal=function(root){let merged=0;
   function walk(g){for(const c of [...g.children])if(!c.isMesh)walk(c);
-   const buckets=new Map();for(const c of g.children){if(!c.isMesh||c.isInstancedMesh||Array.isArray(c.material)||c.material.transparent||c.children.length||c.userData.noExport)continue;
+   const buckets=new Map();for(const c of g.children){if(!c.isMesh||c.isInstancedMesh||Array.isArray(c.material)||c.material.transparent||c.children.length||c.userData.noExport||c.userData.joineryRole)continue;
     const k=c.material.uuid+'/'+c.castShadow+'/'+c.receiveShadow;if(!buckets.has(k))buckets.set(k,[]);buckets.get(k).push(c);}
    for(const items of buckets.values()){if(items.length<2)continue;let n=0,nt=0;for(const o of items){n+=o.geometry.attributes.position.count;nt+=o.geometry.index?.count||o.geometry.attributes.position.count;}
     const ps=new Float32Array(n*3),ns=new Float32Array(n*3),uv=new Float32Array(n*2),ix=new Uint32Array(nt);let base=0,j=0;const p=new T.Vector3(),v=new T.Vector3(),nm=new T.Matrix3();

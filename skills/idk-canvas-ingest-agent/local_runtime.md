@@ -1,11 +1,7 @@
-# 内部凭据与平台执行
+# 设备外置运行配置
 
-Python 标准库执行 scripts/platform_bridge.py，入口 scripts/run.py；JSON 原子写工具复用 HTML Skill 的 scripts/engine/python/common.py。
+本包在 Ubuntu、Windows 来酷和 Genmachine 使用同一份业务代码。Python 3.10+、Node、Chrome/Edge、中文字体及依赖由本机设计 runtime 配置提供；优先用设备登记的 interior-python 包装入口。普通任务不临时安装软件。所有输入和交付保存在当前设备当前工作区。
 
-内部安装位置 `.runtime/baiende-platform.env`，只在来酷保留；或显式 IDK_ENV_FILE。实际键名 IDK_API_KEY、IDK_API_BASE_URL、IDK_TOOL_NAME、IDK_REQUEST_TIMEOUT_MS。管理员按用户授权从 Ubuntu 的受管凭据文件安全复制，不能在终端输出内容。Git、PDF、ZIP 分发排除 .runtime；内部部署同步凭据，不表示把密钥嵌入公开包。
+HTML 和截图共享 interior-html-modeling/scripts/engine。纯 HTML 离线打开不需要 Python；编译依赖 jsonschema、shapely、numpy，截图使用 Playwright 和 INTERIOR_CHROMIUM 指定的浏览器。资源盒由本机包装器沿用，任务结束只关闭本次浏览器。依赖列表见正式 scripts 中的 requirements 文件。
 
-生产 HTTPS https://www.baiende.com/api/v1；国内平台走来酷本地网络。外部下载不携平台 Key。连接错误只报告状态/错误类型，不输出请求头、完整异常或带签名链接。
-
-验收区分 profile、实际库读取、下载、私有上传回读；静态代码及 mock 不算生产联调。只有用户授权上传的文件才 --apply，本轮安装不自动公开社区内容。
-
-2026-09-07 生产字段差异：preview3d 使用 name/title/folderId/html/externalTool/externalRunId；不能混入媒体的 assetKind/origin/sourceType，也不能把 operationKey 放入请求体。幂等操作键通过 Idempotency-Key 请求头传递。媒体上传仍使用独立 materials[] 合同，不能把两类 payload 合并。
+平台凭据通过设备既有 IDK_ENV_FILE 或私有 .runtime 链接提供，分发包不包含凭据；不得跨设备复制登录态。原生绘图使用当前宿主实际提供的绘图工具，准备文件不等于生成图片。

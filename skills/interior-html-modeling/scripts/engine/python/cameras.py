@@ -16,9 +16,18 @@ def vec(x): return np.asarray(x, dtype=float)
 
 
 def corners(p):
-    a=math.radians(p['rotationY']); c,s=math.cos(a),math.sin(a)
-    x,y,z=p['position']; w,h,d=p['size']
-    return [[x+c*u+s*v,y+yy,z-s*u+c*v] for u in [-w/2,w/2] for yy in [0,h] for v in [-d/2,d/2]]
+    # Three.js Euler XYZ: apply Z, then Y, then X around the placement origin.
+    ax,ay,az=[math.radians(p.get(k,0)) for k in ('rotationX','rotationY','rotationZ')]
+    cx,sx,cy,sy,cz,sz=math.cos(ax),math.sin(ax),math.cos(ay),math.sin(ay),math.cos(az),math.sin(az)
+    x,y,z=p['position'];w,h,d=p['size'];out=[]
+    for u in [-w/2,w/2]:
+        for yy in [0,h]:
+            for v in [-d/2,d/2]:
+                a,b=cz*u-sz*yy,sz*u+cz*yy
+                a,c=cy*a+sy*v,-sy*a+cy*v
+                b,c=cx*b-sx*c,sx*b+cx*c
+                out.append([x+a,y+b,z+c])
+    return out
 
 
 def basis(position,target,up=(0,1,0)):
@@ -49,13 +58,15 @@ class Occluders:
     """Oriented solid boxes. Vectorised slab queries keep the candidate search bounded."""
     def __init__(self,layout):
         records=[];opening_states=resolve_openings(layout)
-        def box(id,position,size,rotation=0):
+        def box(id,position,size,rotation=0,rotationX=0,rotationZ=0):
             if min(size)<=.002:return
             a=math.radians(rotation);c,s=math.cos(a),math.sin(a)
-            axes=vec([[c,0,-s],[0,1,0],[s,0,c]])
-            records.append((id,vec(position)+vec([0,size[1]/2,0]),axes,vec(size)/2))
+            ax,az=math.radians(rotationX),math.radians(rotationZ);cx,sx,cz,sz=math.cos(ax),math.sin(ax),math.cos(az),math.sin(az)
+            matrix=vec([[1,0,0],[0,cx,-sx],[0,sx,cx]])@vec([[c,0,s],[0,1,0],[-s,0,c]])@vec([[cz,-sz,0],[sz,cz,0],[0,0,1]])
+            records.append((id,vec(position)+matrix@vec([0,size[1]/2,0]),matrix.T,vec(size)/2))
         for p in layout['placements']:
-            if p['size'][1]>.08:box(p['id'],p['position'],p['size'],p['rotationY'])
+            if p['size'][1]>.08:box(p['id'],p['position'],p['size'],p['rotationY'],p.get('rotationX',0),p.get('rotationZ',0))
+        for p in layout.get('structuralItems',[]):box(p['id'],p['position'],p['size'],p['rotationY'])
         for w in layout['walls']:
             a,b=vec(w['a']),vec(w['b']); length=float(np.linalg.norm(b-a)); tangent=(b-a)/length
             yaw=-math.degrees(math.atan2(tangent[1],tangent[0])); height=w['height']
@@ -198,7 +209,7 @@ def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=F
         width=min(max(cross_room)-min(cross_room),max(subject_width*1.25,(max(cross_room)-min(cross_room))*.8))
         base=vec(position)+hf*depth_back
         points=[list(base+right*x+vec([0,y-base[1],0])) for x in [-width/2,width/2] for y in [.025,layout['floor']['height']-.025]]
-        if whole_bed:points += [v for item in subjects for v in corners(item)]
+        points += [v for item in subjects for v in corners(item)]
         framing='whole-subject-and-full-height-room' if whole_bed else 'full-height-room-backdrop'
     else:points,center=_points(subjects,layout['floor']['height'],detail)
     f,r,u=basis(position,target);delta=vec(points)-vec(position);depth=delta@f
@@ -241,10 +252,10 @@ def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=F
     if not shot['metrics']['complete'] or clear<.55 or foreground>.35:
         shot['status']='review';shot['reviewNotes']=['完整包络、遮挡抽样或近景占幅存在风险；保留候选，实际截图复核。不隐藏实体。']
     else:shot['reviewNotes']=['几何检查可用；实际截图仍需逐图视觉复核。']
-    penalty=max(0,required-90)*50+(1-clear)*160+foreground*140+required+abs(float(position[1])-1.4)*3
+    penalty=max(0,required-90)*50+(1-clear)*2000+foreground*3000+required+abs(float(position[1])-1.4)*3
     if kind=='front':
         # Do not reward a tiny distant subject simply because it allows a narrow lens.
-        penalty=max(0,required-90)*50+max(0,required-75)*8+(1-clear)*160+foreground*140+abs(width-.68)*90+abs(position[1]-1.35)*8
+        penalty=max(0,required-90)*50+max(0,required-75)*8+(1-clear)*2000+foreground*3000+abs(width-.68)*90+abs(position[1]-1.35)*8
         penalty+=composition_cost
         penalty+=Polygon(room['polygon']).distance(Point(position[0],position[2]))*18
     return penalty,shot
@@ -253,6 +264,7 @@ def _evaluate(layout,room,position,target,subjects,frame,kind,occluders,detail=F
 def _camera_domain(layout,room):
     """Physical standing domain; adjoining functional zones do not become shot subjects."""
     from shapely.ops import unary_union
+    if room.get('cameraComposition',{}).get('roomOnly',False):return Polygon(room['polygon'])
     group={room['id']}
     while True:
         expanded=set(group)
@@ -331,7 +343,7 @@ def front_view(layout,room,frame,max_fov=100,occluders=None,subjects=None,label=
         if (vec([p.x,p.y])-vec(wall['a']))@normal<0:normal=-normal
     else:
         yaw=math.radians(subjects[0]['rotationY']);normal=vec([math.sin(yaw),math.cos(yaw)]);tangent=vec([normal[1],-normal[0]])
-    if not empty and any(k in subjects[0].get('componentId','') for k in ['sofa.','bed.','tv.','vanity','cabinet','kitchen','washer','bench.','desk']):
+    if not empty and any(k in subjects[0].get('componentId','') for k in ['sofa.','bed.','tv.','vanity','bath.toilet','bath.shower','cabinet','kitchen','washer','bench.','desk','table.dining']):
         # Furniture front is local +Z; never choose the reverse wall merely because it is closer.
         yaw=math.radians(subjects[0]['rotationY']);front=vec([math.sin(yaw),math.cos(yaw)])
         if not room.get('frontWallId'):normal=front;tangent=vec([normal[1],-normal[0]])
@@ -366,8 +378,8 @@ def front_view(layout,room,frame,max_fov=100,occluders=None,subjects=None,label=
                         shot['metrics'].update({'frontAxis':list(map(float,normal*direction)),'referenceWallId':wall['id'] if wall else None,'horizontal':abs(pitch)<1e-9,'pitchDegrees':round(math.degrees(pitch),3),'frontAngleDegrees':round(angle,6)});choices.append((score+abs(offset)*5,shot))
     # Narrow-room subject views: room-first, then explicit virtual axial retreat.
     # A camera near plane clips the foreground partition for this view only.
-    natural=[s for _,s in choices if s['metrics'].get('fullSubjectProjection',{}).get('complete') and s['fov']<=100 and s['metrics']['cameraHeight']>=1.0 and s['metrics'].get('clearSampleRatio',0)>=.9]
-    if not natural and not empty and any(p.get('componentId','').startswith('bed.') for p in subjects):
+    natural=[s for _,s in choices if s['metrics'].get('complete') and s['metrics'].get('surfaceConstruction',{}).get('ceiling',0)>=.04 and s['metrics'].get('surfaceConstruction',{}).get('floor',0)>=.04 and s['metrics'].get('fullSubjectProjection',{}).get('complete') and s['fov']<=100 and s['metrics']['cameraHeight']>=(1.4 if any(p.get('componentId','').startswith('bed.') for p in subjects) else 1.0) and s['metrics'].get('clearSampleRatio',0)>=.9]
+    if not natural and not empty and room.get('cameraComposition',{}).get('allowVirtualRetreat',False):
         aim=center[[0,2]]
         axis=poly.intersection(LineString([aim,aim+normal*30]))
         segments=list(axis.geoms) if hasattr(axis,'geoms') else [axis]
@@ -380,12 +392,13 @@ def front_view(layout,room,frame,max_fov=100,occluders=None,subjects=None,label=
                 near=retreat+max((w['thickness'] for w in adjacent),default=.2)/2+.03
                 forward=vec([-normal[0],0,-normal[1]])
                 minimum=min((vec(v)-vec(pos))@forward for p in subjects for v in corners(p))
+                clipped_foreground=[]
                 if minimum<=near+.06:continue
                 clipped=occluders.with_near_plane(pos,forward,near)
                 result=_evaluate(layout,room,pos,target,subjects,frame,'front',clipped,near=near)
                 if result:
                     score,shot=result
-                    shot['metrics'].update(frontAxis=list(map(float,normal)),referenceWallId=wall['id'] if wall else None,horizontal=True,pitchDegrees=0,frontAngleDegrees=0,virtualRetreat=True,retreatMetres=retreat,projectionCut='foreground-near-plane; geometry unchanged')
+                    shot['metrics'].update(frontAxis=list(map(float,normal)),referenceWallId=wall['id'] if wall else None,horizontal=True,pitchDegrees=0,frontAngleDegrees=0,virtualRetreat=True,retreatMetres=retreat,projectionCut='foreground-near-plane; geometry unchanged',foregroundCutIds=clipped_foreground)
                     shot['reviewNotes'].append('虚拟正视后退机位：仅本镜头近裁切前方隔断；保留模型，不是现场可站摄影位置。')
                     choices.append((score+20+retreat*5,shot))
     if not choices:
@@ -393,9 +406,11 @@ def front_view(layout,room,frame,max_fov=100,occluders=None,subjects=None,label=
         if math.dist(pos,target)<.05:target[2]-=.5
         shot=base_shot(room['id']+'-front',room['name']+' · 正视待调整',room['id'],pos,target,80,frame,'front')
         shot['id']=room['id']+'-'+label;shot['status']='review';shot['subjectIds']=[] if empty else [p['id'] for p in subjects];shot['metrics']['frontSolved']=False;shot['reviewNotes']=['正视站位尚无可用解；这是诊断图，不是假称正视合格。回查主体/宿主墙/房间输入，不隐藏实体。'];return shot
-    if any(p.get('componentId','').startswith('bed.') for p in subjects):
-        complete_choices=[(score,s) for score,s in choices if s['metrics'].get('fullSubjectProjection',{}).get('complete') and s['metrics'].get('cameraHeight',0)>=1.0 and s['metrics'].get('clearSampleRatio',0)>=.9]
+    if not empty:
+        complete_choices=[(score,s) for score,s in choices if s['metrics'].get('fullSubjectProjection',{}).get('complete') and s['metrics'].get('cameraHeight',0)>=(1.4 if any(p.get('componentId','').startswith('bed.') for p in subjects) else 1.0) and s['metrics'].get('clearSampleRatio',0)>=.9]
         if complete_choices:choices=complete_choices
+        full_room_choices=[(score,s) for score,s in choices if s['metrics'].get('complete') and s['metrics'].get('surfaceConstruction',{}).get('floor',0)>=.04 and s['metrics'].get('surfaceConstruction',{}).get('ceiling',0)>=.04]
+        if full_room_choices:choices=full_room_choices
     shot=min(choices,key=lambda x:x[0])[1];shot['metrics']['candidateCount']=len(choices)
     shot['id']=room['id']+'-'+label;shot['name']=room['name']+' · '+label+' 正视';shot['metrics']['frontSolved']=True
     if empty:shot['subjectIds']=[];shot['metrics']['architecturalSubject']=True
@@ -445,16 +460,34 @@ def compile_cameras(scene,frame,add_front=True):
             # One front photographs one functional face. A whole-room envelope
             # spanning unrelated functions is a layout view; primary still includes full-height room.
             name=(room.get('type','')+' '+room['name']).lower()
-            for names,components in [(['bedroom','卧'],['bed.']),(['kitchen','厨'],['kitchen.sink']),(['bath','卫'],['bath.vanity'])]:
+            for names,components in [(['bedroom','卧'],['bed.']),(['dining','餐厅'],['table.dining']),(['study','书房'],['desk','custom.study-desk']),(['kitchen','厨'],['kitchen.sink']),(['bath','卫'],['bath.vanity','bath.toilet'])]:
                 primary=next((p for p in own if any(p['componentId'].startswith(k) for k in components)),None)
                 if primary and any(k in name for k in names):groups=[('front',[primary])];break
+            if any(k in name for k in ['kitchen','厨']):
+                # An explicitly requested second kitchen subject gets its own functional-face view.
+                hob=next((p for p in own if p['componentId'].startswith('kitchen.hob') and p['id'] in room.get('subjectIds',[])),None)
+                if hob and not any(g and hob in g for _,g in groups):groups.append(('hob-front',[hob]))
+            if any(k in name for k in ['bath','卫']):
+                wet=next((p for p in own if p['componentId'].startswith('bath.toilet')),None)
+                if wet and any(p['componentId'].startswith('bath.vanity') for p in own):groups.append(('wet-front',[wet]))
+            if any(k in name for k in ['closet','dressing','衣帽']):
+                cabinets=[p for p in own if 'cabinet' in p['componentId']]
+                if cabinets:groups=[('front',[cabinets[0]])]+[('cabinet-'+str(i)+'-front',[p]) for i,p in enumerate(cabinets[1:],1)]
             if any(k in (room.get('type','')+' '+room['name']).lower() for k in ['balcony','阳台']):
                 fixtures=[p for p in own if any(k in p['componentId'] for k in ['washer','vanity','cabinet','bench.'])]
                 if fixtures:groups=[('front',[fixtures[0]])]+[('fixture-'+str(i)+'-front',[p]) for i,p in enumerate(fixtures[1:],1)]
             for label,subjects in groups:
                 if subjects==[]:continue
                 shot=front_view(layout,room,frame,occluders=obstacles,subjects=subjects,label=label)
-                if shot:shots.append(shot)
+                if shot:
+                    shots.append(shot)
+                    if shot['status']=='review' or shot['metrics'].get('virtualRetreat'):
+                        complement=_preview(layout,room,frame,obstacles,subjects=subjects)
+                        if complement:
+                            complement['id']=room['id']+'-'+label+'-room'
+                            complement['name']=room['name']+' · 室内补充全貌'
+                            complement['reviewNotes'].append('实际室内候选；不隐藏家具，正视受阻时作为补充。')
+                            shots.append(complement)
         # Per-room primary frames precede supplements. Overview/plan are not room photographs.
         room_order={r['id']:i for i,r in enumerate(layout['rooms'])}
         shots.sort(key=lambda s:(room_order.get(s['roomId'],-1),0 if s['kind']=='front' else 1))

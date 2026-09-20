@@ -7,6 +7,7 @@ from common import read,write
 def main(stage):
     p=argparse.ArgumentParser(description={'model':'JSON 到稳定 Three.js HTML','camera':'保留预设并补正视机位','render':'原生绘图任务准备与真实结果登记'}[stage]);sub=p.add_subparsers(dest='command',required=True)
     if stage=='model':
+        item=sub.add_parser('cabinet-run');item.add_argument('layout');item.add_argument('request');item.add_argument('--out',required=True)
         build=sub.add_parser('build');build.add_argument('layout');build.add_argument('--out',required=True);build.add_argument('--presets');build.add_argument('--style')
         for cmd in ['style-check','style-add']:
             item=sub.add_parser(cmd);item.add_argument('recipe')
@@ -29,7 +30,10 @@ def main(stage):
         native=sub.add_parser('native-complete');native.add_argument('invocation');native.add_argument('image');native.add_argument('--out',required=True)
     a=p.parse_args()
     try:
-        if stage=='model' and a.command in ['style-resolve','style-evidence']:
+        if stage=='model' and a.command=='cabinet-run':
+            from joinery import cabinet_run
+            r=cabinet_run(a.layout,a.request,a.out)
+        elif stage=='model' and a.command in ['style-resolve','style-evidence']:
             from styles import resolve_style,check_evidence
             r=resolve_style(a.query) if a.command=='style-resolve' else check_evidence(read(a.recipe))
             if getattr(a,'out',None):write(a.out,r)

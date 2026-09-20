@@ -72,6 +72,9 @@ def import_html(path,out):
     saved=json.loads(parser.data['saved-project']) if parser.data.get('saved-project') else None
     layout=saved['layout'] if saved else json.loads(parser.data['project-json'])
     if saved:layout['customStyle']=saved['styleRecipe']
+    from kernel import evaluate
+    layout=evaluate(layout)['layout']
+    if saved:saved['layout']=layout
     from validate import validate_layout
     validate_layout(layout,strict=True);write(out,layout)
     state_path=Path(out).with_suffix('.editor.json')

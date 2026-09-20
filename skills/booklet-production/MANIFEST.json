@@ -1,26 +1,6 @@
 {
-  "name": "booklet-production",
-  "version": "4.1.1",
-  "platform": "windows",
-  "upstream": "Ubuntu booklet-production 3.3.0 (read-only reference)",
-  "privateCredentialsIncluded": false,
-  "sha256": {
-    "assets/magazine.css": "a9f13736b9b2f69ee85c1bac6d8b439bd801ffdd316b1ac35046a5cead04d6bc",
-    "data_contract.md": "2046d60cabd25459a890a6a5499b28541309be1dac46fa0f9bacdcebc93caf1c",
-    "expected_outcome/demo.pdf": "aac4601bd96a916f79a783cd461acab730c9e4c044ad7296984d6c5866e6b031",
-    "expected_outcome/expected_outcome.md": "2d7c1861bc28a32897bee8d3601a28426274448e6ebb18d7317481ead5f75f1e",
-    "local_runtime.md": "94d424c80d3cc77c1c99eb8202137073f9d5ad3e27d8f683a6738ceb6dc187a7",
-    "manual/skill-flowchart.svg": "e7085e820b3131c4c65004d19463a2e33d5b672c6f93e3bacc914b47f2ed2b05",
-    "manual/skill-manual.json": "ccdd3854b05783fdf8810c896de1e92207ffaf43fee4744b8b26384b618fd081",
-    "manual/skill-manual.md": "b60819d80894a21cd26ba749774818fcd9625c51520c6b364c99a71a6e8e3c88",
-    "playbook/example-brief.json": "752ee3e0c0e365302bbe0c9656fe538872efbe1778faedc3d877623b7d3c9bf8",
-    "playbook.md": "54d5bf9fcd608567b0a60b769acc4f6511c12fb92e29962f7ede5b4b7cc6e9f8",
-    "scripts/run.py": "bae87e11c12dac2bc5735bf450a13a39bb0d5b60983e8e5741e47cf9616aa5e4",
-    "scripts/scripts.md": "f524bd6dfcef66340ffc565c3339d179e67274c894212cea3ccdfcc74fc53c79",
-    "SKILL_MANUAL.pdf": "38d785c090975b79b92398ebbda8e58ae2fcd08cf437fba52db6eff905db89e0",
-    "SKILL.md": "edf39fe5669ea3bf417ac35bdde0d571aa5ab0a1d954baead5565b0583824bb8"
-  },
-  "file_count": 15,
+  "version": "4.2.0",
+  "release": "ubuntu-design-2026.09.20",
   "files": [
     "MANIFEST.json",
     "SKILL.md",
@@ -31,11 +11,32 @@
     "expected_outcome/expected_outcome.md",
     "local_runtime.md",
     "manual/skill-flowchart.svg",
+    "manual/skill-manual.html",
     "manual/skill-manual.json",
     "manual/skill-manual.md",
     "playbook.md",
+    "playbook/design-facts.md",
     "playbook/example-brief.json",
     "scripts/run.py",
     "scripts/scripts.md"
-  ]
+  ],
+  "file_count": 17,
+  "sha256": {
+    "SKILL.md": "683135c71e853fc9a46a53055331f60b14e97b327e05c5220085fd35cd987522",
+    "SKILL_MANUAL.pdf": "2a030159fa2bc9d87c55f4a5e6b36dbc54b30f024ad4189e0a24994e8053c702",
+    "assets/magazine.css": "a9f13736b9b2f69ee85c1bac6d8b439bd801ffdd316b1ac35046a5cead04d6bc",
+    "data_contract.md": "2046d60cabd25459a890a6a5499b28541309be1dac46fa0f9bacdcebc93caf1c",
+    "expected_outcome/demo.pdf": "aac4601bd96a916f79a783cd461acab730c9e4c044ad7296984d6c5866e6b031",
+    "expected_outcome/expected_outcome.md": "2d7c1861bc28a32897bee8d3601a28426274448e6ebb18d7317481ead5f75f1e",
+    "local_runtime.md": "608d60f2e933bf7dd7f60702fdf820370426f243561ecbc28c55f5fb2ed0fe0d",
+    "manual/skill-flowchart.svg": "344e6c2819ff281dd0821f36f657701e5cf91156d22ea21d3c3a8f10c9fff42b",
+    "manual/skill-manual.html": "1439eb4d9b9ddfaf0855b498610fc43cd1a9178f65e5f1be43dcc6ea929586e5",
+    "manual/skill-manual.json": "9ce398845ea4513ef6ceb26795b6cf33ad8f2097d67c8f0d01f3981bdbcd54cb",
+    "manual/skill-manual.md": "795cf7eb20fcb7c97e5cf690b290676b1505744147fb7f172c04064e0b3e1087",
+    "playbook.md": "54d5bf9fcd608567b0a60b769acc4f6511c12fb92e29962f7ede5b4b7cc6e9f8",
+    "playbook/design-facts.md": "80548e1fdf855e12a06211ae960f46fcddb7ab8d2ff635a9c06795a06cba6178",
+    "playbook/example-brief.json": "752ee3e0c0e365302bbe0c9656fe538872efbe1778faedc3d877623b7d3c9bf8",
+    "scripts/run.py": "bae87e11c12dac2bc5735bf450a13a39bb0d5b60983e8e5741e47cf9616aa5e4",
+    "scripts/scripts.md": "f524bd6dfcef66340ffc565c3339d179e67274c894212cea3ccdfcc74fc53c79"
+  }
 }

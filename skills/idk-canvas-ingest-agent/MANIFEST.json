@@ -1,17 +1,32 @@
 {
-  "version": "3.1.0",
-  "file_count": 11,
+  "version": "3.1.1",
+  "release": "ubuntu-design-2026.09.20",
   "files": [
-    ".gitignore",
-    "local_runtime.md",
     "MANIFEST.json",
+    ".gitignore",
+    "SKILL.md",
+    "SKILL_MANUAL.pdf",
+    "local_runtime.md",
     "manual/skill-flowchart.svg",
+    "manual/skill-manual.html",
     "manual/skill-manual.json",
     "manual/skill-manual.md",
     "playbook.md",
     "scripts/platform_bridge.py",
-    "scripts/run.py",
-    "SKILL_MANUAL.pdf",
-    "SKILL.md"
-  ]
+    "scripts/run.py"
+  ],
+  "file_count": 12,
+  "sha256": {
+    ".gitignore": "3e782aec83661b3537393e8f42b401b72f1265d22f51d8c46d5a6b84e1022e13",
+    "SKILL.md": "3e88940ed2a4093af5116db2fdfdcd42c1d15f918ba4861c4527ca9b1947db8a",
+    "SKILL_MANUAL.pdf": "38eda113c6ca65093624d123db6f5089151ec32f392c6be04efbc0cb336da866",
+    "local_runtime.md": "92882a9eb89b78eaf3340d922e0c04fd0fd1df330e0e12a0551f0ee674fd90e7",
+    "manual/skill-flowchart.svg": "2de19294b8cb4010797b688a5ce72e94f112c0f4e7dde635c832a3be72d81ac3",
+    "manual/skill-manual.html": "d61d9324850135dc42e59ab18268ae31f6eb45bddb7492db6c7ee86b89a64018",
+    "manual/skill-manual.json": "5fb08eaa7329c2cd55024f130ccad675b4e3c63b08598257d38c656b458a8619",
+    "manual/skill-manual.md": "e9c60a7089dbd8b8093223e95ccc74b0e2248338e0b2716a452d1dd639901059",
+    "playbook.md": "b29fcccfd6bba055bb1036ca2e054420b888d51d9b3194c905dc2dbd100a255e",
+    "scripts/platform_bridge.py": "3f08ee336fb4c4a138ddca398db69d5ee13fb0230b1369a009c611ad6b2a22d5",
+    "scripts/run.py": "9a360c90266d02cee8ebe1c22aa5be0e1295ef76cc50c7550a2101ad38d9a526"
+  }
 }

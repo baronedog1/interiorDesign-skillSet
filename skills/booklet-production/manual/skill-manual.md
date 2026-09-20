@@ -1,126 +1,103 @@
-# 小酷设计编排与杂志式方案册 说明书
+# 设计图文方案册
 
-版本：4.1.1
+版本：4.2.0
 
-~~~yaml
+用户给当前方案图文资料 → 确定设计故事与交付范围 → 组织同版主图和节点说明 → 通过正式版式生成图文页面 → 制作高清文档与可读预览 → 用户获得图文方案册
+
+
+## SKILL.md
+
 ---
 name: booklet-production
 description: 将同一室内设计方案的布局、空间图片、材料与用户产品整理成杂志式 HTML 和 PDF 方案册；用户只要图片时不调用。不负责重新建模或生成效果图。
 metadata: {"version":"4.1.1","source_authority":"lecoo-windows-device","category":"interior-design"}
 ---
-~~~
 
-## 调用场景
+# 室内设计方案册
 
-### 完整设计及按目标交付
+用户要求完整方案、设计图册或 PDF 时调用。读取当前项目资料，按设计故事组织页面，运行 `scripts/run.py brief.json --out <任务目录>`，得到高清 PDF、发送版 PDF、可离线 HTML 和逐页预览。输入字段见 [数据合同](data_contract.md)，方法与版式选择见 [制作方法](playbook.md)。
 
-先生成准确户型，再用机位看空间；风格落入模型后刷新正式截图，渲染与交付各归对应 Skill。
+高频数据入口：当前 `C:\AgentWorkspaces\InteriorDesign\projects\<projectId>` 中的同版布局 JSON、模型、机位、实际渲染图片及回执；临时项目则读取用户当前隔离目录。按 projectId、version、shotId 定位，不取其它项目的漂亮图片填空。客户资料缺失先回查当前任务产物；仍缺则说明缺口并标阶段方案。首次使用先按 [运行环境](local_runtime.md) 确认 Python、Chrome 和字体可用。
 
-输入：客户户型图、偏好与交付要求
-输出：对应图片、模型或完整方案 PDF
+先完成户型规划 → HTML 建模 → 机位 → 用户风格 CMF／必要选型 → 更新后的同机位截图 → 原生绘图，再入册；已有同版成果按需复用，不重复执行全链。完整方案不代表施工图、工程预算或工程可实施承诺。
 
-#### 从客户户型，到对应的交付物
-- a：客户原图 + 偏好 + 交付目标；先区分完整方案、图片或单一步骤任务。；已有同版可靠成果按需复用，不强制重跑。
-  - SKILL.md：方案册调用边界
-- b：规划 JSON → 代码生成整户型；规划：尺寸、拓扑、门窗、通路与家具锚点。；HTML：严格按代码生成；错在源头就改源头。；不把漂亮风格参考图当成客户户型。；随步骤记录开始、完成、耗时；代码与绘图等待分开。
-  - playbook.md：接收上游事实，不另造布局
-  - ../interior-html-modeling/playbook/timing.md：计时口径
-  - ../interior-html-modeling/scripts/engine/python/timing.py：正式命令自动计时
-- c：初始机位看布局 → 用户风格入模；先看真实空间关系，再按用户偏好应用 CMF。；平台资产按需获取，指定家具保持尺寸比例。；改风格不默认改户型或家具摆放。
-- d：保存风格版 → 正式机位与截图；只改 CMF 可复用机位几何，但刷新同版截图。；改结构或家具包络，重新求解受影响视角。；旧截图不能配新模型。
-- f：原生绘图：同机位、同结构；默认带完整活动家具与细节。；用户明确要求才使用白模／空白槽位。；精细化普通家具；指定资产不变形、不失真。
-- q：交付目标是完整方案册？；是：编排 PDF；否：按指定格式交付。
-  - SKILL.md：触发判断
-- g：否：发送图片／HTML／JSON；用户要图片就发图片，不强塞 PDF。；实际发送成功才算交付。
-- h：是：第六项 booklet-production；同版布局、风格、效果、材料组成方案册。；缺实际渲染只能标阶段方案。
-  - playbook.md：杂志式内容编排
-  - data_contract.md：brief 输入与来源
-- i：发送完整方案 PDF；平台上传按需调用平台 Skill。；方案册不自动等于施工图、报价或采购承诺。；方案默认高清PDF＋讲解；记录原生结果与有效DPI。
-- a → b
-- b → c
-- c → d
-- d → f
-- f → q
-- q → g：否
-- q → h：是
-- h → i
+普通客户册用最终效果图讲空间，布局说明使用真实布局图。截图不得冒充原生渲染；缺效果图可以明确交付“阶段方案”，不伪造完成。白模不是必需输入：默认不加机位小图；用户需要对照时可加入同 shotId 的完整模型或显式空槽参照。
 
-### 制作有内容差异的设计杂志
+保留真实图的结构、比例和用户资产身份，不为了版面拉伸图片；平面图完整呈现。主图、图文、双图、材料页按内容选择，不固定每空间一套版式或固定页数。客户信息与素材只存在来酷项目目录；本 Skill 不读 API Key。需要平台素材或上传时调用 `idk-canvas-ingest-agent`，本机 PDF 不自动公开。
 
-每页按内容选择布局。宋体标题、清晰正文、大幅照片和细线页码形成统一气质，而不是统一框图。
+运行环境见 [local_runtime.md](local_runtime.md)，脚本说明见 [scripts/scripts.md](scripts/scripts.md)，[流程说明书](SKILL_MANUAL.pdf)，[视觉样册及适用边界](expected_outcome/expected_outcome.md)。
 
-输入：当前同版布局、图片、材料与文字
-输出：离线 HTML、高清 PDF、发送版 PDF
+每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](../interior-html-modeling/playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
 
-#### 内容决定版式，而不是把每页套成同样的框
-- a：同版资料 → 方案叙事；原图／布局、最终效果图、指定产品、CMF。；标清参考照片、模型截图和真实渲染。
-  - data_contract.md：来源、shotId、状态
-  - playbook.md：内容与叙事
-  - playbook/example-brief.json：可编辑的封面与平面输入例子
-- b：按内容选择页面；封面引入 → 平面说明 → 空间故事。；图组、材料与收束按实际需要插入。；无固定页数、无强制白模插图比例。
-  - assets/magazine.css：七类响应式杂志版式
-- c：中文宋体 + 清晰正文 + 大图；暖白纸感、低饱和点缀、细线页码。；空间图保持原比例，封面裁切须显式允许。；材料色板不冒充实物样板。
-  - expected_outcome/expected_outcome.md：样册来源与适用边界
-  - expected_outcome/demo.pdf：实际排版样例，不是客户渲染
-- d：本机 Chrome 实际排版；图片内嵌，文字作为数据转义。；生成高清／发送两份 PDF 与离线 HTML。；字体、长文分页详见蓝色逻辑页。（详见 pagination）
-  - scripts/run.py：document / picture / build
-  - local_runtime.md：Windows Python 与 Chrome
-- q：逐页看图，是否符合本次内容？；图片未变形，文字不溢出。；信息来源真实、版式服务于本页叙事。
-- z：是：发送所需文件；不是只保存路径；检查实际发送回执。；客户要方案发 PDF，模板包另行提供。
-- r：否：改对应源头，再排版；资料错改 brief；版式错改 CSS／分页逻辑。；不盖住错误、不缩到看不清、不伪造图片。
-- a → b
-- b → c
-- c → d
-- d → q
-- q → z：是
-- q → r：否
-- r → d
+用户说“交付方案”但未明确格式，默认交付带文字说明的 booklet-highres.pdf；只有明确仅要图片才省略 PDF。每张 render 图片关联 resultPath、shotId、schemeId；同一空间多机位一起讲清布局与材料，源图低分辨率不能靠放大宣称高清。
 
-## 完整文件地图
-- MANIFEST.json：Windows 分支、版本与文件摘要
-- SKILL.md：调用入口、范围与交付边界
-- SKILL_MANUAL.pdf：编排、排版与分页算法说明书
-- assets/magazine.css：七类页面的字体、图片、色板、分页与移动布局
-- data_contract.md：方案册 JSON 与图片来源字段
-- expected_outcome/demo.pdf：实际 Windows 生成的六页杂志排版演示
-- expected_outcome/expected_outcome.md：视觉样册来源、参考维度与非客户成果边界
-- local_runtime.md：Windows 运行环境和依赖
-- manual/skill-flowchart.svg：完整设计编排总览
-- manual/skill-manual.json：各场景与算法流程图的可维护源数据
-- manual/skill-manual.md：说明书自然语言源
-- playbook.md：杂志式编排、来源语义和源头修正
-- playbook/example-brief.json：可编辑的封面与平面页输入示例，图片替换为当前项目
-- scripts/run.py：本地生成、文字分页、PDF 双版本与回读
-- scripts/scripts.md：标准调用与错误说明
 
-## 具体逻辑解释
+## 当前设计方法
 
-### 分页、图片与 PDF 回读
+先按任务读取 [当前设计事实与图文表达](playbook/design-facts.md)。通用方法与用户参数分开，选择及覆盖见 [规则归属](../interior-html-modeling/playbook/rule-selection.md)。这些是生成方法，不新增强校验、门禁或审批。
 
-排版规则作用于页面，不改变空间和家具。技术检查与逐页识图共同定位源头，不能以报告替代看图。
 
-#### 文字分页与独立 PDF 回读：真实算法
-- a：读取本地资料并安全生成 HTML；转义标题、正文与图片说明；无效输入报真实技术错误。；透明资产先合成白底再转RGB；EXIF方向校正，原文件不改。
-  - scripts/run.py：document / picture
-  - data_contract.md：brief 的字段
-- b：等待字体与图片加载 → 测量末段；按 A4 打印尺寸测量正文末段与页脚。；不是凭字数猜页数，也不把文字截掉。
-  - scripts/run.py：build / PAGINATE
-  - assets/magazine.css：正文、图框和页脚尺寸
-- q：正文末段侵入页脚区域？；是：末段移到续页，再测量。；否：保持当前页，进入 PDF 输出。
-- r：建立同标题续页，移动末段；不重复铺图，不缩字，不修改源图。；循环至段落放下；无法排版报技术原因。
-  - scripts/run.py：PAGINATE
-- p：打印两份 PDF → 独立引擎回读；PyMuPDF 按每页真实内容生成预览。；记录页数、尺寸、字体嵌入、RGB 与摘要。；方案默认高清PDF＋讲解；记录原生结果与有效DPI。
-  - scripts/run.py：inspect_pdf
-  - local_runtime.md：固定依赖
-- v：回读／浏览器／视觉发现问题？；字体、溢出、图像比例与来源均需查看。；这些检查不移动家具、不改空间设计。
-- f：是：定位资料／版式／运行环境；保留报告，修改最早源头后重建。；缺图说明缺口，可交付标注阶段的版本。
-- z：否：保存与交付；manifest 保留来源摘要、观察与输出结果。；新输出目录保留前版，可追溯。
-  - scripts/scripts.md：调用方法与技术错误
-- a → b
-- b → q
-- q → r：是
-- r → b
-- q → p：否
-- p → v
-- v → f：是
-- v → z：否
+## playbook.md
+
+# 杂志式方案册制作方法
+
+## 资料和叙事
+
+从当前项目明确版本的 layout.json、scene.json、cameras.json、最终图片和用户资产取材。记录 projectId、version、每张图的角色、来源、shotId；不要扫描历史目录猜最新版。原生图和参照图成对展示时必须同 shotId；普通情绪参考明确标“风格参考”，不能冒充本户型效果。
+
+完整设计的合理叙事：主题封面 → 居住需求与真实布局 → 风格／用户资产 → 主要空间和次要空间 → 材料及细节 → 交付说明。根据实际资料取舍，不空造资产页、装饰图、面积、品牌或预算。用户只要图片直接交付图片，不调用本 Skill。已有渲染只做图册时不重建上游。
+
+## 版式不是固定业务模板
+
+承接 Ubuntu 3.3 的中文优先、大主图、错落图文和真实素材思路，删除强制 confirmed-version、必带白模 inset、固定版式数量和旧平台入口。
+
+模板提供页面构件，Agent 按内容选择：cover 聚焦主题；plan 完整展示布局和关键说明；story 以图文叙述单空间；full 保留大图视觉；gallery 比较两个空间或两个同源机位；materials 展示色板和真实材料／产品；closing 写实际交付。不是每册每种都必须使用。空间主图默认 contain，封面只有明确 crop=true 才允许装饰性裁切，不改变长宽比；不能截掉关键门窗后声称完整空间。
+
+视觉语言：象牙纸底、炭黑文字、克制橄榄色或用户风格强调色；中文宋体大标题配黑体正文，英文只作小型编辑标签，细分隔线、页码和舒展页边距。图片是主角，不堆圆角卡片、阴影、渐变和大段制作过程。Do：真实主图、短而具体的设计说明、统一基线；Don't：拉伸照片、伪造细节、连续机械换标题。
+
+## 生成与看图
+
+先为页面写 layoutReason；脚本安全读取 JSON 和本地栅格图，校正EXIF方向，将透明区域合成到白色画布后再以RGB内嵌，避免产品透明底变黑；原始资产不改写。随后生成 HTML/CSS，Chrome 加载全部图和字体后出 PDF。网页长正文按实际可用高度续页，不能缩成小字或截断。查看所有页面：主图是否足够大、关键结构是否完整、图文比例是否合适、文字是否溢出、中文是否缺字、版面节奏是否服务故事。问题回到 page kind、内容或 CSS 源再生成，不在成品 PDF 上盖补丁。
+
+高清版保留；发送版从同份文字和图片生成，降低图片像素和 JPEG 质量而不改页序、文字或几何。两份 PDF 由 PyMuPDF 独立重开并生成全部页预览、字体和图像色彩清单。质量观察记录具体页，不把版式数量当门禁；损坏图片、无实际文件等真实技术故障如实指出。
+
+## 交付
+
+发用户指定的 PDF 和必要图片。报告实际页数、字节数、阶段／完整状态；附来源但不把内部路径、Key、测试日志写入客户册。上传平台只通过平台 Skill；PDF 走飞书文件／云盘，平台媒体仅传其支持的封面／页面图片。模板演示使用授权公开图并标“非客户方案”，不列为正式生成效果。
+
+
+## playbook/design-facts.md
+
+# 方案册沿用当前设计事实
+
+从当前revision的模型、正式机位、效果图和需求侧车组织图文。按空间主图及必要节点图讲清柜桌、柜顶、厨房、阳台等设计选择；局部图不冒充全貌。通用方法无需整套抄入客户方案册，只解释本案适用关系。
+
+区分图纸标注、用户确认、概念估算、未选设备和实际完成内容。尺寸图里的模型值不是复尺生产值；说明书里的规则已记录不代表旧项目已修改。用户只要模型或单图不强制生成方案册；无需新增设计门禁或强校验。
+
+
+## data_contract.md
+
+# 输入合同
+
+单个 UTF-8 JSON：`schema="interior.booklet/3"`；projectId、version、title、edition、status（阶段方案／完整方案／模板演示）；pages 数组。路径相对该 JSON 解析，仅本地 png/jpg/webp 图片；脚本不联网下载图片。最小可编辑结构见 [示例 brief](playbook/example-brief.json)，其中图片路径要换为当前项目真实文件。
+
+每页：kind（cover/plan/story/full/gallery/materials/closing）、title、kicker、body（段落数组）、layoutReason、images（图对象数组）、swatches（可选 name/color）。图对象：path、caption、role（planning/render/reference/product/detail）、shotId（空间图）、source（作者／出处）、crop（默认 false；仅封面）、focus（可选 object-position，如 `50% 50%`）。需要对照时参照图和渲染图使用同一 shotId；不同机位作为 gallery 时各自准确标记。
+
+纸张默认 A4 竖版；theme 可含 accent 六位 hex 色，品牌文字来自 brief，禁止自动写虚构客户／面积／联系方式。正文不会自动生成业务事实。没有输入图的 closing 或概念页可用文字；其它页面缺图时明确记录阶段缺项。
+
+输出：booklet.html、booklet-sendable.html、booklet-highres.pdf、booklet-sendable.pdf、manifest.json（来源摘要、页数、尺寸、观察）、preview-highres/ 与 preview-sendable/、mobile-highres.png 与 mobile-sendable.png。重复运行请新 out 目录保留旧交付版本。所有输出只在来酷 C 盘，不入 Skill 安装目录。
+
+空间图片新增 resultPath（相对 brief 的原生结果JSON）、schemeId（风格方案）、sceneKey。脚本核对结果与图片摘要及 shotId，并登记源图/内嵌分辨率和实际打印 DPI；低于150 DPI只是质量提示，不把它作为审美或交付门禁。默认交付 booklet-highres.pdf，发送版为补充。正式方案含选定全部机位图和自然语言讲解；不以文字PDF和散图ZIP代替。
+
+
+## local_runtime.md
+
+# 设备外置运行配置
+
+本包在 Ubuntu、Windows 来酷和 Genmachine 使用同一份业务代码。Python 3.10+、Node、Chrome/Edge、中文字体及依赖由本机设计 runtime 配置提供；优先用设备登记的 interior-python 包装入口。普通任务不临时安装软件。所有输入和交付保存在当前设备当前工作区。
+
+HTML 和截图共享 interior-html-modeling/scripts/engine。纯 HTML 离线打开不需要 Python；编译依赖 jsonschema、shapely、numpy，截图使用 Playwright 和 INTERIOR_CHROMIUM 指定的浏览器。资源盒由本机包装器沿用，任务结束只关闭本次浏览器。依赖列表见正式 scripts 中的 requirements 文件。
+
+平台凭据通过设备既有 IDK_ENV_FILE 或私有 .runtime 链接提供，分发包不包含凭据；不得跨设备复制登录态。原生绘图使用当前宿主实际提供的绘图工具，准备文件不等于生成图片。
+
+方案册使用 scripts/run.py 及 assets/magazine.css 正式版式，按本机运行说明提供 Playwright、Pillow 与中文字体；具体入口见SKILL.md。

@@ -1,0 +1,1 @@
+{"id": "run", "roomId": "r", "position": [4.7, 0, 2.2], "height": 0.85, "depth": 0.6, "modules": [{"width": 0.8, "doors": 2}, {"width": 0.9, "doors": 2}], "worktop": {"thickness": 0.03, "holes": [{"anchorId": "run-2", "x": 0.4, "z": 0, "width": 0.45, "depth": 0.35}]}}

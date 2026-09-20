@@ -1,7 +1,7 @@
 ---
 name: interior-camera-capture
 description: 从当前完整 HTML 的真实模型寻找全屋及各空间机位，冻结相机并输出原生 WebGL 参考截图；逐图识图，不改家具或冒充效果图。
-metadata: {version: "3.2.1", category: interior-design}
+metadata: {version: "3.3.0", category: interior-design}
 ---
 # 机位与模型截图
 
@@ -19,3 +19,8 @@ metadata: {version: "3.2.1", category: interior-design}
 
 
 本轮统一规则见 [空间连接与完整构图](../interior-html-modeling/playbook/space-connections.md)：规划先确认空间连接；HTML按真实门型/状态装配；正视主图带到天花与地面；渲染保留本机位可见空间身份，不把阳台画成房间。
+
+
+## 当前设计方法
+
+先按任务读取 [真实室内完整构图](playbook/interior-framing.md)。通用方法与用户参数分开，选择及覆盖见 [规则归属](../interior-html-modeling/playbook/rule-selection.md)。这些是生成方法，不新增强校验、门禁或审批。

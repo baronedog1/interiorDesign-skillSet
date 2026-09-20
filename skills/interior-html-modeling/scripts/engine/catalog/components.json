@@ -1,6 +1,6 @@
 {
   "schema": "interior.components/1",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "units": "m",
   "frontAxis": "+Z",
   "origin": "footprint-centre-at-floor",
@@ -646,6 +646,160 @@
       "approximation": "style-component-not-exact-product",
       "support": "ceiling",
       "styleMode": "form-and-material"
+    },
+    {
+      "id": "cabinet.custom",
+      "category": "cabinet",
+      "name": "定制柜模块",
+      "builder": "customCabinet",
+      "defaultSize": [
+        0.8,
+        2.4,
+        0.6
+      ],
+      "resize": "parametric",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "parametric-design-not-production",
+      "support": "floor",
+      "styleMode": "material",
+      "shape": {}
+    },
+    {
+      "id": "desk.custom",
+      "category": "desk",
+      "name": "定制书桌",
+      "builder": "customDesk",
+      "defaultSize": [
+        1.4,
+        0.75,
+        0.55
+      ],
+      "resize": "parametric",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "parametric-design-not-production",
+      "support": "floor",
+      "styleMode": "material",
+      "shape": {}
+    },
+    {
+      "id": "bed.platform",
+      "category": "bed",
+      "name": "连续睡眠床台",
+      "builder": "sleepPlatform",
+      "defaultSize": [
+        1.8,
+        0.5,
+        2
+      ],
+      "resize": "parametric",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "parametric-design-not-production",
+      "support": "floor",
+      "styleMode": "material",
+      "shape": {}
+    },
+    {
+      "id": "ceiling.panel",
+      "category": "cabinet",
+      "name": "局部吊顶与封边",
+      "builder": "ceilingAssembly",
+      "defaultSize": [
+        2.4,
+        0.12,
+        0.6
+      ],
+      "resize": "parametric",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "parametric-design-not-production",
+      "support": "floor",
+      "styleMode": "material",
+      "shape": {}
+    },
+    {
+      "id": "surface.worktop",
+      "category": "cabinet",
+      "name": "连续台面与真实开孔",
+      "builder": "worktop",
+      "defaultSize": [
+        2.4,
+        0.03,
+        0.6
+      ],
+      "resize": "parametric",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "parametric-design-not-production",
+      "support": "floor",
+      "styleMode": "material",
+      "shape": {}
+    },
+    {
+      "id": "cabinet.housing",
+      "category": "cabinet",
+      "name": "设备包框",
+      "builder": "fridgeHousing",
+      "defaultSize": [
+        0.8,
+        2.4,
+        0.7
+      ],
+      "resize": "parametric",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "parametric-design-not-production",
+      "support": "floor",
+      "styleMode": "material",
+      "shape": {}
+    },
+    {
+      "id": "seat.banquette",
+      "category": "sofa",
+      "name": "储物软包卡座",
+      "builder": "banquette",
+      "defaultSize": [
+        1.6,
+        0.45,
+        0.55
+      ],
+      "resize": "parametric",
+      "dimensionFactorRange": [
+        0.45,
+        2.2
+      ],
+      "frontAxis": "+Z",
+      "origin": "footprint-centre-at-floor",
+      "approximation": "parametric-design-not-production",
+      "support": "floor",
+      "styleMode": "material",
+      "shape": {}
     }
   ]
 }

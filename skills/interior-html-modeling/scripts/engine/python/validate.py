@@ -6,6 +6,9 @@ from shapely.geometry import Polygon,LineString,Point
 from common import require_schema,resources,digest
 
 def footprint(p):
+    if p.get('rotationX') or p.get('rotationZ'):
+        from cameras import corners
+        return Polygon([(v[0],v[2]) for v in corners(p)]).convex_hull
     x,y,z=p['position'];w,h,d=p['size'];a=math.radians(p['rotationY']);c,s=math.cos(a),math.sin(a)
     return Polygon([(x+c*u+s*v,z-s*u+c*v) for u,v in [(-w/2,-d/2),(w/2,-d/2),(w/2,d/2),(-w/2,d/2)]])
 def validate_layout(data,strict=False):
@@ -46,12 +49,17 @@ def validate_layout(data,strict=False):
     for i,(a,pa) in enumerate(rooms.items()):
         for b,pb in list(rooms.items())[i+1:]:
             if pa.is_valid and pb.is_valid and pa.intersection(pb).area>.005:issue('error','overlapping-rooms','房间区域重叠，不应同时计入两间房面积',[a,b])
+    from kernel import evaluate
+    model_facts=evaluate(data)
+    wall_shapes=model_facts['wallFootprints']
     wall_lines={};wall_polys={}
     for w in data['walls']:
-        line=LineString([w['a'],w['b']]);wall_lines[w['id']]=line;wall_polys[w['id']]=line.buffer(w['thickness']/2,cap_style=2)
+        line=LineString([w['a'],w['b']]);wall_lines[w['id']]=line;wall_polys[w['id']]=Polygon(wall_shapes[w['id']])
         if line.length<.01:issue('error','zero-wall','墙长度为零',[w['id']])
         if w['height']>data['floor']['height']+.001:issue('error','wall-above-ceiling','墙高超过层高',[w['id']])
         if not floor.buffer(.001).covers(wall_polys[w['id']]):issue('error','wall-outside-floor','完整墙厚超出楼面，请检查描线或楼面外边界',[w['id']])
+    for p in data.get('structuralItems',[]):
+        if p['roomId'] not in ids['rooms'] or min(p['size'])<=0 or p['position'][1]<0 or p['position'][1]+p['size'][1]>data['floor']['height']+.001:issue('error','invalid-structure','柱子/烟道尺寸、标高或房间无效',[p['id']])
     for i,(a,pa) in enumerate(wall_lines.items()):
         for b,pb in list(wall_lines.items())[i+1:]:
             if pa.intersection(pb).length>.01:issue('error','duplicate-wall','同一墙段被重复定义',[a,b])

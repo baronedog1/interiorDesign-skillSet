@@ -1,7 +1,9 @@
-# 来酷运行环境
+# 设备外置运行配置
 
-使用已有 `C:\ProgramData\GCPManager\runtimes\interior-design-gpt6-v2\Scripts\python.exe`，复用 Playwright、Pillow，新增固定 PyMuPDF `1.28.2`。Chrome 为 `C:\Program Files\Google\Chrome\Application\chrome.exe`，可用 CHROME_BIN 指定管理员登记路径。中文字体使用 Windows 宋体和微软雅黑；不能假称已使用不存在的商业字体。
+本包在 Ubuntu、Windows 来酷和 Genmachine 使用同一份业务代码。Python 3.10+、Node、Chrome/Edge、中文字体及依赖由本机设计 runtime 配置提供；优先用设备登记的 interior-python 包装入口。普通任务不临时安装软件。所有输入和交付保存在当前设备当前工作区。
 
-安装／升级依赖由设备管理员完成，普通排版不临时安装。浏览器仅创建独立 headless 实例并在 finally 关闭，不改桌面 Chrome。模板纯本地渲染，不需要平台凭据或外部出口；素材先经已授权渠道下载到来酷项目，再传本地路径。
+HTML 和截图共享 interior-html-modeling/scripts/engine。纯 HTML 离线打开不需要 Python；编译依赖 jsonschema、shapely、numpy，截图使用 Playwright 和 INTERIOR_CHROMIUM 指定的浏览器。资源盒由本机包装器沿用，任务结束只关闭本次浏览器。依赖列表见正式 scripts 中的 requirements 文件。
 
-来源：Ubuntu booklet-production 3.3.0 的叙事与视觉规范；此 4.1.1 是来酷 Windows 定制版，Ubuntu 不修改。确定性排版器与模板为本版实现，不继承旧 manifest / validator / Linux 命令链。
+平台凭据通过设备既有 IDK_ENV_FILE 或私有 .runtime 链接提供，分发包不包含凭据；不得跨设备复制登录态。原生绘图使用当前宿主实际提供的绘图工具，准备文件不等于生成图片。
+
+方案册使用 scripts/run.py 及 assets/magazine.css 正式版式，按本机运行说明提供 Playwright、Pillow 与中文字体；具体入口见SKILL.md。

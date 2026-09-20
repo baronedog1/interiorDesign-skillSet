@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-14T04:17:36.622Z",
+  "snapshotAt": "2026-09-20T03:00:00+08:00",
   "source": {
-    "type": "lecoo-current-design-baseline",
+    "type": "ubuntu-design-methods-release",
     "currentDesignRelease": {
-      "deviceId": "lecoo-windows-codex",
-      "skillRoot": "C:\\Users\\agentops\\.codex\\skills",
+      "deviceId": "ubuntu-01-codex",
+      "skillRoot": "/home/agentops/.codex/skills",
       "skillIds": [
         "interior-floorplan-planning",
         "interior-html-modeling",
@@ -27,71 +27,62 @@
       "runtime-cache"
     ]
   },
-  "skillCount": 7,
-  "fileCount": 199,
+  "skillCount": 6,
+  "fileCount": 152,
   "skills": [
     {
       "id": "booklet-production",
       "path": "skills/booklet-production",
       "version": "4.1.1",
-      "sourceDevice": "lecoo-windows-codex",
-      "fileCount": 15,
-      "bytes": 7257632,
-      "sha256": "e5a6c76ec2f3c32430465259f5db5fd2d3752b1189a133ee38e7ab4c7d42ee8b"
+      "sourceDevice": "ubuntu-01-codex",
+      "fileCount": 17,
+      "bytes": 754179,
+      "sha256": "8790af13509c99c326b2bef18f1207cacc8b777d55377c4723b85ae9a269dae1"
     },
     {
       "id": "idk-canvas-ingest-agent",
       "path": "skills/idk-canvas-ingest-agent",
-      "version": "3.1.0",
-      "sourceDevice": "lecoo-windows-codex",
-      "fileCount": 11,
-      "bytes": 6792884,
-      "sha256": "f82876d62177412d8073ba78c31160cefa5c1d9274e45f7a9a0de676bc696b2c"
+      "version": "3.1.1",
+      "sourceDevice": "ubuntu-01-codex",
+      "fileCount": 12,
+      "bytes": 48110,
+      "sha256": "96317a594dda9cc5ba5afcec90193740dad15e872e9252132a871b5ed201e6c3"
     },
     {
       "id": "interior-camera-capture",
       "path": "skills/interior-camera-capture",
-      "version": "3.2.1",
-      "sourceDevice": "lecoo-windows-codex",
-      "fileCount": 9,
-      "bytes": 1852477,
-      "sha256": "bcfa54e594fc5e852d99a605c5a1cb399c481d6c0a2ada8630b2d50d8b1341b6"
+      "version": "3.3.0",
+      "sourceDevice": "ubuntu-01-codex",
+      "fileCount": 11,
+      "bytes": 56661,
+      "sha256": "8e09c6b2784ad8bbc30391cc6637f9a32e507a52b401950cc3f251696487f4ce"
     },
     {
       "id": "interior-floorplan-planning",
       "path": "skills/interior-floorplan-planning",
-      "version": "3.3.0",
-      "sourceDevice": "lecoo-windows-codex",
-      "fileCount": 10,
-      "bytes": 1468947,
-      "sha256": "36abb3605c085de6f2da502f847952c37eeab3adbac58b93f6da895817360198"
+      "version": "3.5.0",
+      "sourceDevice": "ubuntu-01-codex",
+      "fileCount": 12,
+      "bytes": 101237,
+      "sha256": "1421294cb8a54f8e80d1a6371940ded1171746398e80cb3aaa121d1a04fd584b"
     },
     {
       "id": "interior-html-modeling",
       "path": "skills/interior-html-modeling",
-      "version": "3.2.2",
-      "sourceDevice": "lecoo-windows-codex",
-      "fileCount": 77,
-      "bytes": 20821959,
-      "sha256": "7d7138456c3e5ceccf102698c2c3f43193410dd47f4495717e1e61fc9660e2db"
+      "version": "5.0.0",
+      "sourceDevice": "ubuntu-01-codex",
+      "fileCount": 89,
+      "bytes": 19318717,
+      "sha256": "6cbcc3b7d6ec7c99facfbef9df00f99d628c4f0981e51948b918a60b4f041447"
     },
     {
       "id": "interior-space-rendering",
       "path": "skills/interior-space-rendering",
-      "version": "3.3.1",
-      "sourceDevice": "lecoo-windows-codex",
-      "fileCount": 9,
-      "bytes": 1755398,
-      "sha256": "ce80b1419e21b74a48ccaf1d4804d8fbcccece3614facd7bbb3ac69dbfe526a7"
-    },
-    {
-      "id": "product-modeling",
-      "path": "skills/product-modeling",
-      "version": "2.0.0。",
-      "sourceDevice": "ubuntu-01-codex (retained legacy snapshot)",
-      "fileCount": 68,
-      "bytes": 7319685,
-      "sha256": "1ed2f90320dcdcbfb62b3323bf6b22a4ff595804a7107a3577eae02cfc0211fd"
+      "version": "3.4.0",
+      "sourceDevice": "ubuntu-01-codex",
+      "fileCount": 11,
+      "bytes": 100313,
+      "sha256": "7d64142caba0c514afe981835a7fd28dd987200da91d494331117e9857d8efeb"
     }
   ]
 }

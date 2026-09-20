@@ -1,7 +1,7 @@
 ---
 name: interior-space-rendering
 description: 以HTML粗模锁定结构、机位和家具位置尺度，按产品参考图或精细定样锁款，通过原生绘图重建精细家具与真实光影；不锁粗模造型，不把截图当最终效果图。
-metadata: {version: "3.3.1", category: interior-design}
+metadata: {version: "3.4.0", category: interior-design}
 ---
 # 原生绘图效果图
 
@@ -26,3 +26,8 @@ metadata: {version: "3.3.1", category: interior-design}
 完整设计先查看平台风格模板，提炼设计意图并写design-brief.json；ai-request加--design-brief，实际附入风格图。锁建筑壳与洞口位置尺寸，不锁粗模门窗构件、天花饰面或灯光；按同一设计意图完善硬装与陈设，不无依据加大件隔断。详见playbook。
 
 本轮统一规则见 [空间连接与完整构图](../interior-html-modeling/playbook/space-connections.md)：规划先确认空间连接；HTML按真实门型/状态装配；正视主图带到天花与地面；渲染保留本机位可见空间身份，不把阳台画成房间。
+
+
+## 当前设计方法
+
+先按任务读取 [已确认节点与精细出图](playbook/confirmed-nodes.md)。通用方法与用户参数分开，选择及覆盖见 [规则归属](../interior-html-modeling/playbook/rule-selection.md)。这些是生成方法，不新增强校验、门禁或审批。

@@ -1,0 +1,328 @@
+{
+  "schema": "interior.layout/1",
+  "id": "joinery-method-demo",
+  "revision": 1,
+  "name": "定制节点方法示例",
+  "units": "m",
+  "coordinateSystem": "Y_UP_XZ",
+  "source": {
+    "kind": "brief",
+    "description": "合成方法示例，非客户项目",
+    "assumptions": [
+      "概念尺寸，不是生产图"
+    ]
+  },
+  "styleId": "cream",
+  "floor": {
+    "outline": [
+      [
+        -0.1,
+        -0.1
+      ],
+      [
+        7.1,
+        -0.1
+      ],
+      [
+        7.1,
+        6.1
+      ],
+      [
+        -0.1,
+        6.1
+      ]
+    ],
+    "height": 2.8
+  },
+  "rooms": [
+    {
+      "id": "r",
+      "name": "构造示例",
+      "type": "study",
+      "polygon": [
+        [
+          0,
+          0
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          0,
+          6
+        ]
+      ],
+      "subjectIds": [
+        "cab"
+      ]
+    }
+  ],
+  "walls": [
+    {
+      "id": "w0",
+      "name": "墙0",
+      "a": [
+        0,
+        0
+      ],
+      "b": [
+        7,
+        0
+      ],
+      "thickness": 0.12,
+      "height": 2.8,
+      "kind": "wall"
+    },
+    {
+      "id": "w1",
+      "name": "墙1",
+      "a": [
+        7,
+        0
+      ],
+      "b": [
+        7,
+        6
+      ],
+      "thickness": 0.12,
+      "height": 2.8,
+      "kind": "wall"
+    },
+    {
+      "id": "w2",
+      "name": "墙2",
+      "a": [
+        7,
+        6
+      ],
+      "b": [
+        0,
+        6
+      ],
+      "thickness": 0.12,
+      "height": 2.8,
+      "kind": "wall"
+    },
+    {
+      "id": "w3",
+      "name": "墙3",
+      "a": [
+        0,
+        6
+      ],
+      "b": [
+        0,
+        0
+      ],
+      "thickness": 0.12,
+      "height": 2.8,
+      "kind": "wall"
+    }
+  ],
+  "openings": [],
+  "openConnections": [],
+  "placements": [
+    {
+      "id": "cab",
+      "name": "cab",
+      "roomId": "r",
+      "componentId": "cabinet.custom",
+      "size": [
+        0.9,
+        2.4,
+        0.6
+      ],
+      "position": [
+        1,
+        0,
+        0.4
+      ],
+      "rotationY": 0,
+      "joinery": {
+        "doors": 2,
+        "board": 0.018,
+        "gap": 0.002,
+        "doorBottom": 0.015,
+        "zones": [
+          {
+            "bottom": 0.015,
+            "top": 0.74,
+            "type": "fixed",
+            "count": 1
+          },
+          {
+            "bottom": 0.752,
+            "top": 2.398,
+            "type": "doors",
+            "count": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "desk",
+      "name": "desk",
+      "roomId": "r",
+      "componentId": "desk.custom",
+      "size": [
+        1.4,
+        0.75,
+        0.6
+      ],
+      "position": [
+        2.15,
+        0,
+        0.4
+      ],
+      "rotationY": 0,
+      "joinery": {
+        "kind": "desk",
+        "drawerHeight": 0.1,
+        "drawers": 2
+      }
+    },
+    {
+      "id": "top",
+      "name": "top",
+      "roomId": "r",
+      "componentId": "ceiling.panel",
+      "size": [
+        0.9,
+        0.4,
+        0.6
+      ],
+      "position": [
+        1,
+        2.4,
+        0.4
+      ],
+      "rotationY": 0,
+      "joinery": {
+        "kind": "ceiling",
+        "anchor": {
+          "id": "cab",
+          "face": "top",
+          "width": true,
+          "depth": true,
+          "toHeight": 2.8
+        }
+      }
+    },
+    {
+      "id": "sink",
+      "name": "sink",
+      "roomId": "r",
+      "componentId": "cabinet.custom",
+      "size": [
+        0.9,
+        0.86,
+        0.6
+      ],
+      "position": [
+        4,
+        0,
+        0.4
+      ],
+      "rotationY": 0,
+      "joinery": {
+        "top": false,
+        "doors": 2,
+        "topThickness": 0.04,
+        "holes": [
+          {
+            "x": 0,
+            "z": 0,
+            "width": 0.55,
+            "depth": 0.38,
+            "kind": "sink"
+          }
+        ],
+        "zones": [
+          {
+            "bottom": 0.082,
+            "top": 0.56,
+            "type": "doors",
+            "count": 2
+          },
+          {
+            "bottom": 0.562,
+            "top": 0.818,
+            "type": "fixed",
+            "count": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "drawers",
+      "name": "drawers",
+      "roomId": "r",
+      "componentId": "cabinet.custom",
+      "size": [
+        0.9,
+        0.86,
+        0.6
+      ],
+      "position": [
+        4.9,
+        0,
+        0.4
+      ],
+      "rotationY": 0,
+      "joinery": {
+        "drawers": 2,
+        "handle": "recess",
+        "exposedBack": true
+      }
+    },
+    {
+      "id": "platform",
+      "name": "platform",
+      "roomId": "r",
+      "componentId": "bed.platform",
+      "size": [
+        1.8,
+        0.5,
+        2
+      ],
+      "position": [
+        1.5,
+        0,
+        3.8
+      ],
+      "rotationY": 0,
+      "joinery": {
+        "kind": "platform",
+        "cushionThickness": 0.12,
+        "headboardHeight": 0.3
+      }
+    },
+    {
+      "id": "banquette",
+      "name": "banquette",
+      "roomId": "r",
+      "componentId": "seat.banquette",
+      "size": [
+        1.6,
+        0.45,
+        0.55
+      ],
+      "position": [
+        4.8,
+        0,
+        3.8
+      ],
+      "rotationY": 0,
+      "joinery": {
+        "kind": "banquette",
+        "cushionThickness": 0.06,
+        "backrestHeight": 0.45
+      }
+    }
+  ]
+}
