@@ -1,6 +1,6 @@
 {
   "version": "4.2.0",
-  "release": "ubuntu-design-2026.09.20",
+  "release": "ubuntu-design-2026.09.20.1",
   "files": [
     "MANIFEST.json",
     "SKILL.md",
@@ -23,7 +23,7 @@
   "file_count": 17,
   "sha256": {
     "SKILL.md": "683135c71e853fc9a46a53055331f60b14e97b327e05c5220085fd35cd987522",
-    "SKILL_MANUAL.pdf": "2a030159fa2bc9d87c55f4a5e6b36dbc54b30f024ad4189e0a24994e8053c702",
+    "SKILL_MANUAL.pdf": "bbf0331c11294848260ce968ef6b0a752e9e70c2b4fe4f5c9d47ab561e788e4e",
     "assets/magazine.css": "a9f13736b9b2f69ee85c1bac6d8b439bd801ffdd316b1ac35046a5cead04d6bc",
     "data_contract.md": "2046d60cabd25459a890a6a5499b28541309be1dac46fa0f9bacdcebc93caf1c",
     "expected_outcome/demo.pdf": "aac4601bd96a916f79a783cd461acab730c9e4c044ad7296984d6c5866e6b031",

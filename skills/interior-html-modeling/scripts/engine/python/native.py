@@ -86,5 +86,5 @@ def audit_placement(path,placement):
     node=shutil.which('node')
     if not node:raise RuntimeError('摆放同核检查需要Node.js；HTML内核无需额外安装')
     script='const fs=require("fs"),S=require(process.argv[1]),p=JSON.parse(fs.readFileSync(0,"utf8"));console.log(JSON.stringify(S.audit(p,process.argv[2])));'
-    p=subprocess.run([node,'-e',script,str(SHARED/'runtime/spatial.js'),placement],input=Path(path).read_text(encoding='utf-8-sig'),text=True,capture_output=True,timeout=30,check=True)
+    p=subprocess.run([node,'-e',script,str(SHARED/'runtime/spatial.js'),placement],input=Path(path).read_text(encoding='utf-8-sig'),text=True,encoding="utf-8",capture_output=True,timeout=30,check=True)
     return json.loads(p.stdout)

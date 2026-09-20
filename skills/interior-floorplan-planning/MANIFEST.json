@@ -1,6 +1,6 @@
 {
   "version": "3.5.0",
-  "release": "ubuntu-design-2026.09.20",
+  "release": "ubuntu-design-2026.09.20.1",
   "files": [
     "MANIFEST.json",
     "SKILL.md",
@@ -18,7 +18,7 @@
   "file_count": 12,
   "sha256": {
     "SKILL.md": "61a79fd9b23fc1bfe08c0a71fad2a284c4712476a1152b4b9bee72af153493f5",
-    "SKILL_MANUAL.pdf": "f39e8bafd7f37d8024888d51087084903041c4bd47f5a3a3a10be7de4e863a2c",
+    "SKILL_MANUAL.pdf": "9d5a97bf43c1b7faffec01e4ab00b797d0270c26a4d053d0893346f3dfc24965",
     "local_runtime.md": "92882a9eb89b78eaf3340d922e0c04fd0fd1df330e0e12a0551f0ee674fd90e7",
     "manual/skill-flowchart.svg": "52131bc790d6631add4c3cd29b25a9ee72950d9f5902ad15e806428bf1a2f3bd",
     "manual/skill-manual.html": "f45ab5932823b762735dc071fa92762270fe98a0d2fe19a8b77d5ee7a40d320b",

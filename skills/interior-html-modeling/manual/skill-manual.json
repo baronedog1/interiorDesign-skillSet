@@ -1,7 +1,7 @@
 {
   "schemaVersion": 5,
   "displayName": "可编辑模型与定制节点",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "scenarios": [
     {
       "id": "main",

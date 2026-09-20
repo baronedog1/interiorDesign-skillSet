@@ -20,7 +20,7 @@
   }
   await C.nativeAssets.prepare(window.PROJECT.nativeAssets || []);
   const state = (C.state = {
-    version: "html-skills/5.0.0",
+    version: "html-skills/5.0.1",
     view: "overview",
     tool: "browse",
     tab: "walls",
@@ -2990,7 +2990,7 @@
   setView("overview");
   setTab("style");
   draw();
-  $("#engine").textContent = "INTERIOR STUDIO 5.0.0 · OFFLINE";
+  $("#engine").textContent = "INTERIOR STUDIO 5.0.1 · OFFLINE";
   $("#loader").classList.add("done");
   if (document.querySelector("#saved-project")) {
     await importProject(

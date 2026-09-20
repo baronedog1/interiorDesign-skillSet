@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-20T03:00:00+08:00",
+  "snapshotAt": "2026-09-20T03:23:34.955Z",
   "source": {
     "type": "ubuntu-design-methods-release",
     "currentDesignRelease": {
@@ -36,8 +36,8 @@
       "version": "4.1.1",
       "sourceDevice": "ubuntu-01-codex",
       "fileCount": 17,
-      "bytes": 754179,
-      "sha256": "8790af13509c99c326b2bef18f1207cacc8b777d55377c4723b85ae9a269dae1"
+      "bytes": 754181,
+      "sha256": "aec5121b26d913c30c311d89fb3275fed358221321830e457819e0756e8d5076"
     },
     {
       "id": "idk-canvas-ingest-agent",
@@ -45,8 +45,8 @@
       "version": "3.1.1",
       "sourceDevice": "ubuntu-01-codex",
       "fileCount": 12,
-      "bytes": 48110,
-      "sha256": "96317a594dda9cc5ba5afcec90193740dad15e872e9252132a871b5ed201e6c3"
+      "bytes": 48112,
+      "sha256": "692c8ed21560f9871bbed015208a44e8587a43424642f896d99563533a306c1c"
     },
     {
       "id": "interior-camera-capture",
@@ -54,8 +54,8 @@
       "version": "3.3.0",
       "sourceDevice": "ubuntu-01-codex",
       "fileCount": 11,
-      "bytes": 56661,
-      "sha256": "8e09c6b2784ad8bbc30391cc6637f9a32e507a52b401950cc3f251696487f4ce"
+      "bytes": 56663,
+      "sha256": "a9bbc981ab29a6054d61a0c37451e47ed4838bdbb7e51cdb6b9d85d62ead7e03"
     },
     {
       "id": "interior-floorplan-planning",
@@ -63,17 +63,17 @@
       "version": "3.5.0",
       "sourceDevice": "ubuntu-01-codex",
       "fileCount": 12,
-      "bytes": 101237,
-      "sha256": "1421294cb8a54f8e80d1a6371940ded1171746398e80cb3aaa121d1a04fd584b"
+      "bytes": 101239,
+      "sha256": "1b2e867098c840267119d87485a39297c6e433c5cb0456673a78e2857b89ff69"
     },
     {
       "id": "interior-html-modeling",
       "path": "skills/interior-html-modeling",
-      "version": "5.0.0",
+      "version": "5.0.1",
       "sourceDevice": "ubuntu-01-codex",
       "fileCount": 89,
-      "bytes": 19318717,
-      "sha256": "6cbcc3b7d6ec7c99facfbef9df00f99d628c4f0981e51948b918a60b4f041447"
+      "bytes": 19318767,
+      "sha256": "773ecad888c0a9020f43ec48c0014229021c52a23a8daa9a5b7c5a8748f833ba"
     },
     {
       "id": "interior-space-rendering",
@@ -81,8 +81,8 @@
       "version": "3.4.0",
       "sourceDevice": "ubuntu-01-codex",
       "fileCount": 11,
-      "bytes": 100313,
-      "sha256": "7d64142caba0c514afe981835a7fd28dd987200da91d494331117e9857d8efeb"
+      "bytes": 100315,
+      "sha256": "78d53d1d331b961b0be10759771d034cd9ebcf3910a324e5f9d5f6491b3407e9"
     }
   ]
 }

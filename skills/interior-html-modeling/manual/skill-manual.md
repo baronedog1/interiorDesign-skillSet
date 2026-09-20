@@ -1,6 +1,6 @@
 # 可编辑模型与定制节点
 
-版本：5.0.0
+版本：5.0.1
 
 用户给布局或最新完整模型 → 选择对象方法与用户参数 → 按真实尺寸构造板件和节点 → 生成当前离线编辑模板 → 编辑关联、保存并交接同版 → 用户获得完整模型与场景数据
 
@@ -10,7 +10,7 @@
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "5.0.0", category: interior-design}
+metadata: {version: "5.0.1", category: interior-design}
 ---
 # HTML 室内共建
 
