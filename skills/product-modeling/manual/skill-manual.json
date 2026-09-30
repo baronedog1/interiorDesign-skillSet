@@ -1,0 +1,644 @@
+{
+  "schemaVersion": 5,
+  "displayName": "单品照片到三维 HTML",
+  "version": "3.1.1",
+  "fileDescriptions": {
+    "SKILL.md": "识别单品建模请求、路由及最终交付范围",
+    "data_contract.md": "规定生成器、真实锚点、单位、编辑与保存对象",
+    "local_runtime.md": "任务依赖安装、构建命令与设备同步方法",
+    "playbook/geometry.md": "从款式特征、留空、截面及接头选择真实几何表示",
+    "playbook/calibration.md": "区分点、轮廓与结构约束以及已执行与未测的误差",
+    "playbook/surfaces.md": "根据源图分组件建立颜色、纹理和光影",
+    "expected_outcome/expected_outcome.md": "区分形体对应、浏览器运行及未完成事项",
+    "scripts/build-workbench.mjs": "将生成器与唯一工作台打入离线单文件HTML",
+    "scripts/core.mjs": "计算透视相机、锚点投影、轮廓误差与有界求解",
+    "scripts/feature-report.mjs": "测量关键特征的点、间距、曲线及留出偏差",
+    "scripts/materials.mjs": "在真实曲面建立UV材质与按类别遮挡筛选的照片投影",
+    "scripts/package.json": "声明任务目录使用的固定依赖版本",
+    "scripts/test-product.mjs": "改动代码时验证相机、求解、留出点及非法输入",
+    "assets/workbench/product-kernel.js": "解释产品参数及装配定义",
+    "assets/workbench/gltf-io.js": "读写GLB网格、基础材质和统一UV变换",
+    "assets/workbench/workbench.html": "唯一产品工作台的界面和控件",
+    "assets/workbench/workbench.js": "执行视图、选件、编辑、导入导出与保存重开",
+    "assets/workbench/LICENSE-Three.js.txt": "保留工作台运行库的许可信息",
+    "MANIFEST.json": "登记发行版本、正式文件和摘要",
+    "manual/skill-manual.json": "本说明书唯一结构化图源",
+    "SKILL_MANUAL.pdf": "供人阅读的总流程及必要展开",
+    "manual/skill-manual.md": "与图源同义的文字说明",
+    "manual/skill-flowchart.svg": "可独立缩放查看的完整总图",
+    "manual/skill-manual.html": "带详情与文件定位的交互说明书"
+  },
+  "dependencyFiles": [
+    {
+      "path": "../skill-product-manager/scripts/build_skill_manual.mjs",
+      "purpose": "由同一图源生成PDF、文字与网页说明",
+      "scope": "authoring",
+      "rootEnv": "SKILL_PRODUCT_MANAGER_ROOT",
+      "relativePath": "scripts/build_skill_manual.mjs"
+    },
+    {
+      "path": "../skill-product-manager/scripts/validate_skill_manual.mjs",
+      "purpose": "核对图文源、布局与实际PDF",
+      "scope": "authoring",
+      "rootEnv": "SKILL_PRODUCT_MANAGER_ROOT",
+      "relativePath": "scripts/validate_skill_manual.mjs"
+    },
+    {
+      "path": "../skill-product-manager/scripts/release.py",
+      "purpose": "登记摘要并打包可重开的发行版",
+      "scope": "authoring",
+      "rootEnv": "SKILL_PRODUCT_MANAGER_ROOT",
+      "relativePath": "scripts/release.py"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "main",
+      "title": "从产品原图，到可以旋转编辑的成品",
+      "trigger": "用户要求照片单品建模或修改、相关咨询或维护",
+      "input": "原始照片、已确认要求与当前文件",
+      "output": "三维HTML、源码、对照与已验证状态",
+      "explanation": "按当前资料判断是否制作或修改形体；建模主线与已有材料处理汇合到同一次交付。",
+      "diagrams": [
+        {
+          "title": "从产品原图，到可以旋转编辑的成品",
+          "startNode": "input",
+          "endNodes": [
+            "deliver"
+          ],
+          "nodes": [
+            {
+              "id": "input",
+              "title": "用户给产品照片和制作要求",
+              "type": "io",
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "识别单品建模请求、路由及最终交付范围",
+                  "role": "入口"
+                }
+              ],
+              "lines": [
+                "保留原始照片、确认尺寸、修改意见和现有文件。"
+              ]
+            },
+            {
+              "id": "scope",
+              "title": "这次需要制作或修改形体吗？",
+              "type": "decision",
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "识别单品建模请求、路由及最终交付范围",
+                  "role": "入口"
+                }
+              ],
+              "lines": []
+            },
+            {
+              "id": "other",
+              "title": "按当前任务处理已有材料",
+              "type": "process",
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "识别单品建模请求、路由及最终交付范围",
+                  "role": "入口"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "任务依赖安装、构建命令与设备同步方法",
+                  "role": "方法"
+                }
+              ],
+              "lines": [
+                "咨询、发送、确定数据编译或只截图，按本次要求处理。",
+                "只有改技能代码或规则时进入改版详情。"
+              ],
+              "detailRef": "maintenance"
+            },
+            {
+              "id": "geometry",
+              "title": "按原图校准形体和连接",
+              "type": "process",
+              "files": [
+                {
+                  "path": "playbook/geometry.md",
+                  "purpose": "从款式特征、留空、截面及接头选择真实几何表示",
+                  "role": "方法"
+                },
+                {
+                  "path": "data_contract.md",
+                  "purpose": "规定生成器、真实锚点、单位、编辑与保存对象",
+                  "role": "数据"
+                }
+              ],
+              "lines": [
+                "先骨架与机位，再局部排列、截面和接头。",
+                "背面可合理推测，可见处同机位核对。"
+              ],
+              "detailRef": "fitting"
+            },
+            {
+              "id": "surface",
+              "title": "按部件贴合材质颜色和光影",
+              "type": "process",
+              "files": [
+                {
+                  "path": "playbook/surfaces.md",
+                  "purpose": "根据源图分组件建立颜色、纹理和光影",
+                  "role": "方法"
+                },
+                {
+                  "path": "scripts/materials.mjs",
+                  "purpose": "在真实曲面建立UV材质与按类别遮挡筛选的照片投影",
+                  "role": "模块"
+                }
+              ],
+              "lines": [
+                "先材质和颜色，再调灯光；花纹不抵消形体偏差。"
+              ]
+            },
+            {
+              "id": "build",
+              "title": "生成完整离线工作台",
+              "type": "process",
+              "files": [
+                {
+                  "path": "scripts/build-workbench.mjs",
+                  "purpose": "将生成器与唯一工作台打入离线单文件HTML",
+                  "role": "执行"
+                },
+                {
+                  "path": "assets/workbench/workbench.html",
+                  "purpose": "唯一产品工作台的界面和控件",
+                  "role": "模板"
+                },
+                {
+                  "path": "assets/workbench/workbench.js",
+                  "purpose": "执行视图、选件、编辑、导入导出与保存重开",
+                  "role": "模块"
+                },
+                {
+                  "path": "assets/workbench/product-kernel.js",
+                  "purpose": "解释产品参数及装配定义",
+                  "role": "模块"
+                },
+                {
+                  "path": "assets/workbench/gltf-io.js",
+                  "purpose": "读写GLB网格、基础材质和统一UV变换",
+                  "role": "模块"
+                },
+                {
+                  "path": "assets/workbench/LICENSE-Three.js.txt",
+                  "purpose": "保留工作台运行库的许可信息",
+                  "role": "依赖"
+                },
+                {
+                  "path": "scripts/package.json",
+                  "purpose": "声明任务目录使用的固定依赖版本",
+                  "role": "配置"
+                }
+              ],
+              "lines": [
+                "模型、图片和运行库内联；保留实际可用编辑工具。"
+              ]
+            },
+            {
+              "id": "verify",
+              "title": "打开成品核对形体和操作",
+              "type": "process",
+              "files": [
+                {
+                  "path": "expected_outcome/expected_outcome.md",
+                  "purpose": "区分形体对应、浏览器运行及未完成事项",
+                  "role": "方法"
+                }
+              ],
+              "lines": [
+                "实际本地打开，检查同版截图、离线和保存重开。",
+                "受阻项与已通过项分别记录；局部返修后重验。"
+              ]
+            },
+            {
+              "id": "deliver",
+              "title": "交付成品、源码、对照和限制",
+              "type": "io",
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "识别单品建模请求、路由及最终交付范围",
+                  "role": "入口"
+                }
+              ],
+              "lines": [
+                "核对本次成品、源码、实际对照和限制后交付。"
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "input",
+              "to": "scope"
+            },
+            {
+              "from": "scope",
+              "to": "geometry",
+              "label": "需要建模"
+            },
+            {
+              "from": "scope",
+              "to": "other",
+              "label": "无需建模"
+            },
+            {
+              "from": "geometry",
+              "to": "surface"
+            },
+            {
+              "from": "surface",
+              "to": "build"
+            },
+            {
+              "from": "build",
+              "to": "verify"
+            },
+            {
+              "from": "verify",
+              "to": "deliver"
+            },
+            {
+              "from": "other",
+              "to": "deliver"
+            }
+          ],
+          "layout": {
+            "kind": "semantic-grid",
+            "reason": "按制作因果排列，非建模任务从右侧直接收尾；细节单独展开。",
+            "rows": [
+              [
+                "input",
+                null
+              ],
+              [
+                "scope",
+                "other"
+              ],
+              [
+                "geometry",
+                null
+              ],
+              [
+                "surface",
+                null
+              ],
+              [
+                "build",
+                null
+              ],
+              [
+                "verify",
+                null
+              ],
+              [
+                "deliver",
+                null
+              ]
+            ],
+            "columnWidths": [
+              470,
+              470
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "logicDetails": [
+    {
+      "id": "fitting",
+      "code": "D1",
+      "title": "把看得见的特点，变成可检查的形体",
+      "activation": "实际制作或修改形体，需要理解校准计算时",
+      "explanation": "展开主图的形体校准节点，完成后回到材质阶段。",
+      "returnTo": "surface",
+      "diagrams": [
+        {
+          "title": "把看得见的特点，变成可检查的形体",
+          "startNode": "observe",
+          "endNodes": [
+            "resume"
+          ],
+          "nodes": [
+            {
+              "id": "observe",
+              "title": "找出这款产品靠什么被认出",
+              "type": "process",
+              "files": [
+                {
+                  "path": "playbook/geometry.md",
+                  "purpose": "从款式特征、留空、截面及接头选择真实几何表示",
+                  "role": "方法"
+                }
+              ],
+              "lines": [
+                "部件与空隙、粗细、弧面、端头和连接分别记录。"
+              ]
+            },
+            {
+              "id": "bind",
+              "title": "把原图结构点绑定真实几何",
+              "type": "process",
+              "files": [
+                {
+                  "path": "data_contract.md",
+                  "purpose": "规定生成器、真实锚点、单位、编辑与保存对象",
+                  "role": "数据"
+                },
+                {
+                  "path": "playbook/calibration.md",
+                  "purpose": "区分点、轮廓与结构约束以及已执行与未测的误差",
+                  "role": "方法"
+                }
+              ],
+              "lines": [
+                "标注来自读图；自动的是投影计算，不是语义判断。"
+              ]
+            },
+            {
+              "id": "solve",
+              "title": "调整同一相机与有界形体参数",
+              "type": "process",
+              "files": [
+                {
+                  "path": "scripts/core.mjs",
+                  "purpose": "计算透视相机、锚点投影、轮廓误差与有界求解",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/feature-report.mjs",
+                  "purpose": "测量关键特征的点、间距、曲线及留出偏差",
+                  "role": "模块"
+                }
+              ],
+              "lines": [
+                "点误差按图像对角线归一，再加权求和。",
+                "轮廓与结构项由任务脚本明确接入，未测不填零。"
+              ]
+            },
+            {
+              "id": "inspect",
+              "title": "同机位核对整体和局部",
+              "type": "process",
+              "files": [
+                {
+                  "path": "playbook/calibration.md",
+                  "purpose": "区分点、轮廓与结构约束以及已执行与未测的误差",
+                  "role": "方法"
+                }
+              ],
+              "lines": [
+                "1000×1000图上10像素点误差，归一约0.00707。",
+                "权重1的该点损失约0.00005；20像素留出点只报告。",
+                "轮廓未标注就写未测，不能当完全吻合。"
+              ]
+            },
+            {
+              "id": "resume",
+              "title": "记录偏差后回到材质阶段",
+              "type": "io",
+              "files": [
+                {
+                  "path": "expected_outcome/expected_outcome.md",
+                  "purpose": "区分形体对应、浏览器运行及未完成事项",
+                  "role": "方法"
+                }
+              ],
+              "lines": [
+                "关键特征错位要修几何，整体重合分数不能抵消。"
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "observe",
+              "to": "bind"
+            },
+            {
+              "from": "bind",
+              "to": "solve"
+            },
+            {
+              "from": "solve",
+              "to": "inspect"
+            },
+            {
+              "from": "inspect",
+              "to": "resume"
+            }
+          ],
+          "layout": {
+            "kind": "semantic-grid",
+            "reason": "单一展开阶段按因果顺序排列，不保留空列。",
+            "rows": [
+              [
+                "observe"
+              ],
+              [
+                "bind"
+              ],
+              [
+                "solve"
+              ],
+              [
+                "inspect"
+              ],
+              [
+                "resume"
+              ]
+            ],
+            "columnWidths": [
+              620
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "maintenance",
+      "code": "D2",
+      "title": "仅改版时验证技能并更新使用说明",
+      "activation": "仅当本次任务修改技能规则、代码或目录时",
+      "explanation": "咨询和普通模型制作不执行改版制图；改版完成回到当前材料处理节点。",
+      "returnTo": "other",
+      "diagrams": [
+        {
+          "title": "仅改版时验证技能并更新使用说明",
+          "startNode": "change",
+          "endNodes": [
+            "resume"
+          ],
+          "nodes": [
+            {
+              "id": "change",
+              "title": "改动规则或执行代码",
+              "type": "process",
+              "files": [
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "任务依赖安装、构建命令与设备同步方法",
+                  "role": "方法"
+                }
+              ],
+              "lines": [
+                "普通建模不进入本页；保留旧版可恢复快照。"
+              ]
+            },
+            {
+              "id": "test",
+              "title": "验证改动实际影响的行为",
+              "type": "process",
+              "files": [
+                {
+                  "path": "scripts/test-product.mjs",
+                  "purpose": "改动代码时验证相机、求解、留出点及非法输入",
+                  "role": "验证"
+                }
+              ],
+              "lines": [
+                "测试相机、留出点和求解，并打开真实产物检验。"
+              ]
+            },
+            {
+              "id": "manual",
+              "title": "按同一逻辑制作说明书",
+              "type": "process",
+              "files": [
+                {
+                  "path": "manual/skill-manual.json",
+                  "purpose": "本说明书唯一结构化图源",
+                  "role": "图源"
+                },
+                {
+                  "path": "manual/skill-manual.md",
+                  "purpose": "与图源同义的文字说明",
+                  "role": "交付"
+                },
+                {
+                  "path": "manual/skill-flowchart.svg",
+                  "purpose": "可独立缩放查看的完整总图",
+                  "role": "交付"
+                },
+                {
+                  "path": "manual/skill-manual.html",
+                  "purpose": "带详情与文件定位的交互说明书",
+                  "role": "交付"
+                },
+                {
+                  "path": "SKILL_MANUAL.pdf",
+                  "purpose": "供人阅读的总流程及必要展开",
+                  "role": "交付"
+                },
+                {
+                  "path": "../skill-product-manager/scripts/build_skill_manual.mjs",
+                  "purpose": "由同一图源生成PDF、文字与网页说明",
+                  "role": "依赖"
+                },
+                {
+                  "path": "../skill-product-manager/scripts/validate_skill_manual.mjs",
+                  "purpose": "核对图文源、布局与实际PDF",
+                  "role": "依赖"
+                }
+              ],
+              "lines": [
+                "使用 Skill Product Manager 制图工具，逐页检查可读性。"
+              ]
+            },
+            {
+              "id": "install",
+              "title": "核对摘要并替换授权副本",
+              "type": "process",
+              "files": [
+                {
+                  "path": "MANIFEST.json",
+                  "purpose": "登记发行版本、正式文件和摘要",
+                  "role": "登记"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "任务依赖安装、构建命令与设备同步方法",
+                  "role": "方法"
+                },
+                {
+                  "path": "../skill-product-manager/scripts/release.py",
+                  "purpose": "登记摘要并打包可重开的发行版",
+                  "role": "依赖"
+                }
+              ],
+              "lines": [
+                "旧目录退出活跃路径；不覆盖其他能力或凭据。"
+              ]
+            },
+            {
+              "id": "resume",
+              "title": "带着验证结果回到本次交付",
+              "type": "io",
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "识别单品建模请求、路由及最终交付范围",
+                  "role": "入口"
+                }
+              ],
+              "lines": [
+                "新版已生成、已安装和实际运行验证分开记录。"
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "change",
+              "to": "test"
+            },
+            {
+              "from": "test",
+              "to": "manual"
+            },
+            {
+              "from": "manual",
+              "to": "install"
+            },
+            {
+              "from": "install",
+              "to": "resume"
+            }
+          ],
+          "layout": {
+            "kind": "semantic-grid",
+            "reason": "单一展开阶段按因果顺序排列，不保留空列。",
+            "rows": [
+              [
+                "change"
+              ],
+              [
+                "test"
+              ],
+              [
+                "manual"
+              ],
+              [
+                "install"
+              ],
+              [
+                "resume"
+              ]
+            ],
+            "columnWidths": [
+              620
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

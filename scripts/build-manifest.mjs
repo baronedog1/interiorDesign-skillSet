@@ -58,7 +58,7 @@ const skillDirs = fs.readdirSync(skillsRoot, { withFileTypes: true })
   .sort();
 const fileRows = [];
 const skills = [];
-const lecooSkills = new Set(['interior-floorplan-planning', 'interior-html-modeling', 'interior-camera-capture', 'interior-space-rendering', 'idk-canvas-ingest-agent', 'booklet-production']);
+const lecooSkills = new Set(['interior-html-modeling', 'interior-blender-modeling', 'product-modeling']);
 
 for (const skillId of skillDirs) {
   const skillRoot = path.join(skillsRoot, skillId);
@@ -95,8 +95,8 @@ const manifest = {
   schemaVersion: 1,
   snapshotAt,
   source: {
-    type: 'ubuntu-design-methods-release',
-    currentDesignRelease: { deviceId: 'ubuntu-01-codex', skillRoot: '/home/agentops/.codex/skills', skillIds: [...lecooSkills] },
+    type: 'gcp-manager-modeling-current-agent-release',
+    currentDesignRelease: { manager: 'gcp-manager', sourceRoot: '/home/baronedog111/gcp-manager/skills', reconciledFromDevice: 'ubuntu-01-codex', skillIds: [...lecooSkills] },
     excluded: ['credentials', 'auth', 'sessions', 'history', 'tasks', 'logs', 'customer-data', 'node_modules', 'runtime-cache'],
   },
   skillCount: skills.length,

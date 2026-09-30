@@ -1,6 +1,8 @@
 {
-  "version": "5.0.1",
-  "release": "ubuntu-design-2026.09.20.1",
+  "name": "interior-html-modeling",
+  "version": "5.0.2",
+  "distribution": "ordinary-agent-skill",
+  "file_count": 88,
   "files": [
     "MANIFEST.json",
     "SKILL.md",
@@ -18,7 +20,6 @@
     "playbook/joinery.md",
     "playbook/rule-selection.md",
     "playbook/space-connections.md",
-    "playbook/subagents.md",
     "playbook/timing.md",
     "scripts/engine/LICENSE-Three.js.txt",
     "scripts/engine/STYLE-GUIDE.md",
@@ -92,16 +93,15 @@
     "scripts/requirements.txt",
     "scripts/run.py"
   ],
-  "file_count": 89,
   "sha256": {
-    "SKILL.md": "3d7865a50e3265c87a9d5b0e7bbc7ade0ab7cd8f18146eb65dfde7c39030d102",
-    "SKILL_MANUAL.pdf": "d7054508ab13d1107ae84db903e00f76da66aff228a239bbffc7583b392b5caa",
+    "SKILL.md": "e40d0db4d30aa3e8ffd0f87fec5375cff3f6332864b48dae11fb53a44a7ea387",
+    "SKILL_MANUAL.pdf": "6b5284f0283ca4d116233b076bae26c3c8d9915c3633f91f39080f9b98d8d662",
     "data_contract.md": "4058d33f011394ac387f5bbafc71f90af706821b3f6ff2dd33b86e8cbdcffd44",
     "local_runtime.md": "92882a9eb89b78eaf3340d922e0c04fd0fd1df330e0e12a0551f0ee674fd90e7",
-    "manual/skill-flowchart.svg": "251dc32538908ef0a6bea2093d3a535c83244fb4939eb3fe7794a0421250ead4",
-    "manual/skill-manual.html": "7d5da3d6a151752de84ca92a79dc0a978fb406b2fd6f67f10374cb0406de6c33",
-    "manual/skill-manual.json": "deef9dd232447e873c46ade0ec34e92dea5aa8da25b8a9e328a54753e648bca1",
-    "manual/skill-manual.md": "9e6805718927ef721f934f2fdcb1ae78f63402db94cc32de52e33d28f9f5833c",
+    "manual/skill-flowchart.svg": "a7aea79580374f9ba7e923b741115e1bce5d779762d696f2f63162a210057af6",
+    "manual/skill-manual.html": "e29eec9a283c94f2bb62f73a8569d034ca92fa6f2eb8c7ca8704677b092f8e99",
+    "manual/skill-manual.json": "faac652d37cf5be3e3e03f4f2eec56b21af18c40c95675a15abfb0a32ad1a250",
+    "manual/skill-manual.md": "f1512d4d40122d91e01a00f76b11d0b9b3c2da003c0b4052762a5e2ead61cdfc",
     "playbook.md": "6303e08fb3aedf97f6035b4667955093186109e23856139c0655e359265a62c2",
     "playbook/editor-model.md": "d9670953805fe3e54db8c15264bbe1ec3cb53fd47c5c6bf2bcacdeb4c8b732f4",
     "playbook/examples/cabinet-run.json": "680bb0eeba7651d95aecf67968b157865e27b07e9b99420a742eb83423c7c66d",
@@ -109,7 +109,6 @@
     "playbook/joinery.md": "a818752e2df69471bc4f134ef43957f70eecdbc6d9d0bffa9c8ff66723f86f10",
     "playbook/rule-selection.md": "47e7a90a597f80de799d5f1eaa65042041185bd43c106947bc622fb1825dd295",
     "playbook/space-connections.md": "ba6c87300389b746a40e28306c763154d71e02cac7975f66ea78fcbb9e812c22",
-    "playbook/subagents.md": "0208c9eaeeaa80b0f2d25eeff9e5160f3cfd365212e6a8396d1bebc17a99c97f",
     "playbook/timing.md": "3bf2c3e32e6217e1bc39d3bfb65593f2e5db0332d76d77a6538e583461302820",
     "scripts/engine/LICENSE-Three.js.txt": "fb178059e5d6f4d162dbbec255587cdd768b5d9adf3b2573f53dfc5a1774c94d",
     "scripts/engine/STYLE-GUIDE.md": "0262435e8f255e7cc0b11b6cd589113a77a5fc216b82ad0559dd7c21a91e7b35",
@@ -182,5 +181,9 @@
     "scripts/engine/tests/test_space_connections.py": "ab3d03d88ff957a9b88a482824872e7a3770fd633a730b7afdec2bcd0b3e6461",
     "scripts/requirements.txt": "9ff992eddf2cb37f9fb9b6d993921ee70e02a969b4981f00974acffe2137b833",
     "scripts/run.py": "48a6117e9b5c0c2dc887c0754044d308cc6f92130479f32ebc680fa92faab421"
-  }
+  },
+  "hash_note": "MANIFEST.json不自哈希；外层ZIP摘要随交付提供。",
+  "specification": "Skill Product Manager 14.4.0 / schema 5 / node-file bidirectional traceability",
+  "runtime_installation": "not performed by this source package",
+  "external_publication": "not performed"
 }

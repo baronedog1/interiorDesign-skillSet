@@ -1,13 +1,19 @@
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "5.0.1", category: interior-design}
+metadata: {version: "5.0.2", category: interior-design}
 ---
 # HTML 室内共建
 
 消费当前 `layout.json`，交付 `model.html`、`scene.json`。用户编辑后以最新完整 HTML 为准；导出布局重新编译，不能用旧模型覆盖用户修改。
 
 先读取同名 `layout.requirements.json` 或规划明确交接的需求文件，访谈规则归[平面布局Skill](../interior-floorplan-planning/playbook/requirements-interview.md)。依用户已确认的功能、习惯、优先级、保留家具与风格实施建模，不从空白图猜偏好；未知与授权自由发挥分开。仅缺颜色不阻止基础结构建模；影响用途/容量的实质缺口回规划访谈，不重复询问已有答案。每次向机位、渲染、方案册交接同时说明这份需求及当前revision。
+
+## 高频数据入口
+
+- 当前 `layout.json`、同名 `layout.requirements.json` 或规划交接的需求文件；读取已确认约束与待核项。
+- 用户最新完整 HTML 与导出的布局；修改以同版当前文件为准。
+- 本包组件库、风格及构造方法；未知颜色按入口规则继续，影响用途或容量的缺口回规划访谈。
 
 正式入口 `python scripts/run.py build layout.json --out DIR`。按需 `import-html FILE --out layout.json`、`asset-bundle library.json --out assets.json`、`style-resolve 风格名称`、`style-evidence recipe.json`、`style-add recipe.json`。
 
@@ -27,9 +33,9 @@ metadata: {version: "5.0.1", category: interior-design}
 
 统一编辑、墙角接缝与旧文件数据迁移见 [模型与编辑算法](playbook/editor-model.md)。正式 build 自动使用当前编辑器；不从项目 HTML 复制扩展脚本。
 
-## 子代理
+## 执行方式
 
-启用场景：HTML 户型的读图重建、结构/几何生成或修改；主代理委派 gpt-6-astra / low 原生子代理，不复制聊天历史。非建模阶段不自动委派；已是该专家则直接执行。输入为原始资料、已确认需求、当前模型事实和输出范围；执行与收尾详见 [子代理分工](playbook/subagents.md)。
+本 Skill 默认由当前代理执行，不自动启动子代理。
 
 
 ## 当前设计方法

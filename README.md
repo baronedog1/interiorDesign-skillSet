@@ -1,22 +1,17 @@
-# Ubuntu design Skills · 2026.09.20
+# 三项建模 Skill · 当前代理执行
 
-独立发布 `ubuntu-design-2026.09.20.1`，来源 Ubuntu 百亿设计工作流；同步 Ubuntu、Lecoo、Genmachine。旧分支及旧标签保持原样。本分支仅包含六项室内设计 Skill；单产品与 Blender 能力不属于此次发布。
+发行：`modeling-current-agent-2026.10.01.1`。本轮只更新及安装下面三项，默认由当前代理完成建模。各包的入口、数据、脚本和同源 PDF 完整保留，强制或建议委派与专用交接文件退出发行包。
 
-| Skill | Version |
-|---|---|
-| interior-floorplan-planning | 3.5.0 |
-| interior-html-modeling | 5.0.1 |
-| interior-camera-capture | 3.3.0 |
-| interior-space-rendering | 3.4.0 |
-| booklet-production | 4.2.0 |
-| idk-canvas-ingest-agent | 3.1.1 |
+| Skill | 版本 | 入口 |
+| --- | --- | --- |
+| HTML户型 | 5.0.2 | [interior-html-modeling](skills/interior-html-modeling/SKILL.md) |
+| 精细Blender整屋 | 5.1.1 | [interior-blender-modeling](skills/interior-blender-modeling/SKILL.md) |
+| 单品照片建模 | 3.1.1 | [product-modeling](skills/product-modeling/SKILL.md) |
 
-新增方法：图纸上下层投影识别、真实完成面对齐、柜体板件/分格/转角盲区、桌柜关系、台面实开孔、吊顶与封板语义、真实室内构图、已确认节点继承与方案说明。客户固定尺寸、审美和个人偏好留在各项目/用户记忆，不提升为通用默认。
+整改方法与任务核查见 [发行说明](RELEASE.md)。同源说明书在每项根目录的 SKILL_MANUAL.pdf，AI说明书及可交互总图在 manual/。建模代码、模板、资产和设计方法与整改前保持一致；旧版独立标签与主分支保留。
 
-HTML 5.0.1：共享参数化构造核、固定板厚重建、柜段生成、真实台面孔洞与水槽、桌下抽屉、柜体盲区与内缩踢脚、平台床/卡座、独立吊顶构件、完成面锚点与连排台面联动。参数编辑支持撤销/重做及完整 HTML 保存重开。
+共享源由 GCP Manager 管理，四设备按本次授权定向安装三项。设备的私有.runtime、认证、素材、工作区、客户模型和Bridge分别保留。其它五项设计目录继承自父发行，不属于本次更新，也不据本标签自动覆盖到设备；当前设计主链仍按各设备现役登记执行。
 
-这些是制作方法与可配置参数，不增加设计强校验、审美门禁或审批流程。几何测试只用于本次软件维护，不作为客户设计交付门禁。
+安装层逐文件摘要通过不等于本地软件、资产或后端已运行就绪。Lecoo独立Blender能力保持原状，新增同源Blender目录仅登记installed/runtime-unverified。旧TUI需显式读取当前Skill，新会话加载原生配置。
 
-安装：把 `skills/` 的六个目录替换至设备唯一活动 Skill 根；保留该设备已有私有 `.runtime`，不要跨设备复制凭据。Python/Chrome/字体路径按各设备运行配置提供。各 Skill 的 `SKILL.md`、playbook、当前 PDF 为同一版本。`manifest.json` 和 `FILES.sha256` 用于发布文件溯源。
-
-验证：参数化部件测试、已有 Python 测试、真实 Chrome 编辑与完整保存往返。原生效果图及私有平台网络业务不在本次软件发布测试范围。
+manifest.json与FILES.sha256提供整个分支的文件追溯；source.currentDesignRelease.skillIds只列本次三项更新范围。同步脚本不复制凭据或私有运行态，不把维护验证加入客户任务前置流程。

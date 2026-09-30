@@ -1,0 +1,1 @@
+{"private":true,"type":"module","dependencies":{"three":"0.180.0","esbuild":"0.25.9","sharp":"0.34.3","playwright-core":"1.55.0"}}

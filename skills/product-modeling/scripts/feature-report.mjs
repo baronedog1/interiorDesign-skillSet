@@ -1,0 +1,15 @@
+import {pixel} from './core.mjs';
+export function featureReport(features,anchors,camera,width,height){
+ return features.map(f=>{
+  const points=(f.points||[]).map(o=>{if(!anchors[o.id])throw Error(`Feature ${f.id}: unbound ${o.id}`);const predicted=pixel(anchors[o.id],camera,width,height);return {...o,xyz:anchors[o.id],predicted,errorPx:Math.hypot(predicted[0]-o.pixel[0],predicted[1]-o.pixel[1])};});
+  let spacing=null;if(f.spacing){const axis=f.spacing.axis??[1,0],norm=Math.hypot(...axis),lookup=new Map(points.map(p=>[p.id,p]));if(!Number.isFinite(norm)||norm===0)throw Error('间距方向必须是非零有限向量');const chain=f.spacing.ids.map(id=>{if(!lookup.has(id))throw Error(`Missing spacing point ${id}`);return lookup.get(id);});const project=p=>(p[0]*axis[0]+p[1]*axis[1])/norm;spacing={units:'reference image pixels; not 3D distances',pairs:chain.slice(1).map((p,i)=>({from:chain[i].id,to:p.id,observed:project(p.pixel)-project(chain[i].pixel),predicted:project(p.predicted)-project(chain[i].predicted)}))};}
+  let curve=null;if(f.curve){const predicted=f.curve.sampleIds.map(id=>{if(!anchors[id])throw Error('Unbound curve '+id);return pixel(anchors[id],camera,width,height);});const observed=f.curve.polyline;if(predicted.length<2||!observed||observed.length<2)throw Error('曲线至少需要两个对应采样点');const a=polylineDistances(predicted,observed),b=polylineDistances(resample(observed,64),predicted);curve={role:f.curve.role??f.role??'fit',observed,predicted,meanDistancePx:(mean(a)+mean(b))/2,maxDistancePx:Math.max(...a,...b),endpointErrorsPx:[distance(predicted[0],observed[0]),distance(predicted.at(-1),observed.at(-1))]};}
+  return {...f,points,spacing,curve,meanErrorPx:points.length?points.reduce((s,p)=>s+p.errorPx,0)/points.length:null,maxErrorPx:points.length?Math.max(...points.map(p=>p.errorPx)):null};
+ });
+}
+export function featureLoss(reports,width,height){let s=0,w=0;for(const f of reports){if(f.role==='check')continue;const weight=f.weight??1;if(f.curve&&f.curve.role!=='check'){s+=weight*(f.curve.meanDistancePx/Math.hypot(width,height))**2*6;w+=weight*6;}for(const p of f.points){if(p.role==='check')continue;const q=weight*(p.weight??1);s+=q*(p.errorPx/Math.hypot(width,height))**2;w+=q;}}return s/Math.max(1,w);}
+
+const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);const mean=a=>a.reduce((s,v)=>s+v,0)/Math.max(1,a.length);
+function segmentDistance(p,a,b){const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((p[0]-a[0])*dx+(p[1]-a[1])*dy)/Math.max(1e-12,dx*dx+dy*dy)));return distance(p,[a[0]+dx*t,a[1]+dy*t]);}
+function polylineDistances(points,line){return points.map(p=>Math.min(...line.slice(1).map((b,i)=>segmentDistance(p,line[i],b))));}
+function resample(line,count){const lengths=line.slice(1).map((p,i)=>distance(p,line[i])),total=lengths.reduce((s,v)=>s+v,0);return Array.from({length:count},(_,k)=>{let d=k*total/(count-1);for(let i=0;i<lengths.length;i++){if(d<=lengths[i]||i===lengths.length-1){const t=d/Math.max(1e-12,lengths[i]);return line[i].map((v,j)=>v+(line[i+1][j]-v)*t);}d-=lengths[i];}return line.at(-1);});}

@@ -1,339 +1,390 @@
 # 可编辑模型与定制节点
 
-版本：5.0.1
+版本：5.0.2
 
-用户给布局或最新完整模型 → 选择对象方法与用户参数 → 按真实尺寸构造板件和节点 → 生成当前离线编辑模板 → 编辑关联、保存并交接同版 → 用户获得完整模型与场景数据
-
-
-## SKILL.md
-
+```yaml
 ---
 name: interior-html-modeling
 description: 将布局 JSON 编译为可离线编辑的完整 Three.js HTML；支持墙门窗、家具库替换、CMF 风格、量尺面积、灯光相机和完整保存往返。
-metadata: {version: "5.0.1", category: interior-design}
+metadata: {version: "5.0.2", category: interior-design}
 ---
-# HTML 室内共建
-
-消费当前 `layout.json`，交付 `model.html`、`scene.json`。用户编辑后以最新完整 HTML 为准；导出布局重新编译，不能用旧模型覆盖用户修改。
-
-先读取同名 `layout.requirements.json` 或规划明确交接的需求文件，访谈规则归[平面布局Skill](../interior-floorplan-planning/playbook/requirements-interview.md)。依用户已确认的功能、习惯、优先级、保留家具与风格实施建模，不从空白图猜偏好；未知与授权自由发挥分开。仅缺颜色不阻止基础结构建模；影响用途/容量的实质缺口回规划访谈，不重复询问已有答案。每次向机位、渲染、方案册交接同时说明这份需求及当前revision。
-
-正式入口 `python scripts/run.py build layout.json --out DIR`。按需 `import-html FILE --out layout.json`、`asset-bundle library.json --out assets.json`、`style-resolve 风格名称`、`style-evidence recipe.json`、`style-add recipe.json`。
-
-读 [方法与编辑功能](playbook.md)、[数据合同](data_contract.md)、[运行说明](local_runtime.md)。本 Skill 持有五项共用的确定性编译/截图引擎 `scripts/engine`，不是第六项 Skill；平台代码与密钥只属于平台 Skill。
-
-切换风格只改 CMF，保留家具形体、位置、灯光、机位、撤销历史。换家具是另一个明确动作。不要删除床靠墙、正面朝向、门窗真实宿主与动线等设计知识；也不要加审美分数门禁。
-
-实际截图交给 `interior-camera-capture`；效果图交给 `interior-space-rendering`；查询资产、上传 HTML/图片调用 `idk-canvas-ingest-agent`。
-
-效果图链将HTML称为粗模：提供准确结构、布局、机位与约略家具尺度，不作为精细款式或照明参考。渲染按绑定的家具图片/精细定样锁款并重建光影，不锁粗模造型；这不改变HTML内CMF按钮的既有行为，也不表示二维家具图已转成3D资产。规则详见[渲染方法](../interior-space-rendering/playbook.md)。
-
-人读 [PDF](SKILL_MANUAL.pdf)。
-
-每一步必须记录开始、完成、耗时及状态，遵循[统一时间合同](playbook/timing.md)；正式命令自动记录，读图、识图、原生调用与交付等待随执行登记，不事后补时间。
-
-门窗按源事实统一编译；空间两端、门型、开合、填充与外部目标随截图交接。读 [空间连接合同](playbook/space-connections.md)。不再写死半扇玻璃或截图时统一开门。
-
-统一编辑、墙角接缝与旧文件数据迁移见 [模型与编辑算法](playbook/editor-model.md)。正式 build 自动使用当前编辑器；不从项目 HTML 复制扩展脚本。
-
-## 子代理
-
-启用场景：HTML 户型的读图重建、结构/几何生成或修改；主代理委派 gpt-6-astra / low 原生子代理，不复制聊天历史。非建模阶段不自动委派；已是该专家则直接执行。输入为原始资料、已确认需求、当前模型事实和输出范围；执行与收尾详见 [子代理分工](playbook/subagents.md)。
-
-
-## 当前设计方法
-
-先按任务读取 [参数化柜体与节点](playbook/joinery.md)。通用方法与用户参数分开，选择及覆盖见 [规则归属](../interior-html-modeling/playbook/rule-selection.md)。这些是生成方法，不新增强校验、门禁或审批。
-
-正式整组生成：`python scripts/run.py cabinet-run layout.json run.json --out layout-next.json`，再build。模板支持参数化板件、独立模块、真实台面孔、柜桌/床台/吊顶以及显式关联随编辑重建；字段见joinery方法。
-
-
-## playbook.md
-
-# 一个模型，一套编辑事实
-
-采用专家 1.3.1 studio.html 模板与原生组件库作为界面基线，保留底栏、房间机位、结构/家具/灯光面板和完整离线导出。输入事实与家具规则来自平面规划，不再单独调用动线 Skill。
-
-## 初次建模与修改
-
-按 floor、rooms、walls、openings、placements 构建全户型。墙厚和洞口真实生成，2D 与 3D 共用数据。存在盆腔的水槽使用柜体壳板与独立盆腔，不能用完整实心柜块顶穿盆腔；台面开口不是表面贴黑图。组件通过 catalog 的 componentId 和实际 GLB 数据决定形体，不用随手堆方块冒充下载模型。已有五种风格可用于初次细部造型，但类别内结构须由选型决定：sofa.straight为直排双人，sofa.cloud为三座贵妃位。不能把一件贵妃位仅缩窄充当直排。选到产品后若结构家族不符，回布局componentId再编译；风格只改变该家族细部/CMF，不能强加贵妃位。此后换风格按钮只更新CMF。
-
-墙锁防误拖；结构面板编辑端点、厚高、门窗宿主和偏移。拖墙不会偷偷重写房间多边形；需要同步调整源布局。家具面板支持移动、旋转、尺度和材质槽，对象正面统一 +Z，床头/沙发背 -Z。几何建议仅用于选择合理位置；用户有意编辑不要被审美规则拦住。无法表示的格式、丢失引用、坏 GLB 或无效数值明确报出。
-
-## 家具库
-
-用户选择本地目录内 library.json；按类别、风格和宽度筛选，选中对象再替换为同类模型。条目登记 id/name/componentId/category/styles/size/forward/deform/modelPath/sha256。GLB 必须是当前解析器支持的静态自包含三角网格；压缩动画模型先预转换，不偷偷用方块替代。不规则 footprint 不存在时只能称包络观察，不能称精确碰撞结论。
-
-普通活动家具默认等比缩放，柜体延长需要已支持的参数化/分段组件，不整体拉伸拉手。GLB 材质按名称单独调整 color/roughness/metalness 并保存；全局 CMF 不强刷无语义材质槽，避免玻璃金属被统一涂色。自带三个 GLB 只是样件，不声称已覆盖所有生产家具。
-
-## CMF 与智能风格
-
-五个预设是奶油自然、现代极简、中古暖木、侘寂自然、新中式，不是能力上限。style-resolve 返回已知配方；未知返回真实检索请求，由宿主联网阅读，提炼色板、木/石/布/金属/玻璃、家具类别适配，记录链接、日期和支持结论。JSON evidence 只能证明记录完整，不能代替真实访问。配方写材料语义槽；导入新配方可持续扩展。
-
-换风格复制新 CMF，保留当前 forms；不 rebuild，不移动、换形、改灯、不清空撤销。保存 customStyle 后重开仍保持原形。若目标风格必须换某件家具，作为单独选型建议，由家具库替换功能完成。
-
-## 测量、灯光和保存
-
-面积由房间多边形计算，保留凹角，不用外接矩形。底部刻度在正交视图准确，透视只是中心参考。量尺两点投影到 Y=0 地面，支持 m/mm，不称任意 3D 表面距离；标注随完整 HTML 保存。
-
-灯具网格与点/射灯分开；光源支持位置、目标、亮度、色温、柔边和绑定。软件明确限制 24 个光源、3 个投影射灯及数值范围，这是当前实时渲染能力，不是审美标准。
-
-局部编辑更新当前对象；撤销重做分别恢复家具、结构、灯光与 CMF。完整导出包含 layout、customStyle、nativeAssets、measurements、lighting、显示和相机；重新打开应恢复。外发 HTML 不含本地路径、Key 或外部运行库依赖。最新 HTML 导入后重新生成 scene/cameras，旧摘要不能假冒新版本。
-
-## 粗模与最终设计的边界
-
-白模是去掉不透明表面的材质风格，不是改变可见结构。截图时玻璃、薄纱、透射和镂空材质保留原透明/遮罩关系，混合材质逐项处理；不得将透视开口刷成实板。捕获后恢复原材质与相机，不改客户建筑或家具。完整材质截图也可沿正式入口使用。
-
-产品交接按捕获时的画面可见表面采样，包含门外邻室；采样结果只组织参考图，不作为碰撞或审美门禁。渲染准备超过宿主5张附图时，将同职责产品图等比编排参考板，保留原图和绑定，详见渲染Skill。技术采样不代替Agent逐图识别。
-
-采样域先将实例包络裁到相机近面，再投影并裁到画幅内，从该图像区域回投射线。不能只用三维包围盒的角/中心点判可见，否则画边只露一角的马桶等会全部漏记。仍保留实体遮挡；有限采样不宣称逐像素完整性。
-
-HTML负责可计算的建筑、洞口、功能布局与机位；家具是可识别的角色/位置/尺度参考，不以简单组件外形限制最终产品。建模不凭空新增规划没有的大件或功能区隔断。HTML换风格按钮只改CMF，这是编辑交互合同，不代表原生效果图只能换颜色。完整设计由渲染Skill的design-brief组织墙/顶/灯/窗与陈设，再以真实参考重建精细外观；二维终图并不自动成为可编辑三维网格。
-
-白模材质只消除色彩纹理，不改变原材质的 FrontSide / BackSide / DoubleSide 面可见性；顶面和薄片仍从原方向可见，不用全局双面化掩盖几何。截图后恢复原材质。
-
-## 门窗不是固定示意板
-
-空间连接/开合统一执行 [空间连接合同](playbook/space-connections.md)。resolve_openings 的墙局部扇体同时给HTML与机位障碍物；原写死所有门开1.3弧度和固定半幅移门已删除。普通窗/固定玻璃的connects是视觉关系，不是可走通道。
-
-
-## playbook/editor-model.md
-
-# 单一编辑器与模型几何
-
-正式模板由 scripts/engine/python/model.py 汇总 runtime/studio.html 和已登记 runtime 模块。所有新项目从 build 生成；禁止从客户成品抽脚本形成新的产品入口。旧 HTML 仅提取 JSON；不执行其脚本。
-
-## 操作归位
-
-workspace.js 持有结构、门窗、柱子/烟道、量尺与家具库的控件；app.js 持有唯一指针分发、家具变换、灯光、视图、撤销和保存事务。控件输入与拖动修改相同字段。墙长输入换算同一端点；门窗沿宿主墙的 offset/width/sill/height；结构体 position/size/rotationY。家具数值、原有移动旋转和三轴控件均复用 app.js 的快照验证与记录。增加/删除对象使用同一布局事务。
-
-墙体含门窗时删除会一并删除依附开口，撤销恢复整体；不留下无宿主对象。门窗与异形洞口共享一个编辑面板，passageShape 不生成第二套门模型。窗的 connects 表示视觉相邻，不是通行关系，不因改宽而删除。
-
-柱子和烟道是 structuralItems，不冒充家具。烟道保留空腔，允许显隐、锁定、复制、数值和拖动。已有客户文件的 x/z/width/depth/height/angle 字段在导入时转换一次；只有所在房间可唯一确定时自动补 roomId，不能猜测冲突归属。
-
-## 墙角与源事实
-
-model-kernel.js 是浏览器与 Node 编译器共用的模型语义源；kernel.py 仅做进程调用，openings.py 仅保留原有 Python 调用接口。
-
-同一端点的两段非平行墙，以各自厚度偏移后的边线交点形成接缝。等厚、不等厚、正反向、直角和斜角都按线求交，不用独立补洞块；墙实体不再使用造成接缝缝隙的逐段圆角。T形连接将支墙端面接至贯通墙近侧墙面。极尖角的偏移交点超过8倍较大墙厚时保留原端面，避免生成长尖刺；该几何边界属于生成算法，不是客户质量门禁。
-
-不根据距离接近自动焊接两段源墙。描线确认同一接点但采样端点有误差时，规划明确填写 wallJoins：ends 引用墙ID及a/b端，point 是来源确认的接点，source 为 traced-junction 或 user-edit。明确留空的源接点标 source=gap，或对应墙 joinMode=source-gap；原偏移和缺口保留。未知缺口回看源图，不按统一容差吞掉。
-
-数值及拖动编辑相连墙端时，同一节点一起更新。原水平/垂直连接维护共享X/Z；明确给出不一致新坐标时允许改变方向。已关联房间和楼面顶点保留到源墙面的有符号偏移，随墙移动；不靠重新生成一套示例房间覆盖客户布局。新增墙不会擅自命名新房间；需要新增房间身份及用途时由规划在当前模型上明确交接。
-
-## 保存与复用
-
-完整HTML携带当前布局、家具三轴旋转、门窗开合、异形轮廓、结构体、材质、灯光与相机；保存提示用户回传。单空间查看使用临时渲染层，不写成实体隐藏。截图暂时恢复全模型，再按同版机位处理并恢复查看状态。
-
-发布回归检查新项目生成、实际指针操作、撤销、保存重开、HTML只读提取与正式重编译。发布测试的失败修对应实现，不增加客户阶段审批或审美门禁。柜体组合深化与全貌机位算法不在本次编辑器功能整合中扩展。
-
-
-## playbook/joinery.md
-
-# 定制柜、柜桌、台面与吊顶的生成方法
-
-## 职责与使用方式
-消费已确认布局和需求，按对象用途与关系构造板件。相同方法用于单空间和全屋；不增加设计评分、强校验、生成门禁或逐项审批。尺寸不足时仍保留可编辑方案，说明取舍，在当前授权内调整分格；功能不明确才回规划询问。
-
-使用 placement.joinery 传结构参数，单位米；坐标原点为模块占地中心的底面，+Z为柜门使用侧。板厚、门缝、抽箱与五金净空独立于整柜尺寸；编辑后重新生成实体，不整体拉伸。cabinet.custom、desk.custom、bed.platform、ceiling.panel、surface.worktop、cabinet.housing、seat.banquette为正式目录入口。普通wardrobe/counter/sink/hob/upperCabinet/sideboard/shelf/desk也走同一参数化生成方法；不再依赖固定样件的整体缩放。
-
-通用方法没有某个客户的永久数值。代码缺省板厚18mm、缝2mm等只是可编辑概念起点，未选材五金时注明暂定。用户的15mm门底、100mm抽高、450mm桌深、45mm台面、2400柜高、无拉手款式等只从当前用户或项目配置读取，不默认传给另一位用户。
-
-## 整组分柜与正背面
-先扣墙边安装余量和转角盲段，再按当前门宽偏好分单门、双门、开放和抽屉模块。实际门宽=(有效模块宽−两侧缝−中缝)/门数；不能把名义700双门说成两扇实际350。抽面和固定饰板不套平开门范围。自动建议无法同时满足时输出可编辑建议与取舍，不阻断生成。
-
-正式命令：`python scripts/run.py cabinet-run layout.json run.json --out layout-next.json`。run.json包含id、roomId、position、rotationY、height、depth及modules[{width,doors,joinery}]；也可给width与doorRange生成初始分格。每模块有稳定ID、独立编辑；可选worktop生成关联的连续台面。平面为转角时分别生成柜段、留出明确盲区，不能把两个完整柜相交。
-
-joinery.blindWidth/blindSide分离固定盲板和活动门。柜门朝操作通道，固定背饰面用exposedBack表达；假门不是活动门。无墙外露端部按确认款式包侧板或明露收口，采用真实搭接，不能靠重叠板遮盖。独立开门与相邻同时开门是不同使用条件，互斥开启或需移椅/移枕应写明。
-
-## 板件与开合
-board、gap、doors、doorBottom、doorTop、plinthHeight、plinthInset、shelves为独立参数。zones按bottom/top/type/count描述储物门、固定挡板、开放区和抽屉。柜侧、背、底、顶和层板真实分离。普通落地、厨房内缩踢脚、悬浮柜、常鞋开放区、桌上抽屉使用不同底部关系。
-
-handle=none/recess/pull决定对应节点。免拉手外观不等于已选反弹器；recess生成槽背与下折边，抽面和抽箱让位，槽端不加无用途堵板。顶部拉手与烟机控制面板、灯具不是同一对象。门缝是板边真实距离，不画黑线。openAngle用于概念门扇姿态，不声称完整五金仿真。
-
-同类厨房门板以统一上下沿生成，附件不决定柜门高度。高柜改变高度时调整储物段，设备保持真实比例。fridgeHousing为有真实侧背和顶板的设备包框，内部不放穿设备底板；冰箱和高柜为独立对象，净空按具体产品，不能缩机器或推入墙中。
-
-## 台面与设备孔
-连续台面用surface.worktop独立表达。holes[{x,z,width,depth,kind}]在台面中生成真实空洞；kind=sink在柜内生成盆底和盆壁；烟道缺口也用实际空洞，不以贴图遮盖。盆柜上部用fixed区遮盆胆，下部按门或抽屉生成；设备位不能照搬储物层板。
-
-同向连续柜段台面可用joinery.spanIds关联模块；台面随成员的真实外表面重算宽深与标高。holes.anchorId及offsetX/offsetZ使设备孔跟随所属模块。转角或高低台分段表达，分别设缺口和衔接，不用同向包络跨过入口或高柜。独立岛台另建台面。外露返台的背饰面、端板及内缩踢脚按真实用途连续，侧板至台面下皮，不堵扣手。
-
-## 柜桌、床台及卡座
-desk.custom按当前宽高深重建桌板、侧支承与可选drawerHeight薄抽屉。桌高−板厚−抽面−缝得到腿部净空。垂直转角的交接格将doorBottom设为桌顶以上，下部fixed区表达封板；内部取物无法实现时不写成正常储物。同墙夹柜嵌桌按确认的整体前沿确定桌深，不机械套转角桌深。侧支撑、抽箱、端缝随桌深一起生成。
-
-bed.platform用连续承托和cushionThickness软垫表达睡眠台面；headboardHeight从支承台面起算，不从床垫顶起算。床尾柜是否纳入床垫范围由明确用途决定，覆盖翻盖时记录抬垫取物。seat.banquette通过seatHeight指定含软垫完成坐高（未填时以size高度为概念座面）；有靠背时size高度应覆盖整体，backrestHeight单独表达，backrestHeight靠背落至软垫下支承面；长、坐深、总深分开设定，不照抄参考截面。
-
-## 柜顶、吊顶和顶柜
-先确定原顶、梁、设备和顶面主形，再协调柜体。柜上可采用加高柜、固定收口或建筑吊顶，三者分别建模；吊顶不延续柜门竖缝。ceiling.panel生成底面薄板与周边封边，空腔高度不等于板厚；tiles可生成集成板分缝。普通房间不默认400mm厚套框；连通客餐玄关按同一顶面方案生成，避免重复框与孤立条盒。
-
-anchor={id,face:'top'/'front'/'back'/'left'/'right',x,y,z,width,depth,toHeight}可使局部收口随宿主柜体更新，toHeight为项目原顶控制标高。不同柜深和跨桌连接按已确认边界分段，不自动降整屋。低电视柜、悬浮浴柜、临窗洗衣下柜不自动加柜上顶。
-
-灯槽先按遮光、出光、散热、维护形成实体截面，再布置灯具；不能把未封闭柜顶缝当灯槽。无吊顶的原顶不凭空嵌暗轨。复杂弧形、特殊灯槽及五金仍由任务按真实资料深化，当前板件生成器不宣称自动完成曲面施工设计。
-
-## 按用途选柜型
-厨房按柜组拓扑、烟道、设备和连续操作面生成；烟机柜采用设备包框与分区门，不是实心柜。鞋柜按鞋类净高、换鞋与入户门安排层板/开放区；酒柜区分展示与餐边操作面；电视柜区分背景板、设备口、矮柜、侧高柜；书柜按书籍/展示区和背板安排；阳台先分单洗、并排或叠放，按窗、给排水与设备资料决定上柜和侧封板。产品种类与参考外观不能凭照片推断成已采购设备。
-
-## 模板与编辑
-数字输入、拖动和节点参数均使用同一layout事务；修改宽深后重建板件，支持撤销、重做和完整保存。面板提供板厚、缝、门数、门下沿、概念开门角、抽屉数量/抽高及拉手选项；更复杂分区由布局joinery声明。`CREAM.editJoinery(id,patch)`与`CREAM.createCabinetRun(request)`复用相同事务。位置关系仅对显式anchor/spanIds更新；没有声明的跨模块关系不会自动猜测，设计时写清绑定。
-
-先在模型源落实明确节点，再同版截图。原生图可以完善材料与精细产品外观，但不能把已确认吊顶改顶柜、固定挡板改抽屉、整块床台改成品床。已有HTML只提取数据，由当前正式模板重编译；不复制项目补丁脚本。
-
-
-## playbook/rule-selection.md
-
-# 规则只维护一个主落点
-
-通用方法放本Skill playbook；用户偏好仅放按真实身份选取的外部配置；项目位置、数值和当前模型留项目。不要将用户memory全文复制进Skill，也不以旧项目HTML替换正式模板。
-
-执行先读当前任务及layout.requirements.json，再按对象用途选择joinery方法；用户明确本轮指令覆盖其长期偏好。明确尺寸优先于一般参考值。具体结构例外优先于宽泛默认，例如同墙嵌桌齐面不同于垂直转角450深，悬浮柜不同于落地15mm，实际顶柜不同于柜上吊顶。新要求仅覆盖同一适用范围，不清除其它有效条件。
-
-需求侧车可记ruleSelections[{objectId,method,reason}]、parameterOverrides[{objectId,key,value,unit,source,scope}]与uncertainties。它们供Agent做设计决定，不作为代码审批、强校验或生成资格。无需填满字段才工作；未知细节保留概念值与说明，明确授权的适配不重复问。
-
-尺寸变化通过正式构造器重建板件和显式绑定关系；记录规则≠模板实现，模板实现≠某个实际项目已经修改。功能操作、空间事实和视觉表达各自说明真实完成范围，不能用文件存在或编辑通过代替设计本身。
-
-其它Skill引用这里和joinery.md，AGENTS只维护路由和本机runtime位置，不抄一套尺寸表。历史规则仅留归档证据；当前用户配置保留偏好及来源指针，通用方法引用本版Skill。
-
-
-## playbook/space-connections.md
-
-# 空间连接只维护一份源数据
-
-先确定空间身份、边界与连接，再建家具和取机位。不能等到渲染时让生成器从粗模门板猜测：门后到底是阳台、厨房、走廊还是室外。
-
-## 规划输入
-
-rooms.id/name/type 是房间身份；openings.connects 的两个端点是该门或窗两侧的空间，null 只表示户型外部，不自动等于户外。没有墙和门的功能区边界用 openConnections.rooms/span。实体墙就是 walls；墙上直接敞口用 passage，不用删除墙代替开洞。半开放不是新造一个模糊类别：用实际矮墙/栏杆、洞口、门型及开合共同表达。
-
-每个开口先从原图、照片或已确认需求记录宿主墙、offset/width/sill/height、两侧空间。门型为 door（平开）、sliding-door（双轨双扇移门）、passage（无门敞口）、window 或 fixed-glazing。connects 对窗表示视觉相邻，不是通行；可达图只使用门、通道和开放功能边。不要为了通过可达观察把窗当门。
-
-movable opening 的 openFraction=0 为关；0到1之间为部分开；1 为该门机构最大开启。平开最大90°；hingeSide 为沿宿主墙a→b看时的 left/right，swingSign=±1 控制墙局部Y旋转方向。移门 slideTo=left/right；双扇双轨最大净开口约为洞宽一半，不能把1解释成整面消失。infill 是 solid/clear-glass/frosted-glass，分别表达实板/可透视玻璃/磨砂遮视；透光不等于看得清对面。
-
-外部端点用 exteriorView.kind=outdoors/building-common-area/unknown，加 description；basis 写原图、照片、用户确认或设计假设的来源。入户门外可能是公共走廊，不是花园；阳台门后先是 balcony，再通过阳台外窗/栏杆看户外。只有确认是户外时才制定相符的景观意向，未知不杜撰实景。
-
-关键资料不清楚时由规划Skill分轮问清，不把未知写成已确认。历史输入缺开合时仍可做草稿：编译结果明确标 preview-default-closed-not-confirmed，不会伪造现场事实。缺连接关系记录观察并说明；不要增加表单填满率、审美门禁或无穷重试。
-
-## 同一编译结果的两个消费者
-
-scripts/engine/python/openings.py 的 resolve_openings 一次定义墙局部门扇中心、尺寸、转角和填充材料。model.py 把它内嵌到 HTML 的 OPENING_STATES；architecture-kit.js 装配这些扇，不再写死半扇玻璃或所有门开1.3弧度。cameras.py 的 Occluders 也消费同一个函数，不另猜开合。当前仅支持平开、双轨双扇推拉和关闭窗/固定玻璃；折叠、旋转等机构要先扩充实现，不能只改文字冒称支持。
-
-门窗按布局源状态显示。旧全局“打开全部门”控件改为只读状态说明；旧相机 doorsOpen 字段可读取但不再覆盖门状态，正式相机用 doorStateMode=source。家具、CMF和相机编辑继续保持；修改结构/门状态后重新编译新scene与机位。
-
-## 截图交接
-
-app.js 在真实相机上抽样实际表面与开口，写入 renders.results[].spaceContext：当前房间、抽样看到的房间、画内开口的两端身份、门型/开合/填充、可透视性、画面位置及未知信息。开放区提供真实站位，不自动变为主体；相邻房间也不等于全部入画。只传本镜头观测到的关系，不把整屋图谱塞进提示词。
-
-这不是像素级完备证明。极窄孔缝、画边或磨砂材质仍需识图；观测不移动、不隐藏对象、不阻断生成。默认带家具图与显式空槽配对图共用同一空间状态；空槽时取同机位布局图的表面证据，避免暂隐家具改变观测解释。
-
-render.py 把 spaceContext 原样交入实际 ai-request 和提示词：几何、隔断类别、开合、透明关系与目标空间保留，门窗样式可精细化，不改洞口。样式图、产品图和定样图不能改空间身份。旧截图缺此字段则明确 legacy，正式新任务重编译/重截，不给旧已执行图补写不存在的事实。
-
-## 机位构图
-
-room.cameraComposition.emphasis 为 balanced/floor/ceiling/table；notes 记录用户意图。主图默认同时可读地面与天花，强调地毯时更多地面，强调吊顶灯时更多天花，餐桌台面可轻微俯视；不规定所有房间相同百分比。算法先以功能面对应的真实房间背景边界求全高，再按可见地面/天花的候选射线、主体遮挡与镜头自然程度选择站位/FOV/上下偏移。床脚近角不再强迫鱼眼镜头，特写不冒充主图。尺寸受限时如实说明实际可见范围，不穿墙拍、不缩家具、不假称完整。
-
-截图是结构与构图依据，不是最终客户效果图；最终按原生绘图重做精细家具与光影，同空间后续机位沿用同一套设计及产品参考。
-
-## 窄卧室完整床体取景
-
-## 本版室内构图方法
-
-默认在真实室内组织主图，不自动虚拟后退或近裁切家具。空间受限时分视角；剖视仅用于用户明确要求的建筑示意。以机位Skill的playbook/interior-framing.md为当前唯一详细方法。
-
-
-## playbook/subagents.md
-
-# HTML 户型的读图重建、结构/几何生成或修改：子代理分工
-
-主代理默认 gpt-5.6-sol / medium。仅实际建模、几何重建或形体修改时，由主代理调用一个原生子代理，显式 model=gpt-6-astra、reasoning_effort=low、fork_turns=none。已在建模子代理中则直接执行，不递归委派；同一模型默认单一写入者。
-
-仅问耗时/方法、查询资产、发送文件、单纯批量编译已有确定数据、截图、渲染、PDF或平台交付不因此自动开子代理。完整设计只将建模阶段交给专家；子代理可做验证本次几何所需的预览，不把整个后续业务都搬进去。
-
-交接只提供用户原始要求、原图路径、已确认尺寸/约束及用户认可的当前文件、适用 Skill 路径、输出目录和预期交付。子代理自行读 Skill 并选择方法，主代理不重写建模规则、不先做一套猜测几何再限制专家。单产品照片建模始终读原图；整屋保留同版确认结构与用户编辑。
-
-返回模型/源码、预览、主要修改、不确定项和实际阶段耗时。主代理核对产物后交付，不重复建模；记录父子线程、实际模型与 effort、开始/完成、用量及关闭状态，缓存输入与计费不混淆、并行耗时不重复相加。completed 之后停止续派；若运行时提供原生关闭接口则关闭并核对，否则注明已完成但未显式关闭，不用 interrupt 或杀主 tmux 冒充关闭。工具/模型不可用时报告，不能暗中改模型或走 codex exec。
-
-
-## playbook/timing.md
-
-# 逐步骤时间，不事后补写
-
-六项设计 Skill 的正式命令自动向输出目录 `timing.jsonl` 追加开始与完成事件。设置 `INTERIOR_TIMING_LOG` 可汇总到同一项目日志，不能指向 Skill 安装目录。每次尝试独立 spanId，含 step、kind、startedAt、finishedAt、elapsedMs、status；嵌套步骤含 parentSpanId。时间用 UTC ISO，展示可换北京时间；代码耗时用单调时钟，跨进程时间注明 wall-clock。
-
-代码阶段包括规划交接、模型编译、机位求解、逐图截图、请求准备、结果登记、平台命令、PDF 构建与两种输出。截图的每张完成时间另在 renders.json；PDF 两种输出在 manifest.json。父子步骤、并行绘图的耗时不可直接相加。中断只有 start 没 finish 就标中断/未知，不把缺项当 0。
-
-读图/人工布局判断、选型、逐图识图、原生调用等待和渠道交付不是代码内部可以自动看见的操作。Agent 在动作前后使用引擎 `python/timing.py start|finish --record <新文件>`：start 指定 `--step` 与 `--kind agent|native-generation|delivery`，finish 指定实际 `--status`。不要把文件 mtime 或 job 准备时间冒充开始时间。
-
-原生绘图用渲染 Skill 的 native-start → 实际工具调用 → native-complete → 逐图识图 → native-result。调用返回立即 complete，再做复核；其中 elapsedMs 是宿主调用到回收登记的跨度，不是供应商纯计算时间。真实完整 prompt 与全部附图来自 job，不在调用时偷偷增加未记录的提示词。
-
-正常确定性建模/机位应以秒至分钟为优化目标，不是无条件服务承诺。异常变慢时看具体 span、场景规模、浏览器加载、网格量和网络等待；不要靠缩短超时或删除质量说明伪造速度。交付报告列代码净耗时、宿主绘图等待、Agent复核及总跨度，未知明确写未知。
-
-
-## data_contract.md
-
-# 五项设计链的数据合同
-
-相机可选verticalShift是归一化投影纵向中心偏移，默认0；实际画面NDC.y=原投影NDC.y−verticalShift。截图端通过setViewOffset实现，保持水平镜头，完成后恢复；必须把该字段纳入原cameraDigest，不在截图后裁图替代。
-
-客户偏好是规划Skill维护的 `interior.requirements/1` 独立JSON，不改几何schema；结构详见[访谈与需求交接](../interior-floorplan-planning/playbook/requirements-interview.md)。Agent先读同名 `.requirements.json`（或已明确交接路径），落实到当前layout/customStyle并向下游携带原记录。编译器不会自动推断自然语言需求，也不以缺少可选偏好阻止可独立的结构工作。
-
-平面只生成 `interior.layout/1` JSON；HTML 编译生成 `interior.scene/1`；机位生成 `interior.cameras/1` 和 `interior.renders/1` 真实 WebGL 参考截图；效果图使用 `interior.ai-request/1`、`interior.native-image-job/1`、真实宿主调用回执及 `interior.ai-result/1`。平台另用 `baiende.project-binding.v1`，不污染布局。
-
-schema 的唯一机器定义位于 `scripts/engine/schemas/`。米制，平面 [x,z]、三维 [x,y,z]，Y 向上，rotationY 用度，组件地面中心原点、正面 +Z。墙 a/b 为中心线，开口 offset 从 a 到起边；rooms 多边形计面积，openConnections 代表无墙开放连接。
-
-placements 包含 id/componentId/roomId/position/size/rotationY，size=[宽,高,深]；rooms.subjectIds 指向本房真实主体。source 记原图、尺度和估算；不能省略来源再声称精准。
-
-nativeAssets 内嵌静态 GLB，placement.nativeAssetId 绑定；forward/deform/size 描述实际正面与缩放能力。materialOverrides 按材质名保存。customStyle 是完整当前配方，其中 forms 固定当前造型，materials/materialRecipes 为可换 CMF。measurements 两点均在地面，measurementUnit 是 m/mm。
-
-sceneKey/layoutHash/htmlSha256/cameraDigest 绑定实际文件内容。用户修改源布局或 HTML 后应重新导入编译与截图，不使用旧回执。哈希不是审美验收。
-
-观察报告 errors/warnings 保留问题原貌，technicalErrors 只列不能计算的格式/引用/不支持表达；compilable 表示能生成草稿，ok 不等于客户认可。相机 ready/review/blocked 都可作为技术有效的截图候选，blocked 是搜索失败提示，不隐藏它；不能将候选当已验收作品。
-
-原生生成回执必须来自实际宿主调用；prepared-not-generated 不代表生成完成。图片复核记录结构、门窗、家具、机位 pass/fail；有问题仍交付实际结果并说明，再修源输入，不通过自动重试藏问题。
-
-原生参考模式 referenceMode 默认 furnished；只有明确的白模要求才为 empty-slots 并记录 whiteModelRequested=true。截图 row 记录 hiddenPlacementIds，必须对应原布局全部 placements；原 JSON 不删家具或柜体。请求 placementSlots 保留 id/componentId/roomId/position/size/rotationY；产品参考通过 placementId 绑定，sizeMetres 是真实产品尺寸，未知用 null，不从槽位伪造。requiredReview 增加 furnitureDetail/assetIdentity/assetScale。clay 是材质显示模式，不能代替 referenceMode。
-
-渲染referencePolicy为shell-layout-design-space-v4并参与seriesKey：粗模只定义结构/机位/布局，锁款从精细参考图片取得。--products读JSON列表，每项{placementId,path,sizeMetres?}；sizeMetres仍是[宽,高,深]米，未知省略或null，不能以粗模尺寸代填。输出productReferences标记role=furniture-identity-reference、identitySource=reference-image-not-proxy。referenceGuide列实际附图顺序及职责，不引入第二套图片路径。产品参考与粗模截图完全同内容时报错，避免同一图冒充两种事实；图片里具体对象的识别仍由Agent负责。
-
-sourceFrame记录源宽/高/比例，ai-result保存outputFrame与frameObservation.sameAspectRatio，画幅差异不阻断已生成图交付，也不自动拉伸。比例相同不证明几何保真。精细参考/定样决定款式但不提供新的建筑或镜头；没有款式参考时只能称概念首图。二维渲染不回写HTML网格，HTML现有编辑/CMF合同不变。
-
-ai-request可通过--design-brief读取{common:{},spaces:{roomId:{}},styleReferences:[{path,assetId?,notes?}]}。common与当前空间条目合并为designIntent，真实图转为styleReferences并参与附图顺序及seriesKey。顺序为当前结构截图、同系列精细定样、placement绑定产品图、风格设计图；最后一种不提供户型或产品身份。metrics.deliveryRole为primary/supplement/layout-reference，只表达用途，不作为阻断生成的门禁。
-
-productReferences保留逐placement绑定；native_image.references按(role,sha256)合并实际附件，每张图的placementIds列出全部绑定，referenceGuide与job顺序同源。不删除绑定，不设置虚构的统一图数上限。同开放空间各机位使用相同完整产品清单；清单变化代表选型变化，应重新建立定样。主图metrics.framing=full-height-room-backdrop，surfaceConstruction记录构图时的地面/天花可见估计，fullSubjectProjection另记家具完整包络。实际渲染前看完整空间，不把特写默认当主图。组件catalog的shape区分直排/贵妃位与座数，风格不会覆盖该结构。
-
-## 图像内槽位交接
-
-`placementSlots` 保留完整世界坐标；`cameraFrame` 保留实际冻结相机。`imageSlotAnchors` 按当前截图实际visiblePlacementIds选择本房及邻房可见实例，再计算其画面投影，以同一相机把旋转包络投影为左上原点的 0–1 范围；先裁近裁面，再执行透视或正交投影及镜头偏移。它是位置/约略尺度参考，不是可见遮罩、产品轮廓或缩放目标；不可将画外物体搬进画面或拉伸产品填框。
-
-`productReferences` 是连通空间完整产品绑定，参与同系列身份计算；`frameProductReferences` 是投影与当前画面相交的绑定，仅后者进入当前提示词与实际附图。缺省该字段才兼容旧请求，显式空列表不能回退整套产品。产品未入本镜头不等于系列换款；投影不证明墙后可见性。
-
-绘图提示词不混入世界 `position/rotationY`。由组件正面轴和当前相机基底计算 `cameraRelativeYawDegrees`：0为正面、±90侧面、180背面；床的正面是床尾看床头。世界字段仍完整保存在JSON。`imageBoundsUnclipped01` 传递裁切前范围，避免将被裁切家具重新收进画面；它依然只是包络，不是产品比例目标。
-
-空槽截图现在同次生成主图与 `shotId.layout.png`。renders行的 `layoutReference` 保存同一sceneKey、cameraDigest、图片摘要和 `same-camera-layout-only` 职责；ai-request/native-prepare原样交接到 `layoutReferences`。这张辅助图只直观表达JSON中的家具数量、方向、前后遮挡和裁切，绝非款式/材质/光照来源。默认furnished仍单图；历史冻结请求不修改，后续空槽任务重新截图取得配对输入。复用截图时检查配对文件仍在且摘要一致，缺失则按同相机重截，不猜布局。
-
-## 空间连接与完整主图（3.2）
-
-唯一新增源字段为rooms.cameraComposition以及openings的openFraction、hingeSide、swingSign、slideTo、infill、exteriorView；connects对门窗均表示两端空间，只有可通行开口进可达图。语义、默认值、已支持机构与坐标详见 [空间连接合同](playbook/space-connections.md)。截图新增results[].spaceContext，原生请求同时保存spaceContext并写入prompt；不是复制一套人工房间表。正式visibility.doorStateMode=source，旧doorsOpen仅兼容读取不覆盖门型/状态。
-
-## 4.0 编辑字段
-
-- `wallJoins[]`: `{ends:[{wallId,end:"a"|"b"}],point:[x,z],source:"traced-junction"|"user-edit"|"gap"}`。至少两个端点；point 需有来源依据。`walls[].joinMode="source-gap"` 保留明确源端面。
-- `structuralItems[]`: `id,name,kind(column|flue),roomId,position[x,y,z],size[w,h,d],rotationY`，可带 `visible,locked`；单位米、角度度。
-- 门洞保留原 openings 合同，新增 `passageShape(rect|arch|rounded)`、`archRise`、`cornerLeft/cornerRight`；拱高小于洞高，圆角和不超过洞宽。
-- 家具新增可选 `rotationX/rotationZ`，与 rotationY 组成 Three.js XYZ Euler，保存重开及编译保留；零值不代表字段缺失。
-- 编辑快照仍为 `interior.editor/2`，增加 `editorVersion`。查看单空间是瞬时视图，不改变 layout 与对象显隐事实。
-- 旧结构体只有可无歧义解释的数据才迁移；迁移输出正式字段后不保留双份状态。
-
-
-## 参数化构造扩展
-
-placement.joinery为可选对象。字段、单位及实际消费者唯一见playbook/joinery.md和scripts/engine/runtime/joinery-kernel.js。JSON编译、浏览器编辑、撤销及完整保存共享同一构造算法。该字段不引入设计阈值或门禁。
-
-
-## local_runtime.md
-
-# 设备外置运行配置
-
-本包在 Ubuntu、Windows 来酷和 Genmachine 使用同一份业务代码。Python 3.10+、Node、Chrome/Edge、中文字体及依赖由本机设计 runtime 配置提供；优先用设备登记的 interior-python 包装入口。普通任务不临时安装软件。所有输入和交付保存在当前设备当前工作区。
-
-HTML 和截图共享 interior-html-modeling/scripts/engine。纯 HTML 离线打开不需要 Python；编译依赖 jsonschema、shapely、numpy，截图使用 Playwright 和 INTERIOR_CHROMIUM 指定的浏览器。资源盒由本机包装器沿用，任务结束只关闭本次浏览器。依赖列表见正式 scripts 中的 requirements 文件。
-
-平台凭据通过设备既有 IDK_ENV_FILE 或私有 .runtime 链接提供，分发包不包含凭据；不得跨设备复制登录态。原生绘图使用当前宿主实际提供的绘图工具，准备文件不等于生成图片。
+```
+
+总分结构：1 张总图；3 张来自主节点的展开。
+
+## 1. 总图 · 从用户当前布局到可编辑模型
+
+触发：用户要求按当前布局制作或继续修改可编辑室内模型；输入：用户提供当前布局、同版需求或最新完整模型；输出：完整离线模型、同版场景及待核说明
+布局：semantic-grid；选择理由：按因果顺序折行；构造、执行模块及保存交接分别展开，完整路径保持可读字号。
+
+### n0 · 用户给布局或最新完整模型
+读取同版需求；已有用户修改以最新完整模型为准。
+- [入口] `SKILL.md`：接收布局、最新模型及用户要求，确定本次建模与交付范围
+
+### n1 · 选择对象方法与用户参数
+已确认尺寸和偏好只约束本项目；未知与允许发挥分开。
+- [方法] `playbook/rule-selection.md`：区分通用构造方法与本项目尺寸、偏好和明确覆盖
+- [方法] `local_runtime.md`：说明运行依赖、正式命令以及维护说明书和安装副本的方法
+
+### n2 · 按真实尺寸构造板件和节点
+选择结构家族、独立台面与真实门窗；资源用途见展开。
+- [方法] `playbook/joinery.md`：按板厚、分区、独立台面孔与锚点构造柜桌及床台
+D1 · 展开见第2页
+
+### n3 · 生成当前离线编辑模板
+正式构建同时输出完整页面、当前布局与绑定场景。
+- [执行] `scripts/run.py`：将正式建模命令路由到本包引擎，并记录命令时间
+D2 · 展开见第3页
+
+### n4 · 编辑关联、保存并交接同版
+以最终完整页面恢复编辑状态；交接当前需求与版本。
+- [模块] `scripts/engine/runtime/workspace.js`：处理结构与家具编辑、量尺、撤销重做及完整HTML保存和导入
+D3 · 展开见第4页
+
+### n5 · 用户获得完整模型与场景数据
+交付可离线编辑的完整页面和同版场景；待核事项保留说明。
+- [数据] `data_contract.md`：规定布局、编辑状态、场景摘要和同版需求交接
+
+连线：
+- n0 → n1
+- n1 → n2
+- n2 → n3
+- n3 → n4
+- n4 → n5
+
+## 2. D1 节点展开 · 把结构、家具和材料落实到构造事实
+
+展开范围：只展开主图的真实尺寸构造节点；资源按本次对象需要读取，不增加统一建模门禁。；进入条件：构造或选型时需要查明板件、门窗、家具库与材料样件的用途
+来源：总图 `main` 的 `n2`（按真实尺寸构造板件和节点）；返回 `n3`（生成当前离线编辑模板）。
+布局：semantic-grid；选择理由：按因果顺序折行；构造、执行模块及保存交接分别展开，完整路径保持可读字号。
+
+### method · 按用途和确认尺寸确定构造
+柜体分段、板厚、面板分区与台面孔来自构造参数。
+- [方法] `playbook.md`：说明家具结构、风格、量尺、灯光和完整保存的实际行为
+- [方法] `playbook/joinery.md`：按板厚、分区、独立台面孔与锚点构造柜桌及床台
+- [数据] `playbook/examples/cabinet-run.json`：演示柜体整组生成的分段尺寸、拼接和台面请求
+- [数据] `playbook/examples/joinery-layout.json`：演示柜桌、台面、床台、吊顶与显式锚点的布局
+
+### connection · 保留墙门窗和编辑关联
+门窗依真实宿主与开合；关联变化回写同一布局。
+- [方法] `playbook/editor-model.md`：说明统一模型编辑、墙角接缝、关联重建和旧数据迁移
+- [方法] `playbook/space-connections.md`：定义门窗宿主、开合、填充和空间两端的源事实
+
+### library · 按类别和尺度选择家具样件
+明确结构家族和缩放政策；库内三件样品不代表完整产品库。
+- [配置] `scripts/engine/catalog/components.json`：登记支持的组件类别、默认尺寸和参数范围
+- [配置] `scripts/engine/assets/library/library.json`：登记样件类别、尺寸、缩放政策、文件与缩略图
+- [登记] `scripts/engine/assets/library/PROVENANCE.md`：记录样件模型来源与适用范围，避免冒称完整生产库
+
+### native · 使用选中的静态家具形体
+仅选中且已获授权的本地样件参与该模型。
+- [数据] `scripts/engine/assets/library/dining-chair.glb`：本地家具库中的餐椅静态模型样件
+- [数据] `scripts/engine/assets/library/lounge-chair.glb`：本地家具库中的休闲椅静态模型样件
+- [数据] `scripts/engine/assets/library/sideboard.glb`：本地家具库中的餐边柜静态模型样件
+
+### thumb · 用缩略图核对家具选型
+缩略图用于选型显示；形体仍来自对应模型数据。
+- [数据] `scripts/engine/assets/library/dining-chair.png`：家具库选型时显示餐椅样件缩略图
+- [数据] `scripts/engine/assets/library/lounge-chair.png`：家具库选型时显示休闲椅样件缩略图
+- [数据] `scripts/engine/assets/library/sideboard.png`：家具库选型时显示餐边柜样件缩略图
+
+### style · 读取已知风格或记录真实检索
+未知风格由当前代理真实检索；证据记录不冒充已联网验证。
+- [配置] `scripts/engine/catalog/styles.json`：保存已知风格配方、材料语义槽与初次造型选择
+- [数据] `scripts/engine/schemas/style.schema.json`：声明风格配方、材料和检索证据的字段
+- [模块] `scripts/engine/python/styles.py`：解析已知风格、检查新配方及证据；未知风格返回真实检索需求
+- [方法] `scripts/engine/STYLE-GUIDE.md`：解释已有风格的材料、配色和初次造型选择
+
+### style_methods · 按风格方法选择材料和细部
+首次建模可选择细部；之后换风格只改颜色、材料与表面。
+- [方法] `scripts/engine/styles/cream/PLAYBOOK.md`：说明奶油自然的材料、细部、灯光与应避免的造型
+- [方法] `scripts/engine/styles/mid-century/PLAYBOOK.md`：说明中古暖木的材料、细部、灯光与应避免的造型
+- [方法] `scripts/engine/styles/modern-minimal/PLAYBOOK.md`：说明现代极简的材料、细部、灯光与应避免的造型
+- [方法] `scripts/engine/styles/new-chinese/PLAYBOOK.md`：说明新中式的材料、细部、灯光与应避免的造型
+- [方法] `scripts/engine/styles/wabi-sabi/PLAYBOOK.md`：说明侘寂自然的材料、细部、灯光与应避免的造型
+
+### texture_wood · 查看木材和墙面纹理样件
+这些是可移植样图；离线页面由同源材料模块生成纹理。
+- [登记] `scripts/engine/assets/textures/manifest.json`：登记可移植纹理样件来源；页面由同源材料模块生成纹理
+- [数据] `scripts/engine/assets/textures/wood-color.png`：木材的可移植颜色纹理样图，供预览和导出
+- [数据] `scripts/engine/assets/textures/wood-normal.png`：木材的可移植凹凸法线样图，供预览和导出
+- [数据] `scripts/engine/assets/textures/plaster-color.png`：墙面灰泥的可移植颜色纹理样图，供预览和导出
+- [数据] `scripts/engine/assets/textures/plaster-normal.png`：墙面灰泥的可移植凹凸法线样图，供预览和导出
+
+### texture_cloth · 查看织物和皮革纹理样件
+颜色图表达表面配色；法线图表达细小凹凸。
+- [数据] `scripts/engine/assets/textures/fabric-color.png`：织物的可移植颜色纹理样图，供预览和导出
+- [数据] `scripts/engine/assets/textures/fabric-normal.png`：织物的可移植凹凸法线样图，供预览和导出
+- [数据] `scripts/engine/assets/textures/leather-color.png`：皮革的可移植颜色纹理样图，供预览和导出
+- [数据] `scripts/engine/assets/textures/leather-normal.png`：皮革的可移植凹凸法线样图，供预览和导出
+
+### texture_stone · 查看石材和编织纹理样件
+预览和导出样件保持同源；不因换风格改变家具结构。
+- [数据] `scripts/engine/assets/textures/stone-color.png`：石材的可移植颜色纹理样图，供预览和导出
+- [数据] `scripts/engine/assets/textures/stone-normal.png`：石材的可移植凹凸法线样图，供预览和导出
+- [数据] `scripts/engine/assets/textures/woven-color.png`：编织的可移植颜色纹理样图，供预览和导出
+- [数据] `scripts/engine/assets/textures/woven-normal.png`：编织的可移植凹凸法线样图，供预览和导出
+
+### resume · 带着构造事实回到生成页面
+回总图“生成当前离线编辑模板”；本页不新增逐项读图门禁。
+- [方法] `playbook/joinery.md`：按板厚、分区、独立台面孔与锚点构造柜桌及床台
+
+连线：
+- method → connection
+- connection → library
+- library → native
+- native → thumb
+- thumb → style
+- style → style_methods
+- style_methods → texture_wood
+- texture_wood → texture_cloth
+- texture_cloth → texture_stone
+- texture_stone → resume
+
+## 3. D2 节点展开 · 正式编译器怎样生成同一个离线编辑器
+
+展开范围：只解释主图生成离线编辑模板的执行入口与模块；不改变设计方法或业务代码。；进入条件：构建、导入或修改模型时，需要了解唯一编译器和编辑器模块的真实职责
+来源：总图 `main` 的 `n3`（生成当前离线编辑模板）；返回 `n4`（编辑关联、保存并交接同版）。
+布局：semantic-grid；选择理由：按因果顺序折行；构造、执行模块及保存交接分别展开，完整路径保持可读字号。
+
+### entry · 使用正式入口和任务运行环境
+依任务使用构建、导入、整组柜体或风格命令。
+- [执行] `scripts/run.py`：将正式建模命令路由到本包引擎，并记录命令时间
+- [模块] `scripts/engine/python/cli.py`：分派构建、柜体整组生成、导入和风格等正式命令
+- [模块] `scripts/engine/python/bootstrap.py`：仅Windows存在专用运行环境时转交该Python入口
+- [配置] `scripts/requirements.txt`：列出编译、几何计算及输入检查所需的Python依赖
+
+### normal · 让源数据与编辑使用同一模型
+归一对象和关联参数；只检查可表示格式与引用，不加审美门槛。
+- [模块] `scripts/engine/python/kernel.py`：调用与页面相同的模型内核，归一布局和构造参数
+- [模块] `scripts/engine/runtime/model-kernel.js`：归一对象参数、执行编辑命令并让源数据与页面使用同一模型
+- [模块] `scripts/engine/python/validate.py`：检查字段、引用和可表示数值，并输出非审美观察结果
+- [数据] `scripts/engine/schemas/layout.schema.json`：声明布局、门窗、家具和关联参数的可表示字段
+
+### compile · 编译完整离线页面和场景摘要
+本包模板与运行模块一起内嵌；同版场景绑定页面摘要。
+- [模块] `scripts/engine/python/model.py`：把布局、预设、资源与运行模块编译为完整离线HTML及场景数据
+- [模块] `scripts/engine/python/common.py`：读写JSON、计算文件与场景摘要并定位本包资源
+- [模板] `scripts/engine/runtime/studio.html`：提供底栏、房间视图和结构、家具、灯光面板的唯一页面模板
+- [模块] `scripts/engine/runtime/three-r164.js`：提供本包固定版本的三维绘图运行库，不依赖外部下载
+- [登记] `scripts/engine/LICENSE-Three.js.txt`：保留随离线页面分发的Three.js许可
+
+### walls · 按真实宿主生成墙门窗
+源开合姿态与可见状态一致，墙角和洞口由同一几何构造。
+- [模块] `scripts/engine/python/openings.py`：按源事实求门窗开合姿态、透视状态和外部目标
+- [模块] `scripts/engine/runtime/geometry.js`：提供墙体、洞口及组件使用的可复用几何构造函数
+- [模块] `scripts/engine/runtime/architecture-kit.js`：构造房间建筑面、门窗及相关结构实体
+
+### joinery · 生成参数化板件和连接
+独立台面、开孔、分区和锚点关系随对象参数生成。
+- [模块] `scripts/engine/python/joinery.py`：依据柜体整组请求计算布局分段、模块和独立台面
+- [模块] `scripts/engine/runtime/joinery-kernel.js`：计算板件、面板分区、台面孔与显式锚点关联
+- [模块] `scripts/engine/runtime/joinery.js`：将柜桌、床台和吊顶构造参数生成为页面几何
+
+### furniture · 生成选定结构家族的家具
+组件类别决定结构，初次细部在该家族内选型。
+- [模块] `scripts/engine/runtime/components-base.js`：按组件类别生成基础家具、灯具和配件结构
+- [模块] `scripts/engine/runtime/style-components.js`：在选定组件结构家族内生成初次风格细部
+- [模块] `scripts/engine/runtime/components.js`：路由参数化组件生成并保留对象身份与实例变换
+
+### native · 加入已授权的本地家具数据
+校验自包含静态模型、摘要、类别和缩放政策；不偷偷用方块替代。
+- [模块] `scripts/engine/python/native.py`：校验本地GLB、打包授权家具库并从完整HTML提取当前编辑状态
+- [模块] `scripts/engine/runtime/native-assets.js`：解析自包含GLB，按授权家具身份和缩放政策加入当前场景
+
+### scene · 组织当前场景与材料风格
+材料同源生成；换风格保留已编辑家具形体、位置与灯光。
+- [模块] `scripts/engine/runtime/scene.js`：组织房间、结构、家具、环境与预览机位的当前场景
+- [模块] `scripts/engine/runtime/materials.js`：由同源确定性生成器建立离线颜色、凹凸纹理及材质槽
+- [模块] `scripts/engine/runtime/styles.js`：验证并应用颜色、材料和表面风格，不移动或重建已编辑家具
+
+### view · 加入灯光和可操作视图
+实际光源和灯具网格分开；视图旋转、缩放保持同一相机。
+- [模块] `scripts/engine/runtime/lights.js`：建立可编辑光源，并保存位置、目标、亮度、色温及绑定
+- [模块] `scripts/engine/runtime/controls.js`：处理旋转、缩放和视图操作，保持同一相机与指针控制
+
+### support · 保留量尺观察和局部性能处理
+二维面积和量尺按当前布局计算；网格不跨对象根合并。
+- [模块] `scripts/engine/runtime/spatial.js`：按同版布局计算面积、二维量尺和摆放包络观察
+- [模块] `scripts/engine/runtime/optimization.js`：在各对象根内合并可共享网格，不跨墙门家具混合实体
+
+### resume · 打开同版页面后回到编辑保存
+启动当前模型和房间视图；回总图“编辑关联、保存并交接同版”。
+- [模块] `scripts/engine/runtime/app.js`：启动当前模型、房间视图、显示状态及保存数据恢复
+
+连线：
+- entry → normal
+- normal → compile
+- compile → walls
+- walls → joinery
+- joinery → furniture
+- furniture → native
+- native → scene
+- scene → view
+- view → support
+- support → resume
+
+## 4. D3 节点展开 · 从当前编辑状态保存到同版交付
+
+展开范围：只展开主图的编辑保存与同版交接节点；技能维护与普通模型交付按真实条件分流。；进入条件：保存、重开或向后续机位和绘图Skill交接当前版；仅技能改版才走维护分支
+来源：总图 `main` 的 `n4`（编辑关联、保存并交接同版）；返回 `n5`（用户获得完整模型与场景数据）。
+布局：semantic-grid；选择理由：按因果顺序折行；构造、执行模块及保存交接分别展开，完整路径保持可读字号。
+
+### edit · 在当前页面编辑并保留关联
+调整结构、家具、灯光和量尺；撤销重做恢复同一模型事实。
+- [模块] `scripts/engine/runtime/workspace.js`：处理结构与家具编辑、量尺、撤销重做及完整HTML保存和导入
+- [模块] `scripts/engine/runtime/app.js`：启动当前模型、房间视图、显示状态及保存数据恢复
+- [方法] `playbook/editor-model.md`：说明统一模型编辑、墙角接缝、关联重建和旧数据迁移
+
+### save_html · 保存完整页面并重开核对
+完整页面保留当前布局和编辑状态；按需另导出静态模型。
+补充说明：exporter.js导出GLB网格、材质与贴图；完整HTML保存由workspace.js负责。
+- [模块] `scripts/engine/runtime/workspace.js`：处理结构与家具编辑、量尺、撤销重做及完整HTML保存和导入
+- [模块] `scripts/engine/python/native.py`：校验本地GLB、打包授权家具库并从完整HTML提取当前编辑状态
+- [模块] `scripts/engine/runtime/exporter.js`：按需导出含网格、材质和贴图的静态GLB，排除灯光与显示裁切
+- [数据] `data_contract.md`：规定布局、编辑状态、场景摘要和同版需求交接
+
+### handoff · 把同版场景交给机位和绘图
+后续Skill按用户要求使用当前场景、需求及机位；未生成图片不写已完成。
+- [模块] `scripts/engine/python/cameras.py`：根据当前场景求预览与正式机位，保留遮挡和构图观察
+- [数据] `scripts/engine/schemas/cameras.schema.json`：声明绑定场景的机位、可见状态与检查结果
+- [模块] `scripts/engine/python/render.py`：读取绑定的当前模型，并按机位与产品参考准备绘图请求
+- [模块] `scripts/engine/python/native_image.py`：根据原生绘图能力准备调用事实并登记真实结果和人工审阅
+
+### time · 记录真实执行与等待时间
+按实际开始、完成、耗时和状态登记；不事后补造时间。
+- [模块] `scripts/engine/python/timing.py`：在命令和编译阶段记录实际开始、结束、耗时与状态
+- [方法] `playbook/timing.md`：统一记录每步开始、完成、耗时、状态与真实等待
+
+### maintenance · 本次是否修改了技能规则或代码？
+普通建模直接交付；仅技能改版进入维护检查。
+- [方法] `local_runtime.md`：说明运行依赖、正式命令以及维护说明书和安装副本的方法
+
+### test · 验证本次改动影响的门窗和机位
+维护代码时才验证源开合、遮挡与主体退让；不作为每次建模前置。
+- [验证] `scripts/engine/tests/test_space_connections.py`：改动门窗或机位代码时验证源开合、遮挡与完整主体退让
+
+### manual · 按同一逻辑更新使用说明
+只有技能改版才重制说明书；逐页阅读实际图面和路径用途。
+- [图源] `manual/skill-manual.json`：维护总图、必要展开及真实节点与文件用途的唯一图源
+- [交付] `manual/skill-manual.md`：同源输出总流程、必要展开和可追溯的文字说明
+- [交付] `manual/skill-flowchart.svg`：提供可独立放大查看的完整六节点总图
+- [交付] `manual/skill-manual.html`：提供可放大、跳转详情并按真实文件定位的交互说明书
+- [交付] `SKILL_MANUAL.pdf`：供人阅读完整总图及构造、模块、保存交接的必要展开
+- [依赖] `../skill-product-manager/scripts/build_skill_manual.mjs`：改版时由同一图源生成PDF、文字及交互说明
+- [依赖] `../skill-product-manager/scripts/validate_skill_manual.mjs`：改版时只读核对图源、图面及实际PDF同源性
+
+### register · 登记摘要并替换授权发行副本
+核对正式文件和摘要；生成、安装与真实运行验证分开记录。
+- [登记] `MANIFEST.json`：登记发行版本、正式文件清单和全部内容摘要
+- [依赖] `../skill-product-manager/scripts/release.py`：改版时登记摘要、核对正式文件并打包发行副本
+
+### resume · 带着当前模型和真实结果回到交付
+回总图“用户获得完整模型与场景数据”；保留待核事项。
+- [数据] `data_contract.md`：规定布局、编辑状态、场景摘要和同版需求交接
+
+连线：
+- edit → save_html
+- save_html → handoff
+- handoff → time
+- time → maintenance
+- maintenance → test：修改了技能
+- maintenance → resume：普通建模
+- test → manual
+- manual → register
+- register → resume
+
+## 文件索引（全部用途已在节点内说明）
+- `MANIFEST.json`：登记发行版本、正式文件清单和全部内容摘要；对应 save/register
+- `SKILL.md`：接收布局、最新模型及用户要求，确定本次建模与交付范围；对应 main/n0
+- `SKILL_MANUAL.pdf`：供人阅读完整总图及构造、模块、保存交接的必要展开；对应 save/manual
+- `data_contract.md`：规定布局、编辑状态、场景摘要和同版需求交接；对应 main/n5、save/save_html、save/resume
+- `local_runtime.md`：说明运行依赖、正式命令以及维护说明书和安装副本的方法；对应 main/n1、save/maintenance
+- `manual/skill-flowchart.svg`：提供可独立放大查看的完整六节点总图；对应 save/manual
+- `manual/skill-manual.html`：提供可放大、跳转详情并按真实文件定位的交互说明书；对应 save/manual
+- `manual/skill-manual.json`：维护总图、必要展开及真实节点与文件用途的唯一图源；对应 save/manual
+- `manual/skill-manual.md`：同源输出总流程、必要展开和可追溯的文字说明；对应 save/manual
+- `playbook.md`：说明家具结构、风格、量尺、灯光和完整保存的实际行为；对应 construction/method
+- `playbook/editor-model.md`：说明统一模型编辑、墙角接缝、关联重建和旧数据迁移；对应 construction/connection、save/edit
+- `playbook/examples/cabinet-run.json`：演示柜体整组生成的分段尺寸、拼接和台面请求；对应 construction/method
+- `playbook/examples/joinery-layout.json`：演示柜桌、台面、床台、吊顶与显式锚点的布局；对应 construction/method
+- `playbook/joinery.md`：按板厚、分区、独立台面孔与锚点构造柜桌及床台；对应 main/n2、construction/method、construction/resume
+- `playbook/rule-selection.md`：区分通用构造方法与本项目尺寸、偏好和明确覆盖；对应 main/n1
+- `playbook/space-connections.md`：定义门窗宿主、开合、填充和空间两端的源事实；对应 construction/connection
+- `playbook/timing.md`：统一记录每步开始、完成、耗时、状态与真实等待；对应 save/time
+- `scripts/engine/LICENSE-Three.js.txt`：保留随离线页面分发的Three.js许可；对应 compiler/compile
+- `scripts/engine/STYLE-GUIDE.md`：解释已有风格的材料、配色和初次造型选择；对应 construction/style
+- `scripts/engine/assets/library/PROVENANCE.md`：记录样件模型来源与适用范围，避免冒称完整生产库；对应 construction/library
+- `scripts/engine/assets/library/dining-chair.glb`：本地家具库中的餐椅静态模型样件；对应 construction/native
+- `scripts/engine/assets/library/dining-chair.png`：家具库选型时显示餐椅样件缩略图；对应 construction/thumb
+- `scripts/engine/assets/library/library.json`：登记样件类别、尺寸、缩放政策、文件与缩略图；对应 construction/library
+- `scripts/engine/assets/library/lounge-chair.glb`：本地家具库中的休闲椅静态模型样件；对应 construction/native
+- `scripts/engine/assets/library/lounge-chair.png`：家具库选型时显示休闲椅样件缩略图；对应 construction/thumb
+- `scripts/engine/assets/library/sideboard.glb`：本地家具库中的餐边柜静态模型样件；对应 construction/native
+- `scripts/engine/assets/library/sideboard.png`：家具库选型时显示餐边柜样件缩略图；对应 construction/thumb
+- `scripts/engine/assets/textures/fabric-color.png`：织物的可移植颜色纹理样图，供预览和导出；对应 construction/texture_cloth
+- `scripts/engine/assets/textures/fabric-normal.png`：织物的可移植凹凸法线样图，供预览和导出；对应 construction/texture_cloth
+- `scripts/engine/assets/textures/leather-color.png`：皮革的可移植颜色纹理样图，供预览和导出；对应 construction/texture_cloth
+- `scripts/engine/assets/textures/leather-normal.png`：皮革的可移植凹凸法线样图，供预览和导出；对应 construction/texture_cloth
+- `scripts/engine/assets/textures/manifest.json`：登记可移植纹理样件来源；页面由同源材料模块生成纹理；对应 construction/texture_wood
+- `scripts/engine/assets/textures/plaster-color.png`：墙面灰泥的可移植颜色纹理样图，供预览和导出；对应 construction/texture_wood
+- `scripts/engine/assets/textures/plaster-normal.png`：墙面灰泥的可移植凹凸法线样图，供预览和导出；对应 construction/texture_wood
+- `scripts/engine/assets/textures/stone-color.png`：石材的可移植颜色纹理样图，供预览和导出；对应 construction/texture_stone
+- `scripts/engine/assets/textures/stone-normal.png`：石材的可移植凹凸法线样图，供预览和导出；对应 construction/texture_stone
+- `scripts/engine/assets/textures/wood-color.png`：木材的可移植颜色纹理样图，供预览和导出；对应 construction/texture_wood
+- `scripts/engine/assets/textures/wood-normal.png`：木材的可移植凹凸法线样图，供预览和导出；对应 construction/texture_wood
+- `scripts/engine/assets/textures/woven-color.png`：编织的可移植颜色纹理样图，供预览和导出；对应 construction/texture_stone
+- `scripts/engine/assets/textures/woven-normal.png`：编织的可移植凹凸法线样图，供预览和导出；对应 construction/texture_stone
+- `scripts/engine/catalog/components.json`：登记支持的组件类别、默认尺寸和参数范围；对应 construction/library
+- `scripts/engine/catalog/styles.json`：保存已知风格配方、材料语义槽与初次造型选择；对应 construction/style
+- `scripts/engine/python/bootstrap.py`：仅Windows存在专用运行环境时转交该Python入口；对应 compiler/entry
+- `scripts/engine/python/cameras.py`：根据当前场景求预览与正式机位，保留遮挡和构图观察；对应 save/handoff
+- `scripts/engine/python/cli.py`：分派构建、柜体整组生成、导入和风格等正式命令；对应 compiler/entry
+- `scripts/engine/python/common.py`：读写JSON、计算文件与场景摘要并定位本包资源；对应 compiler/compile
+- `scripts/engine/python/joinery.py`：依据柜体整组请求计算布局分段、模块和独立台面；对应 compiler/joinery
+- `scripts/engine/python/kernel.py`：调用与页面相同的模型内核，归一布局和构造参数；对应 compiler/normal
+- `scripts/engine/python/model.py`：把布局、预设、资源与运行模块编译为完整离线HTML及场景数据；对应 compiler/compile
+- `scripts/engine/python/native.py`：校验本地GLB、打包授权家具库并从完整HTML提取当前编辑状态；对应 compiler/native、save/save_html
+- `scripts/engine/python/native_image.py`：根据原生绘图能力准备调用事实并登记真实结果和人工审阅；对应 save/handoff
+- `scripts/engine/python/openings.py`：按源事实求门窗开合姿态、透视状态和外部目标；对应 compiler/walls
+- `scripts/engine/python/render.py`：读取绑定的当前模型，并按机位与产品参考准备绘图请求；对应 save/handoff
+- `scripts/engine/python/styles.py`：解析已知风格、检查新配方及证据；未知风格返回真实检索需求；对应 construction/style
+- `scripts/engine/python/timing.py`：在命令和编译阶段记录实际开始、结束、耗时与状态；对应 save/time
+- `scripts/engine/python/validate.py`：检查字段、引用和可表示数值，并输出非审美观察结果；对应 compiler/normal
+- `scripts/engine/runtime/app.js`：启动当前模型、房间视图、显示状态及保存数据恢复；对应 compiler/resume、save/edit
+- `scripts/engine/runtime/architecture-kit.js`：构造房间建筑面、门窗及相关结构实体；对应 compiler/walls
+- `scripts/engine/runtime/components-base.js`：按组件类别生成基础家具、灯具和配件结构；对应 compiler/furniture
+- `scripts/engine/runtime/components.js`：路由参数化组件生成并保留对象身份与实例变换；对应 compiler/furniture
+- `scripts/engine/runtime/controls.js`：处理旋转、缩放和视图操作，保持同一相机与指针控制；对应 compiler/view
+- `scripts/engine/runtime/exporter.js`：按需导出含网格、材质和贴图的静态GLB，排除灯光与显示裁切；对应 save/save_html
+- `scripts/engine/runtime/geometry.js`：提供墙体、洞口及组件使用的可复用几何构造函数；对应 compiler/walls
+- `scripts/engine/runtime/joinery-kernel.js`：计算板件、面板分区、台面孔与显式锚点关联；对应 compiler/joinery
+- `scripts/engine/runtime/joinery.js`：将柜桌、床台和吊顶构造参数生成为页面几何；对应 compiler/joinery
+- `scripts/engine/runtime/lights.js`：建立可编辑光源，并保存位置、目标、亮度、色温及绑定；对应 compiler/view
+- `scripts/engine/runtime/materials.js`：由同源确定性生成器建立离线颜色、凹凸纹理及材质槽；对应 compiler/scene
+- `scripts/engine/runtime/model-kernel.js`：归一对象参数、执行编辑命令并让源数据与页面使用同一模型；对应 compiler/normal
+- `scripts/engine/runtime/native-assets.js`：解析自包含GLB，按授权家具身份和缩放政策加入当前场景；对应 compiler/native
+- `scripts/engine/runtime/optimization.js`：在各对象根内合并可共享网格，不跨墙门家具混合实体；对应 compiler/support
+- `scripts/engine/runtime/scene.js`：组织房间、结构、家具、环境与预览机位的当前场景；对应 compiler/scene
+- `scripts/engine/runtime/spatial.js`：按同版布局计算面积、二维量尺和摆放包络观察；对应 compiler/support
+- `scripts/engine/runtime/studio.html`：提供底栏、房间视图和结构、家具、灯光面板的唯一页面模板；对应 compiler/compile
+- `scripts/engine/runtime/style-components.js`：在选定组件结构家族内生成初次风格细部；对应 compiler/furniture
+- `scripts/engine/runtime/styles.js`：验证并应用颜色、材料和表面风格，不移动或重建已编辑家具；对应 compiler/scene
+- `scripts/engine/runtime/three-r164.js`：提供本包固定版本的三维绘图运行库，不依赖外部下载；对应 compiler/compile
+- `scripts/engine/runtime/workspace.js`：处理结构与家具编辑、量尺、撤销重做及完整HTML保存和导入；对应 main/n4、save/edit、save/save_html
+- `scripts/engine/schemas/cameras.schema.json`：声明绑定场景的机位、可见状态与检查结果；对应 save/handoff
+- `scripts/engine/schemas/layout.schema.json`：声明布局、门窗、家具和关联参数的可表示字段；对应 compiler/normal
+- `scripts/engine/schemas/style.schema.json`：声明风格配方、材料和检索证据的字段；对应 construction/style
+- `scripts/engine/styles/cream/PLAYBOOK.md`：说明奶油自然的材料、细部、灯光与应避免的造型；对应 construction/style_methods
+- `scripts/engine/styles/mid-century/PLAYBOOK.md`：说明中古暖木的材料、细部、灯光与应避免的造型；对应 construction/style_methods
+- `scripts/engine/styles/modern-minimal/PLAYBOOK.md`：说明现代极简的材料、细部、灯光与应避免的造型；对应 construction/style_methods
+- `scripts/engine/styles/new-chinese/PLAYBOOK.md`：说明新中式的材料、细部、灯光与应避免的造型；对应 construction/style_methods
+- `scripts/engine/styles/wabi-sabi/PLAYBOOK.md`：说明侘寂自然的材料、细部、灯光与应避免的造型；对应 construction/style_methods
+- `scripts/engine/tests/test_space_connections.py`：改动门窗或机位代码时验证源开合、遮挡与完整主体退让；对应 save/test
+- `scripts/requirements.txt`：列出编译、几何计算及输入检查所需的Python依赖；对应 compiler/entry
+- `scripts/run.py`：将正式建模命令路由到本包引擎，并记录命令时间；对应 main/n3、compiler/entry
+
+## 显式共享依赖
+- `../skill-product-manager/scripts/build_skill_manual.mjs` [authoring]：改版时由同一图源生成PDF、文字及交互说明
+- `../skill-product-manager/scripts/validate_skill_manual.mjs` [authoring]：改版时只读核对图源、图面及实际PDF同源性
+- `../skill-product-manager/scripts/release.py` [authoring]：改版时登记摘要、核对正式文件并打包发行副本

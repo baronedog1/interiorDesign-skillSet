@@ -1,0 +1,7 @@
+import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';import {build} from 'esbuild';
+const [configFile,outFile]=process.argv.slice(2);if(!configFile||!outFile)throw Error('Usage: node product-modeling/scripts/build-workbench.mjs product.config.mjs result.html');
+const skill=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),config=path.resolve(configFile),out=path.resolve(outFile);
+const entry=configFile==='--empty'?"import * as T from 'three';window.THREE=T;":`import * as T from 'three';import * as p from ${JSON.stringify(config)};import {cameraFor,cameraDefaults} from ${JSON.stringify(skill+'/scripts/core.mjs')};import {finishMaterials} from ${JSON.stringify(skill+'/scripts/materials.mjs')};window.THREE=T;window.EmbeddedProduct={...p,cameraFor,cameraDefaults,finishMaterials};`;
+const result=await build({stdin:{contents:entry,resolveDir:path.dirname(config),sourcefile:'embedded-entry.mjs'},bundle:true,write:false,format:'iife',minify:true,target:'es2020',legalComments:'inline'});
+const work=skill+'/assets/workbench/',js=[result.outputFiles[0].text,...['product-kernel.js','gltf-io.js','workbench.js'].map(f=>fs.readFileSync(work+f,'utf8'))].join('\n;\n');
+const html=fs.readFileSync(work+'workbench.html','utf8').replace('<!--BUNDLED_SCRIPTS-->',()=>'<script>'+js.replace(/<\/script/gi,'<\\/script')+'</script>');fs.mkdirSync(path.dirname(out),{recursive:true});fs.writeFileSync(out,html);console.log(JSON.stringify({output:out,bytes:Buffer.byteLength(html)}));

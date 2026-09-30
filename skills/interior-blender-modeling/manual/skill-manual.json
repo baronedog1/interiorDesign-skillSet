@@ -1,0 +1,447 @@
+{
+  "schemaVersion": 5,
+  "skillId": "interior-blender-modeling",
+  "displayName": "当前户型到精细整屋模型",
+  "version": "5.1.1",
+  "scenarios": [
+    {
+      "id": "main",
+      "trigger": "用户确认 HTML 布局后明确要求 Blender 精细模型或 Blender 原生机位图时调用。",
+      "input": "用户提供当前户型事实并要求 Blender 整屋工程或原生机位图片",
+      "output": "自包含模型、派生文件、原生清单、按请求制作的图片及真实限制",
+      "explanation": "系统只拿 HTML 里的墙门窗、房间和家具 transform，不搬 HTML 模型。每件家具按 functionalClass、房间和风格标签从 Blender 原生多款资产中确定性选择；Y-up 等来源先按 catalog 预旋转归一，再按 JSON 尺寸和靠墙/关系语义放置。墙面、天花、干区木地板和湿区瓷砖分别使用受管 PBR 模板；模板包含真实贴图、物理映射尺寸、来源、许可和摘要，禁止运行时程序噪声或纯色回退。Camera 仍只在 HTML 当前版求解一次机位；Blender 每张图单独启动受管进程，在 Eevee 分配纹理前删掉非目标房间家具并清理孤儿数据，因此既保留真实 PBR、AgX、灯光和阴影，又不突破内存上限。缺资产或材质就先人工审查候选，不能自动搜索后入库，也不能回退白模。",
+      "diagrams": [
+        {
+          "id": "main",
+          "title": "从当前户型制作精细模型并交付",
+          "startNode": "input",
+          "endNodes": [
+            "deliver"
+          ],
+          "nodes": [
+            {
+              "id": "input",
+              "type": "io",
+              "title": "用户给当前户型并要求精细整屋模型",
+              "lines": [
+                "明确要求 Blender 工程或原生机位图时调用；默认由当前代理完成。"
+              ],
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "定义触发、事实源、精细资产、PBR 材质和禁止事项。",
+                  "role": "入口"
+                },
+                {
+                  "path": "agents/openai.yaml",
+                  "purpose": "提供 Codex 默认调用提示。",
+                  "role": "配置"
+                }
+              ]
+            },
+            {
+              "id": "prepare",
+              "type": "process",
+              "title": "核对布局、审定资产和本机条件",
+              "lines": [
+                "读取同项目、同版本的墙门窗、房间与家具尺寸位置。",
+                "缺素材时仅获取已审定的免费或 CC0 资源；付费或受限资源按已有授权处理。",
+                "身份冲突、文件缺失、摘要变化或本机依赖受阻时，记录具体原因及可用文件。"
+              ],
+              "files": [
+                {
+                  "path": "data_contract.md",
+                  "purpose": "规定输入、输出、选型、PBR 材质与朝向字段。",
+                  "role": "方法"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "记录 Ubuntu 正式命令。",
+                  "role": "方法"
+                },
+                {
+                  "path": "ENVIRONMENT_CONTRACT.md",
+                  "purpose": "说明权威源、Ubuntu 运行时、资产仓、材质仓、渲染盒和同步关系。",
+                  "role": "方法"
+                },
+                {
+                  "path": "templates.md",
+                  "purpose": "说明唯一模板、组件资产与 PBR 材质。",
+                  "role": "方法"
+                },
+                {
+                  "path": "references/architecture.md",
+                  "purpose": "解释三层职责。",
+                  "role": "方法"
+                },
+                {
+                  "path": "references/contracts.md",
+                  "purpose": "列出交接合同。",
+                  "role": "方法"
+                },
+                {
+                  "path": "assets/blender-component-library/catalog.json",
+                  "purpose": "登记 Blender 同类多款精细资产、选型和朝向合同。",
+                  "role": "数据"
+                },
+                {
+                  "path": "assets/blender-component-library/precision-asset-acquisition.v1.json",
+                  "purpose": "登记人工审过的免费资产 ID。",
+                  "role": "数据"
+                },
+                {
+                  "path": "assets/blender-component-library/acquisition-manifest.v1.json",
+                  "purpose": "记录实际获取资产的来源、许可、大小和摘要。",
+                  "role": "数据"
+                },
+                {
+                  "path": "assets/blender-material-library/catalog.json",
+                  "purpose": "登记墙面、天花、木地板和瓷砖 PBR 模板及物理映射。",
+                  "role": "数据"
+                },
+                {
+                  "path": "assets/blender-material-library/material-acquisition.v1.json",
+                  "purpose": "登记人工审定的 Poly Haven CC0 材质。",
+                  "role": "数据"
+                },
+                {
+                  "path": "assets/blender-material-library/acquisition-manifest.v1.json",
+                  "purpose": "记录实际获取 PBR 材质的来源、许可、文件大小和摘要。",
+                  "role": "数据"
+                },
+                {
+                  "path": "scripts/acquire_blenderkit_assets.py",
+                  "purpose": "获取审定免费资产并生成审计清单。",
+                  "role": "执行"
+                },
+                {
+                  "path": "scripts/acquire_polyhaven_materials.py",
+                  "purpose": "获取审定 CC0 PBR 材质并生成审计清单。",
+                  "role": "执行"
+                },
+                {
+                  "path": "scripts/init_blender_model_project.py",
+                  "purpose": "建立 v5 项目并绑定组件与材质 catalog。",
+                  "role": "执行"
+                }
+              ],
+              "technicalNotes": [
+                "输入为 current-model/coauthoring-model 与同版 structure；HTML 几何不导入 Blender。"
+              ]
+            },
+            {
+              "id": "build",
+              "type": "process",
+              "title": "按房间选款并制作精细模型",
+              "lines": [
+                "同功能类按房间风格选款，先统一来源轴，再按确认尺寸和朝向装配。",
+                "墙、顶、干湿区地面读取登记贴图，按真实尺度映射；素材缺失不以方盒或色块补位。",
+                "编辑时用连续首次接触计算位移；客户当前布局和修改留在本项目。"
+              ],
+              "files": [
+                {
+                  "path": "playbook.md",
+                  "purpose": "说明唯一执行流程。",
+                  "role": "方法"
+                },
+                {
+                  "path": "scripts_logic.md",
+                  "purpose": "登记脚本职责。",
+                  "role": "方法"
+                },
+                {
+                  "path": "scripts/build_floorplan_scene.py",
+                  "purpose": "唯一 Blender PBR 编译器。",
+                  "role": "执行"
+                },
+                {
+                  "path": "scripts/common.py",
+                  "purpose": "JSON 与摘要函数。",
+                  "role": "模块"
+                },
+                {
+                  "path": "scripts/resolve_component_motion.py",
+                  "purpose": "连续首次接触计算。",
+                  "role": "执行"
+                },
+                {
+                  "path": "assets/blender-style-presets/warm-modern-neutral.json",
+                  "purpose": "登记房间选型、结构 PBR 模板、Eevee 灯光和贴图预算。",
+                  "role": "数据"
+                },
+                {
+                  "path": "assets/blender-template/backend-options.json",
+                  "purpose": "固定后端、材质事实源与 Eevee 原生渲染选项。",
+                  "role": "配置"
+                }
+              ],
+              "technicalNotes": [
+                "坐标转换 [x,y,z] → [x,-z,y]；贴图为 Diffuse/Roughness/Normal；模型保存为自包含 .blend 和派生 GLB。"
+              ]
+            },
+            {
+              "id": "verify",
+              "type": "process",
+              "title": "重新打开模型并核对真实结果",
+              "lines": [
+                "核对集合、组件身份、素材摘要、朝向和贴图打包，登记未匹配项及技术失败。",
+                "生成原生模型清单和真实网格审计数据；失败只修对应输入、登记或编译器。"
+              ],
+              "files": [
+                {
+                  "path": "scripts/validate_blender_scene.py",
+                  "purpose": "重开验证原生模型。",
+                  "role": "验证"
+                },
+                {
+                  "path": "scripts/test_mcp_connection.py",
+                  "purpose": "连接和重开检查。",
+                  "role": "验证"
+                },
+                {
+                  "path": "scripts/export_native_model_manifest.py",
+                  "purpose": "生成原生模型清单。",
+                  "role": "执行"
+                },
+                {
+                  "path": "scripts/export_camera_scene.py",
+                  "purpose": "导出网格语义审计包。",
+                  "role": "执行"
+                }
+              ]
+            },
+            {
+              "id": "want",
+              "type": "decision",
+              "title": "用户是否需要原生机位图片？",
+              "lines": [
+                "按用户要求选择交付范围；受阻模型只整理已有结果和原因。"
+              ],
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "定义触发、事实源、精细资产、PBR 材质和禁止事项。",
+                  "role": "入口"
+                },
+                {
+                  "path": "playbook.md",
+                  "purpose": "说明唯一执行流程。",
+                  "role": "方法"
+                }
+              ]
+            },
+            {
+              "id": "capture",
+              "type": "process",
+              "title": "用同版机位逐张拍摄房间",
+              "lines": [
+                "读取 Camera 已冻结机位，逐图使用独立进程并清理非目标房间资产。",
+                "记录请求、成功和失败数量；实际图片及回执与本次模型绑定。"
+              ],
+              "files": [
+                {
+                  "path": "scripts/capture_blender_batch.py",
+                  "purpose": "逐图隔离截图批处理。",
+                  "role": "执行"
+                },
+                {
+                  "path": "scripts/capture_blender_views.py",
+                  "purpose": "目标房间剪枝与 Eevee 冻结机位适配器。",
+                  "role": "执行"
+                },
+                {
+                  "path": "local_runtime.md",
+                  "purpose": "记录 Ubuntu 正式命令。",
+                  "role": "方法"
+                }
+              ],
+              "technicalNotes": [
+                "固定 plan 的 position/target/FOV/windowCenter/显隐与裁切；Eevee 960×600、16 samples、AgX；遵守现有渲染盒限额。"
+              ]
+            },
+            {
+              "id": "organize",
+              "type": "process",
+              "title": "整理交付范围、使用说明与登记",
+              "lines": [
+                "普通任务整理可交付模型、图片与真实限制；模型受阻时说明原因和已有成果。",
+                "只有修改本 Skill 规则、代码或目录时，更新版本、文件登记和同源说明书；不增加建模前置检查。"
+              ],
+              "files": [
+                {
+                  "path": "MANIFEST.json",
+                  "purpose": "登记版本和全部活动文件。",
+                  "role": "登记"
+                },
+                {
+                  "path": "manual/skill-manual.json",
+                  "purpose": "说明书唯一结构化事实源。",
+                  "role": "图源"
+                },
+                {
+                  "path": "manual/skill-manual.md",
+                  "purpose": "AI 可读说明书。",
+                  "role": "交付"
+                },
+                {
+                  "path": "manual/skill-flowchart.svg",
+                  "purpose": "流程总览。",
+                  "role": "交付"
+                },
+                {
+                  "path": "manual/skill-manual.html",
+                  "purpose": "提供可放大、按文件定位和跳转的同源使用说明",
+                  "role": "交付"
+                }
+              ]
+            },
+            {
+              "id": "deliver",
+              "type": "io",
+              "title": "用户拿到精细模型和所需图片",
+              "lines": [
+                "交付可重开的模型、原生清单、请求的机位图与回执；未完成项单独说明。",
+                "平台上传仍沿用已有授权与平台 Skill。"
+              ],
+              "files": [
+                {
+                  "path": "SKILL.md",
+                  "purpose": "定义触发、事实源、精细资产、PBR 材质和禁止事项。",
+                  "role": "入口"
+                },
+                {
+                  "path": "SKILL_MANUAL.pdf",
+                  "purpose": "提供从用户输入到交付的中文流程图和使用说明",
+                  "role": "交付"
+                }
+              ]
+            }
+          ],
+          "edges": [
+            {
+              "from": "input",
+              "to": "prepare",
+              "fromPort": "E",
+              "toPort": "W"
+            },
+            {
+              "from": "prepare",
+              "to": "build",
+              "fromPort": "E",
+              "toPort": "W"
+            },
+            {
+              "from": "build",
+              "to": "verify",
+              "fromPort": "S",
+              "toPort": "N"
+            },
+            {
+              "from": "verify",
+              "to": "want",
+              "fromPort": "W",
+              "toPort": "E"
+            },
+            {
+              "from": "want",
+              "to": "capture",
+              "label": "需要图片且模型可用",
+              "fromPort": "S",
+              "toPort": "N"
+            },
+            {
+              "from": "want",
+              "to": "organize",
+              "label": "只要模型或本次受阻",
+              "fromPort": "W",
+              "toPort": "N"
+            },
+            {
+              "from": "capture",
+              "to": "organize",
+              "label": "图片与实际回执",
+              "fromPort": "W",
+              "toPort": "E"
+            },
+            {
+              "from": "organize",
+              "to": "deliver",
+              "fromPort": "S",
+              "toPort": "N"
+            }
+          ],
+          "layout": {
+            "kind": "semantic-grid",
+            "reason": "先横向核对并制作模型，再按是否需要图片分支，回到同一交付；避免把全部步骤排成长条。",
+            "rows": [
+              [
+                "input",
+                "prepare",
+                "build"
+              ],
+              [
+                null,
+                "want",
+                "verify"
+              ],
+              [
+                "organize",
+                "capture",
+                null
+              ],
+              [
+                "deliver",
+                null,
+                null
+              ]
+            ],
+            "columnWidths": [
+              520,
+              620,
+              520
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "logicDetails": [],
+  "fileDescriptions": {
+    "ENVIRONMENT_CONTRACT.md": "说明权威源、Ubuntu 运行时、资产仓、材质仓、渲染盒和同步关系。",
+    "MANIFEST.json": "登记版本和全部活动文件。",
+    "SKILL.md": "定义触发、事实源、精细资产、PBR 材质和禁止事项。",
+    "SKILL_MANUAL.pdf": "提供从用户输入到交付的中文流程图和使用说明",
+    "agents/openai.yaml": "提供 Codex 默认调用提示。",
+    "assets/blender-component-library/acquisition-manifest.v1.json": "记录实际获取资产的来源、许可、大小和摘要。",
+    "assets/blender-component-library/catalog.json": "登记 Blender 同类多款精细资产、选型和朝向合同。",
+    "assets/blender-component-library/precision-asset-acquisition.v1.json": "登记人工审过的免费资产 ID。",
+    "assets/blender-material-library/acquisition-manifest.v1.json": "记录实际获取 PBR 材质的来源、许可、文件大小和摘要。",
+    "assets/blender-material-library/catalog.json": "登记墙面、天花、木地板和瓷砖 PBR 模板及物理映射。",
+    "assets/blender-material-library/material-acquisition.v1.json": "登记人工审定的 Poly Haven CC0 材质。",
+    "assets/blender-style-presets/warm-modern-neutral.json": "登记房间选型、结构 PBR 模板、Eevee 灯光和贴图预算。",
+    "assets/blender-template/backend-options.json": "固定后端、材质事实源与 Eevee 原生渲染选项。",
+    "data_contract.md": "规定输入、输出、选型、PBR 材质与朝向字段。",
+    "local_runtime.md": "记录 Ubuntu 正式命令。",
+    "playbook.md": "说明唯一执行流程。",
+    "references/architecture.md": "解释三层职责。",
+    "references/contracts.md": "列出交接合同。",
+    "scripts/acquire_blenderkit_assets.py": "获取审定免费资产并生成审计清单。",
+    "scripts/acquire_polyhaven_materials.py": "获取审定 CC0 PBR 材质并生成审计清单。",
+    "scripts/build_floorplan_scene.py": "唯一 Blender PBR 编译器。",
+    "scripts/capture_blender_batch.py": "逐图隔离截图批处理。",
+    "scripts/capture_blender_views.py": "目标房间剪枝与 Eevee 冻结机位适配器。",
+    "scripts/common.py": "JSON 与摘要函数。",
+    "scripts/export_camera_scene.py": "导出网格语义审计包。",
+    "scripts/export_native_model_manifest.py": "生成原生模型清单。",
+    "scripts/init_blender_model_project.py": "建立 v5 项目并绑定组件与材质 catalog。",
+    "scripts/resolve_component_motion.py": "连续首次接触计算。",
+    "scripts/test_mcp_connection.py": "连接和重开检查。",
+    "scripts/validate_blender_scene.py": "重开验证原生模型。",
+    "scripts_logic.md": "登记脚本职责。",
+    "templates.md": "说明唯一模板、组件资产与 PBR 材质。",
+    "manual/skill-manual.json": "说明书唯一结构化事实源。",
+    "manual/skill-manual.md": "AI 可读说明书。",
+    "manual/skill-flowchart.svg": "流程总览。",
+    "manual/skill-manual.html": "提供可放大、按文件定位和跳转的同源使用说明"
+  }
+}

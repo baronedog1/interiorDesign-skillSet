@@ -1,18 +1,16 @@
 {
   "schemaVersion": 1,
-  "snapshotAt": "2026-09-20T03:23:34.955Z",
+  "snapshotAt": "2026-10-01",
   "source": {
-    "type": "ubuntu-design-methods-release",
+    "type": "gcp-manager-modeling-current-agent-release",
     "currentDesignRelease": {
-      "deviceId": "ubuntu-01-codex",
-      "skillRoot": "/home/agentops/.codex/skills",
+      "manager": "gcp-manager",
+      "sourceRoot": "/home/baronedog111/gcp-manager/skills",
+      "reconciledFromDevice": "ubuntu-01-codex",
       "skillIds": [
-        "interior-floorplan-planning",
         "interior-html-modeling",
-        "interior-camera-capture",
-        "interior-space-rendering",
-        "idk-canvas-ingest-agent",
-        "booklet-production"
+        "interior-blender-modeling",
+        "product-modeling"
       ]
     },
     "excluded": [
@@ -27,8 +25,8 @@
       "runtime-cache"
     ]
   },
-  "skillCount": 6,
-  "fileCount": 152,
+  "skillCount": 8,
+  "fileCount": 211,
   "skills": [
     {
       "id": "booklet-production",
@@ -47,6 +45,15 @@
       "fileCount": 12,
       "bytes": 48112,
       "sha256": "692c8ed21560f9871bbed015208a44e8587a43424642f896d99563533a306c1c"
+    },
+    {
+      "id": "interior-blender-modeling",
+      "path": "skills/interior-blender-modeling",
+      "version": "5.1.1",
+      "sourceDevice": "ubuntu-01-codex",
+      "fileCount": 36,
+      "bytes": 1275797,
+      "sha256": "abe853f06fc427592c144ebe9fe0600ce395b5aa1be6827e2eacce1b28fc8d48"
     },
     {
       "id": "interior-camera-capture",
@@ -69,11 +76,11 @@
     {
       "id": "interior-html-modeling",
       "path": "skills/interior-html-modeling",
-      "version": "5.0.1",
+      "version": "5.0.2",
       "sourceDevice": "ubuntu-01-codex",
-      "fileCount": 89,
-      "bytes": 19318767,
-      "sha256": "773ecad888c0a9020f43ec48c0014229021c52a23a8daa9a5b7c5a8748f833ba"
+      "fileCount": 88,
+      "bytes": 23474366,
+      "sha256": "4c345c5cdef167e40f43e82fba5e1dedfc8bfa7e1ad44efeff0af9f8ed97e955"
     },
     {
       "id": "interior-space-rendering",
@@ -83,6 +90,15 @@
       "fileCount": 11,
       "bytes": 100315,
       "sha256": "78d53d1d331b961b0be10759771d034cd9ebcf3910a324e5f9d5f6491b3407e9"
+    },
+    {
+      "id": "product-modeling",
+      "path": "skills/product-modeling",
+      "version": "3.1.1",
+      "sourceDevice": "ubuntu-01-codex",
+      "fileCount": 24,
+      "bytes": 2408224,
+      "sha256": "37807f64fa9b76a2cd6e0589a7aaefe8dda08b885ecd0aef5b536f9501a7299f"
     }
   ]
 }
